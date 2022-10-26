@@ -1,5 +1,5 @@
 {
-  "name": "@inc/notifications",
+  "name": "@inc/database",
   "version": "0.0.0",
   "main": "./index.tsx",
   "types": "./index.tsx",
