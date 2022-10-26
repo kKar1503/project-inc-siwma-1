@@ -1,0 +1,24 @@
+{
+  "name": "team-c",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3003",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@inc/ui": "workspace:*",
+    "luxon": "^3.0.4",
+    "next": "13.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "prop-types": "^15.8.1"
+  },
+  "devDependencies": {
+    "cypress": "^10.11.0",
+    "eslint": "8.26.0",
+    "eslint-config-custom": "workspace:*"
+  }
+}

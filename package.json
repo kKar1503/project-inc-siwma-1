@@ -14,9 +14,12 @@
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
     "eslint-config-custom": "workspace:*",
     "husky": "^8.0.0",
     "lint-staged": "^13.0.3",
+    "next": "13.0.0",
     "prettier": "latest",
     "turbo": "latest"
   },
@@ -25,7 +28,7 @@
   },
   "packageManager": "pnpm@7.12.2",
   "lint-staged": {
-    "{apps,packages}/**/*.{js,jsx}": [
+    "{apps,packages}/!(eslint-config-custom)/**/*.{js,jsx}": [
       "eslint --fix",
       "prettier --write"
     ],
