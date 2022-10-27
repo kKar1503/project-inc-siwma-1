@@ -7,10 +7,13 @@
     "packages/*"
   ],
   "scripts": {
+    "clean-i": "pnpm install --frozen-lockfile",
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{js,jsx,md}\"",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+    "git-clean": "git clean -d -x -e node_modules -e packages -f",
+    "git-reset": "git reset --hard HEAD",
     "prepare": "run-script-os",
     "prepare:macos": "husky install && chmod ug+x .husky/*",
     "prepare:default": "husky install"

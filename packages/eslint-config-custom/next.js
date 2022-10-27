@@ -1,15 +1,17 @@
 module.exports = {
   env: {
     browser: true,
+    es2021: true,
     node: true,
   },
-  extends: [
-    'next',
-    'airbnb',
-    'plugin:import/errors',
-    'plugin:import/warnings',
-    'prettier',
-  ],
+  extends: ['next', 'airbnb', 'plugin:import/errors', 'plugin:import/warnings', 'prettier'],
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  },
   plugins: ['import'],
   settings: {
     next: {
@@ -19,6 +21,21 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/require-default-props': 'off',
+    'react/function-component-definition': [2, { namedComponents: 'arrow-function' }],
+    'react/button-has-type': 'off',
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    indent: ['error', 2, { SwitchCase: 1 }],
+    quotes: ['error', 'single', { allowTemplateLiterals: true, avoidEscape: true }],
+    'object-curly-newline': 'off',
+    'operator-linebreak': ['error', 'after', { overrides: { '?': 'before', ':': 'before' } }],
+    'no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        args: 'after-used',
+        ignoreRestSiblings: true,
+      },
+    ],
   },
   overrides: [
     {
