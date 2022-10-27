@@ -12,6 +12,9 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
+  globals: {
+    JSX: true,
+  },
   plugins: ['import'],
   settings: {
     next: {
