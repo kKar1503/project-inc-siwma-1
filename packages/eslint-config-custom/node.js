@@ -1,13 +1,13 @@
 module.exports = {
   env: {
     node: true,
+    es2021: true,
   },
-  extends: [
-    'airbnb-base',
-    'plugin:import/errors',
-    'plugin:import/warnings',
-    'prettier',
-  ],
+  extends: ['airbnb-base', 'plugin:import/errors', 'plugin:import/warnings', 'prettier'],
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  },
   plugins: ['import'],
   overrides: [
     {

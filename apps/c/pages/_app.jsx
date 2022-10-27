@@ -1,10 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import PropTypes from "prop-types";
-import "../styles/globals.css";
+import PropTypes from 'prop-types';
+import '../styles/globals.css';
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
-}
+const MyApp = ({ Component, pageProps }) => <Component {...pageProps} />;
 
 MyApp.propTypes = {
   pageProps: PropTypes.shape({}),

@@ -7,11 +7,16 @@
     "packages/*"
   ],
   "scripts": {
+    "clean-i": "pnpm install --frozen-lockfile",
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{js,jsx,md}\"",
-    "prepare": "husky install"
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+    "git-clean": "git clean -d -x -e node_modules -e packages -f",
+    "git-reset": "git reset --hard HEAD",
+    "prepare": "run-script-os",
+    "prepare:macos": "husky install && chmod ug+x .husky/*",
+    "prepare:default": "husky install"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
@@ -21,6 +26,7 @@
     "lint-staged": "^13.0.3",
     "next": "13.0.0",
     "prettier": "latest",
+    "run-script-os": "^1.1.6",
     "turbo": "latest"
   },
   "engines": {
