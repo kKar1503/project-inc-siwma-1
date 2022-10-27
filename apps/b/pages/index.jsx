@@ -1,6 +1,4 @@
 import Head from 'next/head';
-import Image from 'next/image';
-import { Header } from '@inc/ui';
 import styles from '../styles/Home.module.css';
 
 const Home = () => (
@@ -11,7 +9,9 @@ const Home = () => (
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
-    <main className={styles.main}></main>
+    <main className={styles.main}>
+      <button className="btn btn-primary">Hello</button>
+    </main>
   </div>
 );
 
