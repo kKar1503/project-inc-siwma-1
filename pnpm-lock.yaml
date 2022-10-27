@@ -32,6 +32,7 @@ importers:
       eslint-config-custom: workspace:*
       luxon: ^3.0.4
       next: 13.0.0
+      next-transpile-modules: ^9.1.0
       prop-types: ^15.8.1
       react: 18.2.0
       react-dom: 18.2.0
@@ -39,6 +40,7 @@ importers:
       '@inc/ui': link:../../packages/ui
       luxon: 3.0.4
       next: 13.0.0_biqbaboplfbrettd7655fr4n2y
+      next-transpile-modules: 9.1.0
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -55,6 +57,7 @@ importers:
       eslint-config-custom: workspace:*
       luxon: ^3.0.4
       next: 13.0.0
+      next-transpile-modules: ^9.1.0
       prop-types: ^15.8.1
       react: 18.2.0
       react-dom: 18.2.0
@@ -62,6 +65,7 @@ importers:
       '@inc/ui': link:../../packages/ui
       luxon: 3.0.4
       next: 13.0.0_biqbaboplfbrettd7655fr4n2y
+      next-transpile-modules: 9.1.0
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -78,6 +82,7 @@ importers:
       eslint-config-custom: workspace:*
       luxon: ^3.0.4
       next: 13.0.0
+      next-transpile-modules: ^9.1.0
       prop-types: ^15.8.1
       react: 18.2.0
       react-dom: 18.2.0
@@ -85,6 +90,7 @@ importers:
       '@inc/ui': link:../../packages/ui
       luxon: 3.0.4
       next: 13.0.0_biqbaboplfbrettd7655fr4n2y
+      next-transpile-modules: 9.1.0
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -101,6 +107,7 @@ importers:
       eslint-config-custom: workspace:*
       luxon: ^3.0.4
       next: 13.0.0
+      next-transpile-modules: ^9.1.0
       prop-types: ^15.8.1
       react: 18.2.0
       react-dom: 18.2.0
@@ -108,6 +115,7 @@ importers:
       '@inc/ui': link:../../packages/ui
       luxon: 3.0.4
       next: 13.0.0_biqbaboplfbrettd7655fr4n2y
+      next-transpile-modules: 9.1.0
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -194,7 +202,10 @@ importers:
     specifiers:
       eslint: ^7.32.0
       eslint-config-custom: workspace:*
+      prop-types: ^15.8.1
       react: ^18.2.0
+    dependencies:
+      prop-types: 15.8.1
     devDependencies:
       eslint: 7.32.0
       eslint-config-custom: link:../eslint-config-custom
@@ -1526,6 +1537,14 @@ packages:
       once: 1.4.0
     dev: true
 
+  /enhanced-resolve/5.10.0:
+    resolution: {integrity: sha512-T0yTFjdpldGY8PmuXXR0PyQ1ufZpEGiHVrp7zHKB7jdR4qlmZHhONVM5AQOAWXuF/w3dnHbEQVrNptJgt7F+cQ==}
+    engines: {node: '>=10.13.0'}
+    dependencies:
+      graceful-fs: 4.2.10
+      tapable: 2.2.1
+    dev: false
+
   /enquirer/2.3.6:
     resolution: {integrity: sha512-yjNnPr315/FjS4zIsUxYguYUPP2e1NK4d7E7ZOLiyYCcbFBiTMyID+2wvm2w6+pZ/odMA7cRkjhsPbltwBOrLg==}
     engines: {node: '>=8.6'}
@@ -1586,7 +1605,6 @@ packages:
   /escalade/3.1.1:
     resolution: {integrity: sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==}
     engines: {node: '>=6'}
-    dev: true
 
   /escape-string-regexp/1.0.5:
     resolution: {integrity: sha512-vbRorB5FUQWvla16U8R/qgaFIya2qGzwDrNmCZuYKrbdSUMG6I1ZCGQRefkRVhuOkIGVne7BQ35DSfo1qvJqFg==}
@@ -2437,7 +2455,6 @@ packages:
 
   /graceful-fs/4.2.10:
     resolution: {integrity: sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==}
-    dev: true
 
   /grapheme-splitter/1.0.4:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
@@ -3100,6 +3117,13 @@ packages:
 
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
+
+  /next-transpile-modules/9.1.0:
+    resolution: {integrity: sha512-yzJji65xDqcIqjvx5vPJcs1M+MYQTzLM1pXH/qf8Q88ohx+bwVGDc1AeV+HKr1NwvMCNTpwVPSFI7cA5WdyeWA==}
+    dependencies:
+      enhanced-resolve: 5.10.0
+      escalade: 3.1.1
+    dev: false
 
   /next/13.0.0:
     resolution: {integrity: sha512-puH1WGM6rGeFOoFdXXYfUxN9Sgi4LMytCV5HkQJvVUOhHfC1DoVqOfvzaEteyp6P04IW+gbtK2Q9pInVSrltPA==}
@@ -3981,6 +4005,11 @@ packages:
       slice-ansi: 4.0.0
       string-width: 4.2.3
       strip-ansi: 6.0.1
+
+  /tapable/2.2.1:
+    resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
+    engines: {node: '>=6'}
+    dev: false
 
   /text-extensions/1.9.0:
     resolution: {integrity: sha512-wiBrwC1EhBelW12Zy26JeOUkQ5mRu+5o8rpsJk5+2t+Y5vE7e842qtZDQ2g1NpX/29HdyFeJ4nSIhI47ENSxlQ==}
