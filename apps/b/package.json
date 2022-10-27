@@ -11,6 +11,7 @@
   "dependencies": {
     "@inc/styles": "workspace:*",
     "@inc/ui": "workspace:*",
+    "classnames": "^2.3.2",
     "daisyui": "^2.33.0",
     "luxon": "^3.0.4",
     "next": "13.0.0",
