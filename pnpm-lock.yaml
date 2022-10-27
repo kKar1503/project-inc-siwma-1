@@ -1091,15 +1091,24 @@ packages:
     engines: {node: '>= 4.0.0'}
     dev: true
 
+<<<<<<< HEAD
   /autoprefixer/10.4.13_postcss@8.4.18:
     resolution: {integrity: sha512-49vKpMqcZYsJjwotvt4+h/BCjJVnhGwcLpDt5xkcaOG3eLrG/HUYLagrihYsQ+qrIBgIzX1Rw7a6L8I/ZA1Atg==}
+=======
+  /autoprefixer/10.4.12_postcss@8.4.18:
+    resolution: {integrity: sha512-WrCGV9/b97Pa+jtwf5UGaRjgQIg7OK3D06GnoYoZNcG1Xb8Gt3EfuKjlhh9i/VtT16g6PYjZ69jdJ2g8FxSC4Q==}
+>>>>>>> chore: :rocket: add tailwindcss and daisyui
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
     peerDependencies:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.21.4
+<<<<<<< HEAD
       caniuse-lite: 1.0.30001426
+=======
+      caniuse-lite: 1.0.30001422
+>>>>>>> chore: :rocket: add tailwindcss and daisyui
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -1165,7 +1174,11 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
+<<<<<<< HEAD
       caniuse-lite: 1.0.30001426
+=======
+      caniuse-lite: 1.0.30001422
+>>>>>>> chore: :rocket: add tailwindcss and daisyui
       electron-to-chromium: 1.4.284
       node-releases: 2.0.6
       update-browserslist-db: 1.0.10_browserslist@4.21.4
@@ -1524,13 +1537,21 @@ packages:
       yauzl: 2.10.0
     dev: true
 
+<<<<<<< HEAD
   /daisyui/2.33.0_lycaqaeny3mp632atgvyvqdgwe:
+=======
+  /daisyui/2.33.0_xkowlklhtk6sfvtndbucb3hfiy:
+>>>>>>> chore: :rocket: add tailwindcss and daisyui
     resolution: {integrity: sha512-NviwGs9oC9NW7IEZiLexHtxkpzP38AKxb9GTUCqUa0qoU8NHKQGqJUzQWZwWSZakU57KsQLblFVe0xMhqw4TlA==}
     peerDependencies:
       autoprefixer: ^10.0.2
       postcss: ^8.1.6
     dependencies:
+<<<<<<< HEAD
       autoprefixer: 10.4.13_postcss@8.4.18
+=======
+      autoprefixer: 10.4.12_postcss@8.4.18
+>>>>>>> chore: :rocket: add tailwindcss and daisyui
       color: 4.2.3
       css-selector-tokenizer: 0.8.0
       postcss: 8.4.18
@@ -3379,6 +3400,9 @@ packages:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+
+  /node-releases/2.0.6:
+    resolution: {integrity: sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==}
 
   /node-releases/2.0.6:
     resolution: {integrity: sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==}
