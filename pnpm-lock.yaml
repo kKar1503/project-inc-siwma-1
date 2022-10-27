@@ -64,6 +64,7 @@ importers:
       '@inc/styles': workspace:*
       '@inc/ui': workspace:*
       autoprefixer: ^10.4.13
+      classnames: ^2.3.2
       cypress: ^10.11.0
       daisyui: ^2.33.0
       eslint: 8.26.0
@@ -79,6 +80,7 @@ importers:
     dependencies:
       '@inc/styles': link:../../packages/styles
       '@inc/ui': link:../../packages/ui
+      classnames: 2.3.2
       daisyui: 2.33.0_lycaqaeny3mp632atgvyvqdgwe
       luxon: 3.0.4
       next: 13.0.0_biqbaboplfbrettd7655fr4n2y
@@ -1259,6 +1261,10 @@ packages:
   /ci-info/3.5.0:
     resolution: {integrity: sha512-yH4RezKOGlOhxkmhbeNuC4eYZKAUsEaGtBuBzDDP1eFUKiccDWzBABxBfOx31IDwDIXMTxWuwAxUGModvkbuVw==}
     dev: true
+
+  /classnames/2.3.2:
+    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
+    dev: false
 
   /clean-stack/2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
