@@ -16,9 +16,9 @@ const fullConfig = resolveConfig(tailwindConfig);
 const LargeLayout = ({ children }) => {
   return (
     <div className="w-screen h-screen flex flex-row justify-center items-center">
-      <Image src="/siwma-bg.jpg" alt="SIWMA Background" fill />
+      <Image src="/siwma-bg.jpg" alt="SIWMA Background" className="opacity-60" fill />
       <div className="flex flex-col justify-center items-center p-16 w-full h-full">
-        <section className="flex flex-col w-full max-w-xl max-h-full bg-base-100 rounded-xl z-10">
+        <section className="flex flex-col w-full max-w-xl max-h-full bg-base-100 shadow-lg rounded-xl z-10">
           <header className="flex flex-row items-center justify-center p-8">
             <div className="relative h-16 w-full">
               <Image src="/siwma-logo.png" alt="SIWMA Banner" fill className="object-contain" />
@@ -45,7 +45,7 @@ const LargeLayout = ({ children }) => {
 const SmallLayout = ({ children }) => {
   return (
     <div className="w-screen h-screen flex">
-      <Image src="/siwma-bg.jpg" alt="SIWMA Banner" fill className="object-cover" />
+      <Image src="/siwma-bg.jpg" alt="SIWMA Banner" fill className="object-cover opacity-60" />
       <section className="flex flex-col w-full h-full z-10">
         <header className="flex flex-row items-center justify-center bg-base-100 py-4 rounded-b-xl">
           <div className="relative h-8 w-full">
