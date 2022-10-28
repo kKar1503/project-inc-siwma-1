@@ -3,6 +3,7 @@ import tailwindConfig from '../../tailwind.config';
 import Image from 'next/image';
 import Link from 'next/link';
 import cx from 'classnames';
+import { useMediaQuery } from 'react-responsive';
 
 const fullConfig = resolveConfig(tailwindConfig);
 
@@ -56,7 +57,7 @@ const LoginForm = ({ className }) => {
 /**
  * @type {import("next").nextpage}
  */
-const NMPage = () => {
+const LargePage = () => {
   return (
     <div className="w-screen min-h-screen flex flex-row justify-center items-center">
       <Image src="/siwma-bg.jpg" alt="SIWMA Background" fill />
@@ -85,8 +86,7 @@ const NMPage = () => {
 /**
  * @type {import("next").nextpage}
  */
-const Page = () => {
-  console.log(fullConfig.theme.screens.md);
+const SmallPage = () => {
   return (
     <div className="w-screen h-screen flex">
       <section className="flex flex-col w-full h-full">
@@ -108,6 +108,18 @@ const Page = () => {
       </section>
     </div>
   );
+};
+
+/**
+ * @type {import("next").nextpage}
+ */
+const Page = () => {
+  const isMobile = useMediaQuery({ query: `(max-width: ${fullConfig.theme.screens.md})` });
+
+  if (isMobile) {
+    return <SmallPage />;
+  }
+  return <LargePage />;
 };
 
 export default Page;
