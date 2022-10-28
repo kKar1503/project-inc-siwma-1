@@ -40,6 +40,7 @@ importers:
       prop-types: ^15.8.1
       react: 18.2.0
       react-dom: 18.2.0
+      react-responsive: ^9.0.0
       tailwindcss: ^3.2.1
     dependencies:
       '@inc/styles': link:../../packages/styles
@@ -51,6 +52,7 @@ importers:
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      react-responsive: 9.0.0_react@18.2.0
     devDependencies:
       autoprefixer: 10.4.13_postcss@8.4.18
       cypress: 10.11.0
