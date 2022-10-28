@@ -1,6 +1,10 @@
+import resolveConfig from 'tailwindcss/resolveConfig';
+import tailwindConfig from '../../tailwind.config';
 import Image from 'next/image';
 import Link from 'next/link';
 import cx from 'classnames';
+
+const fullConfig = resolveConfig(tailwindConfig);
 
 /**
  * Separating the form logic in this component so if the fields gets changed,
@@ -52,7 +56,7 @@ const LoginForm = ({ className }) => {
 /**
  * @type {import("next").nextpage}
  */
-const Page = () => {
+const NMPage = () => {
   return (
     <div className="w-screen min-h-screen flex flex-row justify-center items-center">
       <Image src="/siwma-bg.jpg" alt="SIWMA Background" fill />
@@ -81,7 +85,8 @@ const Page = () => {
 /**
  * @type {import("next").nextpage}
  */
-const NMPage = () => {
+const Page = () => {
+  console.log(fullConfig.theme.screens.md);
   return (
     <div className="w-screen h-screen flex">
       <section className="flex flex-col w-full h-full">
