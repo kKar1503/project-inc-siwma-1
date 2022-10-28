@@ -50,14 +50,17 @@ const LoginForm = ({ className }) => {
 };
 
 /**
- * @type {import("next").NextPage}
+ * @type {import("next").nextpage}
  */
 const Page = () => {
   return (
     <div className="w-screen min-h-screen flex flex-row justify-center items-center">
-      <section className="flex flex-col gap-4 w-full p-8 max-w-5xl bg-base-100 rounded-xl">
-        <header>
-          <Image src="" alt="SIMWA Banner" />
+      <Image src="/siwma-bg.jpg" alt="SIWMA Background" fill />
+      <section className="flex flex-col gap-4 w-full p-8 max-w-xl bg-base-100 rounded-xl z-10">
+        <header className="flex flex-row items-center justify-center">
+          <div className="relative h-16 w-full">
+            <Image src="/siwma-logo.png" alt="SIWMA Banner" fill className="object-contain" />
+          </div>
         </header>
         <div
           className="bg-neutral-content"
@@ -65,8 +68,38 @@ const Page = () => {
             height: 1,
           }}
         />
-        <h1 className="font-bold text-xl">Login</h1>
+        <div className="flex flex-col">
+          <h1 className="font-bold text-xl">Login</h1>
+          <p>Please sign in to your account.</p>
+        </div>
         <LoginForm />
+      </section>
+    </div>
+  );
+};
+
+/**
+ * @type {import("next").nextpage}
+ */
+const NMPage = () => {
+  return (
+    <div className="w-screen h-screen flex">
+      <section className="flex flex-col w-full h-full">
+        <header className="flex flex-row items-center justify-center py-4">
+          <div className="relative h-8 w-full">
+            <Image src="/siwma-logo.png" alt="SIWMA Background" fill className="object-contain" />
+          </div>
+        </header>
+        <div className="relative h-1/4">
+          <Image src="/siwma-bg.jpg" alt="SIWMA Banner" fill className="object-cover" />
+        </div>
+        <div className="flex flex-col gap-4 flex-1 overflow-y-auto p-8">
+          <div className="flex flex-col">
+            <h1 className="font-bold text-xl">Login</h1>
+            <p>Please sign in to your account.</p>
+          </div>
+          <LoginForm />
+        </div>
       </section>
     </div>
   );
