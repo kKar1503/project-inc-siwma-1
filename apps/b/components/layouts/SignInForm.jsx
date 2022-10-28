@@ -23,11 +23,21 @@ const SignInForm = ({ className }) => {
       <div className="flex flex-col gap-4">
         <label className="flex flex-col gap-2">
           E-Mail
-          <input className="input input-bordered" />
+          <input
+            className="input input-bordered"
+            placeholder="Your company e-mail"
+            type="email"
+            required
+          />
         </label>
         <label className="flex flex-col gap-2">
           Password
-          <input className="input input-bordered" />
+          <input
+            className="input input-bordered"
+            placeholder="Your password"
+            type="password"
+            required
+          />
         </label>
       </div>
 
@@ -37,7 +47,7 @@ const SignInForm = ({ className }) => {
           Remember Me
         </label>
         <Link href="/">
-          <p className="text-primary underline">Forgot Password?</p>
+          <p className="text-primary underline">Forgot Your Password?</p>
         </Link>
       </div>
 
