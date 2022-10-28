@@ -25,7 +25,7 @@ const LargeLayout = ({ children }) => {
             </div>
           </header>
           <div
-            className="bg-neutral-content"
+            className="bg-base-200"
             style={{
               height: 1,
             }}
