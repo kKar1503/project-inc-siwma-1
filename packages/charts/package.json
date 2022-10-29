@@ -1,8 +1,8 @@
 {
   "name": "@inc/charts",
   "version": "0.0.0",
-  "main": "./index.tsx",
-  "types": "./index.tsx",
+  "main": "./index.jsx",
+  "types": "./index.d.ts",
   "license": "MIT",
   "scripts": {
     "lint": "eslint *.js*"
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@inc/styles": "workspace:*",
+    "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-hot-toast": "^2.4.0",
     "victory": "^36.6.8"
