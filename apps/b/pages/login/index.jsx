@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic';
 import SignInAndUpLayout from '../../components/layouts/SignInAndUpLayout';
 import SignInForm from '../../components/layouts/SignInForm';
 
@@ -14,6 +15,10 @@ const Page = () => (
   </div>
 );
 
-Page.getLayout = (page) => <SignInAndUpLayout>{page}</SignInAndUpLayout>;
+const SignInAndUpLayoutNoSSR = dynamic(() => Promise.resolve(SignInAndUpLayout), {
+  ssr: false,
+});
+
+Page.getLayout = (page) => <SignInAndUpLayoutNoSSR>{page}</SignInAndUpLayoutNoSSR>;
 
 export default Page;
