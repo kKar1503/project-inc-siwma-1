@@ -2,6 +2,13 @@ import { useState } from 'react';
 import { bool, func, objectOf, string } from 'prop-types';
 import { useRouter } from 'next/router';
 
+/**
+ * The Icon that is used to open the HamburgerMenu
+ * @param open {boolean} - if the menu is open or not
+ * @param setOpen {(boolean) => void} - function to set the open state
+ * @returns {JSX.Element} - the hamburger button
+ * @constructor - the hamburger button
+ */
 const HamburgerButtonIcon = ({ open, setOpen }) => {
   // ------------------ Styles -----------------
   // border color doesn't show up
@@ -45,6 +52,13 @@ HamburgerButtonIcon.propTypes = {
   setOpen: func,
 };
 
+/**
+ * The Item represents each tab in the HamburgerMenu
+ * @param name {string} - the name of the tab
+ * @param link {string} - the link of the tab
+ * @returns {JSX.Element} - the item
+ * @constructor - the item
+ */
 const HamburgerMenuItem = ({ name, link }) => {
   const router = useRouter();
 
@@ -91,6 +105,13 @@ HamburgerMenuItem.propTypes = {
   link: string,
 };
 
+/**
+ * The ExpandedHamburgerMenu is the menu that is shown when the HamburgerButtonIcon is clicked
+ * @param navigationTabs {object} - the tabs that are shown in the menu
+ * @param open {boolean} - if the menu is open or not
+ * @returns {JSX.Element} - the menu
+ * @constructor - the menu
+ */
 const ExpandedHamburgerMenu = ({ navigationTabs, open }) => {
   // try to implement a way to close the menu when clicking outside it
 
@@ -128,6 +149,12 @@ ExpandedHamburgerMenu.propTypes = {
 // Rip my OCD
 
 // ------------------ Main Component -----------------
+/**
+ * The HamburgerMenu is the menu that is shown when the HamburgerButtonIcon is clicked
+ * @param navigationTabs {Object.<string, string>} - the tabs that are shown in the menu
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const HamburgerMenu = ({ navigationTabs }) => {
   // ------------------ useStates -----------------
   const [open, setOpen] = useState(false);
