@@ -3,7 +3,14 @@ import { bool, func, objectOf, string } from 'prop-types';
 import { useRouter } from 'next/router';
 
 // todo use color scheme
-// todo animations
+// ------------------ Colors -----------------
+const IconBackgroundColor = 'white';
+const IconColor = 'black';
+
+const ElementHoverColor = 'blue';
+const ElementDefaultColor = 'white';
+
+const MenuBackgroundColor = 'red';
 
 /**
  * The Icon that is used to open the HamburgerMenu
@@ -16,7 +23,7 @@ const HamburgerButtonIcon = ({ open, setOpen }) => {
   // ------------------ Styles -----------------
   // border color doesn't show up
   const style = {
-    // borderColor: 'gray',
+    backgroundColor: IconBackgroundColor,
   };
 
   // ------------------ Handles -----------------
@@ -26,13 +33,13 @@ const HamburgerButtonIcon = ({ open, setOpen }) => {
 
   // ------------------ Return -----------------
   return (
-    <div style={style}>
-      <button className="btn" onClick={onClickHandle}>
+    <div>
+      <button className="btn" onClick={onClickHandle} style={style}>
         <svg
           height={32}
           width={32}
           style={{
-            fill: 'black',
+            fill: IconColor,
           }}
         >
           <path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" />
@@ -63,7 +70,7 @@ const HamburgerMenuItem = ({ name, redirectLink }) => {
 
   // ------------------ Styles -----------------
   const style = {
-    backgroundColor: hover ? 'blue' : 'white',
+    backgroundColor: hover ? ElementHoverColor : ElementDefaultColor,
     width: '12em',
   };
 
@@ -116,9 +123,8 @@ const ExpandedHamburgerMenu = ({ navigationTabs, open }) => {
   // ------------------ Styles -----------------
   const style = {
     position: 'absolute',
-    backgroundColor: 'red',
+    backgroundColor: MenuBackgroundColor,
     width: '12em',
-    // display: open ? 'block' : 'none',
     transition: 'all 0.5s ease',
     marginLeft: open ? '-0.5em' : '-13em',
   };
@@ -131,7 +137,7 @@ const ExpandedHamburgerMenu = ({ navigationTabs, open }) => {
   // ------------------ Mapping -----------------
   const content = Object.keys(navigationTabs).map((name) => {
     const redirectLink = navigationTabs[name];
-    return <HamburgerMenuItem name={name} redirectLink={redirectLink} />;
+    return <HamburgerMenuItem key={name} name={name} redirectLink={redirectLink} />;
   });
 
   // ------------------ Return -----------------
