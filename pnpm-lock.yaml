@@ -11,8 +11,11 @@ importers:
       lint-staged: ^13.0.3
       next: 13.0.0
       prettier: latest
+      react-icons: ^4.6.0
       run-script-os: ^1.1.6
       turbo: latest
+    dependencies:
+      react-icons: 4.6.0
     devDependencies:
       '@commitlint/cli': 17.1.2
       '@commitlint/config-conventional': 17.1.0
