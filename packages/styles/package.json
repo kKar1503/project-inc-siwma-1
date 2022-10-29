@@ -6,9 +6,6 @@
     "tailwind.config.js",
     "postcss.config.js"
   ],
-  "scripts": {
-    "lint": "eslint *.js*"
-  },
   "publishConfig": {
     "access": "public"
   }
