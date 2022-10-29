@@ -1,0 +1,15 @@
+{
+  "name": "@inc/styles",
+  "version": "0.0.0",
+  "files": [
+    "styles",
+    "tailwind.config.js",
+    "postcss.config.js"
+  ],
+  "scripts": {
+    "lint": "eslint *.js*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
