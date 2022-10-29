@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { bool, func, objectOf, string } from 'prop-types';
 import { useRouter } from 'next/router';
 
+// todo use color scheme
+// todo animations
+
 /**
  * The Icon that is used to open the HamburgerMenu
  * @param open {boolean} - if the menu is open or not
@@ -13,34 +16,27 @@ const HamburgerButtonIcon = ({ open, setOpen }) => {
   // ------------------ Styles -----------------
   // border color doesn't show up
   const style = {
-    borderColor: 'gray',
+    // borderColor: 'gray',
   };
-
-  // ------------------ UseStates -----------------
-  const [realState, setRealState] = useState(open);
 
   // ------------------ Handles -----------------
   const onClickHandle = () => {
-    setOpen(!realState);
-    setRealState(!realState);
-  };
-  const onHoverHandle = () => {
-    setOpen(true);
-  };
-  const onLeaveHandle = () => {
-    setOpen(realState);
+    setOpen(!open);
   };
 
   // ------------------ Return -----------------
   return (
     <div style={style}>
-      <button
-        className="btn"
-        onClick={onClickHandle}
-        onMouseEnter={onHoverHandle}
-        onMouseLeave={onLeaveHandle}
-      >
-        Hamburger
+      <button className="btn" onClick={onClickHandle}>
+        <svg
+          height={32}
+          width={32}
+          style={{
+            fill: 'black',
+          }}
+        >
+          <path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" />
+        </svg>
       </button>
     </div>
   );
@@ -55,11 +51,11 @@ HamburgerButtonIcon.propTypes = {
 /**
  * The Item represents each tab in the HamburgerMenu
  * @param name {string} - the name of the tab
- * @param link {string} - the link of the tab
+ * @param redirectLink {string} - the link of the tab
  * @returns {JSX.Element} - the item
  * @constructor - the item
  */
-const HamburgerMenuItem = ({ name, link }) => {
+const HamburgerMenuItem = ({ name, redirectLink }) => {
   const router = useRouter();
 
   // ------------------ UseStates -----------------
@@ -73,7 +69,7 @@ const HamburgerMenuItem = ({ name, link }) => {
 
   // ------------------ Handles -----------------
   const onClickHandle = async () => {
-    await router.push(link);
+    await router.push(redirectLink);
   };
   const onHoverHandle = () => {
     setHover(true);
@@ -102,7 +98,7 @@ const HamburgerMenuItem = ({ name, link }) => {
 
 HamburgerMenuItem.propTypes = {
   name: string,
-  link: string,
+  redirectLink: string,
 };
 
 /**
@@ -113,27 +109,35 @@ HamburgerMenuItem.propTypes = {
  * @constructor - the menu
  */
 const ExpandedHamburgerMenu = ({ navigationTabs, open }) => {
-  // try to implement a way to close the menu when clicking outside it
+  // todo:
+  // implement a way to close the menu when clicking outside it
+  // implement opening and closing animations
 
   // ------------------ Styles -----------------
   const style = {
     position: 'absolute',
     backgroundColor: 'red',
     width: '12em',
+    // display: open ? 'block' : 'none',
+    transition: 'all 0.5s ease',
+    marginLeft: open ? '-0.5em' : '-13em',
+  };
+
+  const listStyle = {
     listStyle: 'none',
-    display: open ? 'block' : 'none',
+    padding: '0',
   };
 
   // ------------------ Mapping -----------------
   const content = Object.keys(navigationTabs).map((name) => {
-    const link = navigationTabs[name];
-    return <HamburgerMenuItem name={name} link={link} />;
+    const redirectLink = navigationTabs[name];
+    return <HamburgerMenuItem name={name} redirectLink={redirectLink} />;
   });
 
   // ------------------ Return -----------------
   return (
     <div style={style}>
-      <ul>{content}</ul>
+      <ul style={listStyle}>{content}</ul>
     </div>
   );
 };
@@ -145,12 +149,12 @@ ExpandedHamburgerMenu.propTypes = {
   open: bool,
 };
 
-// The purpose of using NextJS is to keep component related logic within 1 file ~kar lok
+// The purpose of using NextJS is to keep component related logic within 1 file ~ kar lok
 // Rip my OCD
 
 // ------------------ Main Component -----------------
 /**
- * The HamburgerMenu is the menu that is shown when the HamburgerButtonIcon is clicked
+ * The HamburgerMenu is a hamburger menu
  * @param navigationTabs {Object.<string, string>} - the tabs that are shown in the menu
  * @returns {JSX.Element}
  * @constructor
