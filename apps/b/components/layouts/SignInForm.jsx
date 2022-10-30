@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Link from 'next/link';
@@ -22,18 +21,18 @@ import Link from 'next/link';
 const SignInForm = ({ className }) => (
   <form className={cx(className, 'flex flex-col w-full gap-12')}>
     <div className="flex flex-col gap-4">
-      <label className="flex flex-col gap-2">
+      <label className="flex flex-col gap-2" htmlFor="email">
         E-Mail
         <input className="input input-bordered" />
       </label>
-      <label className="flex flex-col gap-2">
+      <label className="flex flex-col gap-2" htmlFor="password">
         Password
         <input className="input input-bordered" />
       </label>
     </div>
 
     <div className="flex flex-row justify-between">
-      <label className="flex flex-row gap-4">
+      <label className="flex flex-row gap-4" htmlFor="remember">
         <input type="checkbox" className="checkbox checkbox-primary" />
         Remember Me
       </label>
