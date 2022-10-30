@@ -4,12 +4,12 @@ import Title from '../Title';
 const colors = ['#2AB985', '#21986C', '#34D399', '#A5EBD2', '#1A7755', '#0F4733'];
 
 const dataset = [
-  { cat: 'cat1', post: 10 },
-  { cat: 'cat2', post: 4 },
-  { cat: 'cat3', post: 15 },
-  { cat: 'cat4', post: 3 },
-  { cat: 'cat5', post: 2 },
-  { cat: 'cat6', post: 6 },
+  { cat: 'cat1', post: 15 },
+  { cat: 'cat2', post: 10 },
+  { cat: 'cat3', post: 6 },
+  { cat: 'cat4', post: 4 },
+  { cat: 'cat5', post: 3 },
+  { cat: 'cat6', post: 2 },
 ];
 
 const MostCommonCategoryChart = () => (
