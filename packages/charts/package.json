@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@inc/styles": "workspace:*",
+    "luxon": "^3.0.4",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-hot-toast": "^2.4.0",

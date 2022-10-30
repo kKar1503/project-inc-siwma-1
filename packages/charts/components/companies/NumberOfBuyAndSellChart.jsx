@@ -1,41 +1,37 @@
 import { VictoryAxis, VictoryLine, VictoryChart, VictoryGroup } from 'victory';
+import { DateTime } from 'luxon';
+import Title from '../Title';
 
+const colors = ['orange', 'tomato'];
+
+const year = 2021;
 const dataset = [
-  [
-    { month: new Date(0, 0, 1), posts: 5 },
-    { month: new Date(0, 0, 4), posts: 25 },
-    { month: new Date(0, 0, 6), posts: 15 },
-    { month: new Date(0, 0, 9), posts: 30 },
-    { month: new Date(0, 0, 11), posts: 25 },
-    { month: new Date(0, 0, 12), posts: 35 },
-  ],
-  [
-    { month: new Date(0, 0, 1), posts: 5 },
-    { month: new Date(0, 0, 4), posts: 20 },
-    { month: new Date(0, 0, 6), posts: 5 },
-    { month: new Date(0, 0, 9), posts: 25 },
-    { month: new Date(0, 0, 11), posts: 25 },
-    { month: new Date(0, 0, 12), posts: 25 },
-  ],
+  { month: new Date(year, 0), buy: 5, sell: 5 },
+  { month: new Date(year, 3), buy: 25, sell: 20 },
+  { month: new Date(year, 6), buy: 15, sell: 5 },
+  { month: new Date(year, 8), buy: 30, sell: 25 },
+  { month: new Date(year, 10), buy: 25, sell: 25 },
+  { month: new Date(year, 11), buy: 35, sell: 35 },
 ];
 
 const NumberOfBuyAndSellChart = () => (
-  <div>
-    <VictoryChart domainPadding={20}>
-      <VictoryGroup colorScale={['tomato', 'orange']}>
-        {dataset.map((datas) => (
-          <VictoryLine data={datas} x="month" y="posts" />
-        ))}
-      </VictoryGroup>
-
-      <VictoryAxis
-        style={{ tickLabels: { fontSize: 8 } }}
-        tickFormat={(x) => x.toLocaleString('vn-vn', { month: 'short', day: 'numeric' })}
-        label="Month"
-      />
-      <VictoryAxis dependentAxis tickCount={7} label="Companys" />
-    </VictoryChart>
-  </div>
+  <VictoryChart domainPadding={{ y: [20, 20] }}>
+    <Title text="Number Of Companies Buying And Selling" />
+    <VictoryAxis dependentAxis style={{ grid: { stroke: '#DADADA' } }} />
+    <VictoryGroup colorScale={colors}>
+      <VictoryLine data={dataset} x="month" y="sell" />
+      <VictoryLine data={dataset} x="month" y="buy" />
+    </VictoryGroup>
+    <VictoryAxis
+      style={{ tickLabels: { fontSize: 8 } }}
+      tickFormat={(date) => DateTime.fromMillis(date).toFormat('MMM')}
+      tickValues={Array(12)
+        .fill()
+        .map((_, i) => DateTime.fromObject({ year, month: i + 1 }).toMillis())}
+      label="Month"
+    />
+    <VictoryAxis dependentAxis tickCount={7} label="Companies" />
+  </VictoryChart>
 );
 
 export default NumberOfBuyAndSellChart;
