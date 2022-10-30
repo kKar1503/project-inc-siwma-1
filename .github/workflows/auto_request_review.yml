@@ -9,12 +9,10 @@ jobs:
     name: Auto Request Review
     runs-on: ubuntu-latest
 
-    strategy: 
-      matrix:
-        teams: [a, b, c, d]
-        head-branch: ${{ github.event.pull_request.head.ref }}
+    env: 
+      teams: [a, b, c, d]
 
-    if: ${{ contains(matrix.teams, matrix.head-branch) }}
+    if: ${{ contains(env.teams, github.event.pull_request.head.ref) }}
     steps:
       - name: Request review based on the branch being merged into
         uses: necojackarc/auto-request-review@v0.8.0
