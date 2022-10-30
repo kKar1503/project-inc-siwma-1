@@ -1,4 +1,10 @@
-import { VictoryAxis, VictoryLine, VictoryChart, VictoryGroup } from 'victory';
+import {
+  VictoryAxis,
+  VictoryLine,
+  VictoryChart,
+  VictoryGroup,
+  VictoryClipContainer,
+} from 'victory';
 import { DateTime } from 'luxon';
 import Title from '../Title';
 
@@ -19,8 +25,18 @@ const NumberOfBuyAndSellChart = () => (
     <Title text="Number Of Companies Buying And Selling" />
     <VictoryAxis dependentAxis style={{ grid: { stroke: '#DADADA' } }} />
     <VictoryGroup colorScale={colors}>
-      <VictoryLine data={dataset} x="month" y="sell" />
-      <VictoryLine data={dataset} x="month" y="buy" />
+      <VictoryLine
+        data={dataset}
+        x="month"
+        y="sell"
+        groupComponent={<VictoryClipContainer clipId={0} />}
+      />
+      <VictoryLine
+        data={dataset}
+        x="month"
+        y="buy"
+        groupComponent={<VictoryClipContainer clipId={1} />}
+      />
     </VictoryGroup>
     <VictoryAxis
       style={{ tickLabels: { fontSize: 8 } }}
