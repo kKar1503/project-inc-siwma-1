@@ -9,10 +9,7 @@ jobs:
     name: Auto Request Review
     runs-on: ubuntu-latest
 
-    env: 
-      teams: [a, b, c, d]
-
-    if: ${{ contains(env.teams, github.event.pull_request.head.ref) }}
+    if: ${{ contains(fromJson('["a", "b", "c", "d"]'), github.event.pull_request.head.ref) }}
     steps:
       - name: Request review based on the branch being merged into
         uses: necojackarc/auto-request-review@v0.8.0
