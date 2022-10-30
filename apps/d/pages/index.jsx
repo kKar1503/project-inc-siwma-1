@@ -1,4 +1,9 @@
-import { MostPostsBarChart } from '@inc/charts';
+import {
+  MostPostsBarChart,
+  MostBuyAndSellStackChart,
+  NumberOfBuyAndSellChart,
+  MostCommonCategoryChart,
+} from '@inc/charts';
 
 const mockData = [
   { company: 'A&G EQUIPMENT PTE.LTD.', posts: 32 },
@@ -10,6 +15,9 @@ const mockData = [
 const Home = () => (
   <div className="w-96">
     <MostPostsBarChart data={mockData} />
+    <MostBuyAndSellStackChart />
+    <NumberOfBuyAndSellChart />
+    <MostCommonCategoryChart />
   </div>
 );
 
