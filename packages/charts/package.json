@@ -15,6 +15,7 @@
     "@inc/styles": "workspace:*",
     "luxon": "^3.0.4",
     "prop-types": "^15.8.1",
+    "@inc/styles": "workspace:*",
     "react": "^18.2.0",
     "react-hot-toast": "^2.4.0",
     "victory": "^36.6.8"
