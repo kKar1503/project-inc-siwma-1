@@ -1,8 +1,4 @@
 reviewers:
-  # The default reviewers
-  defaults:
-    - repository-owners # group
-
   # Reviewer groups each of which has a list of GitHub usernames
   groups:
     team-a:
@@ -33,15 +29,6 @@ reviewers:
       - Xu3huapiaopiao
       - MrsDarth
       - YiningSP
-    team-leaders:
-      - yeoxhshelby
-      - georgeyinxu
-      - Axiver
-      - Acrylic125
-      - kKar1503
-      - RuinedRuins
-      - huishilhs
-      - tohmenchoo
 
 options:
   ignore_draft: true
