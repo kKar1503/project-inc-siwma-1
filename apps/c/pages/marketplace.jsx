@@ -1,3 +1,5 @@
+import Link from 'next/link';
+import Container from '../components/Container';
 import Carousel from '../components/marketplace/Carousel';
 import CategoryListingItem from '../components/marketplace/CategoryListingItem';
 import ProductListingItem from '../components/marketplace/ProductListingItem';
@@ -103,7 +105,7 @@ const products = [
     name: 'Product 2',
     rating: 3.6,
     href: '#',
-    img: 'https://via.placeholder.com/150',
+    img: 'https://via.placeholder.com/150x50',
   },
 
   {
@@ -180,58 +182,80 @@ const products = [
 ];
 
 const MarketplacePage = () => (
-  <div className="container">
-    {/* Carousel */}
-    <h1 className="text-3xl font-bold">Marketplace</h1>
-
-    {/* Title */}
-    <h3 className="text-xl font-bold my-2">Categories</h3>
-    {/* View all categories link */}
-    {/* Carousel of categories */}
-
-    <Carousel
-      items={categories.map((category) => (
-        <CategoryListingItem
-          key={category.id}
-          img={category.img}
-          name={category.name}
-          href={category.href}
+  <div>
+    {/* TODO: Ask for proper dimensions for the banner image at the top */}
+    {/* Image banner */}
+    <div className="mb-10">
+      {/* Image banner - Object cover covers the image (zoom crop) */}
+      <picture>
+        <img
+          src="https://via.placeholder.com/1500x500"
+          className="object-cover w-full h-[200px]"
+          alt="Banner"
         />
-      ))}
-      name="categories"
-    />
+      </picture>
+    </div>
 
-    {/* Title */}
-    <h3 className="text-xl font-bold my-2">Popular</h3>
+    {/* Container just adds margin from left and right */}
+    <Container>
+      {/* Carousel */}
+      <h1 className="text-3xl font-bold">Marketplace</h1>
 
-    {/* Carousel of products */}
-    <Carousel
-      items={products.map((product) => (
-        <ProductListingItem
-          img={product.img}
-          name={product.name}
-          rating={product.rating}
-          href={product.href}
-        />
-      ))}
-      name="popular-products"
-    />
+      <div className="flex flex-wrap justify-between items-center">
+        {/* Title */}
+        <h3 className="text-xl font-bold my-2">Categories</h3>
+        {/* View all categories link */}
+        <Link href="/categories">
+          <p className="link">View all categories</p>
+        </Link>
+      </div>
 
-    {/* Title */}
-    <h3 className="text-xl font-bold my-2">Recommended</h3>
+      {/* Carousel of categories */}
 
-    {/* Carousel of products */}
-    <Carousel
-      items={products.map((product) => (
-        <ProductListingItem
-          img={product.img}
-          name={product.name}
-          rating={product.rating}
-          href={product.href}
-        />
-      ))}
-      name="recommended-products"
-    />
+      <Carousel
+        items={categories.map((category) => (
+          <CategoryListingItem
+            key={category.id}
+            img={category.img}
+            name={category.name}
+            href={category.href}
+          />
+        ))}
+        name="categories"
+      />
+
+      {/* Title */}
+      <h3 className="text-xl font-bold my-2">Popular</h3>
+
+      {/* Carousel of products */}
+      <Carousel
+        items={products.map((product) => (
+          <ProductListingItem
+            img={product.img}
+            name={product.name}
+            rating={product.rating}
+            href={product.href}
+          />
+        ))}
+        name="popular-products"
+      />
+
+      {/* Title */}
+      <h3 className="text-xl font-bold my-2">Recommended</h3>
+
+      {/* Carousel of products */}
+      <Carousel
+        items={products.map((product) => (
+          <ProductListingItem
+            img={product.img}
+            name={product.name}
+            rating={product.rating}
+            href={product.href}
+          />
+        ))}
+        name="recommended-products"
+      />
+    </Container>
   </div>
 );
 
