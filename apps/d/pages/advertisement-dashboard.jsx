@@ -1,7 +1,8 @@
-import Image from 'next/image';
+import { NumberOfAdsChart } from '@inc/charts';
 
 const AdvertisementDashboard = () => (
   <div className="pl-48">
+    <NumberOfAdsChart />
     <div>
       <div className="space-y-4">
         <div className="card flex-initial h-18 bg-base-100 shadow-xl">
