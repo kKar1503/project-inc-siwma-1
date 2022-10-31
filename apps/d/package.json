@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@inc/charts": "workspace:*",
     "@inc/styles": "workspace:*",
     "@inc/ui": "workspace:*",
     "@inc/charts": "workspace:*",
