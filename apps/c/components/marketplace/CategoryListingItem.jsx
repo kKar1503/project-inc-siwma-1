@@ -6,7 +6,7 @@ const CategoryListingItem = ({ img, name, href }) => (
     <a href={href}>
       {/* TODO: Implement image and text overlap on top of each other (use relative positioning) */}
       <picture>
-        <img src={img} alt={name} />
+        <img src={img} alt={name} className="aspect-square object-cover h-[150px]" />
       </picture>
       <p>{name}</p>
     </a>
