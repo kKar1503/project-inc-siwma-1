@@ -77,6 +77,7 @@ HamburgerButtonIcon.propTypes = {
  * The Item represents each tab in the HamburgerMenu
  * @param name {string} - the name of the tab
  * @param redirectLink {string} - the link of the tab
+ * @param width {number} - the width of the tab
  * @returns {JSX.Element} - the item
  * @constructor - the item
  */
