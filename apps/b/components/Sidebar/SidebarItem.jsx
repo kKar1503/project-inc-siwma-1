@@ -25,6 +25,20 @@ export function parseSidebarItem(sidebarItem) {
  * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
  */
 const SidebarItem = ({ label, link, selected, subPages }) => {
+  /**
+   * There are two variants to the SidebarItem component
+   * 1. A regular navigation button
+   * 2. A collapsible dropdown list that can contain other SidebarItems
+   *
+   * Depending on the variant being rendered, the isSelected state is used differently
+   * Variant 1 - isSelected is used to determine whether or not the SidebarItem should be rendered in its selected state (bg-primary, text-white)
+   * Variant 2 - isSelected is used to determine whether or not the dropdown list contains any selected items
+   *
+   * In Variant 2, should the dropdown list contain a selected item, the SidebarItem being rendered will have a grey background applied (bg-base-200)
+   * when it is expanded, and the primary background applied (bg-primary) when collapsed.
+   *
+   * This is done to indicate to the user, when the SidebarItem is collapsed, that an item within it is selected
+   */
   const [isSelected, setIsSelected] = useState(
     label === selected ||
       (subPages !== undefined && subPages.some((e) => Object.keys(e)[0] === selected))
