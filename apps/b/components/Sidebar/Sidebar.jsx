@@ -47,7 +47,7 @@ const Sidebar = ({ children, sidebarList, selected }) => (
     <div className="drawer-side lg:rounded-2xl shadow-xl">
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label htmlFor="sidebar-drawer" className="drawer-overlay" />
-      <ul className="menu p-4 overflow-y-auto w-64 bg-base-100 text-base-content">
+      <ul className="menu p-4 overflow-y-visible w-64 bg-base-100 text-base-content flex-nowrap">
         <li className="flex-none w-full h-16 btn-disabled bg-base-100 my-5">
           <div className="inline-block">
             <Image src="/siwma-logo-sm.png" className="object-contain" alt="SIWMA Logo" fill />

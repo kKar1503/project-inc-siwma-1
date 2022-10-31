@@ -76,7 +76,7 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
         {label}
       </div>
       <ul
-        className="collapse-content menu px-2 py-0"
+        className="collapse-content menu px-2 py-0 flex-nowrap"
         style={{ paddingBottom: isExpanded ? '0.375rem' : '0rem' }}
       >
         {
