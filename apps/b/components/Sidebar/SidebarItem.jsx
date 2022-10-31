@@ -19,6 +19,7 @@ export function parseSidebarItem(sidebarItem) {
 
 /**
  * Navigation item for the sidebar
+ * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
  */
 const SidebarItem = ({ label, link, selected, subPages }) => {
   const [isSelected, setIsSelected] = useState(
@@ -80,11 +81,13 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
   );
 };
 
-SidebarItem.propTypes = {
+const propTypes = {
   label: PropTypes.string.isRequired,
   link: PropTypes.string,
   selected: PropTypes.string,
   subPages: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
 };
+
+SidebarItem.propTypes = propTypes;
 
 export default SidebarItem;
