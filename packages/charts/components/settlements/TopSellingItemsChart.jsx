@@ -20,7 +20,7 @@ const TopSellingItemsChart = ({ data = mockData }) => (
     domainPadding={40}
   >
     <Title text="Top 6 Selling Items in 2022" />
-    <VictoryAxis dependentAxis style={{ grid: { stroke: '#DADADA' } }} />
+    <VictoryAxis dependentAxis style={{ grid: { stroke: '#DADADA' } }} tickCount={7} />
     <VictoryAxis dependentAxis label="Amount" />
     <VictoryBar data={data} x="item" y="amount" style={{ data: { fill: color } }} />
     <VictoryAxis
