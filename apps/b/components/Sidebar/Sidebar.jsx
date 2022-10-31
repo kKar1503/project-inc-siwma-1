@@ -32,8 +32,7 @@ const sidebarList = [
 
 /**
  * Sidebar for admin pages
- * @param {*}
- * @returns
+ * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
  */
 const Sidebar = ({ children, selected }) => (
   <div className="drawer drawer-mobile">
@@ -74,9 +73,11 @@ const Sidebar = ({ children, selected }) => (
   </div>
 );
 
-Sidebar.propTypes = {
+const propTypes = {
   children: PropTypes.node,
   selected: PropTypes.string,
 };
+
+Sidebar.propTypes = propTypes;
 
 export default Sidebar;
