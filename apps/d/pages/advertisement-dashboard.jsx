@@ -1,4 +1,4 @@
-import { ClickDistribution } from '@inc/charts';
+import { ClickDistribution, NumberOfAdsChart } from '@inc/charts';
 
 const AdvertisementDashboard = () => (
   <div className="pl-48 pr-10">
@@ -98,6 +98,7 @@ const AdvertisementDashboard = () => (
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">
           <div className="card-title">Number of active ad-space per month</div>
+          <NumberOfAdsChart />
         </div>
       </div>
     </div>

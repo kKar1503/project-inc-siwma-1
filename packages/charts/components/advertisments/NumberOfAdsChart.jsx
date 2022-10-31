@@ -1,18 +1,40 @@
 import { VictoryChart, VictoryBar, VictoryAxis, VictoryLabel, Bar } from 'victory';
-// import { DateTime } from 'luxon';
 
-const dataset = [{ month: 'Jan', buy: 5, sell: 5 }];
+const dataset = [
+  { month: 'Jan', ad_space: 5 },
+  { month: 'Feb', ad_space: 1 },
+  { month: 'Mar', ad_space: 2 },
+  { month: 'Apr', ad_space: 4 },
+  { month: 'May', ad_space: 4 },
+  { month: 'Jun', ad_space: 1 },
+  { month: 'Jul', ad_space: 4 },
+  { month: 'Aug', ad_space: 1 },
+  { month: 'Sep', ad_space: 3 },
+  { month: 'Oct', ad_space: 4 },
+];
+
+const ticks = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const month = 'Oct';
+
 const NumberOfAdsCharts = () => (
-  <VictoryChart>
+  <VictoryChart domainPadding={20}>
     <VictoryBar
       data={dataset}
-      // labels={({ data }) => data._y}
-      barWidth={40}
-      labelComponent={<VictoryLabel y={335} angle={-90} lineHeight={-1.5} textAnchor="start" />}
+      x="month"
+      y="ad_space"
+      style={{
+        data: { fill: ({ datum }) => (datum.month === month ? '#F43F5E' : 'lightgrey') },
+        labels: { fill: ({ datum }) => (datum.month === month ? 'white' : 'black') },
+      }}
+      labels={({ datum }) => datum.ad_space}
+      barWidth={20}
+      labelComponent={<VictoryLabel y={242} angle={-90} lineHeight="-1.5" textAnchor="start" />}
       dataComponent={
-        <Bar cornerRadius={{ topLeft: 20, topRight: 20, bottomLeft: 20, bottomRight: 20 }} />
+        <Bar cornerRadius={{ topLeft: 10, topRight: 10, bottomLeft: 10, bottomRight: 10 }} />
       }
     />
+    <VictoryAxis tickValues={ticks} style={{ axis: { stroke: 'none' } }} />
   </VictoryChart>
 );
 
