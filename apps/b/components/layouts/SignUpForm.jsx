@@ -25,43 +25,34 @@ const SignUpForm = ({ className }) => (
       <label className="flex flex-col gap-2" htmlFor="company">
         Company
         <input
-          className="input input-bordered rounded-md"
+          className="input input-bordered rounded-lg"
           placeholder="REGISTERED COMPANY NAME HERE"
         />
       </label>
       <label className="flex flex-col gap-2" htmlFor="name">
         Full Name
-        <input className="input input-bordered rounded-md" placeholder="Your full name" />
+        <input className="input input-bordered rounded-lg" placeholder="Your full name" />
       </label>
       <div className="flex flex-col md:flex-row gap-4">
         <label className="flex flex-col gap-2" htmlFor="email">
           E-Mail
-          <input className="input input-bordered rounded-md" placeholder="Your email address" />
+          <input className="input input-bordered rounded-lg" placeholder="Your email address" />
         </label>
-        <label className="flex flex-col md:flex-row gap-2" htmlFor="password">
+        <label className="flex flex-col gap-2" htmlFor="password">
           Password
-          <input className="input input-bordered rounded-md" placeholder="Your password" />
+          <input className="input input-bordered rounded-lg" placeholder="Your password" />
         </label>
       </div>
       <div className="flex flex-col md:flex-row gap-4">
         <label className="flex flex-col gap-2" htmlFor="phone">
           Mobile Number
-          <input className="input input-bordered rounded-md" placeholder="Your mobile number" />
+          <input className="input input-bordered rounded-lg" placeholder="Your mobile number" />
         </label>
         <label className="flex flex-col gap-2" htmlFor="confirm">
           Confirm Password
-          <input className="input input-bordered rounded-md" placeholder="Confirm your password" />
+          <input className="input input-bordered rounded-lg" placeholder="Confirm your password" />
         </label>
       </div>
-    </div>
-    <div className="flex flex-row justify-between">
-      <label className="flex flex-row gap-4" htmlFor="remember">
-        <input type="checkbox" className="checkbox checkbox-primary" />
-        Remember Me
-      </label>
-      <Link href="/">
-        <p className="text-primary underline">Forgot Password?</p>
-      </Link>
     </div>
 
     <button type="submit" className="btn btn-primary">
