@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 
 const CategoryListingItem = ({ img, name, href }) => (
-  <div>
+  <div className="card">
     <a href={href}>
       {/* TODO: Implement image and text overlap on top of each other (use relative positioning) */}
       <picture>
