@@ -24,6 +24,7 @@ const NumberOfBuyAndSellChart = () => (
   <VictoryChart domainPadding={{ y: [20, 20] }}>
     <Title text="Number Of Companies Buying And Selling" />
     <VictoryAxis dependentAxis style={{ grid: { stroke: '#DADADA' } }} />
+    <VictoryAxis dependentAxis style={{ grid: { stroke: '#DADADA' } }} tickCount={7} />
     <VictoryGroup colorScale={colors}>
       <VictoryLine
         data={dataset}

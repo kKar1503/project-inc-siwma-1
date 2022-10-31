@@ -13,11 +13,11 @@ const dataset = [
 ];
 
 const MostCommonCategoryChart = () => (
-  <VictoryContainer width={400} height={350}>
+  <VictoryContainer width={400} height={290}>
     <Title text="Most Common Category In $/kg" />
     <VictoryPie
-      padding={{ left: 50, bottom: 100, top: 25, right: 50 }}
-      radius={120}
+      padding={{ left: 50, bottom: 130, right: 50 }}
+      radius={95}
       standalone={false}
       data={dataset}
       x="cat"
@@ -25,14 +25,14 @@ const MostCommonCategoryChart = () => (
       colorScale={colors}
       labels={({ datum }) => datum.post}
       style={{ labels: { fill: 'white', fontSize: 16 } }}
-      labelRadius={({ innerRadius }) => innerRadius + 70}
+      labelRadius={({ innerRadius }) => innerRadius + 60}
     />
     <VictoryLegend
       standalone={false}
       itemsPerRow={2}
-      gutter={50}
-      x={75}
-      y={300}
+      gutter={80}
+      x={45}
+      y={230}
       colorScale={colors}
       data={dataset.map(({ cat }) => ({ name: cat, symbol: { type: 'square' } }))}
     />
