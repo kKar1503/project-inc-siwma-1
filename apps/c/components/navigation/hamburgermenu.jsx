@@ -1,3 +1,5 @@
+// ------------------ Imports ------------------
+
 import { useState } from 'react';
 import { node, string } from 'prop-types';
 import { useRouter } from 'next/router';
@@ -12,22 +14,30 @@ const LayoutEditor = () => (
   <>
     <SidebarHeaderIcon />
 
-    <MenuLineDivider />
+    <SidebarDivider />
 
     <SidebarSearch />
-    <MenuItem name="Home" redirectLink="/" customIcon={<i className="bi bi-house-door-fill" />} />
-    <MenuItem name="Bookmark" redirectLink="/" customIcon={<i className="bi bi-bookmark-fill" />} />
-    <MenuItem
-      name="Chat box"
-      redirectLink="/"
+    <SidebarItem
+      name="Home"
+      redirectLink="/test#home"
+      customIcon={<i className="bi bi-house-door-fill" />}
+    />
+    <SidebarItem
+      name="Bookmark"
+      redirectLink="/test#bookmark"
+      customIcon={<i className="bi bi-bookmark-fill" />}
+    />
+    <SidebarItem
+      name="Chat"
+      redirectLink="/test#chat"
       customIcon={<i className="bi bi-chat-left-text-fill" />}
     >
-      <SubMenuItem name="Social" redirectLink="/" />
-      <SubMenuItem name="Personal" redirectLink="/" />
-      <SubMenuItem name="Friends" redirectLink="/" />
-    </MenuItem>
+      <SidebarSubItem name="Social" redirectLink="/test#chat_socials" />
+      <SidebarSubItem name="Personal" redirectLink="/test#chat_personal" />
+      <SidebarSubItem name="Friends" redirectLink="/test#chat_friends" />
+    </SidebarItem>
 
-    <MenuLineDivider />
+    <SidebarDivider />
 
     <SidebarLogout />
   </>
@@ -41,7 +51,7 @@ const LayoutEditor = () => (
  * @returns {JSX.Element}
  * @constructor
  */
-const MenuLineDivider = () => <div className="my-4 bg-gray-600 h-[1px]" />;
+const SidebarDivider = () => <div className="my-4 bg-gray-600 h-[1px]" />;
 
 /**
  * The Item represents each tab in the HamburgerMenu
@@ -52,7 +62,7 @@ const MenuLineDivider = () => <div className="my-4 bg-gray-600 h-[1px]" />;
  * @returns {JSX.Element} - the item
  * @constructor - the item
  */
-const MenuItem = ({ name, customIcon, redirectLink, children }) => {
+const SidebarItem = ({ name, customIcon, redirectLink, children }) => {
   // ------------------ useStates -----------------
   const [open, setOpen] = useState(false);
 
@@ -118,7 +128,7 @@ const MenuItem = ({ name, customIcon, redirectLink, children }) => {
  * @returns {JSX.Element}
  * @constructor
  */
-const SubMenuItem = ({ name, customIcon, redirectLink }) => {
+const SidebarSubItem = ({ name, customIcon, redirectLink }) => {
   // ------------------ Misc -----------------
   const router = useRouter();
 
@@ -213,16 +223,16 @@ export default HamburgerMenu;
 
 LayoutEditor.propTypes = {};
 
-MenuLineDivider.propTypes = {};
+SidebarDivider.propTypes = {};
 
-MenuItem.propTypes = {
+SidebarItem.propTypes = {
   name: string.isRequired,
   customIcon: node,
   children: node,
   redirectLink: string,
 };
 
-SubMenuItem.propTypes = {
+SidebarSubItem.propTypes = {
   name: string.required,
   customIcon: node,
   redirectLink: string,
