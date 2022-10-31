@@ -1,8 +1,7 @@
-import { NumberOfAdsChart } from '@inc/charts';
+import { ClickDistribution } from '@inc/charts';
 
 const AdvertisementDashboard = () => (
-  <div className="pl-48">
-    <NumberOfAdsChart />
+  <div className="pl-48 pr-10">
     <div>
       <div className="space-y-4">
         <div className="card flex-initial h-18 bg-base-100 shadow-xl">
@@ -23,10 +22,11 @@ const AdvertisementDashboard = () => (
             <p>Total clicks</p>
           </div>
         </div>
-        <div className="card flex-initial w-96 shadow-xl">
+        <div className="card flex-initial w-120 shadow-xl">
           <div className="card-body">
             <div className="card-title">Total click distribution</div>
             <p>Number of clicks per ad-space</p>
+            <ClickDistribution />
           </div>
         </div>
       </div>
