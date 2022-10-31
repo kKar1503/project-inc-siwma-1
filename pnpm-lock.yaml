@@ -178,6 +178,8 @@ importers:
       victory: ^36.6.8
     dependencies:
       '@inc/styles': link:../styles
+      luxon: 3.0.4
+      prop-types: 15.8.1
       react: 18.2.0
       react-hot-toast: 2.4.0_react@18.2.0
       victory: 36.6.8_react@18.2.0
