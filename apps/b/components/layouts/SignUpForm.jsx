@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Link from 'next/link';
@@ -23,53 +22,46 @@ import Link from 'next/link';
 const SignUpForm = ({ className }) => (
   <form className={cx(className, 'flex flex-col w-full gap-12')}>
     <div className="flex flex-col gap-4">
-      <label className="flex flex-col gap-2">
+      <label className="flex flex-col gap-2" htmlFor="company">
         Company
         <input
-          className="input input-bordered rounded-lg"
+          className="input input-bordered rounded-md"
           placeholder="REGISTERED COMPANY NAME HERE"
-          disabled // Company Name should be auto-filled
         />
       </label>
-      <label className="flex flex-col gap-2">
+      <label className="flex flex-col gap-2" htmlFor="name">
         Full Name
-        <input className="input input-bordered rounded-lg" placeholder="Your full name" />
+        <input className="input input-bordered rounded-md" placeholder="Your full name" />
       </label>
-      <div className="flex flex-col md:flex-row gap-4">
-        <label className="flex flex-col gap-2 flex-1">
+      <div className="flex flex-row gap-4">
+        <label className="flex flex-col gap-2" htmlFor="email">
           E-Mail
-          <input
-            className="input input-bordered rounded-lg w-full"
-            placeholder="Your email address"
-          />
+          <input className="input input-bordered rounded-md" placeholder="Your email address" />
         </label>
-        <label className="flex flex-col gap-2 flex-1">
+        <label className="flex flex-col gap-2" htmlFor="password">
           Password
-          <input
-            className="input input-bordered rounded-lg w-full"
-            placeholder="Your password"
-            type="password"
-          />
+          <input className="input input-bordered rounded-md" placeholder="Your password" />
         </label>
       </div>
-      <div className="flex flex-col md:flex-row gap-4">
-        <label className="flex flex-col gap-2 flex-1">
+      <div className="flex flex-row gap-4">
+        <label className="flex flex-col gap-2" htmlFor="phone">
           Mobile Number
-          <input
-            className="input input-bordered rounded-lg w-full"
-            placeholder="Your mobile number"
-            type="tel"
-          />
+          <input className="input input-bordered rounded-md" placeholder="Your mobile number" />
         </label>
-        <label className="flex flex-col gap-2 flex-1">
+        <label className="flex flex-col gap-2" htmlFor="confirm">
           Confirm Password
-          <input
-            className="input input-bordered rounded-lg w-full"
-            placeholder="Confirm your password"
-            type="password"
-          />
+          <input className="input input-bordered rounded-md" placeholder="Confirm your password" />
         </label>
       </div>
+    </div>
+    <div className="flex flex-row justify-between">
+      <label className="flex flex-row gap-4" htmlFor="remember">
+        <input type="checkbox" className="checkbox checkbox-primary" />
+        Remember Me
+      </label>
+      <Link href="/">
+        <p className="text-primary underline">Forgot Password?</p>
+      </Link>
     </div>
 
     <button type="submit" className="btn btn-primary">
