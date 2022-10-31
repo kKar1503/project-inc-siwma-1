@@ -1,18 +1,53 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const datas = ['company A', 'company B', 'company C'];
 
-const AdminUpload = () => {
-  const [buttonText, setButtonText] = useState('+');
+const data2 = [
+  { name: 'company a', selected: false },
+  { name: 'company b', selected: false },
+  { name: 'company c', selected: false },
+];
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    setButtonText(' x');
-    setTimeout(() => {
-      setButtonText('+');
-    }, 1000);
+const AdminUpload = () => {
+  const [getData, setGetData] = useState(null);
+
+  const handleClick = (name) => {
+    // e.preventDefault();
+    // setButtonText(' x');
+    // setTimeout(() => {
+    //   setButtonText('+');
+    // }, 1000);
+    // const filterData = getData;
+    // if (filterData.includes(name)){
+    //   filterData
+    // }
   };
+
+  const handleHover = (name) => {
+    const filter = getData.data;
+    for (let i = 0; i < filter.length; i++) {
+      if (filter[i].name === name) {
+        filter[i].selected = true;
+      }
+    }
+    setGetData({ type: 'select', data: filter });
+  };
+
+  const onMouseLeave = (name) => {
+    const filter = getData.data;
+    for (let i = 0; i < filter.length; i++) {
+      if (filter[i].name === name) {
+        filter[i].selected = false;
+      }
+    }
+    setGetData({ type: 'select', data: filter });
+  };
+
+  useEffect(() => {
+    setGetData({ type: 'data', data: data2 });
+  }, []);
 
   return (
     <>
@@ -72,36 +107,34 @@ const AdminUpload = () => {
           </div>
         </div>
         <div className="card w-1/3 h-80 bg-base-100 shadow-xl">
-          <h1 className="ml-4 leading-loose font-bold text-xl">Company to tag</h1>
+          <h1 className="ml-4 leading-loose font-bold text-xl mt-6">Company to tag</h1>
           <div>
             <input
               className="w-3/4 h-10 px-4 ml-4 mt-4 text-base placeholder-gray-500 border rounded-lg focus:shadow-outline"
               type="text"
               placeholder="Search"
             />
-            {/* <button className="btn btn-outline btn-accent rounded-xl">
-            Search
-          </button> */}
           </div>
           <table className="table-fixed">
-            {/* <thead>
-            <tr>
-              <th>Companies</th>
-            </tr>
-          </thead> */}
             <tbody>
               <tr>
                 <td>
                   <ul className=" ml-8 leading-loose text-gray-600 text-xl">
-                    {datas.map((data) => (
-                      <li>
-                        {data}
-                        <button className="ml-12" onClick={handleClick}>
-                          {' '}
-                          {buttonText}
-                        </button>
-                      </li>
-                    ))}
+                    {getData !== null &&
+                      getData.data.map((data) => (
+                        <li key={data.name}>
+                          {data.name}
+                          <button
+                            className="ml-12"
+                            onMouseOver={() => handleHover(data.name)}
+                            onMouseLeave={() => onMouseLeave(data.name)}
+                            onFocus={() => handleHover(data.name)}
+                            onClick={() => handleClick(data.name)}
+                          >
+                            {getData?.type === 'select' && data.selected ? 'x' : '+'}
+                          </button>
+                        </li>
+                      ))}
                   </ul>
                 </td>
               </tr>
