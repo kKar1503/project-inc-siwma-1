@@ -49,8 +49,8 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
   if (subPages === undefined) {
     // The sidebar item has no subpages, render a standalone sidebar item
     return (
-      <li className={cx('rounded-lg', { 'bg-primary text-white': isSelected })}>
-        <Link className="font-medium px-8 rounded-lg" href={link}>
+      <li className={cx('rounded-lg mt-1.5', { 'bg-primary text-white': isSelected })}>
+        <Link className="font-medium px-8 rounded-lg py-2.5" href={link}>
           {label}
         </Link>
       </li>
@@ -60,7 +60,7 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
   // The sidebar item has subpages, render a dropdown to contain them instead
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-    <div tabIndex="0" className="collapse collapse-arrow bg-base-200 rounded-lg">
+    <div tabIndex="0" className="collapse collapse-arrow bg-base-200 rounded-lg mt-1.5">
       <input
         className="min-h-0"
         type="checkbox"
@@ -68,14 +68,17 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
         onChange={() => setIsExpanded(!isExpanded)}
       />
       <div
-        className={cx('collapse-title min-h-0 py-3 font-medium rounded-lg px-8', {
+        className={cx('collapse-title min-h-0 font-medium rounded-lg px-8 py-2.5', {
           'bg-base-300 rounded-b-none': isSelected && isExpanded,
           'bg-primary text-white': isSelected && !isExpanded,
         })}
       >
         {label}
       </div>
-      <ul className="collapse-content menu px-2">
+      <ul
+        className="collapse-content menu px-2 py-0"
+        style={{ paddingBottom: isExpanded ? '0.375rem' : '0rem' }}
+      >
         {
           /* Render the sub pages */
           subPages.map((subPage) => {
