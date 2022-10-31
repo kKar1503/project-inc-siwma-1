@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import Sidebar from '../components/Sidebar/Sidebar';
+import Sidebar, { adminSidebar } from '../components/Sidebar/Sidebar';
 
 const Home = () => (
   <div className="bg-[#FAFAFA]">
@@ -9,7 +9,7 @@ const Home = () => (
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <main>
-      <Sidebar selected="Users">
+      <Sidebar sidebarList={adminSidebar} selected="Users">
         <button className="btn btn-primary">Hello</button>
       </Sidebar>
     </main>

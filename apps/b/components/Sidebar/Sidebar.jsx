@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 import SidebarItem, { parseSidebarItem } from './SidebarItem';
+import { lazyReference } from '../../utils';
 
 /**
- * Construct sidebar navigation menu
+ * Navigation list for admin sidebars
  */
-const sidebarList = [
+export const adminSidebar = [
   {
     'Home Page': '/',
   },
@@ -34,7 +35,7 @@ const sidebarList = [
  * Sidebar for admin pages
  * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
  */
-const Sidebar = ({ children, selected }) => (
+const Sidebar = ({ children, sidebarList, selected }) => (
   <div className="drawer drawer-mobile">
     <input id="sidebar-drawer" type="checkbox" className="drawer-toggle" />
     <div className="drawer-content flex flex-col items-center justify-center">
@@ -73,8 +74,21 @@ const Sidebar = ({ children, selected }) => (
   </div>
 );
 
+/**
+ * Recursive proptype definitions
+ * https://stackoverflow.com/a/32092829
+ */
+// eslint-disable-next-line no-use-before-define
+const lazySidebarListType = lazyReference(() => sidebarListType);
+
+const sidebarListType = PropTypes.oneOfType([
+  PropTypes.objectOf(PropTypes.string),
+  PropTypes.objectOf(PropTypes.arrayOf(lazySidebarListType)),
+]);
+
 const propTypes = {
   children: PropTypes.node,
+  sidebarList: PropTypes.arrayOf(sidebarListType).isRequired,
   selected: PropTypes.string,
 };
 
