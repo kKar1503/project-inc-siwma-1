@@ -9,10 +9,13 @@ import { useState } from 'react';
  * @returns The sidebar item's label, link and subpages (if any)
  */
 export function parseSidebarItem(sidebarItem) {
-  // Retrieve the label, link and the sub-pages of the sidebar item
+  // Retrieve the label, and its value from the sidebar item
   const label = Object.keys(sidebarItem)[0];
-  const link = typeof sidebarItem[label] === 'string' ? sidebarItem[label] : '/';
-  const subPages = typeof sidebarItem[label] !== 'string' ? sidebarItem[label] : undefined;
+  const labelValue = sidebarItem[label];
+
+  // Determine whether the value is a link or an array of subpages
+  const link = typeof labelValue === 'string' ? labelValue : '/';
+  const subPages = Array.isArray(labelValue) ? labelValue : undefined;
 
   return { label, link, subPages };
 }
