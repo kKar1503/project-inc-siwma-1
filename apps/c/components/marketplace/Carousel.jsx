@@ -21,20 +21,23 @@ const Carousel = ({ items, name }) => {
     // Carousel container
     // flex because we want the carousel buttons to be centered vertically
     // Relative positioning so that the carousel buttons can be positioned absolutely
-    <div className="flex w-screen max-h-min items-center relative">
+    <div className="flex items-center relative">
       {/* Carousel buttons */}
       {/* Carousel buttons are position absolutely */}
       <div className="carousel-buttons z-10 flex w-full justify-between px-2 absolute">
         {/* Previous button */}
         <button
           onClick={previousButtonHandler}
-          className="btn btn-square btn-sm rounded-md shadow-lg"
+          className="btn btn-square btn-md rounded-full shadow-lg text-lg"
         >
           <a href={`#${name}-${currentFocus}`}>&lt;</a>
         </button>
 
         {/* Next button */}
-        <button onClick={nextButtonHandler} className="btn btn-square btn-sm rounded-md shadow-lg">
+        <button
+          onClick={nextButtonHandler}
+          className="btn btn-square btn-md rounded-full shadow-lg text-lg"
+        >
           <a href={`#${name}-${currentFocus}`}>&gt;</a>
         </button>
       </div>
