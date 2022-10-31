@@ -14,8 +14,8 @@ const mockData = [
 const MostPostsBarChart = ({ data = mockData }) => (
   <VictoryChart domainPadding={50}>
     <Title text="Top 4 Companies With The Most Posts" />
-    <VictoryAxis dependentAxis style={{ grid: { stroke: '#DADADA' } }} />
-    <VictoryAxis dependentAxis label="Posts" />
+    <VictoryAxis dependentAxis style={{ grid: { stroke: '#DADADA' } }} tickCount={7} />
+    <VictoryAxis dependentAxis label="Posts" tickCount={7} />
     <VictoryBar
       data={data}
       x="company"

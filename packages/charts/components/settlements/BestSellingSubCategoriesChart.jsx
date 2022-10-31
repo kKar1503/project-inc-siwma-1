@@ -29,7 +29,7 @@ const mockData = [
 const BestSellingSubCategoriesChart = ({ data = mockData }) => (
   <VictoryChart domainPadding={50}>
     <Title text="Top 3 Best Selling Sub Categories" />
-    <VictoryAxis dependentAxis style={{ grid: { stroke: '#DADADA' } }} />
+    <VictoryAxis dependentAxis style={{ grid: { stroke: '#DADADA' } }} tickCount={7} />
     <VictoryAxis dependentAxis label="Posts" />
     <VictoryGroup offset={15} colorScale={colors}>
       {data.map((sub, i) => (
