@@ -1,3 +1,5 @@
+// ------------------ Imports ------------------
+
 import { useState } from 'react';
 import { node, string } from 'prop-types';
 import { useRouter } from 'next/router';
@@ -15,51 +17,44 @@ const HamburgerButtonIcon = ({ open, setOpen }) => {
   // ------------------ UseStates -----------------
   const [hover, setHover] = useState(false);
 
-  // ------------------ Handles -----------------
-  const onClickHandle = () => {
-    setOpen(!open);
-  };
-  const onHoverHandle = () => {
-    setHover(true);
-  };
-  const onLeaveHandle = () => {
-    setHover(false);
-  };
-  // ------------------ Styles -----------------
-  const style = {
-    backgroundColor: hover ? IconBackgroundHoverColor : IconBackgroundColor,
-    zIndex: 2,
-  };
+    <SidebarDivider />
 
-  // ------------------ Return -----------------
-  return (
-    <div>
-      <button
-        className="btn"
-        onClick={onClickHandle}
-        onMouseEnter={onHoverHandle}
-        onMouseLeave={onLeaveHandle}
-        style={style}
-      >
-        <svg
-          height={32}
-          width={32}
-          style={{
-            fill: hover ? IconHoverColor : IconColor,
-          }}
-        >
-          <path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" />
-        </svg>
-      </button>
-    </div>
-  );
-};
-// ------------------ PropTypes ------------------
+    <SidebarSearch />
+    <SidebarItem
+      name="Home"
+      redirectLink="/test#home"
+      customIcon={<i className="bi bi-house-door-fill" />}
+    />
+    <SidebarItem
+      name="Bookmark"
+      redirectLink="/test#bookmark"
+      customIcon={<i className="bi bi-bookmark-fill" />}
+    />
+    <SidebarItem
+      name="Chat"
+      redirectLink="/test#chat"
+      customIcon={<i className="bi bi-chat-left-text-fill" />}
+    >
+      <SidebarSubItem name="Social" redirectLink="/test#chat_socials" />
+      <SidebarSubItem name="Personal" redirectLink="/test#chat_personal" />
+      <SidebarSubItem name="Friends" redirectLink="/test#chat_friends" />
+    </SidebarItem>
 
-HamburgerButtonIcon.propTypes = {
-  open: bool,
-  setOpen: func,
-};
+    <SidebarDivider />
+
+    <SidebarLogout />
+  </>
+);
+
+// -----------------------------------------------
+
+/**
+ * MenuLineDivider is a line divider that is displayed in the menu
+ * This can be used to visually separate items
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const SidebarDivider = () => <div className="my-4 bg-gray-600 h-[1px]" />;
 
 /**
  * The Item represents each tab in the HamburgerMenu
@@ -68,7 +63,7 @@ HamburgerButtonIcon.propTypes = {
  * @returns {JSX.Element} - the item
  * @constructor - the item
  */
-const MenuItem = ({ name, customIcon, redirectLink, children }) => {
+const SidebarItem = ({ name, customIcon, redirectLink, children }) => {
   // ------------------ useStates -----------------
   const [open, setOpen] = useState(false);
 
@@ -134,7 +129,7 @@ const MenuItem = ({ name, customIcon, redirectLink, children }) => {
  * @returns {JSX.Element}
  * @constructor
  */
-const SubMenuItem = ({ name, customIcon, redirectLink }) => {
+const SidebarSubItem = ({ name, customIcon, redirectLink }) => {
   // ------------------ Misc -----------------
   const router = useRouter();
 
@@ -234,9 +229,27 @@ export default HamburgerMenu;
 
 // ------------------ PropTypes ------------------
 
-HamburgerMenu.propTypes = {
-  navigationTabs: objectOf(string),
+LayoutEditor.propTypes = {};
+
+SidebarDivider.propTypes = {};
+
+SidebarItem.propTypes = {
+  name: string.isRequired,
+  customIcon: node,
+  children: node,
+  redirectLink: string,
 };
 
-// ------------------ Export ------------------
-export default HamburgerMenu;
+SidebarSubItem.propTypes = {
+  name: string.required,
+  customIcon: node,
+  redirectLink: string,
+};
+
+SidebarHeaderIcon.propTypes = {};
+
+SidebarLogout.propTypes = {};
+
+SidebarSearch.propTypes = {};
+
+HamburgerMenu.propTypes = {};
