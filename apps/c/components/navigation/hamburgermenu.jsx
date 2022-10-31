@@ -1,20 +1,8 @@
-import { useEffect, useState } from 'react';
-import { bool, func, number, objectOf, string } from 'prop-types';
+import { useState } from 'react';
+import { node, string } from 'prop-types';
 import { useRouter } from 'next/router';
 
-// todo use color scheme
-// todo make the menu close when clicking outside it
-// todo make the menu items fill up the empty space
-// ------------------ Colors -----------------
-const IconBackgroundColor = 'white';
-const IconColor = 'black';
-const IconHoverColor = 'white';
-const IconBackgroundHoverColor = 'grey';
-
-const ElementHoverColor = 'blue';
-const ElementDefaultColor = 'grey';
-
-const MenuBackgroundColor = 'red';
+// ------------------ Layout Configuration ------------------
 
 /**
  * The Icon that is used to open the HamburgerMenu
@@ -80,58 +68,88 @@ HamburgerButtonIcon.propTypes = {
  * @returns {JSX.Element} - the item
  * @constructor - the item
  */
-const HamburgerMenuItem = ({ name, redirectLink, width }) => {
-  const router = useRouter();
-
-  // ------------------ UseStates -----------------
-  const [hover, setHover] = useState(false);
+const MenuItem = ({ name, customIcon, redirectLink, children }) => {
+  // ------------------ useStates -----------------
+  const [open, setOpen] = useState(false);
 
   // ------------------ Styles -----------------
-  const listItemStyle = {
-    backgroundColor: hover ? ElementHoverColor : ElementDefaultColor,
-    textAlign: 'center',
-    flex: '1 1 0',
-    width: `${width}px`,
+  const rotateStyles = {
+    transform: open ? 'rotate(90deg)' : 'rotate(0deg)',
   };
 
-  const spanStyle = {
-    display: 'table-cell',
-    verticalAlign: 'middle',
+  const subMenuStyles = {
+    display: open ? 'block' : 'none',
   };
+
+  // ------------------ Misc -----------------
+  const router = useRouter();
 
   // ------------------ Handles -----------------
-  const onClickHandle = async () => {
-    await router.push(redirectLink);
+  const redirect = () => {
+    router.push(redirectLink);
   };
-  const onHoverHandle = () => {
-    setHover(true);
-  };
-  const onLeaveHandle = () => {
-    setHover(false);
+
+  const toggle = () => {
+    setOpen(!open);
   };
 
   // ------------------ Return -----------------
   return (
-    <span style={spanStyle}>
-      <button
-        style={listItemStyle}
-        className="btn"
-        onMouseLeave={onLeaveHandle}
-        onMouseEnter={onHoverHandle}
-        onClick={onClickHandle}
+    <>
+      <div
+        onClick={redirect}
+        role="presentation"
+        className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white"
       >
-        {name}
-      </button>
-    </span>
+        {customIcon && <customIcon />}
+        <span className="text-[15px] ml-4 text-gray-200 font-bold">{name}</span>
+        {children && (
+          <span
+            onClick={toggle}
+            role="presentation"
+            className="text-sm rotate-180"
+            style={rotateStyles}
+          >
+            <i className="bi bi-chevron-down" />
+          </span>
+        )}
+      </div>
+      {children && (
+        <div
+          className="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 font-bold"
+          style={subMenuStyles}
+        >
+          {children}
+        </div>
+      )}
+    </>
   );
 };
 
-// ------------------ PropTypes ------------------
+/**
+ * SubMenuItem is a drawer item that is displayed by a MenuItem
+ * @param name {string} - the name of the item
+ * @param customIcon {JSX.Element} - the icon that is displayed next to the name
+ * @param redirectLink {string} - the link that is redirected to when the item is clicked
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const SubMenuItem = ({ name, customIcon, redirectLink }) => {
+  // ------------------ Misc -----------------
+  const router = useRouter();
 
-HamburgerMenuItem.propTypes = {
-  name: string,
-  redirectLink: string,
-  width: number,
+  // ------------------ Handles -----------------
+  const redirect = () => {
+    router.push(redirectLink);
+  };
+
+  // ------------------ Return -----------------
+  return (
+    <div role="presentation" onClick={redirect}>
+      {customIcon && <customIcon />}
+      <h1 className="cursor-pointer p-2 hover:bg-blue-600 rounded-md mt-1">{name}</h1>
+    </div>
+  );
 };
 
 /**
@@ -195,18 +213,24 @@ ExpandedHamburgerMenu.propTypes = {
  * @returns {JSX.Element}
  * @constructor
  */
-const HamburgerMenu = ({ navigationTabs }) => {
+const HamburgerMenu = () => (
   // ------------------ useStates -----------------
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
 
   // ------------------ Return -----------------
-  return (
-    <div>
-      <HamburgerButtonIcon open={open} setOpen={setOpen} />
-      <ExpandedHamburgerMenu navigationTabs={navigationTabs} open={open} />
-    </div>
-  );
-};
+  <div>
+    <body className="bg-blue-600">
+      <span className="absolute text-white text-4xl top-5 left-4 cursor-pointer">
+        <i className="bi bi-filter-left px-2 bg-gray-900 rounded-md" />
+      </span>
+      <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center bg-gray-900">
+        <LayoutEditor />
+      </div>
+    </body>
+  </div>
+);
+// ------------------ Export ------------------
+export default HamburgerMenu;
 
 // ------------------ PropTypes ------------------
 
