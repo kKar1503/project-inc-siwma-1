@@ -1,5 +1,5 @@
-import InputTextArea from '../components/InputText';
+import Header from '../components/header';
 
-const Home = () => <InputTextArea />;
+const Home = () => <Header />;
 
 export default Home;
