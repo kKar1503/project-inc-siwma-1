@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Link from 'next/link';
@@ -22,33 +23,33 @@ import Link from 'next/link';
 const SignUpForm = ({ className }) => (
   <form className={cx(className, 'flex flex-col w-full gap-12')}>
     <div className="flex flex-col gap-4">
-      <label className="flex flex-col gap-2" htmlFor="company">
+      <label className="flex flex-col gap-2">
         Company
         <input
           className="input input-bordered rounded-lg"
           placeholder="REGISTERED COMPANY NAME HERE"
         />
       </label>
-      <label className="flex flex-col gap-2" htmlFor="name">
+      <label className="flex flex-col gap-2">
         Full Name
         <input className="input input-bordered rounded-lg" placeholder="Your full name" />
       </label>
       <div className="flex flex-col md:flex-row gap-4">
-        <label className="flex flex-col gap-2" htmlFor="email">
+        <label className="flex flex-col gap-2">
           E-Mail
           <input className="input input-bordered rounded-lg" placeholder="Your email address" />
         </label>
-        <label className="flex flex-col gap-2" htmlFor="password">
+        <label className="flex flex-col gap-2">
           Password
           <input className="input input-bordered rounded-lg" placeholder="Your password" />
         </label>
       </div>
       <div className="flex flex-col md:flex-row gap-4">
-        <label className="flex flex-col gap-2" htmlFor="phone">
+        <label className="flex flex-col gap-2">
           Mobile Number
           <input className="input input-bordered rounded-lg" placeholder="Your mobile number" />
         </label>
-        <label className="flex flex-col gap-2" htmlFor="confirm">
+        <label className="flex flex-col gap-2">
           Confirm Password
           <input className="input input-bordered rounded-lg" placeholder="Confirm your password" />
         </label>
