@@ -34,7 +34,7 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
    * Variant 1 - isSelected is used to determine whether or not the SidebarItem should be rendered in its selected state (bg-primary, text-white)
    * Variant 2 - isSelected is used to determine whether or not the dropdown list contains any selected items
    *
-   * In Variant 2, should the dropdown list contain a selected item, the SidebarItem being rendered will have a grey background applied (bg-base-200)
+   * In Variant 2, should the dropdown list contain a selected item, the SidebarItem being rendered will have a grey background applied (bg-base-300)
    * when it is expanded, and the primary background applied (bg-primary) when collapsed.
    *
    * This is done to indicate to the user, when the SidebarItem is collapsed, that an item within it is selected
@@ -60,7 +60,7 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
   // The sidebar item has subpages, render a dropdown to contain them instead
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-    <div tabIndex="0" className={cx('collapse collapse-arrow')}>
+    <div tabIndex="0" className="collapse collapse-arrow bg-base-200 rounded-lg">
       <input
         className="min-h-0"
         type="checkbox"
@@ -69,13 +69,13 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
       />
       <div
         className={cx('collapse-title min-h-0 py-3 font-medium rounded-lg px-8', {
-          'bg-base-200': isSelected && isExpanded,
+          'bg-base-300 rounded-b-none': isSelected && isExpanded,
           'bg-primary text-white': isSelected && !isExpanded,
         })}
       >
         {label}
       </div>
-      <ul className="collapse-content menu px-0">
+      <ul className="collapse-content menu px-2">
         {
           /* Render the sub pages */
           subPages.map((subPage) => {
