@@ -33,17 +33,17 @@ const SignUpForm = ({ className }) => (
         Full Name
         <input className="input input-bordered rounded-md" placeholder="Your full name" />
       </label>
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-col md:flex-row gap-4">
         <label className="flex flex-col gap-2" htmlFor="email">
           E-Mail
           <input className="input input-bordered rounded-md" placeholder="Your email address" />
         </label>
-        <label className="flex flex-col gap-2" htmlFor="password">
+        <label className="flex flex-col md:flex-row gap-2" htmlFor="password">
           Password
           <input className="input input-bordered rounded-md" placeholder="Your password" />
         </label>
       </div>
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-col md:flex-row gap-4">
         <label className="flex flex-col gap-2" htmlFor="phone">
           Mobile Number
           <input className="input input-bordered rounded-md" placeholder="Your mobile number" />
