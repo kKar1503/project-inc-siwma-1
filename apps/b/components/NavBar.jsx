@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 const NavBar = () => (
   <div className="navbar bg-base-100 rounded-lg shadow-lg">
@@ -17,13 +18,13 @@ const NavBar = () => (
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
       <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
         <li>
-          <a href="/">Profile</a>
+          <Link href="/">Profile</Link>
         </li>
         <li>
-          <a href="/">Settings</a>
+          <Link href="/">Settings</Link>
         </li>
         <li>
-          <a href="/">Logout</a>
+          <Link href="/">Logout</Link>
         </li>
       </ul>
     </div>
