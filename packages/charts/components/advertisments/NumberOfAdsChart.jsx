@@ -16,9 +16,10 @@ const dataset = [
 const ticks = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const month = 'Oct';
+const width = 30;
 
 const NumberOfAdsCharts = () => (
-  <VictoryChart domainPadding={20}>
+  <VictoryChart domainPadding={0} padding={{ top: 10, left: 30, right: 30, bottom: 30 }}>
     <VictoryBar
       data={dataset}
       x="month"
@@ -28,10 +29,17 @@ const NumberOfAdsCharts = () => (
         labels: { fill: ({ datum }) => (datum.month === month ? 'white' : 'black') },
       }}
       labels={({ datum }) => datum.ad_space}
-      barWidth={20}
-      labelComponent={<VictoryLabel y={242} angle={-90} lineHeight="-1.5" textAnchor="start" />}
+      barWidth={width}
+      labelComponent={<VictoryLabel y={259} angle={-90} lineHeight="-1.5" textAnchor="start" />}
       dataComponent={
-        <Bar cornerRadius={{ topLeft: 10, topRight: 10, bottomLeft: 10, bottomRight: 10 }} />
+        <Bar
+          cornerRadius={{
+            topLeft: width / 2,
+            topRight: width / 2,
+            bottomLeft: width / 2,
+            bottomRight: width / 2,
+          }}
+        />
       }
     />
     <VictoryAxis tickValues={ticks} style={{ axis: { stroke: 'none' } }} />
