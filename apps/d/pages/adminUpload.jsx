@@ -17,7 +17,7 @@ const AdminUpload = () => {
   const [searchInput, setSearchInput] = useState('');
   const [searchResults, setSearchResults] = useState(null);
 
-  const handleClick = (name) => {
+  const handleDelete = (name) => {
     // e.preventDefault();
     // setButtonText(' x');
     // setTimeout(() => {
@@ -62,7 +62,7 @@ const AdminUpload = () => {
         type: 'filterCompany',
         data: filteredData,
       });
-      // console.log(filteredResults.data);
+      console.log(filteredResults.data);
     } else {
       setFilterResults({ type: 'filter', data: data2 });
     }
@@ -155,7 +155,7 @@ const AdminUpload = () => {
                             onMouseOver={() => handleHover(data.name)}
                             onMouseLeave={() => onMouseLeave(data.name)}
                             onFocus={() => handleHover(data.name)}
-                            onClick={() => handleClick(data.name)}
+                            onClick={() => handleDelete(data.name)}
                           >
                             {searchResults?.type === 'select' && data.selected ? (
                               <svg
@@ -193,6 +193,7 @@ const AdminUpload = () => {
                         </li>
                       ))}
                     {filteredResults?.type === 'filterCompany' &&
+                      searchInput.length !== 0 &&
                       filteredResults.data.map((data) => (
                         <li key={data.name}>
                           {data.name}
@@ -201,7 +202,7 @@ const AdminUpload = () => {
                             onMouseOver={() => handleHover(data.name)}
                             onMouseLeave={() => onMouseLeave(data.name)}
                             onFocus={() => handleHover(data.name)}
-                            onClick={() => handleClick(data.name)}
+                            onClick={() => handleDelete(data.name)}
                           >
                             {searchResults?.type === 'select' && data.selected ? (
                               <svg
