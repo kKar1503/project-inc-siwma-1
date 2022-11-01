@@ -4,7 +4,7 @@ import cx from 'classnames';
 const AdminFigure = ({ title, value, icon, color }) => (
   <div className="flex flex-row grow h-40 shadow-xl items-center p-6 rounded-2xl space-between justify-between">
     <div className="flex flex-col mt-4 h-full items-left">
-      <p className={cx('text-5xl font-black py-1 pr-4 select-none', color ?? 'text-gray-700')}>
+      <p className={cx('text-6xl font-black py-1 pr-4 select-none', color ?? 'text-gray-700')}>
         {value}
       </p>
       <h2 className="text-lg text-left text-gray-700 py-1 select-none">{title}</h2>
