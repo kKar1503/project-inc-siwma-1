@@ -11,13 +11,13 @@ const CreateListingInformation = () => (
     </div>
 
     {/* Category Label */}
-    <select className="select select-bordered w-full text-center">
-      <option disabled selected>
+    <select className="select select-bordered w-full text-center" defaultValue="Category">
+      <option disabled value="Category">
         Category
       </option>
-      <option>Bar</option>
-      <option>Angle Bars</option>
-      <option>Big Bricks</option>
+      <option value="Bar">Bar</option>
+      <option value="Angle Bars">Angle Bars</option>
+      <option value="Big Bricks">Big Bricks</option>
     </select>
 
     {/* Title Label */}
@@ -41,7 +41,7 @@ const CreateListingInformation = () => (
         name="options"
         data-title="Brand New"
         className="btn bg-white border-blue-300 text-blue-300 hover:bg-white hover:border-blue-400"
-        checked
+        defaultChecked
       />
       <input
         type="radio"
