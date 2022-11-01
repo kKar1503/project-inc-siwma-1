@@ -10,7 +10,7 @@ import {
 const AnalyticCharts = () => (
   <div className="grid place-content-center">
     <h2 className="my-2 text-2xl font-semibold ">Company</h2>
-    <div className="my-5 flex sm:flex-wrap md:flex-nowrap overflow-auto flex-direction-row gap-8">
+    <div className="my-5 flex max-sm:flex-wrap max-md:flex-nowrap overflow-auto flex-direction-row gap-8">
       <div className="card w-96 bg-base-100 shadow-md shrink-0">
         <MostPostsChart />
       </div>
@@ -22,7 +22,7 @@ const AnalyticCharts = () => (
       </div>
     </div>
     <h2 className="my-2 text-2xl font-semibold ">Settlements</h2>
-    <div className="my-5 flex sm:flex-wrap md:flex-nowrap overflow-auto flex-direction-row gap-8">
+    <div className="my-5 flex max-sm:flex-wrap max-md:flex-nowrap overflow-auto flex-direction-row gap-8">
       <div className="card w-96 bg-base-100 shadow-md shrink-0">
         <BestSellingSubCategoriesChart />
       </div>
