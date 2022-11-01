@@ -7,8 +7,8 @@ import ProductListingItem from '../components/marketplace/ProductListingItem';
 const categories = [
   {
     id: 1,
-    name: 'Category 1',
-    img: 'https://via.placeholder.com/150',
+    name: 'Mobile Phones',
+    img: 'https://images.unsplash.com/photo-1523206489230-c012c64b2b48?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2574&q=80',
     href: '#',
   },
   {
