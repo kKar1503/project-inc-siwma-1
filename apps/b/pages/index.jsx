@@ -11,9 +11,9 @@ const Home = () => (
     <div className="flex flex-row w-full h-full gap-8">
       <div className="bg-white shadow-xl rounded-lg p-4 w-2/12 h-full" />
       <div className="flex flex-row flex-wrap w-full h-full gap-8 p-8">
-        <AdminFigure title="Total Users" value="1,234" color="text-blue-500" />
-        <AdminFigure title="Total Users" value="4,568" color="text-yellow-500" />
-        <AdminFigure title="Total Users" value="5,983" color="text-blue-500" />
+        <AdminFigure title="Registered Companies" value="1,234" color="text-blue-500" />
+        <AdminFigure title="Total Users" value="4,568" color="text-teal-500" />
+        <AdminFigure title="Pending Invites" value="5,983" color="text-yellow-500" />
       </div>
     </div>
   </div>
