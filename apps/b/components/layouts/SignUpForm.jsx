@@ -28,6 +28,7 @@ const SignUpForm = ({ className }) => (
         <input
           className="input input-bordered rounded-lg"
           placeholder="REGISTERED COMPANY NAME HERE"
+          disabled // Company Name should be auto-filled
         />
       </label>
       <label className="flex flex-col gap-2">
@@ -37,21 +38,36 @@ const SignUpForm = ({ className }) => (
       <div className="flex flex-col md:flex-row gap-4">
         <label className="flex flex-col gap-2">
           E-Mail
-          <input className="input input-bordered rounded-lg" placeholder="Your email address" />
+          <input
+            className="input input-bordered rounded-lg w-full"
+            placeholder="Your email address"
+          />
         </label>
         <label className="flex flex-col gap-2">
           Password
-          <input className="input input-bordered rounded-lg" placeholder="Your password" />
+          <input
+            className="input input-bordered rounded-lg w-full"
+            placeholder="Your password"
+            type="password"
+          />
         </label>
       </div>
       <div className="flex flex-col md:flex-row gap-4">
         <label className="flex flex-col gap-2">
           Mobile Number
-          <input className="input input-bordered rounded-lg" placeholder="Your mobile number" />
+          <input
+            className="input input-bordered rounded-lg w-full"
+            placeholder="Your mobile number"
+            type="tel"
+          />
         </label>
         <label className="flex flex-col gap-2">
           Confirm Password
-          <input className="input input-bordered rounded-lg" placeholder="Confirm your password" />
+          <input
+            className="input input-bordered rounded-lg w-full"
+            placeholder="Confirm your password"
+            type="password"
+          />
         </label>
       </div>
     </div>
