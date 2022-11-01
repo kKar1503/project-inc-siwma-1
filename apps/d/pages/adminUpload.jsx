@@ -5,13 +5,17 @@ import { useEffect, useState } from 'react';
 const datas = ['company A', 'company B', 'company C'];
 
 const data2 = [
-  { name: 'company a', selected: false },
-  { name: 'company b', selected: false },
+  { name: 'abc company', selected: false },
+  { name: 'efg company', selected: false },
   { name: 'company c', selected: false },
+  { name: 'kkkkkkk', selected: false },
 ];
 
 const AdminUpload = () => {
   const [getData, setGetData] = useState(null);
+  const [filteredResults, setFilterResults] = useState(null);
+  const [searchInput, setSearchInput] = useState('');
+  const [searchResults, setSearchResults] = useState(null);
 
   const handleClick = (name) => {
     // e.preventDefault();
@@ -32,7 +36,7 @@ const AdminUpload = () => {
         filter[i].selected = true;
       }
     }
-    setGetData({ type: 'select', data: filter });
+    setSearchResults({ type: 'select', data: filter });
   };
 
   const onMouseLeave = (name) => {
@@ -42,7 +46,26 @@ const AdminUpload = () => {
         filter[i].selected = false;
       }
     }
-    setGetData({ type: 'select', data: filter });
+    setSearchResults({ type: 'select', data: filter });
+  };
+
+  const searchItems = (searchValue) => {
+    setSearchInput(searchValue);
+    // console.log(searchInput.length)
+    // console.log(searchInput);
+    if (searchInput !== '') {
+      // setFilterState(true);
+      const filteredData = getData.data.filter((item) =>
+        Object.values(item).join('').toLowerCase().includes(searchInput.toLowerCase())
+      );
+      setFilterResults({
+        type: 'filterCompany',
+        data: filteredData,
+      });
+      // console.log(filteredResults.data);
+    } else {
+      setFilterResults({ type: 'filter', data: data2 });
+    }
   };
 
   useEffect(() => {
@@ -101,7 +124,7 @@ const AdminUpload = () => {
               </span>
               <input type="file" name="file_upload" className="hidden" />
             </label>
-            <button className="btn btn-active btn-ghost rounded-md w-1/2 h-6 mx-20 my-8 normal-case text-base">
+            <button className="btn btn-active btn-ghost rounded-md w-1/2 h-6 mx-24 my-8 normal-case text-base">
               Create
             </button>
           </div>
@@ -113,6 +136,7 @@ const AdminUpload = () => {
               className="w-3/4 h-10 px-4 ml-4 mt-4 text-base placeholder-gray-500 border rounded-lg focus:shadow-outline"
               type="text"
               placeholder="Search"
+              onChange={(e) => searchItems(e.target.value)}
             />
           </div>
           <table className="table-fixed">
@@ -121,6 +145,8 @@ const AdminUpload = () => {
                 <td>
                   <ul className=" ml-8 leading-loose text-gray-600 text-xl">
                     {getData !== null &&
+                      getData?.type === 'data' &&
+                      searchInput.length <= 1 &&
                       getData.data.map((data) => (
                         <li key={data.name}>
                           {data.name}
@@ -131,7 +157,53 @@ const AdminUpload = () => {
                             onFocus={() => handleHover(data.name)}
                             onClick={() => handleClick(data.name)}
                           >
-                            {getData?.type === 'select' && data.selected ? (
+                            {searchResults?.type === 'select' && data.selected ? (
+                              <svg
+                                className="h-4 w-4 text-black-500"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                strokeWidth="2"
+                                stroke="currentColor"
+                                fill="none"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                {' '}
+                                <path stroke="none" d="M0 0h24v24H0z" />{' '}
+                                <line x1="18" y1="6" x2="6" y2="18" />{' '}
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                              </svg>
+                            ) : (
+                              <svg
+                                className="h-4 w-4  text-black-500"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M12 4v16m8-8H4"
+                                />
+                              </svg>
+                            )}
+                          </button>
+                        </li>
+                      ))}
+                    {filteredResults?.type === 'filterCompany' &&
+                      filteredResults.data.map((data) => (
+                        <li key={data.name}>
+                          {data.name}
+                          <button
+                            className="ml-12"
+                            onMouseOver={() => handleHover(data.name)}
+                            onMouseLeave={() => onMouseLeave(data.name)}
+                            onFocus={() => handleHover(data.name)}
+                            onClick={() => handleClick(data.name)}
+                          >
+                            {searchResults?.type === 'select' && data.selected ? (
                               <svg
                                 className="h-4 w-4 text-black-500"
                                 width="24"
