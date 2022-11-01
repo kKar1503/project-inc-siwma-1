@@ -3,7 +3,7 @@ import Image from 'next/image';
 const NavBar = () => (
   <div className="navbar bg-base-100 rounded-lg shadow-lg">
     <div className="flex-1" />
-    <div className="block border-l border-gray-300 px-4 text-right">
+    <div className="block border-l border-gray-300 px-4 text-right leading-3">
       <p>System Adminstrator</p>
       <p className="text-sm font-thin">Admin</p>
     </div>
@@ -11,7 +11,7 @@ const NavBar = () => (
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control, jsx-a11y/no-noninteractive-tabindex */}
       <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
         <div className="w-10 rounded-full">
-          <Image src="https://placeimg.com/80/80/people" />
+          <Image src="/../public/sample-profile-pic.jpg" alt="profile-pic" width={80} height={80} />
         </div>
       </label>
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
