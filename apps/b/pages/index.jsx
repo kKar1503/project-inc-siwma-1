@@ -6,6 +6,7 @@ import RegisteredUsersTable from '../components/Tables/RegisteredUsersTable';
 import RegisteredUsersTableWithoutCheckbox from '../components/Tables/RegisteredUsersTableWithoutCheckbox';
 import PendingInvitesTable from '../components/Tables/PendingInvitesTable';
 import RegisteredCompaniesTable from '../components/Tables/RegisteredCompaniesTable';
+import TableButton from '../components/Tables/TableButton';
 
 const Home = () => {
   const registeredUsersData = [
