@@ -8,7 +8,7 @@ const CompanyRegister = () => (
         </label>
         <div>
           <h3 className="text-lg font-bold">Create an individual company</h3>
-          <p className="text-sm">Register an company profile to the system</p>
+          <p className="text-sm">Register a company profile to the system</p>
         </div>
         <div className="flex flex-wrap">
           <div className="flex-1 mr-10">
