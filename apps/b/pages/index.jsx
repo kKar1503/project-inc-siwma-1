@@ -9,7 +9,7 @@ const Home = () => {
   const data = [
     {
       id: 1,
-      // profilePicture: pic,
+      profilePicture: pic,
       name: 'John Doe',
       email: 'john@doe.com',
       company: 'Company',
@@ -17,10 +17,10 @@ const Home = () => {
     },
     {
       id: 2,
-      // profilePicture: pic,
+      profilePicture: pic,
       name: 'Veryvery Long Name',
       email: 'veryverylongname@veryverylongdomain.com',
-      company: 'Company',
+      company: 'Very Very Long Company Name',
       mobileNumber: '+65 9832 0293',
     },
   ];
@@ -42,8 +42,8 @@ const Home = () => {
       </div>
       <div className="flex flex-row w-4/5 mx-5">
         {/* <BaseTable data={data} /> */}
-        {/* <RegisteredUsersTable data={data} /> */}
-        <PendingInvitesTable data={data} />
+        <RegisteredUsersTable data={data} />
+        {/* <PendingInvitesTable data={data} /> */}
       </div>
     </div>
   );
