@@ -2,73 +2,38 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useEffect, useState } from 'react';
 
-const data2 = [
-  { id: '1', name: 'abc company', selected: false },
-  { id: '2', name: 'efg company', selected: false },
-  { id: '3', name: 'company c', selected: false },
-  { id: '4', name: 'kkkkkkk', selected: false },
+const dataList = [
+  { id: '1', data: 'abc company' },
+  { id: '2', data: 'efg company' },
+  { id: '3', data: 'company c' },
+  { id: '4', data: 'kkkkkkk' },
 ];
 
+// const data2 = [
+//   { id: '1', name: 'abc company', selected: false },
+//   { id: '2', name: 'efg company', selected: false },
+//   { id: '3', name: 'company c', selected: false },
+//   { id: '4', name: 'kkkkkkk', selected: false },
+// ];
+
 const AdminUpload = () => {
-  const [getData, setGetData] = useState(null);
-  const [filteredResults, setFilterResults] = useState(null);
-  const [searchInput, setSearchInput] = useState('');
-  const [searchResults, setSearchResults] = useState(null);
+  const [getData, setGetData] = useState([]);
+  const [userInput, setUserInput] = useState('');
 
-  const handleDelete = (name) => {
-    // e.preventDefault();
-    // setButtonText(' x');
-    // setTimeout(() => {
-    //   setButtonText('+');
-    // }, 1000);
-    // const filterData = getData;
-    // if (filterData.includes(name)){
-    //   filterData
-    // }
-  };
-
-  const handleHover = (name) => {
-    const filter = getData.data;
-    for (let i = 0; i < filter.length; i++) {
-      if (filter[i].name === name) {
-        filter[i].selected = true;
-      }
-    }
-    setSearchResults({ type: 'select', data: filter });
-  };
-
-  const onMouseLeave = (name) => {
-    const filter = getData.data;
-    for (let i = 0; i < filter.length; i++) {
-      if (filter[i].name === name) {
-        filter[i].selected = false;
-      }
-    }
-    setSearchResults({ type: 'select', data: filter });
-  };
-
-  const searchItems = (searchValue) => {
-    setSearchInput(searchValue);
-    // console.log(searchInput.length)
-    // console.log(searchInput);
-    if (searchInput !== '') {
-      // setFilterState(true);
-      const filteredData = getData.data.filter((item) =>
-        Object.values(item).join('').toLowerCase().includes(searchInput.toLowerCase())
-      );
-      setFilterResults({
-        type: 'filterCompany',
-        data: filteredData,
-      });
-      // console.log(filteredResults.data);
-    } else {
-      setFilterResults({ type: 'filter', data: data2 });
-    }
-  };
+  // useEffect(() => {
+  //   setGetData({ type: 'data', data: dataList });
+  // }, []);
 
   useEffect(() => {
-    setGetData({ type: 'data', data: data2 });
+    setGetData(dataList);
   }, []);
+
+  const filter = () => {
+    if (userInput !== '')
+      return getData.filter((val) => val.data.toLowerCase().includes(userInput.toLowerCase()));
+
+    return getData;
+  };
 
   return (
     <>
@@ -134,116 +99,31 @@ const AdminUpload = () => {
               className="w-3/4 h-10 px-4 ml-4 mt-4 text-base placeholder-gray-500 border rounded-lg focus:shadow-outline"
               type="text"
               placeholder="Search"
-              onChange={(e) => searchItems(e.target.value)}
+              onChange={(e) => setUserInput(e.target.value)}
             />
           </div>
           <table className="table-fixed">
             <tbody>
               <tr>
                 <td>
-                  <ul className=" ml-8 leading-loose text-gray-600 text-xl">
+                  {/* <ul className=" ml-8 leading-loose text-gray-600 text-xl">
                     {getData !== null &&
                       getData?.type === 'data' &&
-                      searchInput.length <= 1 &&
-                      getData.data.map((data) => (
-                        <li key={data.name}>
+                      // searchInput.length <= 1 &&
+                      filter().getData.data.map((item) => (
+                        <li key={getData.id}>
                           <input type="checkbox" name="checkbox" />
-                          {data.name}
-                          {/* <button
-                            className="ml-12"
-                            onMouseOver={() => handleHover(data.name)}
-                            onMouseLeave={() => onMouseLeave(data.name)}
-                            onFocus={() => handleHover(data.name)}
-                            onClick={() => handleDelete(data.name)}
-                          >
-                            {searchResults?.type === 'select' && data.selected ? (
-                              <svg
-                                className="h-4 w-4 text-black-500"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                strokeWidth="2"
-                                stroke="currentColor"
-                                fill="none"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              >
-                                {' '}
-                                <path stroke="none" d="M0 0h24v24H0z" />{' '}
-                                <line x1="18" y1="6" x2="6" y2="18" />{' '}
-                                <line x1="6" y1="6" x2="18" y2="18" />
-                              </svg>
-                            ) : (
-                              <svg
-                                className="h-4 w-4  text-black-500"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M12 4v16m8-8H4"
-                                />
-                              </svg>
-                            )}
-                          </button> */}
+                          {item.name}
                         </li>
                       ))}
-                    {filteredResults?.type === 'filterCompany' &&
-                      searchInput.length !== 0 &&
-                      filteredResults.data.map((data) => (
-                        <li key={data.name}>
-                          <span>
-                            <input type="checkbox" name="checkbox" />
-                          </span>
-                          <span>
-                            {data.name}
-                            {/* <button
-                              className="ml-12"
-                              onMouseOver={() => handleHover(data.name)}
-                              onMouseLeave={() => onMouseLeave(data.name)}
-                              onFocus={() => handleHover(data.name)}
-                              onClick={() => handleDelete(data.name)}
-                            > */}
-
-                            {/* {searchResults?.type === 'select' && data.selected ? (
-                              <svg
-                                className="h-4 w-4 text-black-500"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                strokeWidth="2"
-                                stroke="currentColor"
-                                fill="none"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              >
-                                {' '}
-                                <path stroke="none" d="M0 0h24v24H0z" />{' '}
-                                <line x1="18" y1="6" x2="6" y2="18" />{' '}
-                                <line x1="6" y1="6" x2="18" y2="18" />
-                              </svg>
-                            ) : (
-                              <svg
-                                className="h-4 w-4  text-black-500"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M12 4v16m8-8H4"
-                                />
-                              </svg>
-                            )} */}
-                            {/* </button> */}
-                          </span>
-                        </li>
-                      ))}
+                  </ul> */}
+                  <ul>
+                    {filter().map((item) => (
+                      <li key={getData.id} className="text-xl">
+                        <input type="checkbox" name="checkbox" className="mr-2 ml-4 mt-2 h-4 w-4" />
+                        {item.data}
+                      </li>
+                    ))}
                   </ul>
                 </td>
               </tr>
