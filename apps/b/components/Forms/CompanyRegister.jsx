@@ -1,9 +1,13 @@
 const CompanyRegister = () => (
   <div>
     <input type="checkbox" id="company-register" className="modal-toggle" />
-    <div className="modal">
-      <div className="modal-box rounded-xl max-w-4xl">
-        <label htmlFor="company-register" className="text-lg absolute right-4 top-2">
+    <label htmlFor="company-register" className="modal cursor-pointer">
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+      <label htmlFor="" className="modal-box rounded-xl max-w-4xl">
+        <label
+          htmlFor="company-register"
+          className="text-lg absolute right-4 top-2 hover:cursor-pointer"
+        >
           ✕
         </label>
         <div>
@@ -82,8 +86,8 @@ const CompanyRegister = () => (
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </label>
+    </label>
   </div>
 );
 
