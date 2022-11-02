@@ -79,12 +79,16 @@ const BaseTable = ({ header, headings, headingColor, showCheckbox, columnKeys, d
                     <span>{row[key]}</span>
                   </td>
                 ))}
+                <td>
+                  {/* TODO: Replace with the proper icon once react-icons is set up */}
+                  <Image src="/icons/edit.svg" alt="Edit" width={20} height={20} />
+                </td>
               </tr>
             ))}
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan={headings.length + 1} className="bg-white rounded-none">
+              <td colSpan={headings.length + 2} className="bg-white rounded-none">
                 {footer}
               </td>
             </tr>
