@@ -2,6 +2,7 @@ import Head from 'next/head';
 import pic from '../public/siwma-logo-sm.png';
 import AdminFigure from '../components/AdminFigure';
 import BaseTable from '../components/Tables/BaseTable';
+import RegisteredUsersTable from '../components/Tables/RegisteredUsersTable';
 
 const Home = () => {
   const data = [
@@ -11,7 +12,7 @@ const Home = () => {
       name: 'John Doe',
       email: 'john@doe.com',
       company: 'Company',
-      mobileNumber: '12345678',
+      mobileNumber: '+65 9832 0293',
     },
     {
       id: 2,
@@ -19,7 +20,7 @@ const Home = () => {
       name: 'Veryvery Long Name',
       email: 'veryverylongname@veryverylongdomain.com',
       company: 'Company',
-      mobileNumber: '12345678',
+      mobileNumber: '+65 9832 0293',
     },
   ];
 
@@ -38,8 +39,9 @@ const Home = () => {
           <AdminFigure title="Pending Invites" value="5,983" color="text-secondary" />
         </div>
       </div>
-      <div className="flex flex-row w-4/5">
-        <BaseTable data={data} />
+      <div className="flex flex-row w-4/5 mx-5">
+        {/* <BaseTable data={data} /> */}
+        <RegisteredUsersTable data={data} />
       </div>
     </div>
   );
