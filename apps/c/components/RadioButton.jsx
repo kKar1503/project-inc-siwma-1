@@ -1,6 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const RadioButton = () => {
+/**
+ * RadioButton is a component that renders a radio button.
+ * @params {Array} options - The options to be displayed in the radio button.
+ * @returns {JSX.Element}
+ * @constructor - RadioButton
+ */
+const RadioButton = ({ options }) => {
   const [choice, setChoice] = React.useState('');
 
   const onChange = async (event) => {
@@ -9,32 +16,30 @@ const RadioButton = () => {
 
   return (
     <>
-      <div className="form-control">
-        <label className="label cursor-pointer">
-          <span className="label-text">Red pill</span>
+      <label htmlFor="condition" className="label">
+        <span className="label-text mt-3 text-xl font-bold">Condition</span>
+      </label>
+      <div id="condition" className="btn-group">
+        {options.map((option) => (
           <input
             type="radio"
-            name="radio-10"
-            value="Buy"
-            className="radio checked:bg-red-500"
+            name="options"
+            key={option}
+            data-title={`${option}`}
+            value={`${option}`}
+            className="btn btn bg-white border-primary text-primary hover:bg-primary hover:text-primary-content"
             onChange={onChange}
+            defaultChecked
           />
-        </label>
-      </div>
-      <div className="form-control">
-        <label className="label cursor-pointer">
-          <span className="label-text">Blue pill</span>
-          <input
-            type="radio"
-            name="radio-10"
-            value="Sell"
-            className="radio checked:bg-blue-500"
-            onChange={onChange}
-          />
-        </label>
+        ))}
       </div>
       {choice}
     </>
   );
 };
+
+RadioButton.propTypes = {
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
 export default RadioButton;

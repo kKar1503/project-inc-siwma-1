@@ -1,23 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Input = ({ text, height }) => (
-  <div className="form-control w-full max-w-xs pb-5">
+/**
+ * Input is a component that renders an input field.
+ * @param {string} text - The text to be displayed on the label.
+ * @param {string} type - The type of input field. (normal input/textarea)
+ * @returns {JSX.Element}
+ * @constructor - Input
+ */
+const Input = ({ text, type }) => (
+  <div className="form-control">
     <label className="label">
-      <span className="label-text">{text}</span>
+      <span className="label-text mt-31 text-xl font-bold">{text}</span>
     </label>
-    <input
-      type="text"
-      placeholder={`Enter ${text}`}
-      id="input"
-      className={height ? `input w-full max-w-xs h-${height}` : `input w-full max-w-xs`}
-    />
+    {type === 'textarea' ? (
+      <textarea id="description" className="textarea h-24" placeholder={`${text} of listing...`} />
+    ) : (
+      <input
+        id="input"
+        type="text"
+        placeholder={`${text} of listing...`}
+        className="input w-full"
+      />
+    )}
   </div>
 );
 
 Input.propTypes = {
   text: PropTypes.string.isRequired,
-  height: PropTypes.number,
+  type: PropTypes.string,
 };
 
 export default Input;
