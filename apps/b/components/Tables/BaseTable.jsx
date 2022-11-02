@@ -11,11 +11,11 @@ import cx from 'classnames';
   - theadColor (The color of the table headings)
   - data (An array of objects that you want to be the rows of the table)
 
-  Data is expected to contain at least the following keys:
+  Data is expected to contain the following keys:
   [
     {
       id: int,
-      profilePicture: image,
+      profilePicture: image, // optional
       name: string,
       email: string,
       company: string,
@@ -57,15 +57,17 @@ const BaseTable = ({ header, theadColor, data }) => {
                 </td>
                 <td>
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 relative">
-                      <Image
-                        src={row.profilePicture}
-                        alt="Profile Picture"
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-full"
-                      />
-                    </div>
+                    {row.profilePicture && (
+                      <div className="w-10 h-10 relative">
+                        <Image
+                          src={row.profilePicture}
+                          alt="Profile Picture"
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-full"
+                        />
+                      </div>
+                    )}
                     <span>{row.name}</span>
                   </div>
                 </td>
