@@ -24,5 +24,3 @@ jobs:
           stale-pr-label: 'status: stale'
           exempt-issue-labels: 'no-stale'
           exempt-pr-labels: 'no-stale'
-          close-issue-label: 'status: closed'
-          close-pr-label: 'status: closed'
