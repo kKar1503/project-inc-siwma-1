@@ -1,0 +1,26 @@
+# https://github.com/actions/stale
+name: 'Stale issue handler'
+on:
+  workflow_dispatch:
+  schedule:
+    # This runs every day 20 minutes before midnight: https://crontab.guru/#40_23_*_*_*
+    - cron: '40 23 * * *'
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v6
+        id: stale
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: 'This issue is stale because it has been open 1 day with no activity. Remove stale label or comment or this will be closed if it remains stale for 1 week.'
+          close-issue-message: 'This issue has been automatically closed because it received no activity for 1 week. If you think it was closed by accident, please leave a comment. Thank you.'
+          stale-pr-message: 'This PR is stale because it has been open 1 day with no activity. Remove stale label or comment or this will be closed if it remains stale for 1 week.'
+          close-pr-message: 'This PR has been automatically closed because it received no activity for 1 week. If you think it was closed by accident, please leave a comment. Thank you.'
+          days-before-stale: 2
+          days-before-close: 5
+          stale-issue-label: 'status: stale'
+          stale-pr-label: 'status: stale'
+          exempt-issue-labels: 'no-stale'
+          exempt-pr-labels: 'no-stale'

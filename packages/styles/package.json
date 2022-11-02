@@ -1,0 +1,12 @@
+{
+  "name": "@inc/styles",
+  "version": "0.0.0",
+  "files": [
+    "styles",
+    "tailwind.config.js",
+    "postcss.config.js"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
