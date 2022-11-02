@@ -2,13 +2,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useEffect, useState } from 'react';
 
-const datas = ['company A', 'company B', 'company C'];
-
 const data2 = [
-  { name: 'abc company', selected: false },
-  { name: 'efg company', selected: false },
-  { name: 'company c', selected: false },
-  { name: 'kkkkkkk', selected: false },
+  { id: '1', name: 'abc company', selected: false },
+  { id: '2', name: 'efg company', selected: false },
+  { id: '3', name: 'company c', selected: false },
+  { id: '4', name: 'kkkkkkk', selected: false },
 ];
 
 const AdminUpload = () => {
@@ -62,7 +60,7 @@ const AdminUpload = () => {
         type: 'filterCompany',
         data: filteredData,
       });
-      console.log(filteredResults.data);
+      // console.log(filteredResults.data);
     } else {
       setFilterResults({ type: 'filter', data: data2 });
     }
@@ -149,8 +147,9 @@ const AdminUpload = () => {
                       searchInput.length <= 1 &&
                       getData.data.map((data) => (
                         <li key={data.name}>
+                          <input type="checkbox" name="checkbox" />
                           {data.name}
-                          <button
+                          {/* <button
                             className="ml-12"
                             onMouseOver={() => handleHover(data.name)}
                             onMouseLeave={() => onMouseLeave(data.name)}
@@ -189,22 +188,27 @@ const AdminUpload = () => {
                                 />
                               </svg>
                             )}
-                          </button>
+                          </button> */}
                         </li>
                       ))}
                     {filteredResults?.type === 'filterCompany' &&
                       searchInput.length !== 0 &&
                       filteredResults.data.map((data) => (
                         <li key={data.name}>
-                          {data.name}
-                          <button
-                            className="ml-12"
-                            onMouseOver={() => handleHover(data.name)}
-                            onMouseLeave={() => onMouseLeave(data.name)}
-                            onFocus={() => handleHover(data.name)}
-                            onClick={() => handleDelete(data.name)}
-                          >
-                            {searchResults?.type === 'select' && data.selected ? (
+                          <span>
+                            <input type="checkbox" name="checkbox" />
+                          </span>
+                          <span>
+                            {data.name}
+                            {/* <button
+                              className="ml-12"
+                              onMouseOver={() => handleHover(data.name)}
+                              onMouseLeave={() => onMouseLeave(data.name)}
+                              onFocus={() => handleHover(data.name)}
+                              onClick={() => handleDelete(data.name)}
+                            > */}
+
+                            {/* {searchResults?.type === 'select' && data.selected ? (
                               <svg
                                 className="h-4 w-4 text-black-500"
                                 width="24"
@@ -235,8 +239,9 @@ const AdminUpload = () => {
                                   d="M12 4v16m8-8H4"
                                 />
                               </svg>
-                            )}
-                          </button>
+                            )} */}
+                            {/* </button> */}
+                          </span>
                         </li>
                       ))}
                   </ul>
