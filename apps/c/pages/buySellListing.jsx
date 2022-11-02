@@ -26,7 +26,7 @@ const BuySellListing = () => {
           <div className="flex space-y-6 flex-col">
             <CardBackground>
               <label className="flex justify-center w-full h-40 px-4 transition bg-white border-2 border-accent border-dashed rounded-md appearance-none cursor-pointer hover:border-accent-focus focus:outline-none">
-                <span className="items-center space-x-4">
+                <span className="flex items-center space-x-4">
                   <div className="btn btn-ghost normal-case text-xl rounded-2xl bg-accent hover:bg-accent-focus">
                     Upload Image
                   </div>
