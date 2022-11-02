@@ -1,7 +1,17 @@
-const CardBackground = () => (
-  <div className="card w-96 bg-slate-300 shadow-xl">
-    <div className="card-body" />
+import React from 'react';
+import PropTypes from 'prop-types';
+
+const CardBackground = ({ children }) => (
+  <div className="card w-auto border-2 border-red-500 shadow-xl">
+    <div className="card-body">{children}</div>
   </div>
 );
+
+CardBackground.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.element),
+    PropTypes.element.isRequired,
+  ]),
+};
 
 export default CardBackground;
