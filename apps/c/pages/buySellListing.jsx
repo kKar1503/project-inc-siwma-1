@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React from 'react';
 import CardBackground from '../components/CardBackground';
 import Input from '../components/Input';
-import RightSide from './rightSide';
+import ListingForm from '../components/layouts/listingForm';
 
 const BuySellListing = () => {
   const [selectedImage, setSelectedImage] = React.useState(null);
@@ -64,7 +64,7 @@ const BuySellListing = () => {
           </div>
           <div className="flex flex-col">
             <CardBackground>
-              <RightSide />
+              <ListingForm />
             </CardBackground>
           </div>
         </div>
