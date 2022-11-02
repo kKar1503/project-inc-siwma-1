@@ -45,7 +45,7 @@ const UserInvite = () => (
           </div>
         </form>
         <div className="modal-action">
-          <label htmlFor="user-invite" className="btn btn-primary btn-info w-full">
+          <label htmlFor="user-invite" className="btn btn-outline btn-primary w-full">
             Send Invite
           </label>
         </div>
