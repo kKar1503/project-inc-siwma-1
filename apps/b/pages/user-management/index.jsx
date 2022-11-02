@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import Head from 'next/head';
 import AdminFigure from '../../components/AdminFigure';
 import Sidebar, { adminSidebar } from '../../components/Sidebar/Sidebar';
