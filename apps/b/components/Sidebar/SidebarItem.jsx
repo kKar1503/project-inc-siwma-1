@@ -46,17 +46,14 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
    *
    * This is done to indicate to the user, when the SidebarItem is collapsed, that an item within it is selected
    */
-  const [isSelected, setIsSelected] = useState(false);
+  const [isSelected, setIsSelected] = useState(checkSelected());
   const [isExpanded, setIsExpanded] = useState(isSelected);
 
   /**
    * Listens for any changes to the selected prop so that the isSelected state can be updated when necessary
    */
   useEffect(() => {
-    setIsSelected(
-      label === selected ||
-      (subPages !== undefined && subPages.some((e) => Object.keys(e)[0] === selected))
-    );
+    setIsSelected(checkSelected());
   }, [selected]);
 
   // Check if the sidebar item being rendered has any subpages
@@ -73,8 +70,8 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
 
   // The sidebar item has subpages, render a dropdown to contain them instead
   return (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
     <div
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
       tabIndex="0"
       className={cx('collapse collapse-arrow rounded-lg mt-1.5', {
         'bg-base-200': isSelected || isExpanded,
