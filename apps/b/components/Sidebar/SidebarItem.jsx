@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * Parses a sidebar item
@@ -39,11 +39,18 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
    *
    * This is done to indicate to the user, when the SidebarItem is collapsed, that an item within it is selected
    */
-  const [isSelected, setIsSelected] = useState(
-    label === selected ||
-      (subPages !== undefined && subPages.some((e) => Object.keys(e)[0] === selected))
-  );
+  const [isSelected, setIsSelected] = useState(false);
   const [isExpanded, setIsExpanded] = useState(isSelected);
+
+  /**
+   * Listens for any changes to the selected prop so that the isSelected state can be updated when necessary
+   */
+  useEffect(() => {
+    setIsSelected(
+      label === selected ||
+        (subPages !== undefined && subPages.some((e) => Object.keys(e)[0] === selected))
+    );
+  }, [selected]);
 
   // Check if the sidebar item being rendered has any subpages
   if (subPages === undefined) {
