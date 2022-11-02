@@ -9,20 +9,10 @@ const dataList = [
   { id: '4', data: 'kkkkkkk' },
 ];
 
-// const data2 = [
-//   { id: '1', name: 'abc company', selected: false },
-//   { id: '2', name: 'efg company', selected: false },
-//   { id: '3', name: 'company c', selected: false },
-//   { id: '4', name: 'kkkkkkk', selected: false },
-// ];
-
 const AdminUpload = () => {
   const [getData, setGetData] = useState([]);
   const [userInput, setUserInput] = useState('');
-
-  // useEffect(() => {
-  //   setGetData({ type: 'data', data: dataList });
-  // }, []);
+  const [selected, setSelected] = useState(false);
 
   useEffect(() => {
     setGetData(dataList);
@@ -37,7 +27,7 @@ const AdminUpload = () => {
 
   return (
     <>
-      <nav className="text-black ml-72 mt-24 mb-14" aria-label="Breadcrumb">
+      <nav className="text-black ml-10 mt-24 mb-14" aria-label="Breadcrumb">
         <ol className="list-none p-0 inline-flex">
           <li className="flex items-center">
             <a href="#">Advertisement</a>
@@ -61,38 +51,8 @@ const AdminUpload = () => {
           </li>
         </ol>
       </nav>
-      <div className="flex flex-row-reverse space-x-16 space-x-reverse my-30 mr-10 ...">
-        <div className="card w-1/3 h-80 bg-base-100 shadow-xl px-8 py-8 ">
-          <div className="max-w-xl">
-            <label className="flex justify-center w-full h-40 px-4 mt-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
-              <span className="items-center space-x-2">
-                <svg
-                  className="h-16 w-16 text-black m-auto my-4"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  strokeWidth="2"
-                  stroke="currentColor"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" />
-                  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
-                  <polyline points="7 9 12 4 17 9" /> <line x1="12" y1="4" x2="12" y2="16" />
-                </svg>
-                <p className="text-xs text-gray-600 text-center my-6">
-                  Click to upload or drag and drop SVG, PNG or JPG (MAX. 800 x 400px)
-                </p>
-              </span>
-              <input type="file" name="file_upload" className="hidden" />
-            </label>
-            <button className="btn btn-active btn-ghost rounded-md w-1/2 h-6 mx-24 my-8 normal-case text-base">
-              Create
-            </button>
-          </div>
-        </div>
-        <div className="card w-1/3 h-80 bg-base-100 shadow-xl">
+      <div className="flex flex-col sm:flex-row ml-10 ">
+        <div className="card w-1/3 max-sm:w-full h-80 bg-base-100 shadow-xl mr-10 max-sm:mb-10">
           <h1 className="ml-4 leading-loose font-bold text-xl mt-6">Company to tag</h1>
           <div>
             <input
@@ -106,21 +66,16 @@ const AdminUpload = () => {
             <tbody>
               <tr>
                 <td>
-                  {/* <ul className=" ml-8 leading-loose text-gray-600 text-xl">
-                    {getData !== null &&
-                      getData?.type === 'data' &&
-                      // searchInput.length <= 1 &&
-                      filter().getData.data.map((item) => (
-                        <li key={getData.id}>
-                          <input type="checkbox" name="checkbox" />
-                          {item.name}
-                        </li>
-                      ))}
-                  </ul> */}
                   <ul>
                     {filter().map((item) => (
                       <li key={getData.id} className="text-xl">
-                        <input type="checkbox" name="checkbox" className="mr-2 ml-4 mt-2 h-4 w-4" />
+                        <input
+                          type="radio"
+                          name="radio"
+                          id="radio"
+                          className="mr-2 ml-6 mt-2 h-4 w-4"
+                          onChange={() => setSelected(true)}
+                        />
                         {item.data}
                       </li>
                     ))}
@@ -130,6 +85,40 @@ const AdminUpload = () => {
             </tbody>
           </table>
         </div>
+        {selected === true && (
+          <div className="card w-1/3  max-sm:w-full h-80 bg-base-100 shadow-xl px-8 py-8 ">
+            <div className="max-w-xl">
+              <label className="flex justify-center w-full h-40 px-4 mt-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+                <span className="items-center space-x-2">
+                  <svg
+                    className="h-16 w-16 text-black m-auto my-4"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2"
+                    stroke="currentColor"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" />
+                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                    <polyline points="7 9 12 4 17 9" /> <line x1="12" y1="4" x2="12" y2="16" />
+                  </svg>
+                  <p className="text-xs text-gray-600 text-center my-6">
+                    Click to upload or drag and drop SVG, PNG or JPG (MAX. 800 x 400px)
+                  </p>
+                </span>
+                <input type="file" name="file_upload" className="hidden" />
+              </label>
+              <div className="flex items-center justify-center">
+                <button className="btn btn-active btn-ghost rounded-md w-1/2 h-6 my-8 normal-case text-base">
+                  Create
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
