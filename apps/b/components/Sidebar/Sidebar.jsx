@@ -25,7 +25,7 @@ export const adminSidebar = [
         Users: '/',
       },
       {
-        Invites: '/',
+        Invites: '/admin/invite',
       },
     ],
   },
