@@ -4,9 +4,10 @@ import AdminFigure from '../components/AdminFigure';
 import BaseTable from '../components/Tables/BaseTable';
 import RegisteredUsersTable from '../components/Tables/RegisteredUsersTable';
 import PendingInvitesTable from '../components/Tables/PendingInvitesTable';
+import RegisteredCompaniesTable from '../components/Tables/RegisteredCompaniesTable';
 
 const Home = () => {
-  const data = [
+  const registeredUsersData = [
     {
       id: 1,
       profilePicture: pic,
@@ -25,6 +26,38 @@ const Home = () => {
     },
   ];
 
+  const pendingInvitesData = [
+    {
+      id: 1,
+      company: 'Company',
+      email: 'john@doe.com',
+      mobileNumber: '+65 9832 0293',
+    },
+    {
+      id: 2,
+      company: 'Very Very Long Company Name',
+      email: 'veryverylongname@veryverylongdomain.com',
+      mobileNumber: '+65 9832 0293',
+    },
+  ];
+
+  const registeredCompaniesData = [
+    {
+      id: 1,
+      profilePicture: pic,
+      company: 'Company',
+      website: 'www.company.com',
+      bio: 'Company Bio',
+    },
+    {
+      id: 2,
+      profilePicture: pic,
+      company: 'Very Very Long Company Name',
+      website: 'veryverylongname@veryverylongdomain.com',
+      bio: 'Very Very Long Company Bio',
+    },
+  ];
+
   return (
     <div className="bg-[#FAFAFA]">
       <Head>
@@ -40,10 +73,14 @@ const Home = () => {
           <AdminFigure title="Pending Invites" value="5,983" color="text-secondary" />
         </div>
       </div>
-      <div className="flex flex-row w-4/5 mx-5">
-        {/* <BaseTable data={data} /> */}
-        <RegisteredUsersTable data={data} />
-        {/* <PendingInvitesTable data={data} /> */}
+      <div className="flex flex-row m-5">
+        <RegisteredUsersTable data={registeredUsersData} />
+      </div>
+      <div className="flex flex-row m-5">
+        <PendingInvitesTable data={pendingInvitesData} />
+      </div>
+      <div className="flex flex-row m-5">
+        <RegisteredCompaniesTable data={registeredCompaniesData} />
       </div>
     </div>
   );
