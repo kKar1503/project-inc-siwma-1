@@ -2,10 +2,10 @@ const CreateListingInformation = () => (
   <form className="p-5">
     {/* Selling/Buying Options */}
     <div className="flex flex-row justify-between mb-5">
-      <button className="bg-blue-700 hover:bg-blue-800 text-white py-2 px-4 rounded w-2/5 ml-2">
+      <button className="bg-primary hover:bg-primary-focus text-primary-content py-2 px-4 rounded w-2/5 ml-2">
         Selling
       </button>
-      <button className="bg-blue-700 hover:bg-blue-800 text-white py-2 px-4 rounded w-2/5 mr-2">
+      <button className="bg-primary hover:bg-primary-focus text-primary-content py-2 px-4 rounded w-2/5 mr-2">
         Buying
       </button>
     </div>
@@ -40,14 +40,14 @@ const CreateListingInformation = () => (
         type="radio"
         name="options"
         data-title="Brand New"
-        className="btn bg-white border-blue-300 text-blue-300 hover:bg-white hover:border-blue-400"
+        className="btn bg-primary-content text-primary border-primary hover:bg-primary hover:text-primary-content"
         defaultChecked
       />
       <input
         type="radio"
         name="options"
         data-title="Lightly Used"
-        className="btn bg-white border-blue-300 text-blue-300 hover:bg-white hover:border-blue-400"
+        className="btn bg-primary-content text-primary border-primary hover:bg-primary hover:text-primary-content"
       />
     </div>
 
@@ -73,7 +73,7 @@ const CreateListingInformation = () => (
     <div className="flex flex-row justify-end">
       <button
         type="submit"
-        className="bg-blue-700 hover:bg-blue-800 text-white py-2 px-4 rounded mt-5"
+        className="bg-primary hover:bg-primary-focus text-primary-content py-2 px-4 rounded mt-5"
       >
         List Now
       </button>

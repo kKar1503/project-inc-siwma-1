@@ -3,6 +3,7 @@ import Image from 'next/image';
 import React from 'react';
 import CardBackground from '../components/CardBackground';
 import Input from '../components/Input';
+import RightSide from './rightSide';
 
 const BuySellListing = () => {
   const [selectedImage, setSelectedImage] = React.useState(null);
@@ -56,13 +57,15 @@ const BuySellListing = () => {
               )}
             </CardBackground>
             <CardBackground>
-              <h1 className='font-bold text-3xl'>Dimensions</h1>
-              <Input text='Width'/>
-              <Input text='Height'/>
+              <h1 className="font-bold text-3xl">Dimensions</h1>
+              <Input text="Width" />
+              <Input text="Height" />
             </CardBackground>
           </div>
           <div className="flex flex-col">
-            <CardBackground />
+            <CardBackground>
+              <RightSide />
+            </CardBackground>
           </div>
         </div>
       </main>
