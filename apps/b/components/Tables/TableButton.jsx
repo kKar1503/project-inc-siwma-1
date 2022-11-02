@@ -9,7 +9,7 @@ When it is not selected, it is black.
 const TableButton = ({ index, selectedIndex, setSelectedIndex, selectedColor, styles }) => (
   <button
     className={cx(
-      'px-4 py-2 text-white',
+      'btn px-4 py-2 text-white rounded-none border-none',
       styles,
       index === selectedIndex ? selectedColor : 'bg-black'
     )}
