@@ -20,6 +20,7 @@ const RegisteredCompaniesTable = ({ data }) => (
     }
     headings={['Company', 'Website', 'Bio']}
     headingColor="bg-primary"
+    showCheckbox
     columnKeys={['company', 'website', 'bio']}
     data={data}
   />

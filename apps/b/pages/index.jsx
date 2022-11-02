@@ -3,6 +3,7 @@ import pic from '../public/siwma-logo-sm.png';
 import AdminFigure from '../components/AdminFigure';
 import BaseTable from '../components/Tables/BaseTable';
 import RegisteredUsersTable from '../components/Tables/RegisteredUsersTable';
+import RegisteredUsersTableWithoutCheckbox from '../components/Tables/RegisteredUsersTableWithoutCheckbox';
 import PendingInvitesTable from '../components/Tables/PendingInvitesTable';
 import RegisteredCompaniesTable from '../components/Tables/RegisteredCompaniesTable';
 
@@ -75,6 +76,9 @@ const Home = () => {
       </div>
       <div className="flex flex-row m-5">
         <RegisteredUsersTable data={registeredUsersData} />
+      </div>
+      <div className="flex flex-row m-5">
+        <RegisteredUsersTableWithoutCheckbox data={registeredUsersData} />
       </div>
       <div className="flex flex-row m-5">
         <PendingInvitesTable data={pendingInvitesData} />
