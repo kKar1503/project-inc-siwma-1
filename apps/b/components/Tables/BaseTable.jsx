@@ -2,10 +2,13 @@ import React from 'react';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 
+import cx from 'classnames';
+
 // This is the base table component that every other table is built on.
 
 /* Expected props:
   - header (A div that you want to be the header of the table)
+  - theadColor (The color of the table headings)
   - data (An array of objects that you want to be the rows of the table)
 
   Data is expected to contain at least the following keys:
@@ -21,7 +24,7 @@ import PropTypes from 'prop-types';
   ]
   */
 
-const BaseTable = ({ header, data }) => {
+const BaseTable = ({ header, theadColor, data }) => {
   if (!data || data.length === 0) {
     return (
       <div className="flex flex-col text-center">
@@ -30,21 +33,18 @@ const BaseTable = ({ header, data }) => {
     );
   }
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto bg-none">
+      {header}
       <div className="overflow-x-auto w-full">
         <table className="table w-full">
           <thead>
             <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
-              <th>User</th>
-              <th>E-mail</th>
-              <th>Company</th>
-              <th>Mobile Number</th>
-              <th>Actions</th>
+              <th className={cx('text-white', theadColor)}> </th> {/* Empty column for Checkbox */}
+              <th className={cx('text-white', theadColor)}>User</th>
+              <th className={cx('text-white', theadColor)}>E-mail</th>
+              <th className={cx('text-white', theadColor)}>Company</th>
+              <th className={cx('text-white', theadColor)}>Mobile Number</th>
+              <th className={cx('text-white', theadColor)}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -75,38 +75,6 @@ const BaseTable = ({ header, data }) => {
                 {/* <td><Image></Image> */}
               </tr>
             ))}
-            {/* <tr>
-            <th>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </th>
-            <td>
-              <div className="flex items-center space-x-3">
-                <div className="avatar">
-                  <div className="mask mask-squircle w-12 h-12">
-                    <Image
-                      src="/tailwind-css-component-profile-2@56w.png"
-                      alt="Avatar Tailwind CSS Component"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="font-bold">Hart Hagerty</div>
-                  <div className="text-sm opacity-50">United States</div>
-                </div>
-              </div>
-            </td>
-            <td>
-              Zemlak, Daniel and Leannon
-              <br />
-              <span className="badge badge-ghost badge-sm">Desktop Support Technician</span>
-            </td>
-            <td>Purple</td>
-            <th>
-              <button className="btn btn-ghost btn-xs">details</button>
-            </th>
-          </tr> */}
           </tbody>
           {/* <tfoot>
           <tr>
@@ -124,8 +92,18 @@ const BaseTable = ({ header, data }) => {
 };
 
 BaseTable.propTypes = {
-  header: PropTypes.arrayOf(PropTypes.string),
-  data: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+  header: PropTypes.element,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      profilePicture: PropTypes.string,
+      name: PropTypes.string,
+      email: PropTypes.string,
+      company: PropTypes.string,
+      mobileNumber: PropTypes.string,
+    })
+  ),
+  theadColor: PropTypes.string,
 };
 
 export default BaseTable;
