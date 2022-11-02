@@ -27,7 +27,7 @@ import cx from 'classnames';
   ]
   */
 
-const BaseTable = ({ header, headings, headingColor, columnKeys, data }) => {
+const BaseTable = ({ header, headings, headingColor, showCheckbox, columnKeys, data }) => {
   if (!data || data.length === 0) {
     return (
       <div className="flex flex-col text-center">
@@ -54,11 +54,13 @@ const BaseTable = ({ header, headings, headingColor, columnKeys, data }) => {
           <tbody>
             {data.map((row) => (
               <tr key={row.id}>
-                <td>
-                  <label>
-                    <input type="checkbox" className="checkbox" />
-                  </label>
-                </td>
+                {showCheckbox && (
+                  <td>
+                    <label>
+                      <input type="checkbox" className="checkbox" />
+                    </label>
+                  </td>
+                )}
                 {columnKeys.map((key, index) => (
                   <td key={key}>
                     {/* Show a profilePicture if one exists and if we're on the first column */}
@@ -98,6 +100,7 @@ BaseTable.propTypes = {
   header: PropTypes.element,
   headings: PropTypes.arrayOf(PropTypes.string),
   headingColor: PropTypes.string,
+  showCheckbox: PropTypes.bool,
   columnKeys: PropTypes.arrayOf(PropTypes.string),
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.

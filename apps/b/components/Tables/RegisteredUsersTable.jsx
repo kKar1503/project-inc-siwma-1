@@ -26,6 +26,7 @@ const RegisteredUsersTable = ({ data }) => (
     }
     headings={['User', 'E-mail', 'Company', 'Mobile Number']}
     headingColor="bg-primary"
+    showCheckbox
     columnKeys={['name', 'email', 'company', 'mobileNumber']}
     data={data}
   />
