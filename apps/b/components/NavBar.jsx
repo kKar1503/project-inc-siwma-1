@@ -9,12 +9,12 @@ const NavBar = () => (
       <p className="text-sm font-thin">Admin</p>
     </div>
     <div className="dropdown dropdown-end">
-      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control, jsx-a11y/no-noninteractive-tabindex */}
-      <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+      <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
         <div className="w-10 rounded-full">
           <Image src="/../public/sample-profile-pic.jpg" alt="profile-pic" width={80} height={80} />
         </div>
-      </label>
+      </div>
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
       <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
         <li>
