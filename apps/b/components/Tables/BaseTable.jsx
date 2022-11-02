@@ -45,11 +45,11 @@ const BaseTable = ({ header, headings, headingColor, showCheckbox, columnKeys, d
             <tr>
               {showCheckbox && <th className={cx('rounded-none', headingColor)}> </th>}
               {headings.map((heading) => (
-                <th key={heading} className={cx('text-white', headingColor)}>
+                <th key={heading} className={cx('rounded-none text-white', headingColor)}>
                   {heading}
                 </th>
               ))}
-              <th className={cx('text-white', headingColor)}>Actions</th>
+              <th className={cx('rounded-none text-white', headingColor)}>Actions</th>
             </tr>
           </thead>
           <tbody>
