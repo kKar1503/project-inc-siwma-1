@@ -1,84 +1,42 @@
-comment:
-  header: Hi, @{{ pull_request.user.login }}.
-
 labels:
-  - name: invalid
+  - name: 'status: template-invalid'
     labeled:
       issue:
-        body: |
-          Please follow the issue templates.
-
+        body: @{{issue.user.login}}, please follow the issue template.
         action: close
       pr:
-        body: Please follow the pull request templates.
+        body: @{{pull_request.user.login}}, please follow the pull request template.
         action: close
     unlabeled:
       issue:
-        body: Thank you for following the template. The repository owner will reply.
-        action: open
-  - name: forum
-    labeled:
-      issue:
-        body: |
-          Please ask questions about GitHub Actions at the following forum.
-          https://github.community/c/github-actions
-        action: close
-  - name: wontfix
-    labeled:
-      issue:
-        body: This will not be worked on but we appreciate your contribution.
-        action: close
-    unlabeled:
-      issue:
-        body: This has become active again.
+        body: Thank you for following the template. The thread is now re-opened.
         action: open
   - name: duplicate
     labeled:
       issue:
         body: This issue already exists.
         action: close
-  - name: good first issue
-    labeled:
-      issue:
-        body: This issue is easy for contributing. Everyone can work on this.
-  - name: proposal
-    labeled:
-      issue:
-        body: Thank you @{{ issue.user.login }} for suggesting this.
-  - name: locked (spam)
+      pr:
+        body: This pull request already exists.
+        action: close
+  - name: 'status: locked'
     labeled:
       issue:
         body: |
-          This issue has been **LOCKED** because of spam!
+          This issue has been **LOCKED** because of bad chat!
 
-          Please do not spam messages and/or issues on the issue tracker. You may get blocked from this repository for doing so.
+          Please do not spam messages or send offensive messages.
         action: close
         locking: lock
         lock_reason: spam
       pr:
         body: |
-          This pull-request has been **LOCKED** because of spam!
+          This pull-request has been **LOCKED** because of bad chat!
 
-          Please do not spam messages and/or pull-requests on this project. You may get blocked from this repository for doing so.
+          Please do not spam messages or send offensive messages.
         action: close
         locking: lock
         lock_reason: spam
-  - name: locked (heated)
-    labeled:
-      issue:
-        body: |
-          This issue has been **LOCKED** because of heated conversation!
-
-          We appreciate exciting conversations, as long as they won't become too aggressive and/or emotional.
-        locking: lock
-        lock_reason: too heated
-      pr:
-        body: |
-          This pull-request has been **LOCKED** because of heated conversation!
-
-          We appreciate exciting conversations, as long as they won't become too aggressive and/or emotional.
-        locking: lock
-        lock_reason: too heated
     unlabeled:
       issue:
         body: |
@@ -87,25 +45,15 @@ labels:
       pr:
         body: |
           This pull-request has been unlocked now.
+        action: open
         locking: unlock
-  - name: locked (off-topic)
+  - name: 'status: cannot-reproduce'
     labeled:
       issue:
-        body: |
-          This issue has been **LOCKED** because of off-topic conversations!
-
-          Please use our other means of communication for casual chats.
+        body: @{{issue.user.login}}, please check the reproduction step, it is not working.
         action: close
-        locking: lock
-        lock_reason: off-topic
-  - name: locked (resolved)
-    labeled:
+    unlabeled:
       issue:
         body: |
-          This issue has been **LOCKED** because of it being resolved!
-
-          The issue has been fixed and is therefore considered resolved.
-          If you still encounter this or it has changed, open a new issue instead of responding to solved ones.
-        action: close
-        locking: lock
-        lock_reason: resolved
+          Thank you for fixing reproduction steps. The thread is now re-opened.
+        locking: open
