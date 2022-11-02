@@ -26,6 +26,13 @@ export function parseSidebarItem(sidebarItem) {
  */
 const SidebarItem = ({ label, link, selected, subPages }) => {
   /**
+   * Determines whether or not the component (or any component within it) is selected
+   */
+  const checkSelected = () =>
+    label === selected ||
+    (subPages !== undefined && subPages.some((e) => Object.keys(e)[0] === selected));
+
+  /**
    * There are two variants to the SidebarItem component
    * 1. A regular navigation button
    * 2. A collapsible dropdown list that can contain other SidebarItems
@@ -39,17 +46,14 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
    *
    * This is done to indicate to the user, when the SidebarItem is collapsed, that an item within it is selected
    */
-  const [isSelected, setIsSelected] = useState(false);
+  const [isSelected, setIsSelected] = useState(checkSelected());
   const [isExpanded, setIsExpanded] = useState(isSelected);
 
   /**
    * Listens for any changes to the selected prop so that the isSelected state can be updated when necessary
    */
   useEffect(() => {
-    setIsSelected(
-      label === selected ||
-        (subPages !== undefined && subPages.some((e) => Object.keys(e)[0] === selected))
-    );
+    setIsSelected(checkSelected());
   }, [selected]);
 
   // Check if the sidebar item being rendered has any subpages
@@ -67,7 +71,12 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
   // The sidebar item has subpages, render a dropdown to contain them instead
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-    <div tabIndex="0" className="collapse collapse-arrow bg-base-200 rounded-lg mt-1.5">
+    <div
+      tabIndex="0"
+      className={cx('collapse collapse-arrow rounded-lg mt-1.5', {
+        'bg-base-200': isSelected || isExpanded,
+      })}
+    >
       <input
         className="min-h-0"
         type="checkbox"
@@ -76,7 +85,7 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
       />
       <div
         className={cx('collapse-title min-h-0 font-medium rounded-lg px-8 py-2.5', {
-          'bg-base-300 rounded-b-none': isSelected && isExpanded,
+          'bg-base-300 rounded-b-none': isExpanded,
           'bg-primary text-white': isSelected && !isExpanded,
         })}
       >
