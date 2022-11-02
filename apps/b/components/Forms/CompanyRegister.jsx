@@ -15,7 +15,7 @@ const CompanyRegister = () => (
           <p className="text-sm">Register a company profile to the system</p>
         </div>
         <div className="flex flex-wrap">
-          <div className="flex-1 mr-10">
+          <div className="flex-1 md:mr-10">
             <form>
               <div className="form-control">
                 <div className="label">
