@@ -36,15 +36,10 @@ export const adminSidebar = [
  * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
  */
 const Sidebar = ({ children, sidebarList, selected }) => (
-  <div className="drawer drawer-mobile">
+  <div className="drawer drawer-mobile h-auto min-h-screen">
     <input id="sidebar-drawer" type="checkbox" className="drawer-toggle" />
-    <div className="drawer-content flex flex-col items-center justify-center">
-      <label htmlFor="sidebar-drawer" className="btn btn-primary drawer-button lg:hidden">
-        Open drawer
-      </label>
-      {children}
-    </div>
-    <div className="drawer-side lg:rounded-2xl shadow-xl">
+    <div className="drawer-content flex flex-col items-center justify-center">{children}</div>
+    <div className="drawer-side lg:rounded-2xl shadow-xl h-auto min-h-screen">
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label htmlFor="sidebar-drawer" className="drawer-overlay" />
       <ul className="menu p-4 overflow-y-visible w-64 bg-base-100 text-base-content flex-nowrap">
