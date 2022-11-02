@@ -7,8 +7,6 @@ import SearchBar from '../SearchBar';
 
 const RegisteredUsersTable = ({ data }) => (
   <BaseTable
-    data={data}
-    theadColor="bg-primary"
     header={
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-col pb-3">
@@ -26,6 +24,10 @@ const RegisteredUsersTable = ({ data }) => (
         </div>
       </div>
     }
+    headings={['User', 'E-mail', 'Company', 'Mobile Number']}
+    headingColor="bg-primary"
+    columnKeys={['name', 'email', 'company', 'mobileNumber']}
+    data={data}
   />
 );
 

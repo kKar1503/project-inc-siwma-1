@@ -7,12 +7,10 @@ import SearchBar from '../SearchBar';
 
 const PendingInvitesTable = ({ data }) => (
   <BaseTable
-    data={data}
-    theadColor="bg-warning"
     header={
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-col pb-3">
-          <h1 className="font-bold text-xl">Registered Users</h1>
+          <h1 className="font-bold text-xl">Pending Invites</h1>
           <h1>Showing 1 to 10 of 100 entries</h1>
         </div>
         <div className="flex flex-row gap-4">
@@ -20,6 +18,10 @@ const PendingInvitesTable = ({ data }) => (
         </div>
       </div>
     }
+    headings={['Company', 'E-mail', 'Mobile Number']}
+    headingColor="bg-warning"
+    columnKeys={['company', 'email', 'mobileNumber']}
+    data={data}
   />
 );
 
