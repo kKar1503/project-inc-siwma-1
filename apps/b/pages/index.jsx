@@ -3,12 +3,13 @@ import pic from '../public/siwma-logo-sm.png';
 import AdminFigure from '../components/AdminFigure';
 import BaseTable from '../components/Tables/BaseTable';
 import RegisteredUsersTable from '../components/Tables/RegisteredUsersTable';
+import PendingInvitesTable from '../components/Tables/PendingInvitesTable';
 
 const Home = () => {
   const data = [
     {
       id: 1,
-      profilePicture: pic,
+      // profilePicture: pic,
       name: 'John Doe',
       email: 'john@doe.com',
       company: 'Company',
@@ -16,7 +17,7 @@ const Home = () => {
     },
     {
       id: 2,
-      profilePicture: pic,
+      // profilePicture: pic,
       name: 'Veryvery Long Name',
       email: 'veryverylongname@veryverylongdomain.com',
       company: 'Company',
@@ -41,7 +42,8 @@ const Home = () => {
       </div>
       <div className="flex flex-row w-4/5 mx-5">
         {/* <BaseTable data={data} /> */}
-        <RegisteredUsersTable data={data} />
+        {/* <RegisteredUsersTable data={data} /> */}
+        <PendingInvitesTable data={data} />
       </div>
     </div>
   );
