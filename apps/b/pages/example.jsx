@@ -1,12 +1,12 @@
-import CompanyRegister from '../components/Forms/CompanyRegister';
+import UserInvite from '../components/Forms/UserInvite';
 
-const test = () => (
+const example = () => (
   <div>
-    <label htmlFor="company-register" className="btn">
+    <label htmlFor="user-invite" className="btn">
       Open
     </label>
-    <CompanyRegister />
+    <UserInvite />
   </div>
 );
 
-export default test;
+export default example;
