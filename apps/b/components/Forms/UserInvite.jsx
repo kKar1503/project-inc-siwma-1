@@ -1,13 +1,9 @@
 const UserInvite = () => (
   <div>
     <input type="checkbox" id="user-invite" className="modal-toggle" />
-    <label htmlFor="user-invite" className="modal cursor-pointer">
-      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-      <label htmlFor="" className="modal-box rounded-xl">
-        <label
-          htmlFor="user-invite"
-          className="text-lg absolute right-4 top-2 hover:cursor-pointer"
-        >
+    <div className="modal">
+      <div className="modal-box rounded-xl">
+        <label htmlFor="user-invite" className="text-lg absolute right-4 top-2">
           ✕
         </label>
         <div>
@@ -30,7 +26,9 @@ const UserInvite = () => (
               <span className="label-text font-semibold">Company</span>
             </div>
             <select className="select select-bordered font-normal text-gray-400">
-              <option>User&apos;s company</option>
+              <option disabled selected>
+                User&apos;s company
+              </option>
               <option>Option 1</option>
               <option>Option 2</option>
             </select>
@@ -47,12 +45,12 @@ const UserInvite = () => (
           </div>
         </form>
         <div className="modal-action">
-          <label htmlFor="user-invite" className="btn btn-outline btn-primary w-full">
+          <label htmlFor="user-invite" className="btn btn-outline btn-info w-full">
             Send Invite
           </label>
         </div>
-      </label>
-    </label>
+      </div>
+    </div>
   </div>
 );
 
