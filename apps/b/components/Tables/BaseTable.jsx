@@ -59,9 +59,10 @@ const BaseTable = ({ header, headings, headingColor, columnKeys, data }) => {
                     <input type="checkbox" className="checkbox" />
                   </label>
                 </td>
-                {columnKeys.map((key) => (
+                {columnKeys.map((key, index) => (
                   <td key={key}>
-                    {key === 'name' && row.profilePicture && (
+                    {/* Show a profilePicture if one exists and if we're on the first column */}
+                    {index === 0 && row.profilePicture && (
                       <div className="w-10 h-10 relative">
                         <Image
                           src={row.profilePicture}
