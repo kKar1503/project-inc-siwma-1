@@ -8,15 +8,18 @@ import cx from 'classnames';
 
 /* Expected props:
   - header (A div that you want to be the header of the table)
-  - theadColor (The color of the table headings)
+  - headings (An array of strings that will be the headings of the table)
+  - headingColor (The color of the table headings)
+  - columnKeys (An array of strings that will be the keys of the data object)
   - data (An array of objects that you want to be the rows of the table)
 
-  Data is expected to contain the following keys:
+  Data is expected to contain the keys you specify in columnKeys. For example, if you specify columnKeys = ['name', 'profilePicture', 'email', 'company', 'mobileNumber'], then data should look like this:
+  id is a COMPULSORY key that is used to uniquely identify each row. Failure to provide it will result in bad things happening. You have been warned.
   [
     {
       id: int,
-      profilePicture: image, // optional
       name: string,
+      profilePicture: image, // optional
       email: string,
       company: string,
       mobileNumber: string,
@@ -24,7 +27,7 @@ import cx from 'classnames';
   ]
   */
 
-const BaseTable = ({ header, theadColor, data }) => {
+const BaseTable = ({ header, headings, headingColor, columnKeys, data }) => {
   if (!data || data.length === 0) {
     return (
       <div className="flex flex-col text-center">
@@ -39,12 +42,13 @@ const BaseTable = ({ header, theadColor, data }) => {
         <table className="table w-full">
           <thead>
             <tr>
-              <th className={cx('text-white', theadColor)}> </th> {/* Empty column for Checkbox */}
-              <th className={cx('text-white', theadColor)}>User</th>
-              <th className={cx('text-white', theadColor)}>E-mail</th>
-              <th className={cx('text-white', theadColor)}>Company</th>
-              <th className={cx('text-white', theadColor)}>Mobile Number</th>
-              <th className={cx('text-white', theadColor)}>Actions</th>
+              <th className={headingColor}> </th> {/* For the Checkbox */}
+              {headings.map((heading) => (
+                <th key={heading} className={cx('text-white', headingColor)}>
+                  {heading}
+                </th>
+              ))}
+              <th className={cx('text-white', headingColor)}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -55,9 +59,9 @@ const BaseTable = ({ header, theadColor, data }) => {
                     <input type="checkbox" className="checkbox" />
                   </label>
                 </td>
-                <td>
-                  <div className="flex items-center gap-4">
-                    {row.profilePicture && (
+                {columnKeys.map((key) => (
+                  <td key={key}>
+                    {key === 'name' && row.profilePicture && (
                       <div className="w-10 h-10 relative">
                         <Image
                           src={row.profilePicture}
@@ -68,13 +72,9 @@ const BaseTable = ({ header, theadColor, data }) => {
                         />
                       </div>
                     )}
-                    <span>{row.name}</span>
-                  </div>
-                </td>
-                <td>{row.email}</td>
-                <td>{row.company}</td>
-                <td>{row.mobileNumber}</td>
-                {/* <td><Image></Image> */}
+                    <span>{row[key]}</span>
+                  </td>
+                ))}
               </tr>
             ))}
           </tbody>
@@ -95,17 +95,11 @@ const BaseTable = ({ header, theadColor, data }) => {
 
 BaseTable.propTypes = {
   header: PropTypes.element,
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      profilePicture: PropTypes.string,
-      name: PropTypes.string,
-      email: PropTypes.string,
-      company: PropTypes.string,
-      mobileNumber: PropTypes.string,
-    })
-  ),
-  theadColor: PropTypes.string,
+  headings: PropTypes.arrayOf(PropTypes.string),
+  headingColor: PropTypes.string,
+  columnKeys: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  // We don't know what the data object will look like, so we can't specify it.
 };
 
 export default BaseTable;
