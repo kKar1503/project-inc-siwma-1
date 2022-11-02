@@ -1,8 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
-
 import cx from 'classnames';
+import TableButton from './TableButton';
 
 // This is the base table component that every other table is built on.
 
@@ -12,6 +12,7 @@ import cx from 'classnames';
   - headingColor (The color of the table headings)
   - columnKeys (An array of strings that will be the keys of the data object)
   - data (An array of objects that you want to be the rows of the table)
+  - footer (A div that you want to be the footer of the table)
 
   Data is expected to contain the keys you specify in columnKeys. For example, if you specify columnKeys = ['name', 'profilePicture', 'email', 'company', 'mobileNumber'], then data should look like this:
   id is a COMPULSORY key that is used to uniquely identify each row. Failure to provide it will result in bad things happening. You have been warned.
@@ -27,7 +28,7 @@ import cx from 'classnames';
   ]
   */
 
-const BaseTable = ({ header, headings, headingColor, showCheckbox, columnKeys, data }) => {
+const BaseTable = ({ header, headings, headingColor, showCheckbox, columnKeys, data, footer }) => {
   if (!data || data.length === 0) {
     return (
       <div className="flex flex-col text-center">
@@ -38,11 +39,11 @@ const BaseTable = ({ header, headings, headingColor, showCheckbox, columnKeys, d
   return (
     <div className="overflow-x-auto bg-none">
       {header}
-      <div className="overflow-x-auto w-full">
+      <div className="w-full">
         <table className="table w-full">
           <thead>
             <tr>
-              <th className={headingColor}> </th> {/* For the Checkbox */}
+              {showCheckbox && <th className={cx('rounded-none', headingColor)}> </th>}
               {headings.map((heading) => (
                 <th key={heading} className={cx('text-white', headingColor)}>
                   {heading}
@@ -81,15 +82,13 @@ const BaseTable = ({ header, headings, headingColor, showCheckbox, columnKeys, d
               </tr>
             ))}
           </tbody>
-          {/* <tfoot>
-          <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Job</th>
-            <th>Favorite Color</th>
-            <th></th>
-          </tr>
-        </tfoot> */}
+          <tfoot>
+            <tr>
+              <td colSpan={headings.length + 1} className="bg-white rounded-none">
+                {footer}
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
@@ -104,6 +103,7 @@ BaseTable.propTypes = {
   columnKeys: PropTypes.arrayOf(PropTypes.string),
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.
+  footer: PropTypes.element,
 };
 
 export default BaseTable;
