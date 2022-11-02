@@ -45,7 +45,7 @@ const CompanyRegister = () => (
               </div>
             </form>
           </div>
-          <div className="w-1/2 flex flex-col">
+          <div className="md:w-1/2 flex flex-col">
             <div className="label">
               <span className="label-text ">Company Logo (optional)</span>
             </div>
