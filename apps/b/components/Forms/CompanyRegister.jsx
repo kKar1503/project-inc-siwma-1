@@ -10,7 +10,7 @@ const CompanyRegister = () => (
         >
           ✕
         </label>
-        <div>
+        <div className="pb-3">
           <h3 className="text-lg font-bold">Create an individual company</h3>
           <p className="text-sm">Register a company profile to the system</p>
         </div>
@@ -19,7 +19,7 @@ const CompanyRegister = () => (
             <form>
               <div className="form-control">
                 <div className="label">
-                  <span className="label-text font-semibold">Company name</span>
+                  <span className="label-text">Company name</span>
                 </div>
                 <input
                   type="text"
@@ -29,7 +29,7 @@ const CompanyRegister = () => (
               </div>
               <div className="form-control">
                 <div className="label">
-                  <span className="label-text font-semibold">Company website</span>
+                  <span className="label-text">Company website</span>
                 </div>
                 <input
                   type="text"
@@ -39,7 +39,7 @@ const CompanyRegister = () => (
               </div>
               <div className="form-control">
                 <div className="label">
-                  <span className="label-text font-semibold">Company bio(optional)</span>
+                  <span className="label-text">Company bio (optional)</span>
                 </div>
                 <textarea className="textarea textarea-bordered h-32" placeholder="Company bio" />
               </div>
@@ -47,7 +47,7 @@ const CompanyRegister = () => (
           </div>
           <div className="w-1/2 flex flex-col">
             <div className="label">
-              <span className="label-text font-semibold">Company Logo(optional)</span>
+              <span className="label-text ">Company Logo (optional)</span>
             </div>
             <label className="flex flex-1 justify-center w-full px-8 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
               <span className="flex items-center space-x-2">
@@ -81,7 +81,7 @@ const CompanyRegister = () => (
             </label>
             <div className="modal-action">
               <label htmlFor="company-register" className="btn btn-outline btn-primary w-full">
-                Register Comapny
+                Register Company
               </label>
             </div>
           </div>
