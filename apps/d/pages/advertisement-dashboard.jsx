@@ -1,5 +1,8 @@
 import { ClickDistribution, NumberOfAdsChart } from '@inc/charts';
 
+import { BsMegaphone } from 'react-icons/bs';
+import { TbHandClick } from 'react-icons/tb';
+
 const AdvertisementDashboard = () => (
   <div className="pl-48 pr-10 ">
     <div className="space-y-4">
@@ -10,15 +13,21 @@ const AdvertisementDashboard = () => (
     <div className="flex flex-row">
       <div className="flex flex-row flex-wrap space-y-4 gap-8">
         <div className="card flex-initial h-36 w-96  shadow-xl">
-          <div className="card-body">
-            <div className="card-title text-blue-600 text-xl">4</div>
-            <p>Active ad-spaces</p>
+          <div className="card-body flex flex-row">
+            <div className="flex flex-col">
+              <p className="text-blue-500 font-bold text-6xl">4</p>
+              <p>Active ad-spaces</p>
+            </div>
+            <BsMegaphone fontSize={100} style={{ color: '#2563EB' }} />
           </div>
         </div>
         <div className="card flex-initial h-36 w-96  shadow-xl">
-          <div className="card-body">
-            <div className="card-title text-green-400">25</div>
-            <p>Total clicks</p>
+          <div className="card-body flex flex-row">
+            <div className="flex flex-col">
+              <p className="text-green-500 font-bold text-6xl ">25</p>
+              <p>Total clicks</p>
+            </div>
+            <TbHandClick fontSize={100} style={{ color: '#34D399' }} />
           </div>
         </div>
         <div className="card flex-initial h-84 w-7/12 bg-base-100 shadow-xl">
