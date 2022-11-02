@@ -70,8 +70,8 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
 
   // The sidebar item has subpages, render a dropdown to contain them instead
   return (
-    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
     <div
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
       tabIndex="0"
       className={cx('collapse collapse-arrow rounded-lg mt-1.5', {
         'bg-base-200': isSelected || isExpanded,
