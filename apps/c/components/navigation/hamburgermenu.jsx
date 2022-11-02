@@ -1,7 +1,7 @@
 // ------------------ Imports ------------------
 
 import { useState } from 'react';
-import { node, string } from 'prop-types';
+import { bool, func, node, string } from 'prop-types';
 import { useRouter } from 'next/router';
 
 // ------------------ Layout Configuration ------------------
@@ -13,9 +13,9 @@ import { useRouter } from 'next/router';
  * @returns {JSX.Element} - the hamburger button
  * @constructor - the hamburger button
  */
-const HamburgerButtonIcon = ({ open, setOpen }) => {
-  // ------------------ UseStates -----------------
-  const [hover, setHover] = useState(false);
+const LayoutEditor = ({ closeHandle }) => (
+  <>
+    <SidebarHeaderIcon closeHandle={closeHandle} />
 
     <SidebarDivider />
 
@@ -69,7 +69,7 @@ const SidebarItem = ({ name, customIcon, redirectLink, children }) => {
 
   // ------------------ Styles -----------------
   const rotateStyles = {
-    transform: open ? 'rotate(90deg)' : 'rotate(0deg)',
+    transform: open ? 'rotate(0deg)' : 'rotate(-90deg)',
   };
 
   const subMenuStyles = {
@@ -80,13 +80,12 @@ const SidebarItem = ({ name, customIcon, redirectLink, children }) => {
   const router = useRouter();
 
   // ------------------ Handles -----------------
-  const redirect = () => {
-    router.push(redirectLink);
-  };
 
   const toggle = () => {
     setOpen(!open);
   };
+
+  const redirect = () => (children ? toggle() : router.push(redirectLink));
 
   // ------------------ Return -----------------
   return (
@@ -98,15 +97,15 @@ const SidebarItem = ({ name, customIcon, redirectLink, children }) => {
       >
         {customIcon && <customIcon />}
         <span className="text-[15px] ml-4 text-gray-200 font-bold">{name}</span>
+        {/* add 40 - name number of spaces */}
+
         {children && (
-          <span
-            onClick={toggle}
-            role="presentation"
-            className="text-sm rotate-180"
-            style={rotateStyles}
-          >
-            <i className="bi bi-chevron-down" />
-          </span>
+          <>
+            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+            <span role="presentation" className="text-sm rotate-180" style={rotateStyles}>
+              V
+            </span>
+          </>
         )}
       </div>
       {children && (
@@ -154,10 +153,19 @@ const SidebarSubItem = ({ name, customIcon, redirectLink }) => {
  * @returns {JSX.Element} - the menu
  * @constructor - the menu
  */
-const ExpandedHamburgerMenu = ({ navigationTabs, open }) => {
-  // todo:
-  // implement a way to close the menu when clicking outside it
-  // implement opening and closing animations
+const SidebarHeaderIcon = ({ closeHandle }) => (
+  <div className="text-gray-100 text-xl">
+    <div className="p-2.5 mt-1 flex items-center">
+      <i className="bi bi-app-indicator px-2 py-1 rounded-md bg-blue-600" />
+      <h1 className="font-bold text-gray-200 text-[15px] ml-3">S I W M A</h1>
+      <i className="bi bi-x cursor-pointer ml-28 lg:hidden" />
+      &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+      <div role="presentation" onClick={closeHandle}>
+        X
+      </div>
+    </div>
+  </div>
+);
 
   // ------------------ UseStats -----------------
   const [width, setWidth] = useState(0);
@@ -208,28 +216,38 @@ ExpandedHamburgerMenu.propTypes = {
  * @returns {JSX.Element}
  * @constructor
  */
-const HamburgerMenu = () => (
-  // ------------------ useStates -----------------
-  // const [open, setOpen] = useState(false);
+const HamburgerMenu = ({ open, setOpen }) => {
+  // ------------------ Handles -----------------
+  const closeHandle = () => setOpen(false);
+
+  // ------------------ Styles -----------------
+  const Styles = {
+    display: open ? 'block' : 'none',
+  };
 
   // ------------------ Return -----------------
-  <div>
-    <body className="bg-blue-600">
-      <span className="absolute text-white text-4xl top-5 left-4 cursor-pointer">
-        <i className="bi bi-filter-left px-2 bg-gray-900 rounded-md" />
-      </span>
-      <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center bg-gray-900">
-        <LayoutEditor />
-      </div>
-    </body>
-  </div>
-);
+  return (
+    <div style={Styles}>
+      <body>
+        <span className="absolute text-white text-4xl top-5 left-4 cursor-pointer">
+          <i className="bi bi-filter-left px-2 bg-gray-900 rounded-md" />
+        </span>
+        {/* todo background color here */}
+        <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center bg-gray-900">
+          <LayoutEditor closeHandle={closeHandle} />
+        </div>
+      </body>
+    </div>
+  );
+};
 // ------------------ Export ------------------
 export default HamburgerMenu;
 
 // ------------------ PropTypes ------------------
 
-LayoutEditor.propTypes = {};
+LayoutEditor.propTypes = {
+  closeHandle: func,
+};
 
 SidebarDivider.propTypes = {};
 
@@ -241,15 +259,20 @@ SidebarItem.propTypes = {
 };
 
 SidebarSubItem.propTypes = {
-  name: string.required,
+  name: string.isRequired,
   customIcon: node,
   redirectLink: string,
 };
 
-SidebarHeaderIcon.propTypes = {};
+SidebarHeaderIcon.propTypes = {
+  closeHandle: func,
+};
 
 SidebarLogout.propTypes = {};
 
 SidebarSearch.propTypes = {};
 
-HamburgerMenu.propTypes = {};
+HamburgerMenu.propTypes = {
+  open: bool.isRequired,
+  setOpen: func,
+};
