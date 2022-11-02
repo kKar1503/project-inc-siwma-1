@@ -42,7 +42,7 @@ const TestTable = ({ className }) => (
 );
 
 const InvitesPage = () => (
-  <div className="flex flex-col flex-1 w-full p-8 gap-8">
+  <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
     <NavBar />
     <div className="flex flex-col lg:grid lg:grid-flow-row grid-cols-12 gap-8 flex-1">
       <FileUpload className="h-full col-span-4" />
