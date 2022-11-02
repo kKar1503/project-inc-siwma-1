@@ -166,7 +166,10 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-icons: 4.6.0_react@18.2.0
+<<<<<<< HEAD
       victory: 36.6.8_react@18.2.0
+=======
+>>>>>>> da6b9fa (style: card styling)
     devDependencies:
       autoprefixer: 10.4.13_postcss@8.4.18
       cypress: 10.11.0

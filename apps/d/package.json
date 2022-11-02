@@ -19,8 +19,12 @@
     "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+<<<<<<< HEAD
     "react-icons": "^4.6.0",
     "victory": "^36.6.8"
+=======
+    "react-icons": "^4.6.0"
+>>>>>>> da6b9fa (style: card styling)
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
