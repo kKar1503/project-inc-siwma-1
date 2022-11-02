@@ -3,7 +3,7 @@ name: 'CI stuff'
 on:
   workflow_dispatch:
   pull_request:
-    branches: [main, develop, a, b, c, d]
+    branches: [main, develop]
 
 env:
   PNPM_VERSION: 7.14.0
@@ -26,29 +26,30 @@ jobs:
 
       - run: pnpm run build
 
-      - uses: actions/cache@v3
-        id: cache-build
-        with:
-          path: ./*
-          key: ${{ github.sha }}-${{ github.run_number }}
+      # - uses: actions/cache@v3
+      #   id: cache-build
+      #   with:
+      #     path: ./*
+      #     key: ${{ github.sha }}-${{ github.run_number }}
 
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout source tree
-        uses: actions/checkout@v2.5.0
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   steps:
+  #     - name: Checkout source tree
+  #       uses: actions/checkout@v2.5.0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '16.x'
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: '16.x'
 
-      - run: npm i -g pnpm@${PNPM_VERSION}
+  #     - run: npm i -g pnpm@${PNPM_VERSION}
 
-      - uses: actions/cache@v3
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ github.sha }}-${{ github.run_number }}
+  #     - uses: actions/cache@v3
+  #       id: restore-build
+  #       with:
+  #         path: ./*
+  #         key: ${{ github.sha }}-${{ github.run_number }}
 
-      - run: pnpm run lint
+  #     - run: pnpm run lint
