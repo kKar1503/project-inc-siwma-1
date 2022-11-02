@@ -1,25 +1,21 @@
 const CompanyRegister = () => (
   <div>
     <input type="checkbox" id="company-register" className="modal-toggle" />
-    <label htmlFor="company-register" className="modal cursor-pointer">
-      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-      <label htmlFor="" className="modal-box rounded-xl max-w-4xl">
-        <label
-          htmlFor="company-register"
-          className="text-lg absolute right-4 top-2 hover:cursor-pointer"
-        >
+    <div className="modal">
+      <div className="modal-box rounded-xl max-w-4xl">
+        <label htmlFor="company-register" className="text-lg absolute right-4 top-2">
           ✕
         </label>
-        <div className="pb-3">
+        <div>
           <h3 className="text-lg font-bold">Create an individual company</h3>
-          <p className="text-sm">Register a company profile to the system</p>
+          <p className="text-sm">Register an company profile to the system</p>
         </div>
         <div className="flex flex-wrap">
-          <div className="flex-1 md:mr-10">
+          <div className="flex-1 mr-10">
             <form>
               <div className="form-control">
                 <div className="label">
-                  <span className="label-text">Company name</span>
+                  <span className="label-text font-semibold">Company name</span>
                 </div>
                 <input
                   type="text"
@@ -29,7 +25,7 @@ const CompanyRegister = () => (
               </div>
               <div className="form-control">
                 <div className="label">
-                  <span className="label-text">Company website</span>
+                  <span className="label-text font-semibold">Company website</span>
                 </div>
                 <input
                   type="text"
@@ -39,15 +35,15 @@ const CompanyRegister = () => (
               </div>
               <div className="form-control">
                 <div className="label">
-                  <span className="label-text">Company bio (optional)</span>
+                  <span className="label-text font-semibold">Company bio(optional)</span>
                 </div>
                 <textarea className="textarea textarea-bordered h-32" placeholder="Company bio" />
               </div>
             </form>
           </div>
-          <div className="md:w-1/2 flex flex-col">
+          <div className="w-1/2 flex flex-col">
             <div className="label">
-              <span className="label-text ">Company Logo (optional)</span>
+              <span className="label-text font-semibold">Company Logo(optional)</span>
             </div>
             <label className="flex flex-1 justify-center w-full px-8 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
               <span className="flex items-center space-x-2">
@@ -81,13 +77,13 @@ const CompanyRegister = () => (
             </label>
             <div className="modal-action">
               <label htmlFor="company-register" className="btn btn-outline btn-primary w-full">
-                Register Company
+                Register Comapny
               </label>
             </div>
           </div>
         </div>
-      </label>
-    </label>
+      </div>
+    </div>
   </div>
 );
 
