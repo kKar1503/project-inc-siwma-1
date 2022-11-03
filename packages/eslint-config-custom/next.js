@@ -39,6 +39,7 @@ module.exports = {
         ignoreRestSiblings: true,
       },
     ],
+    'jsx-ally/label-has-associated-control' : ['error', { assert: 'either'}]
   },
   overrides: [
     {
