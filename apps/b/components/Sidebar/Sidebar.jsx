@@ -22,7 +22,7 @@ export const adminSidebar = [
         Companies: '/',
       },
       {
-        Users: '/',
+        Users: '/admin/users',
       },
       {
         Invites: '/admin/invite',
