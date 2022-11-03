@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import Image from 'next/image';
 import PropType from 'prop-types';
-import pic from '../image/SIWMALOGOFULL.png';
+import pic from '../public/SIWMALOGOFULL.png';
 
 const Footer = ({ arrayOfPages }) => (
   <footer className="p-4 bg-white sm:p-6 2xl:p-10 dark:bg-gray-900 lg:mx-10 2xl:mx-20 xl:mx-20">
