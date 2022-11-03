@@ -3,6 +3,7 @@ import Head from 'next/head';
 import AdminFigure from '../../components/AdminFigure';
 import Sidebar, { adminSidebar } from '../../components/Sidebar/Sidebar';
 import SearchBar from '../../components/SearchBar';
+import NavBar from '../../components/NavBar';
 
 const UserOverview = () => (
   <div className="bg-[#FAFAFA]">
