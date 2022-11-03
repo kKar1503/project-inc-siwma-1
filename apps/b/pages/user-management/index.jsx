@@ -3,6 +3,7 @@ import Head from 'next/head';
 import AdminFigure from '../../components/AdminFigure';
 import Sidebar, { adminSidebar } from '../../components/Sidebar/Sidebar';
 import SearchBar from '../../components/SearchBar';
+import NavBar from '../../components/NavBar';
 
 const UserOverview = () => (
   <div className="bg-[#FAFAFA]">
@@ -16,17 +17,7 @@ const UserOverview = () => (
         <div className="flex flex-col w-full h-full gap-8 p-8">
           <div className="flex flex-col w-full h-full gap-8">
             {/* { replace this with sidebar } */}
-            <div className="flex flex-row gap-8 flex-wrap">
-              <div className="flex flex-row justify-end items-center w-full h-24 rounded-2xl bg-base-100 shadow-lg p-8">
-                <div className="flex flex-row items-center justify-between w-fit gap-6 border-l pl-6">
-                  <div className="flex flex-col">
-                    <h1 className="text-right text-lg">System Administrator</h1>
-                    <h1 className="text-right text-sm">Admin</h1>
-                  </div>
-                  <div className="h-14 w-14 rounded-full bg-base-300" />
-                </div>
-              </div>
-            </div>
+            <NavBar />
 
             <div className="flex flex-row gap-8 flex-wrap">
               <AdminFigure title="Active Companies" value="20" color="text-primary" />
