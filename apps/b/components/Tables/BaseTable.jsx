@@ -99,15 +99,15 @@ const BaseTable = ({
               </tr>
             ))}
           </tbody>
-          <tfoot>
+          {/* <tfoot>
             <tr>
               <td colSpan={headings.length + 2} className="bg-white rounded-none border-t py-3">
                 {footer}
               </td>
             </tr>
-          </tfoot>
+          </tfoot> */}
         </table>
-        {/* <div className="sticky b-0 mt-3">{footer}</div> */}
+        <div className="sticky bottom-0 p-3 bg-white">{footer}</div>
       </div>
     </div>
   );
