@@ -68,7 +68,7 @@ const AdminUpload = () => {
                 <td>
                   <ul>
                     {filter().map((item) => (
-                      <li key={getData.id} className="text-xl">
+                      <li key={item.id} className="text-xl">
                         <input
                           type="radio"
                           name="radio"
