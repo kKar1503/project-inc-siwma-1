@@ -32,17 +32,13 @@ function populateArray(element, count) {
 }
 
 const InvitesPage = () => (
-  <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
+  <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto xl:max-h-screen">
     <NavBar />
-    <div className="flex flex-col lg:grid lg:grid-flow-row grid-cols-12 gap-8 flex-1">
+    <div className="flex flex-col lg:grid lg:grid-flow-row grid-cols-12 gap-8 flex-1 xl:overflow-hidden">
       <FileUpload className="h-full col-span-4" />
-      <div className="flex flex-col col-start-5 col-end-13 gap-8 flex-1 justify-between">
-        <div className="bg-base-100 rounded-lg shadow-lg max-h-80 overflow-y-auto">
-          <CompanyProfilesPreviewTable data={populateArray(companyTableData, 15)} />
-        </div>
-        <div className="bg-base-100 rounded-lg shadow-lg max-h-80 overflow-y-auto">
-          <UserInvitesPreviewTable data={populateArray(userTableData, 30)} />
-        </div>
+      <div className="flex flex-col col-start-5 col-end-13 gap-8 flex-1 justify-between xl:overflow-hidden">
+        <CompanyProfilesPreviewTable data={populateArray(companyTableData, 15)} />
+        <UserInvitesPreviewTable data={populateArray(userTableData, 30)} />
         <div className="flex justify-end">
           <button className="btn btn-primary rounded-lg btn-wide">Confirm</button>
         </div>
