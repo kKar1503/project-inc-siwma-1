@@ -126,7 +126,7 @@ const UserOverview = () => (
                   <div className="flex flex-row justify-between items-center gap-8 p-6">
                     <div className="flex flex-col">
                       <h1 className="text-xl font-bold">Pending Invites</h1>
-                      <p>Showing 1-5 of 15 pending invites</p>
+                      <p>Showing 1-5 of 15 invites</p>
                     </div>
                     <div className="flex flex-col gap-4">
                       <SearchBar placeholder="Search by e-mail" />
