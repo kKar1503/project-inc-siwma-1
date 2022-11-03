@@ -8,7 +8,7 @@ const Footer = ({ arrayOfPages }) => (
     <div className="md:flex md:justify-between">
       <div className="mb-6 md:mb-0 text-center sm:text-left ">
         <a href="#" className="flex items-center h-auto w-auto">
-          <Image src={pic} className="mr-3 h-10" alt="SIW Logo" height={100} width={400} />
+          <Image src={pic} className="mr-3 h-10" alt="SIW Logo" height={100} width={400} priority />
         </a>
 
         <p className="font-inter regular mt-10">
@@ -30,13 +30,13 @@ const Footer = ({ arrayOfPages }) => (
 
       <div className="grid grid-cols-2 ml-8 gap-10 2xl:gap-24 sm:grid-cols-3 2xl:grid-cols-4">
         {arrayOfPages.map((group) => (
-          <div>
+          <div key={group.category}>
             <h2 className="mb-6 text-base 2xl:text-lg font-bold text-gray-900 normalcase dark:text-white">
               {group.category}
             </h2>
             <ul className="text-gray-600 dark:text-gray-400 text-base 2xl:text-lg">
               {group.pages.map((page) => (
-                <li className="mb-6 ">
+                <li className="mb-6" key={page.name}>
                   <a href={page.url} className="hover:underline break-words">
                     {page.name}
                   </a>

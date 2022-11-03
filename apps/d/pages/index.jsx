@@ -5,15 +5,15 @@ const pages = [
     category: 'Services',
     pages: [
       {
-        name: 'Loreum ipsum',
+        name: 'Inauguration Ceremony',
         url: 'http://localhost:3004/',
       },
       {
-        name: 'Loreum ipsum',
+        name: 'Committee Meetings',
         url: 'http://localhost:3004/',
       },
       {
-        name: 'Loreum ipsum',
+        name: 'Members Welfare',
         url: 'http://localhost:3004/',
       },
     ],
@@ -26,11 +26,11 @@ const pages = [
         url: 'http://localhost:3004/',
       },
       {
-        name: 'Loreum ipsum',
+        name: 'Trips',
         url: 'http://localhost:3004/',
       },
       {
-        name: 'Loreum ipsum',
+        name: 'Visits',
         url: 'http://localhost:3004/',
       },
     ],
