@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
  * @constructor - RadioButton
  */
 const RadioButton = ({ options }) => {
-  const [choice, setChoice] = React.useState('');
+  const [, setChoice] = React.useState('');
 
   const onChange = async (event) => {
     setChoice(event.target.value);
@@ -33,7 +33,6 @@ const RadioButton = ({ options }) => {
           />
         ))}
       </div>
-      {choice}
     </>
   );
 };
