@@ -57,7 +57,7 @@ const BuySellListing = () => {
               )}
             </CardBackground>
             <CardBackground>
-              <h1 className="font-bold text-3xl">Dimensions</h1>
+              <h1 className="font-bold text-3xl">Optional Parameters</h1>
               <Input text="Width" />
               <Input text="Height" />
             </CardBackground>

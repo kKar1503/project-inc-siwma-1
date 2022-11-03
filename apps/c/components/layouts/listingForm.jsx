@@ -25,6 +25,12 @@ const CreateListingInformation = () => (
 
     {/* Price Label */}
     <Input text="Price" />
+    <div className="form-control">
+      <label className="label cursor-pointer">
+        <span className="label-text">Negotiable</span>
+        <input type="checkbox" className="checkbox checkbox-primary" />
+      </label>
+    </div>
 
     {/* Description Label */}
     <Input text="Description" type="textarea" />
