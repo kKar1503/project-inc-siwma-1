@@ -2,6 +2,7 @@ import NavBar from '../../../components/NavBar';
 import UserInvite from '../../../components/Forms/UserInvite';
 import RegisteredUsersTable from '../../../components/Tables/RegisteredUsersTable';
 import PendingInvitesTable from '../../../components/Tables/PendingInvitesTable';
+import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
 
 const inviteTableData = (id) => ({
   id,
@@ -55,13 +56,15 @@ const UsersPage = () => (
       </div>
     </div>
     <div className="bg-base-100 rounded-lg shadow-lg max-h-80 overflow-y-auto">
-      <PendingInvitesTable data={populateArray(inviteTableData, 10)} />
+      <PendingInvitesTable data={populateArray(inviteTableData, 15)} />
     </div>
     <div className="bg-base-100 rounded-lg shadow-lg max-h-80 overflow-y-auto">
-      <RegisteredUsersTable data={populateArray(registerTableData, 15)} />
+      <RegisteredUsersTable data={populateArray(registerTableData, 30)} />
     </div>
     <UserInvite />
   </div>
 );
+
+UsersPage.getLayout = (page) => <AdminPageLayout pageName="Users">{page}</AdminPageLayout>;
 
 export default UsersPage;
