@@ -93,10 +93,10 @@ const SidebarItem = ({ name, customIcon, redirectLink, children }) => {
       <div
         onClick={redirect}
         role="presentation"
-        className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white"
+        className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-primary-focus text-white"
       >
         {customIcon && <customIcon />}
-        <span className="text-[15px] ml-4 text-gray-200 font-bold">{name}</span>
+        <span className="text-[15px] ml-4 text-base-200 font-bold">{name}</span>
         {/* add 40 - name number of spaces */}
 
         {children && (
@@ -110,7 +110,7 @@ const SidebarItem = ({ name, customIcon, redirectLink, children }) => {
       </div>
       {children && (
         <div
-          className="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 font-bold"
+          className="text-left text-sm mt-2 w-4/5 mx-auto text-base-200 font-bold"
           style={subMenuStyles}
         >
           {children}
@@ -141,7 +141,7 @@ const SidebarSubItem = ({ name, customIcon, redirectLink }) => {
   return (
     <div role="presentation" onClick={redirect}>
       {customIcon && <customIcon />}
-      <h1 className="cursor-pointer p-2 hover:bg-blue-600 rounded-md mt-1">{name}</h1>
+      <h1 className="cursor-pointer p-2 hover:bg-primary-focus rounded-md mt-1">{name}</h1>
     </div>
   );
 };
@@ -156,8 +156,8 @@ const SidebarSubItem = ({ name, customIcon, redirectLink }) => {
 const SidebarHeaderIcon = ({ closeHandle }) => (
   <div className="text-gray-100 text-xl">
     <div className="p-2.5 mt-1 flex items-center">
-      <i className="bi bi-app-indicator px-2 py-1 rounded-md bg-blue-600" />
-      <h1 className="font-bold text-gray-200 text-[15px] ml-3">S I W M A</h1>
+      <i className="bi bi-app-indicator px-2 py-1 rounded-md bg-primary-focus" />
+      <h1 className="font-bold text-base-200 text-[15px] ml-3">S I W M A</h1>
       <i className="bi bi-x cursor-pointer ml-28 lg:hidden" />
       &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
       <div role="presentation" onClick={closeHandle}>
@@ -167,8 +167,18 @@ const SidebarHeaderIcon = ({ closeHandle }) => (
   </div>
 );
 
-  // ------------------ UseStats -----------------
-  const [width, setWidth] = useState(0);
+/**
+ * The sidebar logout is a logout button that is displayed in the sidebar
+ * todo no logout functionality yet
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const SidebarLogout = () => (
+  <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-primary-focus text-white">
+    <i className="bi bi-box-arrow-in-right" />
+    <span className="text-[15px] ml-4 text-base-200 font-bold">Logout</span>
+  </div>
+);
 
   // ------------------ Styles -----------------
   const style = {
@@ -233,7 +243,7 @@ const HamburgerMenu = ({ open, setOpen }) => {
           <i className="bi bi-filter-left px-2 bg-gray-900 rounded-md" />
         </span>
         {/* todo background color here */}
-        <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center bg-gray-900">
+        <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center bg-base-content">
           <LayoutEditor closeHandle={closeHandle} />
         </div>
       </body>
