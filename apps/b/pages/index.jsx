@@ -1,5 +1,10 @@
+import Head from 'next/head';
 import AdminFigure from '../components/AdminFigure';
-import AdminPageLayout from '../components/layouts/AdminPageLayout';
+import pic from '../public/sample-profile-pic.jpg';
+import RegisteredUsersTable from '../components/Tables/RegisteredUsersTable';
+import RegisteredUsersTableWithoutCheckbox from '../components/Tables/RegisteredUsersTableWithoutCheckbox';
+import PendingInvitesTable from '../components/Tables/PendingInvitesTable';
+import RegisteredCompaniesTable from '../components/Tables/RegisteredCompaniesTable';
 
 const Home = () => {
   const registeredUsersData = [
