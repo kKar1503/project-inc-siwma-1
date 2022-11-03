@@ -10,6 +10,8 @@ import TableButton from './TableButton';
   - header (A div that you want to be the header of the table)
   - headings (An array of strings that will be the headings of the table)
   - headingColor (The color of the table headings)
+  - showCheckbox (A boolean that determines whether or not to show the checkbox column)
+  - height (The height of the table, defaults to h-fit)
   - columnKeys (An array of strings that will be the keys of the data object)
   - data (An array of objects that you want to be the rows of the table)
   - footer (A div that you want to be the footer of the table)
@@ -28,7 +30,16 @@ import TableButton from './TableButton';
   ]
   */
 
-const BaseTable = ({ header, headings, headingColor, showCheckbox, columnKeys, data, footer }) => {
+const BaseTable = ({
+  header,
+  headings,
+  headingColor,
+  showCheckbox,
+  height,
+  columnKeys,
+  data,
+  footer,
+}) => {
   if (!data || data.length === 0) {
     return (
       <div className="flex flex-col text-center">
@@ -37,9 +48,9 @@ const BaseTable = ({ header, headings, headingColor, showCheckbox, columnKeys, d
     );
   }
   return (
-    <div className="overflow-x-auto bg-none">
+    <div className="overflow-x-scroll sticky t-0">
       {header}
-      <div className="w-full">
+      <div className={(cx('w-full overflow-y-scroll'), height || 'h-fit')}>
         <table className="table w-full mt-3">
           <thead>
             <tr>
@@ -85,14 +96,15 @@ const BaseTable = ({ header, headings, headingColor, showCheckbox, columnKeys, d
               </tr>
             ))}
           </tbody>
-          <tfoot>
+          {/* <tfoot>
             <tr>
               <td colSpan={headings.length + 2} className="bg-white rounded-none border-t py-3">
                 {footer}
               </td>
             </tr>
-          </tfoot>
+          </tfoot> */}
         </table>
+        <div className="sticky b-0 mt-3">{footer}</div>
       </div>
     </div>
   );
@@ -103,6 +115,7 @@ BaseTable.propTypes = {
   headings: PropTypes.arrayOf(PropTypes.string),
   headingColor: PropTypes.string,
   showCheckbox: PropTypes.bool,
+  height: PropTypes.string,
   columnKeys: PropTypes.arrayOf(PropTypes.string),
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.
