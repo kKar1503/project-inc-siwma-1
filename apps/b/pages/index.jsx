@@ -26,6 +26,30 @@ const Home = () => {
       company: 'Very Very Long Company Name',
       mobileNumber: '+65 9832 0293',
     },
+    {
+      id: 3,
+      profilePicture: pic,
+      name: 'John Doe',
+      email: 'john@doe.com',
+      company: 'Company',
+      mobileNumber: '+65 9832 0293',
+    },
+    {
+      id: 4,
+      profilePicture: pic,
+      name: 'John Doe',
+      email: 'john@doe.com',
+      company: 'Company',
+      mobileNumber: '+65 9832 0293',
+    },
+    {
+      id: 5,
+      profilePicture: pic,
+      name: 'John Doe',
+      email: 'john@doe.com',
+      company: 'Company',
+      mobileNumber: '+65 9832 0293',
+    },
   ];
 
   const pendingInvitesData = [
@@ -75,10 +99,10 @@ const Home = () => {
           <AdminFigure title="Pending Invites" value="5,983" color="text-secondary" />
         </div>
       </div>
-      <div className="flex flex-row m-5">
-        <RegisteredUsersTable data={registeredUsersData} />
+      <div className="flex flex-row m-5 h-96">
+        <RegisteredUsersTable data={registeredUsersData} height="h-48" />
       </div>
-      <div className="flex flex-row m-5">
+      {/* <div className="flex flex-row m-5">
         <RegisteredUsersTableWithoutCheckbox data={registeredUsersData} />
       </div>
       <div className="flex flex-row m-5">
@@ -86,7 +110,7 @@ const Home = () => {
       </div>
       <div className="flex flex-row m-5">
         <RegisteredCompaniesTable data={registeredCompaniesData} />
-      </div>
+      </div> */}
     </div>
   );
 };
