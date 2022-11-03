@@ -6,7 +6,7 @@ import TableButton from './TableButton';
 
 // This table shows Pending Invites and is built on the BaseTable component.
 
-const PendingInvitesTable = ({ data }) => {
+const PendingInvitesTable = ({ data, height }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
@@ -25,6 +25,7 @@ const PendingInvitesTable = ({ data }) => {
       headings={['Company', 'E-mail', 'Mobile Number']}
       headingColor="bg-warning"
       showCheckbox
+      height={height}
       columnKeys={['company', 'email', 'mobileNumber']}
       data={data}
       footer={
@@ -68,6 +69,7 @@ PendingInvitesTable.propTypes = {
       mobileNumber: PropTypes.string,
     })
   ),
+  height: PropTypes.string,
 };
 
 export default PendingInvitesTable;
