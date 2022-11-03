@@ -71,7 +71,7 @@ const BaseTable = ({ header, headings, headingColor, showCheckbox, columnKeys, d
                           src={row.profilePicture}
                           alt="Profile Picture"
                           layout="fill"
-                          objectFit="cover"
+                          object-fit="cover"
                           className="rounded-full"
                         />
                       </div>
