@@ -201,7 +201,6 @@ importers:
       prop-types: 15.8.1
       react: 18.2.0
       react-hot-toast: 2.4.0_react@18.2.0
-      victory: 36.6.8_react@18.2.0
     devDependencies:
       eslint: 7.32.0
       eslint-config-custom: link:../eslint-config-custom
@@ -3528,7 +3527,7 @@ packages:
     dependencies:
       '@next/env': 13.0.0
       '@swc/helpers': 0.4.11
-      caniuse-lite: 1.0.30001422
+      caniuse-lite: 1.0.30001426
       postcss: 8.4.14
       styled-jsx: 5.1.0
       use-sync-external-store: 1.2.0
@@ -3990,10 +3989,6 @@ packages:
       scheduler: 0.23.0
     dev: false
 
-  /react-fast-compare/3.2.0:
-    resolution: {integrity: sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==}
-    dev: false
-
   /react-hot-toast/2.4.0_react@18.2.0:
     resolution: {integrity: sha512-qnnVbXropKuwUpriVVosgo8QrB+IaPJCpL8oBI6Ov84uvHZ5QQcTp2qg6ku2wNfgJl6rlQXJIQU5q+5lmPOutA==}
     engines: {node: '>=10'}
@@ -4005,12 +4000,6 @@ packages:
       react: 18.2.0
     transitivePeerDependencies:
       - csstype
-    dev: false
-
-  /react-icons/4.6.0:
-    resolution: {integrity: sha512-rR/L9m9340yO8yv1QT1QurxWQvWpbNHqVX0fzMln2HEb9TEIrQRGsqiNFQfiv9/JEUbyHmHPlNTB2LWm2Ttz0g==}
-    peerDependencies:
-      react: '*'
     dev: false
 
   /react-icons/4.6.0_react@18.2.0:
