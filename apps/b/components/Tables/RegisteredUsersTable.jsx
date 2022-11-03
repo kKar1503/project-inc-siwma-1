@@ -12,7 +12,7 @@ const RegisteredUsersTable = ({ data }) => {
   return (
     <BaseTable
       header={
-        <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-row justify-between items-center pt-6 px-6">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">Registered Users</h1>
             <h1>Showing 1 to 10 of 100 entries</h1>
