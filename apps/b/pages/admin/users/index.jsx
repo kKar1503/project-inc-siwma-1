@@ -13,7 +13,7 @@ const inviteTableData = (id) => ({
 
 const registerTableData = (id) => ({
   id,
-  user: 'Sally Knox',
+  name: 'Sally Knox',
   email: 'sallyknox_slfi@gmail.com',
   company: 'Shi Lin Fang Ironwork PTE, LTD',
   mobileNumber: '+65 9832 0293',
