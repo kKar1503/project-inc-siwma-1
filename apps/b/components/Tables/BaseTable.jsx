@@ -48,39 +48,43 @@ const BaseTable = ({
   }
 
   return (
-    <div className={cx(height, 'bg-base-100 rounded-lg shadow-lg xl:flex-1 overflow-y-hidden')}>
-      <div className="h-full flex flex-col gap-3 py-3">
-        <div className="px-6">{header}</div>
-        <div className="w-full h-auto overflow-hidden border-b">
-          <div className="w-full max-h-full overflow-auto">
-            <table className="table w-full">
-              <thead>
-                <tr>
-                  {showCheckbox && (
-                    <th className={cx('top-0 sticky rounded-none', headingColor)}> </th>
-                  )}
-                  {headings.map((heading) => (
-                    <th
-                      key={heading}
-                      className={cx('top-0 sticky rounded-none text-white', headingColor)}
-                    >
-                      {heading}
-                    </th>
-                  ))}
-                  <th className={cx('top-0 sticky rounded-none text-white', headingColor)}>
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((row) => (
-                  <tr key={row.id}>
-                    {showCheckbox && (
-                      <td>
-                        <label>
-                          <input type="checkbox" className="checkbox" />
-                        </label>
-                      </td>
+    <div className="overflow-x-scroll sticky t-0">
+      {header}
+      <div className={(cx('w-full overflow-y-scroll'), height || 'h-fit')}>
+        <table className="table w-full mt-3">
+          <thead>
+            <tr>
+              {showCheckbox && <th className={cx('rounded-none', headingColor)}> </th>}
+              {headings.map((heading) => (
+                <th key={heading} className={cx('rounded-none text-white', headingColor)}>
+                  {heading}
+                </th>
+              ))}
+              <th className={cx('rounded-none text-white', headingColor)}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((row) => (
+              <tr key={row.id}>
+                {showCheckbox && (
+                  <td>
+                    <label>
+                      <input type="checkbox" className="checkbox" />
+                    </label>
+                  </td>
+                )}
+                {columnKeys.map((key, index) => (
+                  <td key={key}>
+                    {/* Show a profilePicture if one exists and if we're on the first column */}
+                    {index === 0 && row.profilePicture && (
+                      <div className="w-10 h-10 relative">
+                        <Image
+                          src={row.profilePicture}
+                          alt="Profile Picture"
+                          layout="fill"
+                          className="rounded-full"
+                        />
+                      </div>
                     )}
                     {columnKeys.map((key, index) => (
                       <td key={key}>
@@ -104,11 +108,22 @@ const BaseTable = ({
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div className="px-3 bg-white">{footer}</div>
+                <td>
+                  {/* TODO: Replace with the proper icon once react-icons is set up */}
+                  <Image src="/icons/edit.svg" alt="Edit" width={20} height={20} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          {/* <tfoot>
+            <tr>
+              <td colSpan={headings.length + 2} className="bg-white rounded-none border-t py-3">
+                {footer}
+              </td>
+            </tr>
+          </tfoot> */}
+        </table>
+        <div className="sticky b-0 mt-3">{footer}</div>
       </div>
     </div>
   );
