@@ -2,10 +2,12 @@ labels:
   - name: 'status: template-invalid'
     labeled:
       issue:
-        body: @{{issue.user.login}}, please follow the issue template.
+        body: |
+          @{{issue.user.login}}, please follow the issue template.
         action: close
       pr:
-        body: @{{pull_request.user.login}}, please follow the pull request template.
+        body: |
+          @{{pull_request.user.login}}, please follow the pull request template.
         action: close
     unlabeled:
       issue:
@@ -50,7 +52,8 @@ labels:
   - name: 'status: cannot-reproduce'
     labeled:
       issue:
-        body: @{{issue.user.login}}, please check the reproduction step, it is not working.
+        body: |
+          @{{issue.user.login}}, please check the reproduction step, it is not working.
         action: close
     unlabeled:
       issue:
