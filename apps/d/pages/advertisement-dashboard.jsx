@@ -4,33 +4,37 @@ import { BsMegaphone } from 'react-icons/bs';
 import { TbHandClick } from 'react-icons/tb';
 
 const AdvertisementDashboard = () => (
-  <div className="pl-48 pr-10 ">
-    <div className="space-y-4">
+  <div className="pl-48 pr-10 bg-green-1">
+    {/* <div className="space-y-4">
       <div className="card flex-initial h-18 bg-base-100 shadow-xl">
         <div className="card-body" />
       </div>
-    </div>
-    <div className="flex flex-row">
-      <div className="flex flex-row flex-wrap space-y-4 gap-8">
-        <div className="card flex-initial h-36 w-96  shadow-xl">
-          <div className="card-body flex flex-row">
+    </div> */}
+    {/* <div className="flex-row flex"> */}
+    <div className="flex-col flex">
+      <div className="flex flex-row flex-wrap gap-8  mb-6">
+        {/* Card 1 */}
+        <div className="card h-48 md:w-64 lg:w-2/5 bg-base-100 shadow-xl">
+          <div className="card-body flex flex-row justify-between">
             <div className="flex flex-col">
               <p className="text-blue-500 font-bold text-6xl">4</p>
               <p>Active ad-spaces</p>
             </div>
-            <BsMegaphone fontSize={100} style={{ color: '#2563EB' }} />
+            <BsMegaphone fontSize={120} style={{ color: '#2563EB' }} />
           </div>
         </div>
-        <div className="card flex-initial h-36 w-96  shadow-xl">
-          <div className="card-body flex flex-row">
+        {/* Card 2 */}
+        <div className="card h-48 md:w-64 lg:w-2/5 bg-base-100 shadow-xl">
+          <div className="card-body text-left flex flex-row justify-between">
             <div className="flex flex-col">
               <p className="text-green-500 font-bold text-6xl ">25</p>
               <p>Total clicks</p>
             </div>
-            <TbHandClick fontSize={100} style={{ color: '#34D399' }} />
+            <TbHandClick fontSize={120} style={{ color: '#34D399' }} />
           </div>
         </div>
-        <div className="card flex-initial h-84 w-7/12 bg-base-100 shadow-xl">
+        {/* Card 3 */}
+        <div className="card flex-initial h-84 md:w-full lg:w-11/12 bg-base-100 shadow-xl">
           <div className="card-body">
             <div className="card-title">Active ad-spaces</div>
             <div className="overflow-x-auto">
@@ -95,15 +99,17 @@ const AdvertisementDashboard = () => (
         </div>
       </div>
 
-      <div className="flex flex-col gap-8 space-y-4">
-        <div className="card flex-initial w-120 shadow-xl">
+      <div className="flex flex-col gap-4 space-y-4">
+        {/* Card 4 */}
+        <div className="card flex-initial h-96 md:width-3/4 lg:width-11/12 bg-base-100 shadow-xl">
           <div className="card-body">
             <div className="card-title">Total click distribution</div>
             <p>Number of clicks per ad-space</p>
             <ClickDistribution />
           </div>
         </div>
-        <div className="card w-96 bg-base-100 shadow-xl">
+        {/* Card 5 */}
+        <div className="card flex-initial h-96 bg-base-100 shadow-xl">
           <div className="card-body">
             <div className="card-title">Number of active ad-space per month</div>
             <NumberOfAdsChart />
