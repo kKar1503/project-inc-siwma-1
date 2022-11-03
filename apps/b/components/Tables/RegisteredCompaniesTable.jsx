@@ -6,7 +6,7 @@ import TableButton from './TableButton';
 
 // This table shows Registered Companies and is built on the BaseTable component.
 
-const RegisteredCompaniesTable = ({ data }) => {
+const RegisteredCompaniesTable = ({ data, height }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
@@ -25,6 +25,7 @@ const RegisteredCompaniesTable = ({ data }) => {
       headings={['Company', 'Website', 'Bio']}
       headingColor="bg-primary"
       showCheckbox
+      height={height}
       columnKeys={['company', 'website', 'bio']}
       data={data}
       footer={
@@ -69,6 +70,7 @@ RegisteredCompaniesTable.propTypes = {
       bio: PropTypes.string,
     })
   ),
+  height: PropTypes.string,
 };
 
 export default RegisteredCompaniesTable;
