@@ -40,7 +40,7 @@ const BaseTable = ({ header, headings, headingColor, showCheckbox, columnKeys, d
     <div className="overflow-x-auto bg-none">
       {header}
       <div className="w-full">
-        <table className="table w-full">
+        <table className="table w-full mt-3">
           <thead>
             <tr>
               {showCheckbox && <th className={cx('rounded-none', headingColor)}> </th>}
@@ -71,7 +71,6 @@ const BaseTable = ({ header, headings, headingColor, showCheckbox, columnKeys, d
                           src={row.profilePicture}
                           alt="Profile Picture"
                           layout="fill"
-                          object-fit="cover"
                           className="rounded-full"
                         />
                       </div>
@@ -88,7 +87,7 @@ const BaseTable = ({ header, headings, headingColor, showCheckbox, columnKeys, d
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan={headings.length + 2} className="bg-white rounded-none">
+              <td colSpan={headings.length + 2} className="bg-white rounded-none border-t py-3">
                 {footer}
               </td>
             </tr>
