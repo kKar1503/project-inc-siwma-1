@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📑 React Documentation
+    url: https://reactjs.org/docs/getting-started.html
+    about: Try to validate your React issues against React Documentation.
+  - name: 📑 Next.JS Documentation
+    url: https://nextjs.org/docs
+    about: Try to validate your Next.JS issues against Next.JS Documentation.
+  - name: 📚 Our Wiki Page
+    url: https://github.com/kKar1503/Project-Inc-SIWMA/wiki
+    about: Project Inc team has been constantly trying to update the Wiki page to address potential issues, try searching through.
+  - name: ❓ Existing Issues
+    url: https://github.com/kKar1503/Project-Inc-SIWMA/issues
+    about: Look through existing issues if the same issues have been covered before.
