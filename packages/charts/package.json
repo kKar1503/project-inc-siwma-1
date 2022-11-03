@@ -12,7 +12,6 @@
     "eslint-config-custom": "workspace:*"
   },
   "dependencies": {
-    "@inc/styles": "workspace:*",
     "luxon": "^3.0.4",
     "prop-types": "^15.8.1",
     "@inc/styles": "workspace:*",
