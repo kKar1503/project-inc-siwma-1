@@ -49,9 +49,9 @@ const BaseTable = ({
 
   return (
     <div className={cx(height, 'bg-base-100 rounded-lg shadow-lg xl:flex-1 overflow-y-hidden')}>
-      <div className="h-full flex flex-col gap-6 py-6">
+      <div className="h-full flex flex-col gap-3 py-3">
         <div className="px-6">{header}</div>
-        <div className="w-full h-auto overflow-hidden">
+        <div className="w-full h-auto overflow-hidden border-b">
           <div className="w-full max-h-full overflow-auto">
             <table className="table w-full">
               <thead>
@@ -108,7 +108,7 @@ const BaseTable = ({
             </table>
           </div>
         </div>
-        <div className="px-6 bg-white">{footer}</div>
+        <div className="px-3 bg-white">{footer}</div>
       </div>
     </div>
   );
