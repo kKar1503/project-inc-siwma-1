@@ -6,10 +6,10 @@ const CreateListingInformation = () => (
   <form className="p-5">
     {/* Selling/Buying Options */}
     <div className="flex flex-row justify-between mb-5">
-      <button className="bg-primary hover:bg-primary-focus text-primary-content py-2 px-4 rounded w-2/5 ml-2">
+      <button className="bg-primary hover:bg-primary-focus text-primary-content py-2 px-4 rounded w-2/5">
         Selling
       </button>
-      <button className="bg-primary hover:bg-primary-focus text-primary-content py-2 px-4 rounded w-2/5 mr-2">
+      <button className="bg-primary hover:bg-primary-focus text-primary-content py-2 px-4 rounded w-2/5">
         Buying
       </button>
     </div>
