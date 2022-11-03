@@ -25,7 +25,7 @@ const CreateListingInformation = () => (
 
     {/* Price Label */}
     <Input text="Price" />
-    <div className="form-control">
+    <div className="form-control w-1/6">
       <label className="label cursor-pointer">
         <span className="label-text">Negotiable</span>
         <input type="checkbox" className="checkbox checkbox-primary" />
