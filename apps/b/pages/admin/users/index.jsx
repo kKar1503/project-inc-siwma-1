@@ -31,7 +31,7 @@ function populateArray(element, count) {
 }
 
 const UsersPage = () => (
-  <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
+  <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto xl:max-h-screen">
     <NavBar />
     <div className="grid grid-cols-2 gap-10">
       <div className="rounded-lg card bg-base-100 shadow-lg">
@@ -55,13 +55,9 @@ const UsersPage = () => (
         </div>
       </div>
     </div>
-    <div className="flex flex-col col-start-5 col-end-13 gap-8 flex-1 justify-between">
-      <div className="bg-base-100 rounded-lg shadow-lg max-h-80 overflow-y-auto">
-        <PendingInvitesTable data={populateArray(inviteTableData, 15)} />
-      </div>
-      <div className="bg-base-100 rounded-lg shadow-lg max-h-80 overflow-y-auto">
-        <RegisteredUsersTable data={populateArray(registerTableData, 30)} />
-      </div>
+    <div className="flex flex-col col-start-5 col-end-13 gap-8 flex-1 justify-between xl:overflow-y-hidden">
+      <PendingInvitesTable data={populateArray(inviteTableData, 15)} />
+      <RegisteredUsersTable data={populateArray(registerTableData, 30)} />
     </div>
     <UserInvite />
   </div>
