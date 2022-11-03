@@ -1,6 +1,8 @@
-import Sidebar, { adminSidebar } from '../../components/Sidebar/Sidebar';
 import RegisteredCompaniesTable from '../../components/Tables/RegisteredCompaniesTable';
 import pic from '../../public/siwma-logo-sm.png';
+import AdminPageLayout from '../../components/layouts/AdminPageLayout';
+import FileUpload from '../../components/FileUpload';
+import NavBar from '../../components/NavBar';
 
 /**
  * The below is for rendering the Companies Management Page
@@ -18,11 +20,8 @@ import pic from '../../public/siwma-logo-sm.png';
  *       and update operations.
  *
  * TO DO:
- * 1. Actual default layout
- * 2. Import Xavier's Bulk Invite components
- * 3. Import Karandeep's table
- * 4. Fix overflow problem
- * 5.
+ * 1. Import Xavier's Bulk Invite components
+ * 2. Fix overflow problem
  */
 
 /**
@@ -45,20 +44,19 @@ const registeredCompaniesData = [
   },
 ];
 const Page = () => (
-  <div className="flex mb-4 gap-4">
-    <div className="flex flex-row w-full border-solid border-2 border-gray h-full">
-      <h1 className="font-bold text-xl">Bulk Register Placeholder</h1>
-    </div>
-    <div className="w-2/3 max-w-fit max-h-fit flex flex-row">
-      <RegisteredCompaniesTable data={registeredCompaniesData} />
+  <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
+    <NavBar />
+    <div className="flex mb-4 gap-4">
+      <div className="flex flex-row w-full border-solid border-2 border-gray h-full">
+        <FileUpload />
+      </div>
+      <div className="w-2/3 max-w-fit max-h-fit flex flex-row">
+        <RegisteredCompaniesTable data={registeredCompaniesData} />
+      </div>
     </div>
   </div>
 );
 
-Page.getLayout = (page) => (
-  <Sidebar sidebarList={adminSidebar} selected="Companies">
-    {page}
-  </Sidebar>
-);
+Page.getLayout = (page) => <AdminPageLayout pageName="Companies">{page}</AdminPageLayout>;
 
 export default Page;
