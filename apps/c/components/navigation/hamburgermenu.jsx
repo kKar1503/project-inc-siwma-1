@@ -238,7 +238,7 @@ const HamburgerMenu = ({ open, setOpen }) => {
   // ------------------ Return -----------------
   return (
     <div style={Styles}>
-      <body>
+      <main>
         <span className="absolute text-white text-4xl top-5 left-4 cursor-pointer">
           <i className="bi bi-filter-left px-2 bg-gray-900 rounded-md" />
         </span>
@@ -246,7 +246,7 @@ const HamburgerMenu = ({ open, setOpen }) => {
         <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center bg-base-content">
           <LayoutEditor closeHandle={closeHandle} />
         </div>
-      </body>
+      </main>
     </div>
   );
 };
