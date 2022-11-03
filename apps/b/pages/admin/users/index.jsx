@@ -55,11 +55,13 @@ const UsersPage = () => (
         </div>
       </div>
     </div>
-    <div className="bg-base-100 rounded-lg shadow-lg max-h-80 overflow-y-auto">
-      <PendingInvitesTable data={populateArray(inviteTableData, 15)} />
-    </div>
-    <div className="bg-base-100 rounded-lg shadow-lg max-h-80 overflow-y-auto">
-      <RegisteredUsersTable data={populateArray(registerTableData, 30)} />
+    <div className="flex flex-col col-start-5 col-end-13 gap-8 flex-1 justify-between">
+      <div className="bg-base-100 rounded-lg shadow-lg max-h-80 overflow-y-auto">
+        <PendingInvitesTable data={populateArray(inviteTableData, 15)} />
+      </div>
+      <div className="bg-base-100 rounded-lg shadow-lg max-h-80 overflow-y-auto">
+        <RegisteredUsersTable data={populateArray(registerTableData, 30)} />
+      </div>
     </div>
     <UserInvite />
   </div>
