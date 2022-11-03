@@ -48,19 +48,22 @@ const BaseTable = ({
   }
 
   return (
-    <div className="overflow-x-scroll sticky t-0">
+    <div>
       {header}
-      <div className={(cx('w-full overflow-y-scroll'), height || 'h-fit')}>
-        <table className="table w-full mt-3">
+      <div className={cx('w-full overflow-auto', height)}>
+        <table className="table mt-3">
           <thead>
             <tr>
-              {showCheckbox && <th className={cx('rounded-none', headingColor)}> </th>}
+              {showCheckbox && <th className={cx('top-0 sticky rounded-none', headingColor)}> </th>}
               {headings.map((heading) => (
-                <th key={heading} className={cx('rounded-none text-white', headingColor)}>
+                <th
+                  key={heading}
+                  className={cx('top-0 sticky rounded-none text-white', headingColor)}
+                >
                   {heading}
                 </th>
               ))}
-              <th className={cx('rounded-none text-white', headingColor)}>Actions</th>
+              <th className={cx('top-0 sticky rounded-none text-white', headingColor)}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -77,7 +80,7 @@ const BaseTable = ({
                   <td key={key}>
                     {/* Show a profilePicture if one exists and if we're on the first column */}
                     {index === 0 && row.profilePicture && (
-                      <div className="w-10 h-10 relative">
+                      <div className="w-10 h-10">
                         <Image
                           src={row.profilePicture}
                           alt="Profile Picture"
@@ -115,15 +118,15 @@ const BaseTable = ({
               </tr>
             ))}
           </tbody>
-          {/* <tfoot>
+          <tfoot>
             <tr>
               <td colSpan={headings.length + 2} className="bg-white rounded-none border-t py-3">
                 {footer}
               </td>
             </tr>
-          </tfoot> */}
+          </tfoot>
         </table>
-        <div className="sticky b-0 mt-3">{footer}</div>
+        {/* <div className="sticky b-0 mt-3">{footer}</div> */}
       </div>
     </div>
   );

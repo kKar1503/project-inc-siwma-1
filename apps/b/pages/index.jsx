@@ -97,18 +97,18 @@ const Home = () => {
           <AdminFigure title="Pending Invites" value="5,983" color="text-secondary" />
         </div>
       </div>
-      <div className="flex flex-row m-5 h-96">
-        <RegisteredUsersTable data={registeredUsersData} height="h-48" />
+      <div className="flex flex-row m-5">
+        <RegisteredUsersTable data={registeredUsersData} height="h-96" />
       </div>
-      {/* <div className="flex flex-row m-5">
-        <RegisteredUsersTableWithoutCheckbox data={registeredUsersData} />
+      <div className="flex flex-row m-5">
+        <RegisteredUsersTableWithoutCheckbox data={registeredUsersData} height="h-96" />
       </div>
       <div className="flex flex-row m-5">
         <PendingInvitesTable data={pendingInvitesData} height="h-96" />
       </div>
       <div className="flex flex-row m-5">
-        <RegisteredCompaniesTable data={registeredCompaniesData} />
-      </div> */}
+        <RegisteredCompaniesTable data={registeredCompaniesData} height="h-96" />
+      </div>
     </div>
   );
 };
