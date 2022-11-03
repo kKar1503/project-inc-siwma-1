@@ -18,7 +18,7 @@ const RegisteredCompaniesTable = ({ data }) => {
             <h1>Showing 1 to 10 of 100 entries</h1>
           </div>
           <div className="flex flex-row gap-4">
-            <SearchBar placeholder="Search by e-mail" />
+            <SearchBar placeholder="Search by name" />
           </div>
         </div>
       }
