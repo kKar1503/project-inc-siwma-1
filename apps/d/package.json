@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@inc/charts": "workspace:*",
     "@inc/styles": "workspace:*",
     "@inc/ui": "workspace:*",
+    "@inc/charts": "workspace:*",
     "daisyui": "^2.33.0",
     "luxon": "^3.0.4",
     "next": "13.0.0",

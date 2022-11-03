@@ -131,6 +131,7 @@ importers:
 
   apps/d:
     specifiers:
+      '@inc/charts': workspace:*
       '@inc/styles': workspace:*
       '@inc/ui': workspace:*
       autoprefixer: ^10.4.13
@@ -148,6 +149,7 @@ importers:
       react-icons: ^4.6.0
       tailwindcss: ^3.2.1
     dependencies:
+      '@inc/charts': link:../../packages/charts
       '@inc/styles': link:../../packages/styles
       '@inc/ui': link:../../packages/ui
       daisyui: 2.33.0_lycaqaeny3mp632atgvyvqdgwe
@@ -171,11 +173,14 @@ importers:
       '@inc/styles': workspace:*
       eslint: ^7.32.0
       eslint-config-custom: workspace:*
+      luxon: ^3.0.4
+      prop-types: ^15.8.1
       react: ^18.2.0
       react-hot-toast: ^2.4.0
       victory: ^36.6.8
     dependencies:
-      '@inc/styles': link:../styles
+      luxon: 3.0.4
+      prop-types: 15.8.1
       react: 18.2.0
       react-hot-toast: 2.4.0_react@18.2.0
       victory: 36.6.8_react@18.2.0
