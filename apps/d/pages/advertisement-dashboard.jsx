@@ -13,21 +13,21 @@ const AdvertisementDashboard = () => (
   <div className="grid lg:grid-cols-3 lg:grid-rows-4 gap-8 p-8 bg-base-200">
     <div className="flex lg:col-span-2 lg:row-span-1 gap-8">
       <div className="card shadow-xl w-1/2 bg-base-100 rounded-xl">
-        <div className="card-body">
+        <div className="card-body flex-row justify-between">
           <div className="flex flex-col">
             <p className="text-blue-500 font-bold text-6xl">4</p>
             <p>Active ad-spaces</p>
           </div>
-          <BsMegaphone fontSize={120} style={{ color: '#2563EB' }} />
+          <BsMegaphone fontSize={80} style={{ color: '#2563EB' }} />
         </div>
       </div>
       <div className="card shadow-xl w-1/2 bg-base-100 rounded-xl">
-        <div className="card-body">
+        <div className="card-body flex-row justify-between">
           <div className="flex flex-col">
             <p className="text-green-500 font-bold text-6xl ">25</p>
             <p>Total clicks</p>
           </div>
-          <TbHandClick fontSize={120} style={{ color: '#34D399' }} />
+          <TbHandClick fontSize={80} style={{ color: '#34D399' }} />
         </div>
       </div>
     </div>
