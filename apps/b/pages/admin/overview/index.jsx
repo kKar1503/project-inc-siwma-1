@@ -1,9 +1,9 @@
 /* eslint-disable no-plusplus */
 import Head from 'next/head';
-import AdminFigure from '../../components/AdminFigure';
-import AdminPageLayout from '../../components/layouts/AdminPageLayout';
-import SearchBar from '../../components/SearchBar';
-import NavBar from '../../components/NavBar';
+import AdminFigure from '../../../components/AdminFigure';
+import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
+import SearchBar from '../../../components/SearchBar';
+import NavBar from '../../../components/NavBar';
 
 const UserOverview = () => (
   <div className="bg-[#FAFAFA]">
