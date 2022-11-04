@@ -12,7 +12,7 @@ const UserInvitesPreviewTable = ({ data }) => {
   return (
     <BaseTable
       header={
-        <div className="flex flex-row justify-between items-center pt-6 px-6">
+        <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">User Invites Preview</h1>
             <h1>Processed {data.length} user invites from selected file</h1>
@@ -34,7 +34,7 @@ const UserInvitesPreviewTable = ({ data }) => {
       columnKeys={['company', 'email', 'mobileNumber']}
       data={data}
       footer={
-        <div className="flex justify-between bg-none">
+        <div className="flex justify-end bg-none">
           <div className="flex justify-end bg-none">
             <TableButton
               index={0}
