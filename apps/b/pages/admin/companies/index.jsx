@@ -92,7 +92,7 @@ const Modals = () => (
   </div>
 );
 const Page = () => (
-  <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
+  <div className="flex flex-col flex-1 w-full p-8 gap-8 xl:max-h-screen">
     <NavBar />
 
     <div className="flex flex-row gap-6">
@@ -102,25 +102,25 @@ const Page = () => (
             <h3 className="text-lg font-bold">Register an individual company</h3>
             <p className="text-sm">Register a company profile to the system</p>
           </div>
-          <label htmlFor="company-register" className="btn w-full btn-outline btn-primary">
-            Open
-          </label>
+          <button htmlFor="company-register" className="btn w-full btn-outline btn-primary">
+            Register Company
+          </button>
         </div>
       </div>
       <div className="mb-4 gap-4 flex-1">
         <div className="rounded-xl shadow-lg p-4 bg-base-100">
           <div className="pb-3">
             <h3 className="text-lg font-bold">Bulk Register Companies</h3>
-            <p className="text-sm">Register a company profile to the system</p>
+            <p className="text-sm">Register multiple companies through a file upload</p>
           </div>
-          <Link href="invite/" className="w-full btn btn-outline btn-primary">
-            Open
+          <Link href="/admin/invite" className="w-full btn btn-outline btn-primary">
+            Bulk Register Companies
           </Link>
         </div>
       </div>
     </div>
-    <div className="flex mb-4 gap-4">
-      <div className="w-full h-full max-w-fit max-h-fit flex flex-row">
+    <div className="flex mb-4 gap-4 xl:overflow-hidden">
+      <div className="w-full h-full flex flex-row">
         <RegisteredCompaniesTable data={registeredCompaniesData} className="shadow-lg" />
       </div>
     </div>
