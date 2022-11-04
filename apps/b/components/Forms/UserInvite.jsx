@@ -1,10 +1,16 @@
+// import {IoCloseSharp} from 'react-icons/io5';
+
 const UserInvite = () => (
   <div>
     <input type="checkbox" id="user-invite" className="modal-toggle" />
-    <div className="modal">
-      <div className="modal-box rounded-xl">
-        <label htmlFor="user-invite" className="text-lg absolute right-4 top-2">
-          ✕
+    <label htmlFor="user-invite" className="modal cursor-pointer">
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+      <label htmlFor="" className="modal-box rounded-xl">
+        <label
+          htmlFor="user-invite"
+          className="text-lg absolute right-4 top-2 hover:cursor-pointer"
+        >
+          {/* <IoCloseSharp/> */}
         </label>
         <div>
           <h3 className="text-lg font-bold">Create an individual invite</h3>
@@ -49,8 +55,8 @@ const UserInvite = () => (
             Send Invite
           </label>
         </div>
-      </div>
-    </div>
+      </label>
+    </label>
   </div>
 );
 
