@@ -38,7 +38,7 @@ const BaseTable = ({
   headings,
   headingColor,
   showCheckbox,
-  height,
+  className,
   columnKeys,
   data,
   footer,
@@ -52,46 +52,39 @@ const BaseTable = ({
   }
 
   return (
-    <div>
-      {header}
-      <div className={cx('w-full overflow-auto', height)}>
-        <table className="table mt-3">
-          <thead>
-            <tr>
-              {showCheckbox && <th className={cx('top-0 sticky rounded-none', headingColor)}> </th>}
-              {headings.map((heading) => (
-                <th
-                  key={heading}
-                  className={cx('top-0 sticky rounded-none text-white', headingColor)}
-                >
-                  {heading}
-                </th>
-              ))}
-              <th className={cx('top-0 sticky rounded-none text-white', headingColor)}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row) => (
-              <tr key={row.id}>
-                {showCheckbox && (
-                  <td>
-                    <label>
-                      <input type="checkbox" className="checkbox" />
-                    </label>
-                  </td>
-                )}
-                {columnKeys.map((key, index) => (
-                  <td key={key}>
-                    {/* Show a profilePicture if one exists and if we're on the first column */}
-                    {index === 0 && row.profilePicture && (
-                      <div className="w-10 h-10">
-                        <Image
-                          src={row.profilePicture}
-                          alt="Profile Picture"
-                          layout="fill"
-                          className="rounded-full"
-                        />
-                      </div>
+    <div className={cx(className, 'bg-base-100 rounded-lg shadow-lg xl:flex-1 overflow-y-hidden')}>
+      <div className="h-full flex flex-col gap-3 py-3">
+        <div className="px-6">{header}</div>
+        <div className="w-full h-auto overflow-hidden border-b">
+          <div className="w-full max-h-full overflow-auto">
+            <table className="table w-full">
+              <thead>
+                <tr>
+                  {showCheckbox && (
+                    <th className={cx('top-0 sticky rounded-none', headingColor)}> </th>
+                  )}
+                  {headings.map((heading) => (
+                    <th
+                      key={heading}
+                      className={cx('top-0 sticky rounded-none text-white', headingColor)}
+                    >
+                      {heading}
+                    </th>
+                  ))}
+                  <th className={cx('top-0 sticky rounded-none text-white', headingColor)}>
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((row) => (
+                  <tr key={row.id}>
+                    {showCheckbox && (
+                      <td>
+                        <label>
+                          <input type="checkbox" className="checkbox" />
+                        </label>
+                      </td>
                     )}
                     {columnKeys.map((key, index) => (
                       <td key={key}>
@@ -121,33 +114,33 @@ const BaseTable = ({
                 </td>
               </tr>
             ))}
-          </tbody>
-          {/* <tfoot>
+            </tbody>
+            {/* <tfoot>
             <tr>
               <td colSpan={headings.length + 2} className="bg-white rounded-none border-t py-3">
                 {footer}
               </td>
             </tr>
           </tfoot> */}
-        </table>
-        <div className="sticky bottom-0 p-3 bg-white">{footer}</div>
+          </table>
+          <div className="sticky bottom-0 p-3 bg-white">{footer}</div>
+        </div>
       </div>
-    </div>
-  );
+      );
 };
 
-const propTypes = {
-  header: PropTypes.element,
-  headings: PropTypes.arrayOf(PropTypes.string),
-  headingColor: PropTypes.string,
-  showCheckbox: PropTypes.bool,
-  height: PropTypes.string,
-  columnKeys: PropTypes.arrayOf(PropTypes.string),
-  data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
-  // We don't know what the data object will look like, so we can't specify it.
-  footer: PropTypes.element,
+      const propTypes = {
+        header: PropTypes.element,
+      headings: PropTypes.arrayOf(PropTypes.string),
+      headingColor: PropTypes.string,
+      showCheckbox: PropTypes.bool,
+      className: PropTypes.string,
+      columnKeys: PropTypes.arrayOf(PropTypes.string),
+      data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+      // We don't know what the data object will look like, so we can't specify it.
+      footer: PropTypes.element,
 };
 
-BaseTable.propTypes = propTypes;
+      BaseTable.propTypes = propTypes;
 
-export default BaseTable;
+      export default BaseTable;
