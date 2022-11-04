@@ -4,9 +4,9 @@ import BaseTable from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 
-// This table shows Pending Invites and is built on the BaseTable component.
+// This table shows Registered Users and is built on the BaseTable component.
 
-const PendingInvitesTable = ({ data }) => {
+const CompanyProfilesPreviewTable = ({ data }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
@@ -14,41 +14,46 @@ const PendingInvitesTable = ({ data }) => {
       header={
         <div className="flex flex-row justify-between items-center pt-6 px-6">
           <div className="flex flex-col pb-3">
-            <h1 className="font-bold text-xl">Pending Invites</h1>
-            <h1>Showing 1 to 10 of 100 entries</h1>
+            <h1 className="font-bold text-xl">Company Profiles Preview</h1>
+            <h1>Processed {data.length} company profiles from selected file</h1>
           </div>
           <div className="flex flex-row gap-4">
-            <SearchBar placeholder="Search by e-mail" />
+            <h1 className="mt-3">Show</h1>
+            <select className="select select-bordered w-25">
+              <option>8 per page</option>
+              <option>15 per page</option>
+              <option>50 per page</option>
+            </select>
+            <SearchBar placeholder="Search by name" />
           </div>
         </div>
       }
-      headings={['Company', 'E-mail', 'Mobile Number']}
-      headingColor="bg-warning"
+      headings={['Company', 'Website']}
+      headingColor="bg-primary"
       showCheckbox
-      columnKeys={['company', 'email', 'mobileNumber']}
+      columnKeys={['company', 'email']}
       data={data}
       footer={
         <div className="flex justify-between bg-none">
-          <button className="btn btn-warning text-white">REVOKE SELECTED</button>
           <div className="flex justify-end bg-none">
             <TableButton
               index={0}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-warning"
+              selectedColor="bg-primary"
               styles="rounded-l-lg"
             />
             <TableButton
               index={1}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-warning"
+              selectedColor="bg-primary"
             />
             <TableButton
               index={2}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-warning"
+              selectedColor="bg-primary"
               styles="rounded-r-lg"
             />
           </div>
@@ -58,10 +63,12 @@ const PendingInvitesTable = ({ data }) => {
   );
 };
 
-PendingInvitesTable.propTypes = {
+CompanyProfilesPreviewTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
+      // eslint-disable-next-line react/forbid-prop-types
+      profilePicture: PropTypes.object,
       name: PropTypes.string,
       email: PropTypes.string,
       company: PropTypes.string,
@@ -70,4 +77,4 @@ PendingInvitesTable.propTypes = {
   ),
 };
 
-export default PendingInvitesTable;
+export default CompanyProfilesPreviewTable;
