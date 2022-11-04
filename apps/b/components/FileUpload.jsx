@@ -2,7 +2,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 
 const FileUpload = ({ className }) => (
-  <div className={cx('flex flex-col bg-base-100 rounded-lg shadow-lg', className)}>
+  <div className={cx('flex flex-col bg-base-100 rounded-lg', className)}>
     <div className="p-6">
       <h2 className="text-lg font-bold">Bulk Add Companies & Invite Users</h2>
       <p>Import a .xlsx or .csv file below to bulk add company profiles and bulk invite users</p>

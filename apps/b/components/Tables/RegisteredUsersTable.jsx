@@ -68,7 +68,8 @@ RegisteredUsersTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
-      profilePicture: PropTypes.string,
+      // eslint-disable-next-line react/forbid-prop-types
+      profilePicture: PropTypes.object,
       name: PropTypes.string,
       email: PropTypes.string,
       company: PropTypes.string,

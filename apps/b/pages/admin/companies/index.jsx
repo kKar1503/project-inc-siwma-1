@@ -1,8 +1,9 @@
-import RegisteredCompaniesTable from '../../components/Tables/RegisteredCompaniesTable';
-import pic from '../../public/siwma-logo-sm.png';
-import AdminPageLayout from '../../components/layouts/AdminPageLayout';
-import FileUpload from '../../components/FileUpload';
-import NavBar from '../../components/NavBar';
+import RegisteredCompaniesTable from '../../../components/Tables/RegisteredCompaniesTable';
+import pic from '../../../public/siwma-logo-sm.png';
+import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
+import NavBar from '../../../components/NavBar';
+import CompanyRegister from '../../../components/Forms/CompanyRegister';
+import BulkInvite from '../../../components/Forms/BulkInvite';
 
 /**
  * The below is for rendering the Companies Management Page
@@ -20,8 +21,8 @@ import NavBar from '../../components/NavBar';
  *       and update operations.
  *
  * TO DO:
- * 1. Import Xavier's Bulk Invite components
- * 2. Fix overflow problem
+ * 1. Implement real data from react-tables and database
+ * 2. Bulk invites to be moved to redirect
  */
 
 /**
@@ -85,20 +86,52 @@ const registeredCompaniesData = [
     bio: 'Very Very Long Company Bio',
   },
 ];
+const Modals = () => (
+  <div className="absolute">
+    <BulkInvite />
+    <CompanyRegister />
+  </div>
+);
 const Page = () => (
   <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
     <NavBar />
-    <div className="flex mb-4 gap-4">
-      <div className="flex flex-row w-full border-solid border-2 border-gray h-full">
-        <FileUpload className="h-full col-span-4" />
+
+    <div className="flex flex-row">
+      <div className="w-1/2 mb-4 gap-4">
+        <div className="rounded-xl shadow-lg p-4 w-2/3">
+          <div className="pb-3">
+            <h3 className="text-lg font-bold">Create an individual company</h3>
+            <p className="text-sm">Register a company profile to the system</p>
+          </div>
+          <label htmlFor="company-register" className="btn w-full">
+            Open
+          </label>
+        </div>
       </div>
-      <div className="w-2/3 w-full h-full max-w-fit max-h-fit flex flex-row">
+      <div className="w-1/2 mb-4 gap-4">
+        <div className="rounded-xl shadow-lg p-4 w-2/3">
+          <div className="pb-3">
+            <h3 className="text-lg font-bold">Bulk Register Companies</h3>
+            <p className="text-sm">Register a company profile to the system</p>
+          </div>
+          <label htmlFor="bulk-invite" className="w-full btn">
+            Open
+          </label>
+        </div>
+      </div>
+    </div>
+    <div className="flex mb-4 gap-4">
+      <div className="w-full h-full max-w-fit max-h-fit flex flex-row">
         <RegisteredCompaniesTable data={registeredCompaniesData} className="shadow-lg" />
       </div>
     </div>
   </div>
 );
 
-Page.getLayout = (page) => <AdminPageLayout pageName="Companies">{page}</AdminPageLayout>;
+Page.getLayout = (page) => (
+  <AdminPageLayout pageName="Companies" siblings={<Modals />}>
+    {page}
+  </AdminPageLayout>
+);
 
 export default Page;

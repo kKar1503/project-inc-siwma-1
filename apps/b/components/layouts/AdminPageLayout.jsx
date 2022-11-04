@@ -2,7 +2,7 @@ import Head from 'next/head';
 import PropTypes from 'prop-types';
 import Sidebar, { adminSidebar } from '../Sidebar/Sidebar';
 
-const AdminPageLayout = ({ children, pageName }) => (
+const AdminPageLayout = ({ children, pageName, siblings }) => (
   <div className="bg-[#FAFAFA]">
     <Head>
       <title>Team B</title>
@@ -12,12 +12,14 @@ const AdminPageLayout = ({ children, pageName }) => (
     <Sidebar sidebarList={adminSidebar} selected={pageName}>
       {children}
     </Sidebar>
+    {siblings}
   </div>
 );
 
 AdminPageLayout.propTypes = {
   children: PropTypes.node,
   pageName: PropTypes.string,
+  siblings: PropTypes.node,
 };
 
 export default AdminPageLayout;
