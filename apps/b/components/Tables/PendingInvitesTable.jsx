@@ -6,13 +6,13 @@ import TableButton from './TableButton';
 
 // This table shows Pending Invites and is built on the BaseTable component.
 
-const PendingInvitesTable = ({ data }) => {
+const PendingInvitesTable = ({ data, className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
     <BaseTable
       header={
-        <div className="flex flex-row justify-between items-center pt-6 px-6">
+        <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">Pending Invites</h1>
             <h1>Showing 1 to 10 of 100 entries</h1>
@@ -25,6 +25,7 @@ const PendingInvitesTable = ({ data }) => {
       headings={['Company', 'E-mail', 'Mobile Number']}
       headingColor="bg-warning"
       showCheckbox
+      className={className}
       columnKeys={['company', 'email', 'mobileNumber']}
       data={data}
       footer={
@@ -68,6 +69,7 @@ PendingInvitesTable.propTypes = {
       mobileNumber: PropTypes.string,
     })
   ),
+  className: PropTypes.string,
 };
 
 export default PendingInvitesTable;
