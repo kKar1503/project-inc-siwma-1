@@ -125,6 +125,7 @@ const BaseTable = ({
           </table>
           <div className="sticky bottom-0 p-3 bg-white">{footer}</div>
         </div>
+        <div className="px-3 bg-base-100">{footer}</div>
       </div>
       );
 };
