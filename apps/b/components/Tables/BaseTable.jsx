@@ -29,6 +29,10 @@ import cx from 'classnames';
   ]
   */
 
+/**
+ * Base table component
+ * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
+ */
 const BaseTable = ({
   header,
   headings,
@@ -132,7 +136,7 @@ const BaseTable = ({
   );
 };
 
-BaseTable.propTypes = {
+const propTypes = {
   header: PropTypes.element,
   headings: PropTypes.arrayOf(PropTypes.string),
   headingColor: PropTypes.string,
@@ -143,5 +147,7 @@ BaseTable.propTypes = {
   // We don't know what the data object will look like, so we can't specify it.
   footer: PropTypes.element,
 };
+
+BaseTable.propTypes = propTypes;
 
 export default BaseTable;
