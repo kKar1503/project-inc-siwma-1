@@ -175,4 +175,6 @@ const UserOverview = () => (
   </div>
 );
 
+UserOverview.getLayout = (page) => <AdminPageLayout pageName="Overview">{page}</AdminPageLayout>;
+
 export default UserOverview;
