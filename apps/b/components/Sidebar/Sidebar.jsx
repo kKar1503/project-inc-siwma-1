@@ -19,7 +19,7 @@ export const adminSidebar = [
         Overview: '/',
       },
       {
-        Companies: '/companies',
+        Companies: '/admin/companies',
       },
       {
         Users: '/admin/users',
