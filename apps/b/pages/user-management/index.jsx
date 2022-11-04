@@ -1,7 +1,7 @@
 /* eslint-disable no-plusplus */
 import Head from 'next/head';
 import AdminFigure from '../../components/AdminFigure';
-import Sidebar, { adminSidebar } from '../../components/Sidebar/Sidebar';
+import AdminPageLayout from '../../components/layouts/AdminPageLayout';
 import SearchBar from '../../components/SearchBar';
 import NavBar from '../../components/NavBar';
 
