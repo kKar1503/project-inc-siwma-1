@@ -1,9 +1,9 @@
+import Link from 'next/link';
 import RegisteredCompaniesTable from '../../../components/Tables/RegisteredCompaniesTable';
 import pic from '../../../public/siwma-logo-sm.png';
 import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
 import NavBar from '../../../components/NavBar';
 import CompanyRegister from '../../../components/Forms/CompanyRegister';
-import BulkInvite from '../../../components/Forms/BulkInvite';
 
 /**
  * The below is for rendering the Companies Management Page
@@ -88,7 +88,6 @@ const registeredCompaniesData = [
 ];
 const Modals = () => (
   <div className="absolute">
-    <BulkInvite />
     <CompanyRegister />
   </div>
 );
@@ -96,27 +95,27 @@ const Page = () => (
   <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
     <NavBar />
 
-    <div className="flex flex-row">
-      <div className="w-1/2 mb-4 gap-4">
-        <div className="rounded-xl shadow-lg p-4 w-2/3">
+    <div className="flex flex-row gap-6">
+      <div className="mb-4 gap-4 flex-1">
+        <div className="rounded-xl shadow-lg p-4 bg-base-100">
           <div className="pb-3">
-            <h3 className="text-lg font-bold">Create an individual company</h3>
+            <h3 className="text-lg font-bold">Register an individual company</h3>
             <p className="text-sm">Register a company profile to the system</p>
           </div>
-          <label htmlFor="company-register" className="btn w-full">
+          <label htmlFor="company-register" className="btn w-full btn-outline btn-primary">
             Open
           </label>
         </div>
       </div>
-      <div className="w-1/2 mb-4 gap-4">
-        <div className="rounded-xl shadow-lg p-4 w-2/3">
+      <div className="mb-4 gap-4 flex-1">
+        <div className="rounded-xl shadow-lg p-4 bg-base-100">
           <div className="pb-3">
             <h3 className="text-lg font-bold">Bulk Register Companies</h3>
             <p className="text-sm">Register a company profile to the system</p>
           </div>
-          <label htmlFor="bulk-invite" className="w-full btn">
+          <Link href="invite/" className="w-full btn btn-outline btn-primary">
             Open
-          </label>
+          </Link>
         </div>
       </div>
     </div>
