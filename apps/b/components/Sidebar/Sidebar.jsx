@@ -16,7 +16,7 @@ export const adminSidebar = [
   {
     'User Management': [
       {
-        Overview: '/',
+        Overview: '/admin/overview',
       },
       {
         Companies: '/',
