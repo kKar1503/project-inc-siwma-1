@@ -1,4 +1,3 @@
-// import { IoCloseSharp } from 'react-icons/io5';
 import FileUpload from '../FileUpload';
 
 const BulkInvite = () => (
@@ -11,7 +10,7 @@ const BulkInvite = () => (
           htmlFor="bulk-invite"
           className="text-lg absolute right-4 top-2 hover:cursor-pointer"
         >
-          {/* <IoCloseSharp/> */}
+          ✕
         </label>
         <FileUpload />
       </label>
