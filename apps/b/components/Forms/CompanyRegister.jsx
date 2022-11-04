@@ -1,3 +1,4 @@
+// import {IoCloseSharp} from 'react-icons/io5';
 const CompanyRegister = () => (
   <div>
     <input type="checkbox" id="company-register" className="modal-toggle" />
@@ -8,7 +9,7 @@ const CompanyRegister = () => (
           htmlFor="company-register"
           className="text-lg absolute right-4 top-2 hover:cursor-pointer"
         >
-          ✕
+          {/* <IoCloseSharp/> */}
         </label>
         <div className="pb-3">
           <h3 className="text-lg font-bold">Create an individual company</h3>
