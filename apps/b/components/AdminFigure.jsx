@@ -1,8 +1,13 @@
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-const AdminFigure = ({ title, value, icon, color }) => (
-  <div className="flex flex-row grow h-40 shadow-xl items-center p-6 rounded-2xl space-between justify-between">
+const AdminFigure = ({ title, value, icon, color, className }) => (
+  <div
+    className={cx(
+      'flex flex-row grow h-40 shadow-xl items-center p-6 rounded-2xl space-between justify-between',
+      className
+    )}
+  >
     <div className="flex flex-col mt-4 h-full items-left">
       <p className={cx('text-6xl font-black py-1 pr-4 select-none', color ?? 'text-gray-700')}>
         {value}
@@ -20,6 +25,7 @@ AdminFigure.propTypes = {
   value: PropTypes.string,
   icon: PropTypes.element,
   color: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default AdminFigure;
