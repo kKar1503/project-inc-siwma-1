@@ -38,7 +38,7 @@ const BaseTable = ({
   headings,
   headingColor,
   showCheckbox,
-  height,
+  className,
   columnKeys,
   data,
   footer,
@@ -52,7 +52,7 @@ const BaseTable = ({
   }
 
   return (
-    <div className={cx(height, 'bg-base-100 rounded-lg shadow-lg xl:flex-1 overflow-y-hidden')}>
+    <div className={cx(className, 'bg-base-100 rounded-lg shadow-lg xl:flex-1 overflow-y-hidden')}>
       <div className="h-full flex flex-col gap-3 py-3">
         <div className="px-6">{header}</div>
         <div className="w-full h-auto overflow-hidden border-b">
@@ -108,28 +108,39 @@ const BaseTable = ({
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
+                <td>
+                  {/* TODO: Replace with the proper icon once react-icons is set up */}
+                  <Image src="/icons/edit.svg" alt="Edit" width={20} height={20} />
+                </td>
+              </tr>
+            ))}
+            </tbody>
+            {/* <tfoot>
+            <tr>
+              <td colSpan={headings.length + 2} className="bg-white rounded-none border-t py-3">
+                {footer}
+              </td>
+            </tr>
+          </tfoot> */}
+          </table>
+          <div className="sticky bottom-0 p-3 bg-white">{footer}</div>
         </div>
-        <div className="px-3 bg-white">{footer}</div>
       </div>
-    </div>
-  );
+      );
 };
 
-const propTypes = {
-  header: PropTypes.element,
-  headings: PropTypes.arrayOf(PropTypes.string),
-  headingColor: PropTypes.string,
-  showCheckbox: PropTypes.bool,
-  height: PropTypes.string,
-  columnKeys: PropTypes.arrayOf(PropTypes.string),
-  data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
-  // We don't know what the data object will look like, so we can't specify it.
-  footer: PropTypes.element,
+      const propTypes = {
+        header: PropTypes.element,
+      headings: PropTypes.arrayOf(PropTypes.string),
+      headingColor: PropTypes.string,
+      showCheckbox: PropTypes.bool,
+      className: PropTypes.string,
+      columnKeys: PropTypes.arrayOf(PropTypes.string),
+      data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+      // We don't know what the data object will look like, so we can't specify it.
+      footer: PropTypes.element,
 };
 
-BaseTable.propTypes = propTypes;
+      BaseTable.propTypes = propTypes;
 
-export default BaseTable;
+      export default BaseTable;
