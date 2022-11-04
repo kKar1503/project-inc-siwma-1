@@ -38,7 +38,7 @@ const BaseTable = ({
   headings,
   headingColor,
   showCheckbox,
-  height,
+  className,
   columnKeys,
   data,
   footer,
@@ -52,7 +52,7 @@ const BaseTable = ({
   }
 
   return (
-    <div className={cx(height, 'bg-base-100 rounded-lg shadow-lg xl:flex-1 overflow-y-hidden')}>
+    <div className={cx(className, 'bg-base-100 rounded-lg shadow-lg xl:flex-1 overflow-y-hidden')}>
       <div className="h-full flex flex-col gap-3 py-3">
         <div className="px-6">{header}</div>
         <div className="w-full h-auto overflow-hidden border-b">
@@ -123,7 +123,7 @@ const propTypes = {
   headings: PropTypes.arrayOf(PropTypes.string),
   headingColor: PropTypes.string,
   showCheckbox: PropTypes.bool,
-  height: PropTypes.string,
+  className: PropTypes.string,
   columnKeys: PropTypes.arrayOf(PropTypes.string),
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.
