@@ -55,10 +55,8 @@ const UsersPage = () => (
         </div>
       </div>
     </div>
-    <div className="flex flex-col col-start-5 col-end-13 gap-8 flex-1 justify-between xl:overflow-y-hidden">
-      <PendingInvitesTable data={populateArray(inviteTableData, 15)} />
-      <RegisteredUsersTable data={populateArray(registerTableData, 30)} />
-    </div>
+    <PendingInvitesTable data={populateArray(inviteTableData, 15)} />
+    <RegisteredUsersTable data={populateArray(registerTableData, 30)} />
     <UserInvite />
   </div>
 );
