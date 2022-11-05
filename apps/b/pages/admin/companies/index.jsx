@@ -119,8 +119,8 @@ const Page = () => (
         </div>
       </div>
     </div>
-    <div className="flex mb-4 gap-4">
-      <div className="w-full h-full max-w-fit max-h-fit flex flex-row">
+    <div className="flex mb-4 gap-4 xl:overflow-hidden">
+      <div className="w-full h-full flex flex-row">
         <RegisteredCompaniesTable data={registeredCompaniesData} className="shadow-lg" />
       </div>
     </div>
