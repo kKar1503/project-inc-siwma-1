@@ -4,7 +4,7 @@ import cx from 'classnames';
 const AdminFigure = ({ title, value, icon, color, className }) => (
   <div
     className={cx(
-      'flex flex-row grow h-40 shadow-xl items-center p-6 rounded-2xl space-between justify-between',
+      'flex flex-row grow h-40 shadow-xl items-center p-6 rounded-2xl space-between justify-between bg-base-100',
       className
     )}
   >
