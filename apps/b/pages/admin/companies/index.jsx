@@ -102,9 +102,9 @@ const Page = () => (
             <h3 className="text-lg font-bold">Register an individual company</h3>
             <p className="text-sm">Register a company profile to the system</p>
           </div>
-          <button htmlFor="company-register" className="btn w-full btn-outline btn-primary">
+          <label htmlFor="company-register" className="btn w-full btn-outline btn-primary">
             Register Company
-          </button>
+          </label>
         </div>
       </div>
       <div className="mb-4 gap-4 flex-1">
