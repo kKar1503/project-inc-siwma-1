@@ -1,18 +1,10 @@
 import { IoSendSharp } from 'react-icons/io5';
 import { GrAttachment } from 'react-icons/gr';
 import { BsEmojiSmile } from 'react-icons/bs';
-// import EmojiComp from './EmojiComp';
 
 const InputTextArea = () => (
   <div className="flex space-x-2">
-    {/* <div className="pt-4">
-  <button type="select" onClick={handleEmoji}>
-    <BsEmojiSmile size={20} />
-    <div className={showChild ? 'block' : 'hidden'}>
-      <EmojiComp />
-    </div>
-  </button>
-</div> */}
+  
     <div className="pt-4">
       <button type="select">
         <BsEmojiSmile size={20} />
@@ -38,7 +30,5 @@ const InputTextArea = () => (
     </div>
   </div>
 );
-
-// className='grid h-300 card bg-base-300 rounded-box place-items-center'
 
 export default InputTextArea;
