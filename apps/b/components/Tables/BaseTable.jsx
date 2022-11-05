@@ -108,40 +108,28 @@ const BaseTable = ({
                     </td>
                   </tr>
                 ))}
-                <td>
-                  {/* TODO: Replace with the proper icon once react-icons is set up */}
-                  <Image src="/icons/edit.svg" alt="Edit" width={20} height={20} />
-                </td>
-              </tr>
-            ))}
-            </tbody>
-            {/* <tfoot>
-            <tr>
-              <td colSpan={headings.length + 2} className="bg-white rounded-none border-t py-3">
-                {footer}
-              </td>
-            </tr>
-          </tfoot> */}
-          </table>
-          <div className="sticky bottom-0 p-3 bg-white">{footer}</div>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div className="px-3 bg-base-100">{footer}</div>
       </div>
-      );
+    </div>
+  );
 };
 
-      const propTypes = {
-        header: PropTypes.element,
-      headings: PropTypes.arrayOf(PropTypes.string),
-      headingColor: PropTypes.string,
-      showCheckbox: PropTypes.bool,
-      className: PropTypes.string,
-      columnKeys: PropTypes.arrayOf(PropTypes.string),
-      data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
-      // We don't know what the data object will look like, so we can't specify it.
-      footer: PropTypes.element,
+const propTypes = {
+  header: PropTypes.element,
+  headings: PropTypes.arrayOf(PropTypes.string),
+  headingColor: PropTypes.string,
+  showCheckbox: PropTypes.bool,
+  className: PropTypes.string,
+  columnKeys: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  // We don't know what the data object will look like, so we can't specify it.
+  footer: PropTypes.element,
 };
 
-      BaseTable.propTypes = propTypes;
+BaseTable.propTypes = propTypes;
 
-      export default BaseTable;
+export default BaseTable;
