@@ -39,6 +39,7 @@ module.exports = {
         ignoreRestSiblings: true,
       },
     ],
+    'jsx-a11y/label-has-associated-control' : ['error', { assert: 'either'}],
   },
   overrides: [
     {

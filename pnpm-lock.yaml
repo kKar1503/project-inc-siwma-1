@@ -243,7 +243,17 @@ importers:
       eslint-config-custom: link:../eslint-config-custom
 
   packages/styles:
-    specifiers: {}
+    specifiers:
+      autoprefixer: ^10.4.13
+      daisyui: ^2.33.0
+      postcss: ^8.4.18
+      tailwindcss: ^3.2.1
+    dependencies:
+      daisyui: 2.33.0_lycaqaeny3mp632atgvyvqdgwe
+    devDependencies:
+      autoprefixer: 10.4.13_postcss@8.4.18
+      postcss: 8.4.18
+      tailwindcss: 3.2.1_postcss@8.4.18
 
   packages/ui:
     specifiers:
