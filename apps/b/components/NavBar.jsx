@@ -29,7 +29,7 @@ const NavBar = () => (
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
       <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
         <div className="w-10 rounded-full">
-          <Image src="/../public/sample-profile-pic.jpg" alt="profile-pic" width={80} height={80} />
+          <Image src="/sample-profile-pic.jpg" alt="profile-pic" width={80} height={80} />
         </div>
       </div>
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
