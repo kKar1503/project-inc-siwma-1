@@ -1,30 +1,31 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
-const ChatDiv = ({ isCheckCallback }) => {
-  // const [isHovering, setIsHovering] = useState(false);
-  // const [isChecked, setIsChecked] = useState(false);
+const ChatRoom = ({ onCheckCB }) => {
   const [isChecked, setIsChecked] = useState(false);
 
-  const handleOnChange = () => {
-    setIsChecked(!isChecked);
+  const handleOnChange = (checked) => {
+    setIsChecked(checked);
+    if (typeof onCheckCB === 'function') {
+      onCheckCB(checked);
+    }
   };
 
-  useEffect(() => {
-    isCheckCallback(isChecked);
-  }, [isChecked]);
+  const toggleChecked = () => handleOnChange(!isChecked);
 
   return (
     <li className=" group border-b border-gray-300">
       <a href="localhost:3000/">
         <div className="w-1/6">
+          {/* TODO: Please add additional functionality in the future */}
           {true && (
             <input
               type="checkbox"
               checked={isChecked}
-              onChange={handleOnChange}
-              className={`checkbox ${isChecked ? '' : 'hidden'} hover:visible  group-hover:flex`}
+              onChange={toggleChecked}
+              className={cx('hover:visible group-hover:flex', { hidden: isChecked })}
             />
           )}
         </div>
@@ -53,8 +54,8 @@ const ChatDiv = ({ isCheckCallback }) => {
   );
 };
 
-ChatDiv.propTypes = {
-  isCheckCallback: PropTypes.oneOf(PropTypes.func).isRequired,
+ChatRoom.propTypes = {
+  onCheckCB: PropTypes.oneOf(PropTypes.func).isRequired,
 };
 
-export default ChatDiv;
+export default ChatRoom;

@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import ChatDiv from './chatDiv';
+import ChatRoom from './chatRoom';
 
 const data = [
   {
@@ -51,6 +51,7 @@ const ChatList = () => {
     <div>
       <main />
       <div>
+        {/* TODO: Add search functionality in the future */}
         <input
           type="text"
           placeholder="Search messages, listings, usernames"
@@ -103,17 +104,13 @@ const ChatList = () => {
 
         <div className="drawer drawer-mobile">
           <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-          {/* <div className="drawer-content flex flex-col items-center justify-center">
-             <label htmlFor="my-drawer-2" className="btn btn-primary drawer-button lg:hidden">
-              Open drawer
-            </label> 
-          </div> */}
           <div onMouseOver={handleMouseOver} onFocus={handleMouseOver} className="drawer-side">
-            {/* <label htmlFor="my-drawer-2" className="drawer-overlay" />
-            <input id='my-drawer-2' /> */}
             <ul className="menu p-4 overflow-y-auto w-110 bg-base-200 text-base-content">
               {data.map((item) => (
-                <ChatDiv isCheckCallback={(isChecked) => handleCheck(item.id, isChecked)} />
+                <ChatRoom
+                  onCheckCB={(isChecked) => handleCheck(item.id, isChecked)}
+                  key={item.id}
+                />
               ))}
             </ul>
           </div>

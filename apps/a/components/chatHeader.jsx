@@ -4,7 +4,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const chatHeader = () => (
+const ChatHeader = () => (
   <div>
     <main>
       <div>
@@ -24,6 +24,7 @@ const chatHeader = () => (
           </div>
           <div className="flex-none gap-2">
             <div className="dropdown dropdown-end relative">
+              {/* Add HTML for attribute for labels */}
               <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                 <div className="w-67 rounded-full">
                   <BsThreeDotsVertical />
@@ -72,4 +73,4 @@ const chatHeader = () => (
   </div>
 );
 
-export default chatHeader;
+export default ChatHeader;
