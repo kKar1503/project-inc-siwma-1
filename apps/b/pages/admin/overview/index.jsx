@@ -57,13 +57,6 @@ const UserOverview = () => (
       />
     </div>
 
-    <div className="flex flex-row w-full gap-8">
       <RegisteredUsersTableWithoutCheckbox className="" data={registeredUsersData} />
       <PendingInvitesTableWithoutCheckbox className="" data={inviteTableData} />
     </div>
-  </div>
-);
-
-UserOverview.getLayout = (page) => <AdminPageLayout pageName="Overview">{page}</AdminPageLayout>;
-
-export default UserOverview;
