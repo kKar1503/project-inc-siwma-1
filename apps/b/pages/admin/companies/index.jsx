@@ -3,7 +3,7 @@ import RegisteredCompaniesTable from '../../../components/Tables/RegisteredCompa
 import pic from '../../../public/siwma-logo-sm.png';
 import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
 import NavBar from '../../../components/NavBar';
-import CompanyRegister from '../../../components/Forms/CompanyRegister';
+import CompanyRegister from '../../../components/Modals/CompanyRegister';
 
 /**
  * The below is for rendering the Companies Management Page
@@ -86,11 +86,13 @@ const registeredCompaniesData = [
     bio: 'Very Very Long Company Bio',
   },
 ];
+
 const Modals = () => (
   <div className="absolute">
     <CompanyRegister />
   </div>
 );
+
 const Page = () => (
   <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
     <NavBar />
