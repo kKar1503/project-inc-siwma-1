@@ -12,6 +12,7 @@
     "@inc/styles": "workspace:*",
     "@inc/ui": "workspace:*",
     "daisyui": "^2.33.0",
+    "emoji-mart": "^5.2.2",
     "luxon": "^3.0.4",
     "next": "13.0.0",
     "next-transpile-modules": "^9.1.0",

@@ -34,6 +34,7 @@ importers:
       autoprefixer: ^10.4.13
       cypress: ^10.11.0
       daisyui: ^2.33.0
+      emoji-mart: ^5.2.2
       eslint: 8.26.0
       eslint-config-custom: workspace:*
       luxon: ^3.0.4
@@ -49,6 +50,7 @@ importers:
       '@inc/styles': link:../../packages/styles
       '@inc/ui': link:../../packages/ui
       daisyui: 2.33.0_lycaqaeny3mp632atgvyvqdgwe
+      emoji-mart: 5.2.2
       luxon: 3.0.4
       next: 13.0.0_biqbaboplfbrettd7655fr4n2y
       next-transpile-modules: 9.1.0
@@ -1281,9 +1283,6 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /caniuse-lite/1.0.30001422:
-    resolution: {integrity: sha512-hSesn02u1QacQHhaxl/kNMZwqVG35Sz/8DgvmgedxSH8z9UUpcDYSPYgsj3x5dQNRcNp6BwpSfQfVzYUTm+fog==}
-
   /caniuse-lite/1.0.30001427:
     resolution: {integrity: sha512-lfXQ73oB9c8DP5Suxaszm+Ta2sr/4tf8+381GkIm1MLj/YdLf+rEDyDSRCzeltuyTVGm+/s18gdZ0q+Wmp8VsQ==}
 
@@ -1868,6 +1867,10 @@ packages:
 
   /electron-to-chromium/1.4.284:
     resolution: {integrity: sha512-M8WEXFuKXMYMVr45fo8mq0wUrrJHheiKZf6BArTKk9ZBYCKJEOU5H8cdWgDT+qCVZf7Na4lVUaZsA+h6uA9+PA==}
+
+  /emoji-mart/5.2.2:
+    resolution: {integrity: sha512-BvcrX+Ps9MxSVEjnvxupclU3MBD6WVC4WZOY26csfC6oFdaWpFhdrzeVNVBmCLPOmzY1SE0aAsqZJRNVbZ1yhQ==}
+    dev: false
 
   /emoji-regex/8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -3522,7 +3525,7 @@ packages:
     dependencies:
       '@next/env': 13.0.0
       '@swc/helpers': 0.4.11
-      caniuse-lite: 1.0.30001422
+      caniuse-lite: 1.0.30001427
       postcss: 8.4.14
       styled-jsx: 5.1.0
       use-sync-external-store: 1.2.0
@@ -3565,7 +3568,7 @@ packages:
     dependencies:
       '@next/env': 13.0.0
       '@swc/helpers': 0.4.11
-      caniuse-lite: 1.0.30001422
+      caniuse-lite: 1.0.30001427
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
