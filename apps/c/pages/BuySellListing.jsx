@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React from 'react';
 import CardBackground from '../components/CardBackground';
 import Input from '../components/Input';
-import ListingForm from '../components/layouts/listingForm';
+import ListingForm from '../components/layouts/ListingForm';
 
 const BuySellListing = () => {
   const [selectedImage, setSelectedImage] = React.useState(null);

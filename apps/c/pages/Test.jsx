@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import HamburgerMenu from '../components/navigation/hamburgermenu';
+import HamburgerMenu from '../components/navigation/HamburgerMenu';
 
 const Test = () => {
   // ------------------ Use States ------------------
