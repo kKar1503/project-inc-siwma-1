@@ -75,6 +75,17 @@ const UsersPage = () => {
   );
 };
 
-UsersPage.getLayout = (page) => <AdminPageLayout pageName="Users">{page}</AdminPageLayout>;
+UsersPage.getLayout = (page) => (
+  <AdminPageLayout
+    pageName="Users"
+    siblings={
+      <div className="absolute">
+        <UserInvite />
+      </div>
+    }
+  >
+    {page}
+  </AdminPageLayout>
+);
 
 export default UsersPage;
