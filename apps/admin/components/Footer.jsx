@@ -1,15 +1,23 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import Image from 'next/image';
+import Link from 'next/link';
 import PropType from 'prop-types';
 import pic from '../public/SIWMALOGOFULL.png';
 
 const Footer = ({ arrayOfPages }) => (
-  <footer className="p-4 bg-white sm:p-6 2xl:p-10 dark:bg-gray-900 lg:mx-10 2xl:mx-20 xl:mx-20">
+  <footer className="p-6 bg-white sm:p-10 2xl:p-14">
     <div className="md:flex md:justify-between">
       <div className="mb-6 md:mb-0 text-center sm:text-left ">
-        <a href="#" className="flex items-center h-auto w-auto">
-          <Image src={pic} className="mr-3 h-10" alt="SIW Logo" height={100} width={400} priority />
-        </a>
+        <Link href="#" className="flex items-center h-auto w-auto">
+          <Image
+            src={pic}
+            className="mr-3 h-full"
+            alt="SIW Logo"
+            height={100}
+            width={400}
+            priority
+          />
+        </Link>
 
         <p className="font-inter regular mt-10">
           1014 geylang East Ave 3 #07-242 <br /> Singapore 389729
@@ -28,18 +36,21 @@ const Footer = ({ arrayOfPages }) => (
         </p>
       </div>
 
-      <div className="grid grid-cols-2 ml-8 gap-10 2xl:gap-24 sm:grid-cols-3 2xl:grid-cols-4">
+      <div className="grid grid-cols-2 ml-8 gap-10 2xl:gap-24 sm:grid-cols-3">
         {arrayOfPages.map((group) => (
-          <div key={group.category}>
-            <h2 className="mb-6 text-base 2xl:text-lg font-bold text-gray-900 normalcase dark:text-white">
+          <div key={group.category} className="max-w-xs">
+            <h2 className="mb-6 text-base 2xl:text-lg font-bold text-gray-900 normalcase">
               {group.category}
             </h2>
-            <ul className="text-gray-600 dark:text-gray-400 text-base 2xl:text-lg">
+            <ul className="text-gray-600 text-base 2xl:text-lg">
               {group.pages.map((page) => (
                 <li className="mb-6" key={page.name}>
-                  <a href={page.url} className="hover:underline break-words">
+                  <Link
+                    href={page.url}
+                    className="hover:underline whitespace-pre-wrap break-words ..."
+                  >
                     {page.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
