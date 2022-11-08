@@ -57,10 +57,20 @@ const UsersPage = () => (
     </div>
     <PendingInvitesTable data={populateArray(inviteTableData, 15)} />
     <RegisteredUsersTable data={populateArray(registerTableData, 30)} />
-    <UserInvite />
   </div>
 );
 
-UsersPage.getLayout = (page) => <AdminPageLayout pageName="Users">{page}</AdminPageLayout>;
+UsersPage.getLayout = (page) => (
+  <AdminPageLayout
+    pageName="Users"
+    siblings={
+      <div className="absolute">
+        <UserInvite />
+      </div>
+    }
+  >
+    {page}
+  </AdminPageLayout>
+);
 
 export default UsersPage;
