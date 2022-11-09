@@ -13,7 +13,6 @@ const ProductListingItem = ({ img, name, rating, href }) => (
       {/* Listing content */}
       <div className="p-2 pb-4">
         <p className="font-bold">{name}</p>
-        {/* TODO: Implement rating from Daisy UI */}
         <Rating rating={rating} />
       </div>
     </a>
