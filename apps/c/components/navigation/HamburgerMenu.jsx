@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import { bool, func, node, string } from 'prop-types';
 import { useRouter } from 'next/router';
-
+import { MdClose } from 'react-icons/md';
 // ------------------ Layout Configuration ------------------
 
 /**
  * This component is a central location to customize the HamburgerMenu
- * @constructor
+ * @type {React.FC<import('prop-types').InferProps<typeof LayoutEditor.propTypes>>}
  */
 const LayoutEditor = ({ closeHandle }) => (
   <>
@@ -48,19 +48,13 @@ const LayoutEditor = ({ closeHandle }) => (
 /**
  * MenuLineDivider is a line divider that is displayed in the menu
  * This can be used to visually separate items
- * @returns {JSX.Element}
- * @constructor
+ * @type {React.FC<import('prop-types').InferProps<typeof SidebarDivider.propTypes>>}
  */
 const SidebarDivider = () => <div className="my-4 bg-gray-600 h-[1px]" />;
 
 /**
  * The Item represents each tab in the HamburgerMenu
- * @param name {string} - the name of the tab
- * @param customIcon {JSX.Element} - the icon of the tab
- * @param redirectLink {string} - the link of the tab
- * @param children {JSX.Element} - the children of the tab
- * @returns {JSX.Element} - the item
- * @constructor - the item
+ * @type {React.FC<import('prop-types').InferProps<typeof SidebarItem.propTypes>>}
  */
 const SidebarItem = ({ name, customIcon, redirectLink, children }) => {
   // ------------------ useStates -----------------
@@ -121,11 +115,7 @@ const SidebarItem = ({ name, customIcon, redirectLink, children }) => {
 
 /**
  * SubMenuItem is a drawer item that is displayed by a MenuItem
- * @param name {string} - the name of the item
- * @param customIcon {JSX.Element} - the icon that is displayed next to the name
- * @param redirectLink {string} - the link that is redirected to when the item is clicked
- * @returns {JSX.Element}
- * @constructor
+ * @type {React.FC<import('prop-types').InferProps<typeof SidebarSubItem.propTypes>>}
  */
 const SidebarSubItem = ({ name, customIcon, redirectLink }) => {
   // ------------------ Misc -----------------
@@ -148,8 +138,7 @@ const SidebarSubItem = ({ name, customIcon, redirectLink }) => {
 /**
  * The ExpandedHamburgerMenu is the menu that is shown when the HamburgerButtonIcon is clicked
  * This is the icon that is displayed on the top left of the screen
- * @returns {JSX.Element}
- * @constructor
+ * @type {React.FC<import('prop-types').InferProps<typeof SidebarHeaderIcon.propTypes>>}
  */
 const SidebarHeaderIcon = ({ closeHandle }) => (
   <div className="text-gray-100 text-xl">
@@ -159,7 +148,8 @@ const SidebarHeaderIcon = ({ closeHandle }) => (
       <i className="bi bi-x cursor-pointer ml-28 lg:hidden" />
       &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
       <div role="presentation" onClick={closeHandle}>
-        X
+        {/* use X from react-icons */}
+        <MdClose />
       </div>
     </div>
   </div>
@@ -168,8 +158,7 @@ const SidebarHeaderIcon = ({ closeHandle }) => (
 /**
  * The sidebar logout is a logout button that is displayed in the sidebar
  * todo no logout functionality yet
- * @returns {JSX.Element}
- * @constructor
+ * @type {React.FC<import('prop-types').InferProps<typeof SidebarLogout.propTypes>>}
  */
 const SidebarLogout = () => (
   <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-primary-focus text-white">
@@ -180,8 +169,7 @@ const SidebarLogout = () => (
 
 /**
  * The Sidebar search is a search bar that is displayed in the sidebar
- * @returns {JSX.Element}
- * @constructor
+ * @type {React.FC<import('prop-types').InferProps<typeof SidebarSearch.propTypes>>}
  */
 const SidebarSearch = () => (
   <div className="p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer bg-gray-700 text-white">
@@ -200,8 +188,7 @@ const SidebarSearch = () => (
 // ------------------ Main Component -----------------
 /**
  * The HamburgerMenu is a hamburger menu
- * @returns {JSX.Element}
- * @constructor
+ * @type {React.FC<import('prop-types').InferProps<typeof HamburgerMenu.propTypes>>}
  */
 const HamburgerMenu = ({ open, setOpen }) => {
   // ------------------ Handles -----------------
