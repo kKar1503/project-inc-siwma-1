@@ -13,7 +13,9 @@ const Dropdown = ({ items }) => (
   <select className="select w-full text-center" defaultValue="Category">
     <option disabled>Category</option>
     {items.map((item) => (
-      <option key={item}>{item}</option>
+      <option className="hover:bg-primary-focus" key={item}>
+        {item}
+      </option>
     ))}
   </select>
 );
