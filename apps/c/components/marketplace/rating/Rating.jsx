@@ -1,58 +1,8 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-
-const FullStar = () => (
-  <>
-    <input
-      disabled
-      type="radio"
-      name="rating-10"
-      className="bg-orange-500 mask mask-star-2 mask-half-1"
-    />
-    <input
-      disabled
-      type="radio"
-      name="rating-10"
-      className="bg-orange-500 mask mask-star-2 mask-half-2"
-    />
-  </>
-);
-
-const HalfStar = () => (
-  <>
-    <input
-      disabled
-      type="radio"
-      name="rating-10"
-      className="bg-orange-500 mask mask-star-2 mask-half-1"
-    />
-
-    <input
-      disabled
-      type="radio"
-      name="rating-10"
-      className="bg-orange-500/40 mask mask-star-2 mask-half-2"
-    />
-  </>
-);
-
-const RemainingStar = () => (
-  <>
-    <input
-      disabled
-      type="radio"
-      name="rating-10"
-      className="bg-orange-500/40 mask mask-star-2 mask-half-1"
-    />
-
-    <input
-      disabled
-      type="radio"
-      name="rating-10"
-      className="bg-orange-500/40 mask mask-star-2 mask-half-2"
-    />
-  </>
-);
+import FullStar from './FullStar';
+import HalfStar from './HalfStar';
+import RemainingStar from './RemainingStar';
 
 const Rating = ({ rating }) => {
   const [solid] = useState(Math.floor(rating));
@@ -63,19 +13,19 @@ const Rating = ({ rating }) => {
       {/* Stars: */}
       <div className="rating rating-sm rating-half">
         {[...Array(solid)].map(() => (
-          <FullStar />
+          <FullStar key="solid" />
         ))}
 
         {[...Array(half)].map(() => (
-          <HalfStar />
+          <HalfStar key="half" />
         ))}
 
-        {[...Array(5 - solid - half)].map(() => (
-          <RemainingStar />
+        {[...Array(Math.max(0, 5 - solid - half))].map(() => (
+          <RemainingStar key="remaining" />
         ))}
       </div>
 
-      <span className="text-sm">({rating})</span>
+      {/* <span className="text-sm">({rating})</span> */}
     </div>
   );
 };
