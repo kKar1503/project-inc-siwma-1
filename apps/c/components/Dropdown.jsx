@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const propTypes = {
+  items: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
 /**
  * Dropdown is a component that renders a dropdown.
- * @param {Array} items - The items to be displayed in the dropdown.
- * @returns {JSX.Element}
- * @constructor - Dropdown
+ * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
 const Dropdown = ({ items }) => (
   <select className="select w-full text-center" defaultValue="Category">
@@ -16,8 +18,6 @@ const Dropdown = ({ items }) => (
   </select>
 );
 
-Dropdown.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
+Dropdown.propTypes = propTypes;
 
 export default Dropdown;

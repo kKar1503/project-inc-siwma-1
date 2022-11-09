@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const propTypes = {
+  text: PropTypes.string.isRequired,
+  type: PropTypes.string,
+};
+
 /**
  * Input is a component that renders an input field.
- * @param {string} text - The text to be displayed on the label.
- * @param {string} type - The type of input field. (normal input/textarea)
- * @returns {JSX.Element}
- * @constructor - Input
+ * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
 const Input = ({ text, type }) => (
   <div className="form-control">
@@ -26,9 +28,6 @@ const Input = ({ text, type }) => (
   </div>
 );
 
-Input.propTypes = {
-  text: PropTypes.string.isRequired,
-  type: PropTypes.string,
-};
+Input.propTypes = propTypes;
 
 export default Input;

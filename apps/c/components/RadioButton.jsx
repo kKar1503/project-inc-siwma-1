@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const propTypes = {
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
 /**
  * RadioButton is a component that renders a radio button.
- * @params {Array} options - The options to be displayed in the radio button.
- * @returns {JSX.Element}
- * @constructor - RadioButton
+ * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
 const RadioButton = ({ options }) => {
   const [, setChoice] = React.useState('');
@@ -25,8 +27,8 @@ const RadioButton = ({ options }) => {
             type="radio"
             name="options"
             key={option}
-            data-title={`${option}`}
-            value={`${option}`}
+            data-title={option}
+            value={option}
             className="btn btn bg-white border-primary text-primary hover:bg-primary hover:text-primary-content"
             onChange={onChange}
             defaultChecked
@@ -37,8 +39,6 @@ const RadioButton = ({ options }) => {
   );
 };
 
-RadioButton.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
+RadioButton.propTypes = propTypes;
 
 export default RadioButton;
