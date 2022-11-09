@@ -18,7 +18,7 @@ const MostBuyAndSellStackChart = () => (
       <VictoryBar data={dataset} x="company" y="sell" />
     </VictoryStack>
 
-    <VictoryAxis style={{ tickLabels: { fontSize: 8 } }} label="Companys" />
+    <VictoryAxis style={{ tickLabels: { fontSize: 8 } }} label="Company" />
   </VictoryChart>
 );
 
