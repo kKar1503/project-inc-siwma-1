@@ -8,8 +8,8 @@ import PropTypes from 'prop-types';
  */
 
 const CategoryListingItem = ({ img, name, href }) => (
-  <div className="card relative">
-    <Link href={href}>
+  <Link href={href}>
+    <div className="card relative">
       <picture>
         {/* Actual image */}
         <img src={img} alt={name} className="aspect-square object-cover h-[150px]" />
@@ -20,8 +20,8 @@ const CategoryListingItem = ({ img, name, href }) => (
 
       {/* Category text */}
       <p className="absolute z-10 bottom-0 text-center w-full mb-3 text-white">{name}</p>
-    </Link>
-  </div>
+    </div>
+  </Link>
 );
 
 CategoryListingItem.propTypes = {
