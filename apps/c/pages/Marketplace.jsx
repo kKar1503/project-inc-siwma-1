@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import Container from '../components/Container';
 import Carousel from '../components/marketplace/carousel/Carousel';
@@ -14,9 +15,8 @@ const categories = [
   },
   {
     id: 2,
-    name: 'Category 2',
-
-    img: 'https://via.placeholder.com/150',
+    name: 'Scrap Metal',
+    img: 'https://images.unsplash.com/photo-1606337321936-02d1b1a4d5ef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
     href: '#',
   },
 
@@ -188,13 +188,30 @@ const MarketplacePage = () => (
     {/* Image banner */}
     <div className="mb-10">
       {/* Image banner - Object cover covers the image (zoom crop) */}
-      <picture>
-        <img
-          src="https://via.placeholder.com/1500x500"
-          className="object-cover w-full h-[200px]"
-          alt="Banner"
-        />
-      </picture>
+
+      <Carousel>
+        <CarouselItemWrapper wrapperClassName="w-full">
+          <div className="w-full relative">
+            <Image
+              src="https://images.unsplash.com/photo-1598638567141-696be94b464a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+              fill
+              className="object-cover"
+              alt="Banner"
+            />
+          </div>
+        </CarouselItemWrapper>
+
+        <CarouselItemWrapper wrapperClassName="w-full">
+          <div className="w-full h-[200px] relative">
+            <Image
+              src="https://images.unsplash.com/photo-1598638567141-696be94b464a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+              fill
+              className="object-cover"
+              alt="Banner"
+            />
+          </div>
+        </CarouselItemWrapper>
+      </Carousel>
     </div>
 
     {/* Container just adds margin from left and right */}
