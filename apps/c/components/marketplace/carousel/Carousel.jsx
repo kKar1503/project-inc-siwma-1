@@ -36,7 +36,7 @@ const Carousel = ({ children }) => {
     if (elem) {
       const elemDimensions = elem.getBoundingClientRect();
       const { width } = elemDimensions;
-      elem.scrollLeft += width / 2;
+      elem.scrollLeft += width;
     }
   };
 
@@ -51,7 +51,7 @@ const Carousel = ({ children }) => {
 
       // Scroll left is like the user scrolling left on the element but we take the width of the container / 2
       // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
-      elem.scrollLeft -= width / 2;
+      elem.scrollLeft -= width;
     }
   };
 
@@ -74,7 +74,7 @@ const Carousel = ({ children }) => {
 
       {/* Carousel items itself */}
       <div
-        className="carousel carousel-center p-4 space-x-4 rounded-box"
+        className="w-full carousel carousel-center space-x-4 rounded-box"
         ref={carouselContainerRef}
       >
         {children}

@@ -5,10 +5,13 @@ import PropTypes from 'prop-types';
  * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
 
-const CarouselItemWrapper = ({ children }) => <div className="carousel-item">{children}</div>;
+const CarouselItemWrapper = ({ children, wrapperClassName = '' }) => (
+  <div className={`carousel-item ${wrapperClassName}`}>{children}</div>
+);
 
 CarouselItemWrapper.propTypes = {
   children: PropTypes.node,
+  wrapperClassName: PropTypes.string,
 };
 
 export default CarouselItemWrapper;
