@@ -41,20 +41,21 @@ const CompanyProfilesPreviewTable = ({ data }) => {
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
-              styles="rounded-l-lg"
+              styles="rounded-l-lg hover:bg-primary"
             />
             <TableButton
               index={1}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
+              styles="hover:bg-primary"
             />
             <TableButton
               index={2}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
-              styles="rounded-r-lg"
+              styles="rounded-r-lg hover:bg-primary"
             />
           </div>
         </div>
