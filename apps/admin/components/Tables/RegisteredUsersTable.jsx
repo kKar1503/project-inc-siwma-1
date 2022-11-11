@@ -43,20 +43,21 @@ const RegisteredUsersTable = ({ data, className }) => {
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
-              styles="rounded-l-lg"
+              styles="rounded-l-lg hover:bg-primary"
             />
             <TableButton
               index={1}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
+              styles="hover:bg-primary"
             />
             <TableButton
               index={2}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
-              styles="rounded-r-lg"
+              styles="rounded-r-lg hover:bg-primary"
             />
           </div>
         </div>
@@ -69,8 +70,7 @@ RegisteredUsersTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
-      // eslint-disable-next-line react/forbid-prop-types
-      profilePicture: PropTypes.object,
+      profilePicture: PropTypes.string,
       name: PropTypes.string,
       email: PropTypes.string,
       company: PropTypes.string,

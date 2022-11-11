@@ -21,7 +21,7 @@ import cx from 'classnames';
     {
       id: int,
       name: string,
-      profilePicture: image, // optional
+      profilePicture: string,
       email: string,
       company: string,
       mobileNumber: string,
@@ -95,6 +95,8 @@ const BaseTable = ({
                               src={row.profilePicture}
                               alt="Profile Picture"
                               layout="fill"
+                              width={30}
+                              height={30}
                               className="rounded-full"
                             />
                           </div>
