@@ -6,19 +6,12 @@ import cx from 'classnames';
 When it is not selected, it is black.
 */
 
-const TableButton = ({
-  index,
-  selectedIndex,
-  setSelectedIndex,
-  selectedColor,
-  className,
-  disabled,
-}) => (
+const TableButton = ({ index, selectedIndex, setSelectedIndex, selectedColor, classNames }) => (
   <button
     className={cx(
       'btn px-4 py-2 text-white rounded-none border-none',
-      styles,
-      index === selectedIndex ? selectedColor : 'bg-black'
+      index === selectedIndex ? selectedColor : 'bg-black',
+      classNames
     )}
     onClick={() => setSelectedIndex(index)}
     disabled={disabled}
@@ -32,8 +25,7 @@ TableButton.propTypes = {
   selectedIndex: PropTypes.number,
   setSelectedIndex: PropTypes.func,
   selectedColor: PropTypes.string,
-  className: PropTypes.string,
-  disabled: PropTypes.bool,
+  classNames: PropTypes.string,
 };
 
 export default TableButton;
