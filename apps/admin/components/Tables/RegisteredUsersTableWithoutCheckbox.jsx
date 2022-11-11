@@ -35,21 +35,21 @@ const RegisteredUsersTableWithoutCheckbox = ({ data, className }) => {
             selectedIndex={selectedIndex}
             setSelectedIndex={setSelectedIndex}
             selectedColor="bg-success"
-            className="rounded-l-lg hover:bg-success"
+            styles="rounded-l-lg hover:bg-success"
           />
           <TableButton
             index={1}
             selectedIndex={selectedIndex}
             setSelectedIndex={setSelectedIndex}
             selectedColor="bg-success"
-            className="hover:bg-success"
+            styles="hover:bg-success"
           />
           <TableButton
             index={2}
             selectedIndex={selectedIndex}
             setSelectedIndex={setSelectedIndex}
             selectedColor="bg-success"
-            className="rounded-r-lg hover:bg-success"
+            styles="rounded-r-lg hover:bg-success"
           />
         </div>
       }
