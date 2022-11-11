@@ -36,14 +36,22 @@ const RegisteredUsersTableWithoutCheckbox = ({ data, className }) => {
             selectedIndex={selectedIndex}
             setSelectedIndex={setSelectedIndex}
             selectedColor="bg-success"
+<<<<<<< HEAD
             className="rounded-l-lg hover:bg-success"
+=======
+            classNames="rounded-l-lg hover:bg-success"
+>>>>>>> 0e40719 (fix: renamed styles prop to classNames as per convention)
           />
           <TableButton
             index={1}
             selectedIndex={selectedIndex}
             setSelectedIndex={setSelectedIndex}
             selectedColor="bg-success"
+<<<<<<< HEAD
             className="hover:bg-success"
+=======
+            classNames="hover:bg-success"
+>>>>>>> 0e40719 (fix: renamed styles prop to classNames as per convention)
           />
           <TableButton
             index={2}

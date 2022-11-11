@@ -54,13 +54,8 @@ const UserInvitesPreviewTable = ({ data }) => {
               index={2}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
-<<<<<<< HEAD
               selectedColor="bg-success"
               className="rounded-r-lg hover:bg-success"
-=======
-              selectedColor="bg-primary"
-              styles="rounded-r-lg hover:bg-primary"
->>>>>>> 5e2e5f5 (b-fix: fixed TableButton hover, added remote image support)
             />
           </div>
         </div>
