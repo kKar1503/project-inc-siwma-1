@@ -17,8 +17,8 @@ const TableButton = ({
   <button
     className={cx(
       'btn px-4 py-2 text-white rounded-none border-none',
-      index === selectedIndex ? selectedColor : 'bg-black',
-      className
+      styles,
+      index === selectedIndex ? selectedColor : 'bg-black'
     )}
     onClick={() => setSelectedIndex(index)}
     disabled={disabled}
