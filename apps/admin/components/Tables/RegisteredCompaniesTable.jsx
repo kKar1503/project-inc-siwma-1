@@ -37,21 +37,21 @@ const RegisteredCompaniesTable = ({ data, className }) => {
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
-              styles="rounded-l-lg hover:bg-primary"
+              classNames="rounded-l-lg hover:bg-primary"
             />
             <TableButton
               index={1}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
-              styles="hover:bg-primary"
+              classNames="hover:bg-primary"
             />
             <TableButton
               index={2}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
-              styles="rounded-r-lg hover:bg-primary"
+              classNames="rounded-r-lg hover:bg-primary"
             />
           </div>
         </div>
