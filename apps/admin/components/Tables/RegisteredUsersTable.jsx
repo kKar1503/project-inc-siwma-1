@@ -43,7 +43,7 @@ const RegisteredUsersTable = ({ data, className }) => {
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
-              className="rounded-l-lg hover:bg-primary"
+              styles="rounded-l-lg hover:bg-primary"
             />
             <TableButton
               index={1}
@@ -57,7 +57,7 @@ const RegisteredUsersTable = ({ data, className }) => {
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
-              className="rounded-r-lg hover:bg-primary"
+              styles="rounded-r-lg hover:bg-primary"
             />
           </div>
         </div>
