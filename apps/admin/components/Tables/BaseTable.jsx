@@ -90,14 +90,14 @@ const BaseTable = ({
                       <td key={key}>
                         {/* Show a profilePicture if one exists and if we're on the first column */}
                         {index === 0 && row.profilePicture && (
-                          <div className="w-10 h-10 ">
+                          <div className="w-10 h-10">
                             <Image
                               src={row.profilePicture}
                               alt="Profile Picture"
                               layout="fill"
                               width={30}
                               height={30}
-                              className="rounded-full"
+                              className="rounded-full aspect-square object-cover"
                             />
                           </div>
                         )}
