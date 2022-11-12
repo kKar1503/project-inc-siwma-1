@@ -40,22 +40,22 @@ const UserInvitesPreviewTable = ({ data }) => {
               index={0}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-primary"
-              classNames="rounded-l-lg hover:bg-primary"
+              selectedColor="bg-success"
+              className="rounded-l-lg hover:bg-success"
             />
             <TableButton
               index={1}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-primary"
-              classNames="hover:bg-primary"
+              selectedColor="bg-success"
+              className="hover:bg-success"
             />
             <TableButton
               index={2}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-primary"
-              classNames="rounded-r-lg hover:bg-primary"
+              selectedColor="bg-success"
+              className="rounded-r-lg hover:bg-success"
             />
           </div>
         </div>
