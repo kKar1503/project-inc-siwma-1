@@ -6,6 +6,10 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 const propTypes = {
+  defaultFullname: PropTypes.string,
+  defaultPhone: PropTypes.string,
+  email: PropTypes.string,
+  companyName: PropTypes.string,
   onRegister: PropTypes.func,
   formNote: PropTypes.node,
   disabled: PropTypes.bool,
@@ -27,13 +31,27 @@ const propTypes = {
  *
  * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
-const RegisterForm = ({ onRegister, formNote, disabled, className }) => {
+const RegisterForm = ({
+  defaultFullname,
+  defaultPhone,
+  email,
+  companyName,
+  onRegister,
+  formNote,
+  disabled,
+  className,
+}) => {
   const {
     register,
     handleSubmit,
     getValues,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      fullname: defaultFullname,
+      phone: defaultPhone,
+    },
+  });
 
   return (
     <form
@@ -48,6 +66,7 @@ const RegisterForm = ({ onRegister, formNote, disabled, className }) => {
           <input
             className="input input-bordered rounded-lg"
             placeholder="REGISTERED COMPANY NAME HERE"
+            value={companyName}
             disabled // Company Name should be auto-filled
           />
         </label>
@@ -56,7 +75,7 @@ const RegisterForm = ({ onRegister, formNote, disabled, className }) => {
           <input
             className="input input-bordered rounded-lg"
             placeholder="Your full name"
-            {...register('name', {
+            {...register('fullname', {
               required: 'Please enter your full name',
             })}
           />
@@ -68,9 +87,7 @@ const RegisterForm = ({ onRegister, formNote, disabled, className }) => {
             <input
               className="input input-bordered rounded-lg w-full"
               placeholder="Your email address"
-              {...register('email', {
-                required: 'Please enter your email',
-              })}
+              value={email}
               disabled
             />
             {errors.email && <span className="text-error">{errors.email.message}</span>}
@@ -95,7 +112,7 @@ const RegisterForm = ({ onRegister, formNote, disabled, className }) => {
               className="input input-bordered rounded-lg w-full"
               placeholder="Your mobile number"
               type="tel"
-              {...register('mobile', {
+              {...register('phone', {
                 required: 'Please enter your mobile number',
               })}
             />
