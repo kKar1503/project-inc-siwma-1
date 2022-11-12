@@ -6,7 +6,7 @@ import SIWMALogo from '../public/siwma-logo.png';
 import SIWMALogoFull from '../public/siwma-logo-full.png';
 
 const Header = () => (
-  <div className="navbar bg-base-100 bg-gray-200">
+  <div className="navbar bg-gray-200">
     <div className="navbar-start">
       <div className="dropdown">
         <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -59,9 +59,19 @@ const Header = () => (
           </li>
         </ul>
       </div>
-      <Link className="btn btn-ghost" href="http://localhost:3000">
-        <Image src={SIWMALogo} className="h-full w-full object-cover lg:hidden" />
-        <Image src={SIWMALogoFull} className="h-full w-full object-cover hidden lg:flex" />
+      <Link href="http://localhost:3000">
+        <Image
+          src={SIWMALogo}
+          className="h-full w-full object-cover lg:hidden"
+          width="0"
+          height="0"
+        />
+        <Image
+          src={SIWMALogoFull}
+          className="h-full w-full object-cover hidden lg:flex"
+          width="0"
+          height="0"
+        />
       </Link>
       <ul className="menu menu-horizontal p-0 hidden lg:flex">
         <li tabIndex={0}>
@@ -77,7 +87,7 @@ const Header = () => (
               <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
             </svg>
           </Link>
-          <ul className="p-2">
+          <ul className="p-2 bg-base-100 shadow-lg w-full">
             <li>
               <Link href="http://localhost:3000">Category 1</Link>
             </li>
@@ -95,7 +105,7 @@ const Header = () => (
       <div className="dropdown dropdown-end">
         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
           <div className="w-10 rounded-full">
-            <Image src="https://placeimg.com/80/80/people" alt="Person" />
+            <Image src="https://placeimg.com/80/80/people" width="0" height="0" alt="Person" />
           </div>
         </label>
         <ul

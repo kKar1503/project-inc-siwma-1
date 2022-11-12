@@ -30,7 +30,7 @@ const data = [
 ];
 
 const ChatList = () => {
-  const [isHovering, setIsHovering] = useState(false);
+  const [setIsHovering] = useState(false);
   const [isListChecked, setIsListChecked] = useState([]);
 
   const handleMouseOver = () => {
@@ -51,6 +51,7 @@ const ChatList = () => {
     <div>
       <main />
       <div>
+        {/* Search function not implemented yet */}
         <input
           type="text"
           placeholder="Search messages, listings, usernames"
@@ -75,6 +76,7 @@ const ChatList = () => {
             </svg>
           </label>
           <ul className="dropdown-content menu p-2 bg-base-300 rounded-box w-52">
+            {/* TODO: Change href link */}
             <li>
               <Link href="/">All Chats</Link>
             </li>
@@ -103,17 +105,13 @@ const ChatList = () => {
 
         <div className="drawer drawer-mobile">
           <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-          {/* <div className="drawer-content flex flex-col items-center justify-center">
-             <label htmlFor="my-drawer-2" className="btn btn-primary drawer-button lg:hidden">
-              Open drawer
-            </label> 
-          </div> */}
           <div onMouseOver={handleMouseOver} onFocus={handleMouseOver} className="drawer-side">
-            {/* <label htmlFor="my-drawer-2" className="drawer-overlay" />
-            <input id='my-drawer-2' /> */}
-            <ul className="menu p-4 overflow-y-auto w-110 bg-base-200 text-base-content">
+            <ul className="menu p-4 overflow-y-auto bg-base-200 text-base-content">
               {data.map((item) => (
-                <ChatDiv isCheckCallback={(isChecked) => handleCheck(item.id, isChecked)} />
+                <ChatDiv
+                  key={item.id}
+                  isCheckCallback={(isChecked) => handleCheck(item.id, isChecked)}
+                />
               ))}
             </ul>
           </div>

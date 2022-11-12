@@ -3,20 +3,27 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 const ChatDiv = ({ isCheckCallback }) => {
-  // const [isHovering, setIsHovering] = useState(false);
-  // const [isChecked, setIsChecked] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  const handleOnChange = () => {
-    setIsChecked(!isChecked);
+  // const handleOnChange = () => {
+  //   setIsChecked(!isChecked);
+  // };
+
+  // useEffect(() => {
+  //   isCheckCallback(isChecked);
+  // }, [isChecked]);
+
+  // cannot uncheck checkbox need help
+  const handleOnChange = (checked) => {
+    setIsChecked(checked);
+    if (typeof isCheckCallback === 'function') isCheckCallback(checked);
   };
 
-  useEffect(() => {
-    isCheckCallback(isChecked);
-  }, [isChecked]);
+  const toggleChecked = (checked) => handleOnChange(!checked);
 
   return (
     <li className=" group border-b border-gray-300">
+      {/* TODO: Change href link */}
       <a href="localhost:3000/">
         <div className="w-1/6">
           {true && (
@@ -24,13 +31,13 @@ const ChatDiv = ({ isCheckCallback }) => {
               type="checkbox"
               checked={isChecked}
               onChange={handleOnChange}
-              className={`checkbox ${isChecked ? '' : 'hidden'} hover:visible  group-hover:flex`}
+              className={`checkbox ${isChecked ? '' : 'hidden'} group-hover:flex`}
             />
           )}
         </div>
         <div className="avatar online">
           <div className="w-12 rounded-full">
-            <Image src="/" alt="placeholder" width="0" height="0" />
+            <Image src="https://placeimg.com/80/80/people" alt="placeholder" width="0" height="0" />
           </div>
         </div>
 
@@ -44,7 +51,12 @@ const ChatDiv = ({ isCheckCallback }) => {
           <div className="avatar">
             <span className="block ml-2 text-sm text-gray-600">Product Name</span>
             <div className="w-14 rounded ml-48">
-              <Image src="/" alt="Tailwind-CSS-Avatar-component" width="0" height="0" />
+              <Image
+                src="https://placeimg.com/80/80/people"
+                alt="Tailwind-CSS-Avatar-component"
+                width="0"
+                height="0"
+              />
             </div>
           </div>
         </div>
@@ -54,7 +66,7 @@ const ChatDiv = ({ isCheckCallback }) => {
 };
 
 ChatDiv.propTypes = {
-  isCheckCallback: PropTypes.oneOf(PropTypes.func).isRequired,
+  isCheckCallback: PropTypes.func.isRequired,
 };
 
 export default ChatDiv;
