@@ -37,21 +37,21 @@ const PendingInvitesTable = ({ data, className }) => {
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-warning"
-              classNames="rounded-l-lg hover:bg-warning"
+              className="rounded-l-lg hover:bg-warning"
             />
             <TableButton
               index={1}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-warning"
-              classNames="hover:bg-warning"
+              className="hover:bg-warning"
             />
             <TableButton
               index={2}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-warning"
-              classNames="rounded-r-lg hover:bg-warning"
+              className="rounded-r-lg hover:bg-warning"
             />
           </div>
         </div>
