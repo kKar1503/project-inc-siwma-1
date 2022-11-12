@@ -1,10 +1,17 @@
 import PropTypes from 'prop-types';
 import '@inc/styles/globals.css';
+import { SessionContextProvider, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useState } from 'react';
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { QueryClientProvider, QueryClient } from 'react-query';
+
+const queryClient = new QueryClient();
 
 const propTypes = {
   // If getServerSideProps is used, we cannot guarantee the shape of the page props
   // as all page props are passed down through this component.
-  // pageProps: PropTypes.shape({}),
+  // eslint-disable-next-line react/forbid-prop-types
+  pageProps: PropTypes.any,
   Component: PropTypes.elementType,
 };
 
@@ -19,10 +26,17 @@ const propTypes = {
  * @type {import('next').NextPage<PropTypes.InferProps<typeof propTypes>>}
  */
 const MyApp = ({ Component, pageProps }) => {
+  const [supabase] = useState(() => createBrowserSupabaseClient());
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout || ((page) => page);
 
-  return getLayout(<Component {...pageProps} />);
+  return (
+    <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
+      <QueryClientProvider client={queryClient}>
+        {getLayout(<Component {...pageProps} />)}
+      </QueryClientProvider>
+    </SessionContextProvider>
+  );
 };
 
 MyApp.propTypes = propTypes;
