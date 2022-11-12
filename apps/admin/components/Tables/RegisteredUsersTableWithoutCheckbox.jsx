@@ -15,7 +15,7 @@ const RegisteredUsersTableWithoutCheckbox = ({ data, className }) => {
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">Registered Users</h1>
-            <h1>Showing 1 to 10 of 100 entries</h1>
+            <h1 className="pr-2">Showing 1 to 10 of 100 entries</h1>
           </div>
           <div className="flex flex-row gap-4">
             <h1 className="mt-3">Show</h1>
