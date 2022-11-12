@@ -30,7 +30,7 @@ const data = [
 ];
 
 const ChatList = () => {
-  const [setIsHovering] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
   const [isListChecked, setIsListChecked] = useState([]);
 
   const handleMouseOver = () => {
