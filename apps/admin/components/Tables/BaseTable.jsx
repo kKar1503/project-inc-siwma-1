@@ -3,6 +3,8 @@ import Image from 'next/image';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
+import { HiDotsVertical } from 'react-icons/hi';
+
 // This is the base table component that every other table is built on.
 
 /* Expected props:
@@ -88,25 +90,29 @@ const BaseTable = ({
                     )}
                     {columnKeys.map((key, index) => (
                       <td key={key}>
-                        {/* Show a profilePicture if one exists and if we're on the first column */}
-                        {index === 0 && row.profilePicture && (
-                          <div className="w-10 h-10">
-                            <Image
-                              src={row.profilePicture}
-                              alt="Profile Picture"
-                              layout="fill"
-                              width={30}
-                              height={30}
-                              className="rounded-full aspect-square object-cover"
-                            />
-                          </div>
-                        )}
-                        <span>{row[key]}</span>
+                        <div className={cx('flex flex-row')}>
+                          {/* Show a profilePicture if one exists and if we're on the first column */}
+                          {index === 0 && row.profilePicture && (
+                            <div className="w-10 h-10 mr-4">
+                              <Image
+                                src={row.profilePicture}
+                                alt="Profile Picture"
+                                layout="fill"
+                                width={100}
+                                height={100}
+                                className="rounded-full aspect-square object-cover"
+                              />
+                            </div>
+                          )}
+                          {/* vertically center text */}
+                          <div className="flex align-middle items-center">{row[key]}</div>
+                        </div>
                       </td>
                     ))}
                     <td>
-                      {/* TODO: Replace with the proper icon once react-icons is set up */}
-                      <Image src="/icons/edit.svg" alt="Edit" width={20} height={20} />
+                      <button type="button" className="flex items-center gap-2">
+                        <HiDotsVertical />
+                      </button>
                     </td>
                   </tr>
                 ))}
