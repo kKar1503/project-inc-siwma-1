@@ -8,6 +8,8 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { HiDotsVertical } from 'react-icons/hi';
 import { ImCross, ImCheckmark } from 'react-icons/im';
 
+import { HiDotsVertical } from 'react-icons/hi';
+
 // This is the base table component that every other table is built on.
 
 /* Expected props:
