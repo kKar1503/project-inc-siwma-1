@@ -1,10 +1,13 @@
 import Link from 'next/link';
 import { useState } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import RegisteredCompaniesTable from '../../../components/Tables/RegisteredCompaniesTable';
-import pic from '../../../public/siwma-logo-sm.png';
 import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
 import NavBar from '../../../components/NavBar';
 import CompanyRegister from '../../../components/Modals/CompanyRegister';
+
+// Initialise react-query
+const queryClient = new QueryClient();
 
 /**
  * The below is for rendering the Companies Management Page
@@ -29,65 +32,6 @@ import CompanyRegister from '../../../components/Modals/CompanyRegister';
 /**
  * @type {import("next").NextPage}
  */
-const registeredCompaniesData = [
-  {
-    id: 1,
-    profilePicture: pic,
-    company: 'Company',
-    website: 'www.company.com',
-    bio: 'Company Bio',
-  },
-  {
-    id: 2,
-    profilePicture: pic,
-    company: 'Very Very Long Company Name',
-    website: 'veryverylongname@veryverylongdomain.com',
-    bio: 'Very Very Long Company Bio',
-  },
-  {
-    id: 3,
-    profilePicture: pic,
-    company: 'Very Very Long Company Name',
-    website: 'veryverylongname@veryverylongdomain.com',
-    bio: 'Very Very Long Company Bio',
-  },
-  {
-    id: 4,
-    profilePicture: pic,
-    company: 'Very Very Long Company Name',
-    website: 'veryverylongname@veryverylongdomain.com',
-    bio: 'Very Very Long Company Bio',
-  },
-  {
-    id: 5,
-    profilePicture: pic,
-    company: 'Very Very Long Company Name',
-    website: 'veryverylongname@veryverylongdomain.com',
-    bio: 'Very Very Long Company Bio',
-  },
-  {
-    id: 6,
-    profilePicture: pic,
-    company: 'Very Very Long Company Name',
-    website: 'veryverylongname@veryverylongdomain.com',
-    bio: 'Very Very Long Company Bio',
-  },
-  {
-    id: 7,
-    profilePicture: pic,
-    company: 'Very Very Long Company Name',
-    website: 'veryverylongname@veryverylongdomain.com',
-    bio: 'Very Very Long Company Bio',
-  },
-  {
-    id: 8,
-    profilePicture: pic,
-    company: 'Very Very Long Company Name',
-    website: 'veryverylongname@veryverylongdomain.com',
-    bio: 'Very Very Long Company Bio',
-  },
-];
-
 const Page = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -100,42 +44,44 @@ const Page = () => {
   };
 
   return (
-    <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
-      {/* The company register modal will be teleported to the end of the DOM because it uses React Portals */}
-      <CompanyRegister isOpen={isOpen} onRequestClose={closeModal} />
-      <NavBar />
+    <QueryClientProvider client={queryClient}>
+      <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
+        {/* The company register modal will be teleported to the end of the DOM because it uses React Portals */}
+        <CompanyRegister isOpen={isOpen} onRequestClose={closeModal} />
+        <NavBar />
 
-      <div className="flex flex-row gap-6">
-        <div className="mb-4 gap-4 flex-1">
-          <div className="rounded-xl shadow-lg p-4 bg-base-100">
-            <div className="pb-3">
-              <h3 className="text-lg font-bold">Register an individual company</h3>
-              <p className="text-sm">Register a company profile to the system</p>
+        <div className="flex flex-row gap-6">
+          <div className="mb-4 gap-4 flex-1">
+            <div className="rounded-xl shadow-lg p-4 bg-base-100">
+              <div className="pb-3">
+                <h3 className="text-lg font-bold">Register an individual company</h3>
+                <p className="text-sm">Register a company profile to the system</p>
+              </div>
+              <button className="btn w-full btn-outline btn-primary" onClick={openModal}>
+                Register Company
+              </button>
             </div>
-            <button className="btn w-full btn-outline btn-primary" onClick={openModal}>
-              Register Company
-            </button>
+          </div>
+          <div className="mb-4 gap-4 flex-1">
+            <div className="rounded-xl shadow-lg p-4 bg-base-100">
+              <div className="pb-3">
+                <h3 className="text-lg font-bold">Bulk Register Companies</h3>
+                <p className="text-sm">Register a company profile to the system</p>
+              </div>
+              <Link href="invite/" className="w-full btn btn-outline btn-primary">
+                Bulk Register Companies
+              </Link>
+            </div>
           </div>
         </div>
-        <div className="mb-4 gap-4 flex-1">
-          <div className="rounded-xl shadow-lg p-4 bg-base-100">
-            <div className="pb-3">
-              <h3 className="text-lg font-bold">Bulk Register Companies</h3>
-              <p className="text-sm">Register a company profile to the system</p>
-            </div>
-            <Link href="invite/" className="w-full btn btn-outline btn-primary">
-              Bulk Register Companies
-            </Link>
+        <div className="flex mb-4 gap-4 xl:overflow-hidden shadow-lg bg-base-100">
+          <div className="w-full h-full flex flex-row">
+            <RegisteredCompaniesTable />
           </div>
         </div>
       </div>
-      <div className="flex mb-4 gap-4 xl:overflow-hidden shadow-lg bg-base-100">
-        <div className="w-full h-full flex flex-row">
-          <RegisteredCompaniesTable data={registeredCompaniesData} />
-        </div>
-      </div>
-    </div>
-  );
+    </QueryClientProvider>
+  )
 };
 
 Page.getLayout = (page) => <AdminPageLayout pageName="Companies">{page}</AdminPageLayout>;
