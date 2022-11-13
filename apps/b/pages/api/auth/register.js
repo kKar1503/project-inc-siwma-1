@@ -87,7 +87,7 @@ const handler = async (req, res) => {
     // TODO: Use a proper logging library to log the error.
     // eslint-disable-next-line no-console
     console.error(createUserError);
-    return res.status(500).json({ error: 'Failed to create user' });
+    return res.status(500).json({ error: createUserError.message });
   }
   if (!createdUser) {
     return res.status(500).json({ error: 'Failed to create user' });
