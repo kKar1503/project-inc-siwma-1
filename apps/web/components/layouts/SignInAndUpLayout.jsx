@@ -10,14 +10,14 @@ import tailwindConfig from '../../tailwind.config';
 const fullConfig = resolveConfig(tailwindConfig);
 
 const propTypes = {
-  children: PropTypes.elementType,
+  children: PropTypes.node,
 };
 
 /**
  * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
  */
 const LargeLayout = ({ children }) => (
-  <div className="w-screen h-screen flex flex-row justify-center items-center">
+  <div className="relative w-screen h-screen flex flex-row justify-center items-center">
     <Image src="/siwma-bg.jpg" alt="SIWMA Background" className="opacity-60 object-cover" fill />
     <div className="flex flex-col justify-center items-center p-16 w-full h-full">
       <section className="flex flex-col w-full max-w-xl max-h-full bg-base-100 shadow-lg rounded-xl z-10">
@@ -44,7 +44,7 @@ LargeLayout.propTypes = propTypes;
  * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
  */
 const SmallLayout = ({ children }) => (
-  <div className="w-screen h-screen flex">
+  <div className="relative w-screen h-screen flex">
     <Image src="/siwma-bg.jpg" alt="SIWMA Banner" fill className="opacity-60 object-cover" />
     <section className="flex flex-col w-full h-full z-10">
       <header className="flex flex-row items-center justify-center bg-base-100 py-4 rounded-b-xl">
