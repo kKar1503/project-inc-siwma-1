@@ -59,23 +59,20 @@ const BaseTable = ({
           <table className="table w-full">
             <thead>
               <tr>
-                {
-                  showCheckbox && (
-                    <th className={cx('top-0 sticky rounded-none', headingColor)}> </th>
-                  )
-                }
-                {
-                  headings.map((heading) => (
-                    <th
-                      key={heading}
-                      className={cx('top-0 sticky rounded-none text-white', headingColor)}
-                    >
-                      {heading}
-                    </th>
-
-                  ))
-                }
-                <th className={cx('top-0 sticky rounded-none text-white', headingColor)}>
+                {showCheckbox && (
+                  <th className={cx('top-0 sticky rounded-none', headingColor)}> </th>
+                )}
+                {headings.map((heading) => (
+                  <th
+                    key={heading}
+                    className={cx('top-0 sticky rounded-none text-white', headingColor)}
+                  >
+                    {heading}
+                  </th>
+                ))}
+                <th
+                  className={cx('top-0 sticky rounded-none text-white text-center', headingColor)}
+                >
                   Actions
                 </th>
               </tr>
@@ -95,57 +92,64 @@ const BaseTable = ({
               {
                 // Table is not in a loading state, render the data
                 data &&
-                data.map((row) => (
-                  <tr key={row.id}>
-                    {showCheckbox && (
+                  data.map((row) => (
+                    <tr key={row.id}>
+                      {showCheckbox && (
+                        <td>
+                          <label>
+                            <input
+                              type="checkbox"
+                              className="checkbox"
+                              onChange={(e) => onChange(e.currentTarget)}
+                            />
+                          </label>
+                        </td>
+                      )}
+                      {columnKeys.map((key, index) => (
+                        <td key={key}>
+                          <div className={cx('flex flex-row')}>
+                            {/* Show a profilePicture if one exists and if we're on the first column */}
+                            {index === 0 && row.profilePicture && (
+                              <div className="w-10 h-10 mr-4">
+                                <Image
+                                  src={row.profilePicture}
+                                  alt="Profile Picture"
+                                  layout="fill"
+                                  width={100}
+                                  height={100}
+                                  className="rounded-full aspect-square object-cover"
+                                />
+                              </div>
+                            )}
+                            {/* vertically center text */}
+                            <div className="flex align-middle items-center">{row[key]}</div>
+                          </div>
+                        </td>
+                      ))}
                       <td>
-                        <label>
-                          <input type="checkbox" className="checkbox" onChange={(e) => onChange(e.currentTarget)} />
-                        </label>
+                        <button
+                          type="button"
+                          className="flex items-center flex-grow-0 mx-auto text-center gap-2"
+                        >
+                          <HiDotsVertical />
+                        </button>
                       </td>
-                    )}
-                    {columnKeys.map((key, index) => (
-                      <td key={key}>
-                        <div className={cx('flex flex-row')}>
-                          {/* Show a profilePicture if one exists and if we're on the first column */}
-                          {index === 0 && row.profilePicture && (
-                            <div className="w-10 h-10 mr-4">
-                              <Image
-                                src={row.profilePicture}
-                                alt="Profile Picture"
-                                layout="fill"
-                                width={100}
-                                height={100}
-                                className="rounded-full aspect-square object-cover"
-                              />
-                            </div>
-                          )}
-                          {/* vertically center text */}
-                          <div className="flex align-middle items-center">{row[key]}</div>
-                        </div>
-                      </td>
-                    ))}
-                    <td>
-                      <button type="button" className="flex items-center gap-2">
-                        <HiDotsVertical />
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                    </tr>
+                  ))
               }
               {
                 // Render a placeholder text if no data is found
                 !data ||
-                (data.length === 0 && (
-                  <tr>
-                    <td
-                      className="h-52 text-center"
-                      colSpan={headings.length + 1 + (showCheckbox ? 1 : 0)}
-                    >
-                      <h2 className="font-bold text-lg">No data found</h2>
-                    </td>
-                  </tr>
-                ))
+                  (data.length === 0 && (
+                    <tr>
+                      <td
+                        className="h-52 text-center"
+                        colSpan={headings.length + 1 + (showCheckbox ? 1 : 0)}
+                      >
+                        <h2 className="font-bold text-lg">No data found</h2>
+                      </td>
+                    </tr>
+                  ))
               }
             </tbody>
           </table>
