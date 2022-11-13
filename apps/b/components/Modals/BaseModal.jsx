@@ -1,24 +1,35 @@
 import { IoCloseSharp } from 'react-icons/io5';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import Modal from 'react-modal';
 
-const BaseModal = ({ id, header, children }) => {
-  const [isFocused, setIsFocused] = useState(false);
+/**
+ * Replacement overlay for the default overlay supplied by the Modal component (Actually just removes the default overlay)
+ * We replace the default overlay because the default overlay honestly sucks and you cannot style it so here we are
+ */
+const ModalOverlay = (props, contentElement) => (
+  <div className="modalOverlay">{contentElement}</div>
+);
+
+/**
+ * Base modal for other modals to be built on top of
+ * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
+ */
+const BaseModal = ({ header, isOpen, onRequestClose, children }) => {
+  // Bind modal to the app element https://www.npmjs.com/package/react-modal
+  Modal.setAppElement('#__next');
 
   // Initialise reference to the modal box
   let modalRef = null;
 
   /**
-   * Toggles the focus state of the modal box
+   * Focuses the modal
    */
-  const setFocus = (focused) => {
-    // We use !isFocused in our check because the value of isFocused only updates in the next render
-    if (modalRef && focused) {
+  const focusModal = () => {
+    // Check if the modal should be focused
+    if (modalRef && isOpen) {
       // Focus the modal box
       modalRef.focus();
     }
-
-    setIsFocused(focused);
   };
 
   /**
@@ -29,20 +40,24 @@ const BaseModal = ({ id, header, children }) => {
   const handleOnBlur = (e) => {
     if (!e.currentTarget.contains(e.relatedTarget) && e.target !== document.activeElement) {
       // The focused element isn't a child element, close the modal
-      setFocus(false);
+      onRequestClose();
     }
   };
 
   return (
-    <div>
-      <input
-        type="checkbox"
-        id={id}
-        className="modal-toggle"
-        checked={isFocused}
-        onChange={(e) => setFocus(e.currentTarget.checked)}
-      />
-      <div className="modal cursor-pointer">
+    // Wrapper component that handles modal logic
+    <Modal
+      isOpen={isOpen}
+      onAfterOpen={focusModal}
+      className="absolute"
+      onRequestClose={onRequestClose}
+      contentLabel="Example Modal"
+      overlayElement={ModalOverlay}
+      overlayClassName="modalOverlay"
+    >
+      {/* The real modal overlay */}
+      <div className="modal modal-open cursor-pointer">
+        {/* Modal */}
         <div
           // The div must have tabIndex set to 0, otherwise the onBlur() event will not fire
           // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
@@ -54,8 +69,8 @@ const BaseModal = ({ id, header, children }) => {
           }}
         >
           <button
-            onClick={() => setFocus(false)}
-            className="text-lg absolute right-4 top-2 hover:cursor-pointer"
+            onClick={onRequestClose}
+            className="text-lg absolute right-0 top-0 m-4 hover:cursor-pointer"
           >
             <IoCloseSharp />
           </button>
@@ -63,13 +78,14 @@ const BaseModal = ({ id, header, children }) => {
           {children}
         </div>
       </div>
-    </div>
+    </Modal>
   );
 };
 
 BaseModal.propTypes = {
-  id: PropTypes.string.isRequired,
   header: PropTypes.node,
+  isOpen: PropTypes.bool,
+  onRequestClose: PropTypes.func,
   children: PropTypes.node.isRequired,
 };
 
