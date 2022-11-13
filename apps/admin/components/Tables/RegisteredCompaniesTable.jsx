@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
+import cx from 'classnames';
 import BaseTable from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
@@ -29,6 +30,41 @@ const RegisteredCompaniesTable = ({ className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedRows, setSelectedRows] = useState([]);
 
+  // Fetches companies from supabase
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['companies'],
+    queryFn: async () =>
+      supabase
+        .from('companies')
+        .select('*')
+        .order('visible', { ascending: false })
+        .order('name', { ascending: true }),
+  });
+
+  // -- Data fetch/update functions --//
+  /**
+   * Reinstates selected companies
+   */
+  const reinstateCompanies = async () => {
+    // Set the 'visible' column of every selected company to true
+    await supabase.from('companies').update({ visible: 1 }).in('id', selectedRows);
+
+    // Refetch data
+    refetch();
+  };
+
+  /**
+   * Suspends selected companies
+   */
+  const suspendCompanies = async () => {
+    // Set the 'visible' column of every selected company to false
+    await supabase.from('companies').update({ visible: 0 }).in('id', selectedRows);
+
+    // Refetch data
+    refetch();
+  };
+
+  // -- Logic functions -- //
   /**
    * Handles for when a table item is checked/unchecked
    * @param {{}} element The element that was checked/unchecked
@@ -58,42 +94,67 @@ const RegisteredCompaniesTable = ({ className }) => {
     }
   };
 
-  // Retrieve all companies from Supabase
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['companies'],
-    queryFn: async () =>
-      supabase
-        .from('companies')
-        .select('*')
-        .order('visible', { ascending: false })
-        .order('name', { ascending: true }),
-  });
-
-  // Reinstates selected companies
-  const reinstateCompanies = async () => {
-    // Set the 'visible' column of every selected company to true
-    await supabase.from('companies').update({ visible: 1 }).in('id', selectedRows);
-
-    // Refetch data
-    refetch();
-  };
-
-  // Suspends selected companies
-  const suspendCompanies = async () => {
-    // Set the 'visible' column of every selected company to false
-    await supabase.from('companies').update({ visible: 0 }).in('id', selectedRows);
-
-    // Refetch data
-    refetch();
-  };
-
-  // Checks that all selected companies are suspended
+  /**
+   * Checks that all selected companies are suspended
+   * @returns Whether or not all currently selected companies are suspended
+   */
   const selectedAreSuspended = () =>
     selectedRows.every((id) => data.data.find((f) => f.id === Number(id)).visible === 0);
 
-  // Checks that all selected companies are not suspended
+  /**
+   * Checks that all selected companies are not suspended
+   * @returns Whether or not all currently selected companies are not suspended
+   */
   const selectedAreNotSuspended = () =>
     selectedRows.every((id) => data.data.find((f) => f.id === Number(id)).visible === 1);
+
+  // -- Render functions --//
+  /**
+   * Renders pagination buttons
+   */
+  const renderPagination = () => {
+    // Checks if the data is still being fetched from supabase
+    if (isLoading) {
+      // Render a disabled pagination button
+      return (
+        <TableButton
+          index={0}
+          selectedIndex={selectedIndex}
+          setSelectedIndex={setSelectedIndex}
+          selectedColor="bg-primary"
+          className="rounded-lg hover:bg-primary"
+        />
+      );
+    }
+
+    // Data has already been fetched from supabase, determine the number of pagination buttons to be rendered
+    const buttonCount = data.data.length / 10;
+
+    // Initialise an array of buttons
+    const buttons = [];
+
+    // Render x number of buttons
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < buttonCount; i++) {
+      buttons.push(
+        <TableButton
+          index={i}
+          selectedIndex={selectedIndex}
+          setSelectedIndex={setSelectedIndex}
+          selectedColor="bg-primary"
+          // Make the left side of the first button and the right side of the last button rounded,
+          // also make the entire button rounded if it is the only button
+          className={cx('hover:bg-primary', {
+            'rounded-l-lg': i === 0,
+            'rounded-r-lg': i >= buttonCount - 1,
+          })}
+        />
+      );
+    }
+
+    // Return the result
+    return buttons;
+  };
 
   return (
     <BaseTable
@@ -140,27 +201,10 @@ const RegisteredCompaniesTable = ({ className }) => {
           </div>
 
           <div className="flex justify-end bg-none">
-            {/* Table pagination buttons */}
-            <TableButton
-              index={0}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-primary"
-              styles="rounded-l-lg"
-            />
-            <TableButton
-              index={1}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-primary"
-            />
-            <TableButton
-              index={2}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-primary"
-              styles="rounded-r-lg"
-            />
+            {
+              // Table pagination buttons
+              renderPagination()
+            }
           </div>
         </div>
       }
