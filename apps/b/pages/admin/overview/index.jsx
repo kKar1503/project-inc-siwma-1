@@ -2,33 +2,143 @@ import AdminFigure from '../../../components/AdminFigure';
 import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
 import NavBar from '../../../components/NavBar';
 import RegisteredUsersTableWithoutCheckbox from '../../../components/Tables/RegisteredUsersTableWithoutCheckbox';
-import PendingInvitesTable from '../../../components/Tables/PendingInvitesTable';
+import PendingInvitesTableWithoutCheckbox from '../../../components/Tables/PendingInvitesTableWithoutCheckbox';
 
-const inviteTableData = (id) => ({
-  id,
-  company: 'GUANGZHAO METALWORKS, PTE. LTD',
-  email: 'sallyknox_slfi@gmail.com',
-  mobileNumber: '+65 9832 0293',
-});
+const inviteTableData = [
+  {
+    id: 1,
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 2,
+    email: 'veryverylongname@veryverylongdomain.com',
+    company: 'Very Very Long Company Name',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 3,
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 4,
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 5,
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 6,
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 7,
+    email: 'veryverylongname@veryverylongdomain.com',
+    company: 'Very Very Long Company Name',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 8,
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 9,
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 10,
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+];
 
-const registerTableData = (id) => ({
-  id,
-  name: 'Sally Knox',
-  email: 'sallyknox_slfi@gmail.com',
-  company: 'Shi Lin Fang Ironwork PTE, LTD',
-  mobileNumber: '+65 9832 0293',
-});
-
-function populateArray(element, count) {
-  const result = [];
-
-  // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < count; i++) {
-    result[i] = element(i + 1);
-  }
-
-  return result;
-}
+const registeredUsersData = [
+  {
+    id: 1,
+    name: 'John Doe',
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 2,
+    name: 'Veryvery Long Name',
+    email: 'veryverylongname@veryverylongdomain.com',
+    company: 'Very Very Long Company Name',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 3,
+    name: 'John Doe',
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 4,
+    name: 'John Doe',
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 5,
+    name: 'John Doe',
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 6,
+    name: 'John Doe',
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 7,
+    name: 'Veryvery Long Name',
+    email: 'veryverylongname@veryverylongdomain.com',
+    company: 'Very Very Long Company Name',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 8,
+    name: 'John Doe',
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 9,
+    name: 'John Doe',
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+  {
+    id: 10,
+    name: 'John Doe',
+    email: 'john@doe.com',
+    company: 'Company',
+    mobileNumber: '+65 9832 0293',
+  },
+];
 
 const UserOverview = () => (
   <div className="flex flex-col w-full h-full gap-8 p-8 overflow-auto">
@@ -42,14 +152,11 @@ const UserOverview = () => (
     </div>
 
     <div className="flex flex-row flex-wrap gap-8">
-      <RegisteredUsersTableWithoutCheckbox
-        className="flex md:flex-[7] flex-wrap md:overflow-hidden"
-        data={populateArray(registerTableData, 14)}
-      />
+      <RegisteredUsersTableWithoutCheckbox className="basis-[7]" data={registeredUsersData} />
 
-      <PendingInvitesTable
-        className="flex md:flex-[5] w-full grow-none flex-wrap md:overflow-hidden"
-        data={populateArray(inviteTableData, 15)}
+      <PendingInvitesTableWithoutCheckbox
+        className="basis-[5] w-full grow-none"
+        data={inviteTableData}
       />
     </div>
   </div>

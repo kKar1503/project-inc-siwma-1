@@ -7,6 +7,8 @@ import { HiDotsVertical } from 'react-icons/hi';
 
 // This is the base table component that every other table is built on.
 
+//! Note: tentatively, the table header uses inline styles due to a DaisyUI issue that sets the table header's left property to 0px. This may be a temporary fix until the issue is resolved.
+
 /* Expected props:
   - header (A div that you want to be the header of the table)
   - headings (An array of strings that will be the headings of the table)
@@ -61,21 +63,22 @@ const BaseTable = ({
           <div className="w-full max-h-full overflow-auto">
             <table className="table w-full">
               <thead>
-                <tr>
+                <tr className={cx('top-0', headingColor)}>
                   {showCheckbox && (
-                    <th className={cx('top-0 sticky rounded-none', headingColor)}> </th>
+                    <th style={{ left: 'auto' }} className={cx('rounded-none', headingColor)}>
+                      {' '}
+                    </th>
                   )}
                   {headings.map((heading) => (
                     <th
                       key={heading}
-                      className={cx('top-0 sticky rounded-none text-white', headingColor)}
+                      style={{ left: 'auto' }}
+                      className={cx('rounded-none text-white', headingColor)}
                     >
                       {heading}
                     </th>
                   ))}
-                  <th className={cx('top-0 sticky rounded-none text-white', headingColor)}>
-                    Actions
-                  </th>
+                  <th className={cx('rounded-none text-white', headingColor)}>Actions</th>
                 </tr>
               </thead>
               <tbody>
