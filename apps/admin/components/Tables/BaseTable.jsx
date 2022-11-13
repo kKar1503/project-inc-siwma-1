@@ -12,6 +12,8 @@ import { HiDotsVertical } from 'react-icons/hi';
 
 // This is the base table component that every other table is built on.
 
+//! Note: tentatively, the table header uses inline styles due to a DaisyUI issue that sets the table header's left property to 0px. This may be a temporary fix until the issue is resolved.
+
 /* Expected props:
   - header (A div that you want to be the header of the table)
   - headings (An array of strings that will be the headings of the table)

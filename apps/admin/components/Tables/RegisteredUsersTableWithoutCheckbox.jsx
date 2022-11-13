@@ -18,7 +18,6 @@ const RegisteredUsersTableWithoutCheckbox = ({ data, className }) => {
             <h1 className="pr-2">Showing 1 to 10 of 100 entries</h1>
           </div>
           <div className="flex flex-row gap-4">
-            <h1 className="mt-3">Show</h1>
             <SearchBar placeholder="Search by name" />
           </div>
         </div>
