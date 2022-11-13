@@ -15,7 +15,7 @@ const RegisteredUsersTableWithoutCheckbox = ({ data, className }) => {
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">Registered Users</h1>
-            <h1>Showing 1 to 10 of 100 entries</h1>
+            <h1 className="pr-2">Showing 1 to 10 of 100 entries</h1>
           </div>
           <div className="flex flex-row gap-4">
             <h1 className="mt-3">Show</h1>
@@ -36,20 +36,21 @@ const RegisteredUsersTableWithoutCheckbox = ({ data, className }) => {
             selectedIndex={selectedIndex}
             setSelectedIndex={setSelectedIndex}
             selectedColor="bg-success"
-            styles="rounded-l-lg"
+            className="rounded-l-lg hover:bg-success"
           />
           <TableButton
             index={1}
             selectedIndex={selectedIndex}
             setSelectedIndex={setSelectedIndex}
             selectedColor="bg-success"
+            className="hover:bg-success"
           />
           <TableButton
             index={2}
             selectedIndex={selectedIndex}
             setSelectedIndex={setSelectedIndex}
             selectedColor="bg-success"
-            styles="rounded-r-lg"
+            className="rounded-r-lg hover:bg-success"
           />
         </div>
       }
@@ -61,8 +62,7 @@ RegisteredUsersTableWithoutCheckbox.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
-      // eslint-disable-next-line react/forbid-prop-types
-      profilePicture: PropTypes.object,
+      profilePicture: PropTypes.string,
       name: PropTypes.string,
       email: PropTypes.string,
       company: PropTypes.string,

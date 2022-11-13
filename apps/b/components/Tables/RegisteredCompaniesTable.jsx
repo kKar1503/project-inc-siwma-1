@@ -15,7 +15,7 @@ const RegisteredCompaniesTable = ({ data, className }) => {
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">Registered Companies</h1>
-            <h1>Showing 1 to 10 of 100 entries</h1>
+            <h1 className="pr-2">Showing 1 to 10 of 100 entries</h1>
           </div>
           <div className="flex flex-row gap-4">
             <SearchBar placeholder="Search by name" />
@@ -37,20 +37,21 @@ const RegisteredCompaniesTable = ({ data, className }) => {
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
-              styles="rounded-l-lg"
+              className="rounded-l-lg hover:bg-primary"
             />
             <TableButton
               index={1}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
+              className="hover:bg-primary"
             />
             <TableButton
               index={2}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
-              styles="rounded-r-lg"
+              className="rounded-r-lg hover:bg-primary"
             />
           </div>
         </div>
@@ -63,8 +64,7 @@ RegisteredCompaniesTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
-      // eslint-disable-next-line react/forbid-prop-types
-      profilePicture: PropTypes.object,
+      profilePicture: PropTypes.string,
       company: PropTypes.string,
       website: PropTypes.string,
       bio: PropTypes.string,

@@ -15,7 +15,7 @@ const CompanyProfilesPreviewTable = ({ data }) => {
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">Company Profiles Preview</h1>
-            <h1>Processed {data.length} company profiles from selected file</h1>
+            <h1 className="pr-2">Processed {data.length} company profiles from selected file</h1>
           </div>
           <div className="flex flex-row gap-4">
             <h1 className="mt-3">Show</h1>
@@ -41,20 +41,21 @@ const CompanyProfilesPreviewTable = ({ data }) => {
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
-              styles="rounded-l-lg"
+              className="rounded-l-lg hover:bg-primary"
             />
             <TableButton
               index={1}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
+              className="hover:bg-primary"
             />
             <TableButton
               index={2}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-primary"
-              styles="rounded-r-lg"
+              className="rounded-r-lg hover:bg-primary"
             />
           </div>
         </div>

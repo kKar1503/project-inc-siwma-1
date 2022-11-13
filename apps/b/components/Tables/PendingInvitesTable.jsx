@@ -15,7 +15,7 @@ const PendingInvitesTable = ({ data, className }) => {
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">Pending Invites</h1>
-            <h1>Showing 1 to 10 of 100 entries</h1>
+            <h1 className="pr-2">Showing 1 to 10 of 100 entries</h1>
           </div>
           <div className="flex flex-row gap-4">
             <SearchBar placeholder="Search by e-mail" />
@@ -37,20 +37,21 @@ const PendingInvitesTable = ({ data, className }) => {
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-warning"
-              styles="rounded-l-lg"
+              className="rounded-l-lg hover:bg-warning"
             />
             <TableButton
               index={1}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-warning"
+              className="hover:bg-warning"
             />
             <TableButton
               index={2}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
               selectedColor="bg-warning"
-              styles="rounded-r-lg"
+              className="rounded-r-lg hover:bg-warning"
             />
           </div>
         </div>
