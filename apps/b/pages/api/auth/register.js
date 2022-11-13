@@ -2,10 +2,14 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import * as yup from 'yup';
 import { createServiceSupabaseClient } from '../../../utils';
 
+const querySchema = yup.object().shape({
+  token: yup.string().required(),
+});
+
 const bodySchema = yup.object().shape({
-  fullname: yup.string().required(),
+  fullname: yup.string().max(255).required(),
   password: yup.string().required(),
-  phone: yup.string().required(),
+  phone: yup.string().max(255).required(),
 });
 
 /**
@@ -14,13 +18,7 @@ const bodySchema = yup.object().shape({
  * @param {string} token
  */
 async function getInviteByToken(supabase, token) {
-  const result = await supabase
-    .from('invite')
-    .select('*')
-    // .eq('token', token)
-    // TODO: Resolve by token.
-    .eq('id', 3)
-    .maybeSingle();
+  const result = await supabase.from('invite').select('*').eq('token', token).maybeSingle();
   return result;
 }
 
@@ -43,10 +41,8 @@ const handler = async (req, res) => {
   }
 
   // Extract the invite token from the query string.
-  const { token } = req.query;
-  if (!token) {
-    return res.status(400).json({ error: 'Token is required' });
-  }
+  const validatedQuery = await querySchema.validate(req.query);
+  const { token } = validatedQuery;
 
   // Extract body.
   const validatedBody = await bodySchema.validate(req.body);
@@ -81,6 +77,7 @@ const handler = async (req, res) => {
           fullname,
           companyid: invite.company,
         },
+        invite_token: token,
       },
       phone,
       email_confirm: true,
