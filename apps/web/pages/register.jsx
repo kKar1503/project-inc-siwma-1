@@ -83,7 +83,7 @@ const RegisterFormWrap = ({ email, companyName, defaultFullname }) => {
     formNote = (
       <div className="flex flex-col items-start alert alert-error">
         <p className="font-bold">Error!</p>
-        <p>{registerError?.message}</p>
+        <p>{registerError?.message ?? 'Something went wrong!'}</p>
       </div>
     );
   } else if (registerIsSuccess) {
