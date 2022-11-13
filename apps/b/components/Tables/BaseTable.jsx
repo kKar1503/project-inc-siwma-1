@@ -6,6 +6,7 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 import { HiDotsVertical } from 'react-icons/hi';
+import { ImCross, ImCheckmark } from 'react-icons/im';
 
 // This is the base table component that every other table is built on.
 
@@ -44,6 +45,7 @@ const BaseTable = ({
   showCheckbox,
   className,
   columnKeys,
+  centerColumns,
   isLoading,
   data,
   footer,
@@ -65,7 +67,12 @@ const BaseTable = ({
                 {headings.map((heading) => (
                   <th
                     key={heading}
-                    className={cx('top-0 sticky rounded-none text-white', headingColor)}
+                    // Center the heading if it exists in the centerColumns array
+                    className={cx(
+                      'top-0 sticky rounded-none text-white',
+                      { 'text-center': centerColumns ? centerColumns.includes(heading) : false },
+                      headingColor
+                    )}
                   >
                     {heading}
                   </th>
@@ -121,8 +128,35 @@ const BaseTable = ({
                                 />
                               </div>
                             )}
-                            {/* vertically center text */}
-                            <div className="flex align-middle items-center">{row[key]}</div>
+                            {
+                              // Vertically center text and horizontally center text (if required)
+                              // Determines if the text should be horizontally centered by checking if the centerColumns array includes the name of the heading this column is being rendered for
+                            }
+                            <div
+                              className={cx('flex align-middle items-center', {
+                                'mx-auto': centerColumns
+                                  ? centerColumns.includes(headings[index])
+                                  : false,
+                              })}
+                            >
+                              {
+                                // Render the value of the column (will not render anything if the value is a boolean)
+                                row[key]
+                              }
+                              {/* Render boolean values as a tick or a cross */}
+                              {
+                                // Render a tick if boolean value is true
+                                typeof row[key] === 'boolean' && row[key] && (
+                                  <ImCheckmark className="text-success" />
+                                )
+                              }
+                              {
+                                // Render a cross if boolean value is false
+                                typeof row[key] === 'boolean' && !row[key] && (
+                                  <ImCross className="text-error" />
+                                )
+                              }
+                            </div>
                           </div>
                         </td>
                       ))}
@@ -167,6 +201,7 @@ const propTypes = {
   showCheckbox: PropTypes.bool,
   className: PropTypes.string,
   columnKeys: PropTypes.arrayOf(PropTypes.string),
+  centerColumns: PropTypes.arrayOf(PropTypes.string),
   isLoading: PropTypes.bool,
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.
