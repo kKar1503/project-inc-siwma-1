@@ -19,7 +19,7 @@ function parseData(data) {
     company: e.name,
     website: e.website,
     bio: e.bio,
-    isSelected: e.isSelected,
+    visible: e.visible === 1,
   }));
 }
 
@@ -91,16 +91,18 @@ const RegisteredCompaniesTable = ({ className }) => {
           </div>
         </div>
       }
-      headings={['Company', 'Website', 'Bio']}
+      headings={['Company', 'Website', 'Bio', 'Operational']}
       headingColor="bg-primary"
       showCheckbox
       className={className}
-      columnKeys={['company', 'website', 'bio']}
+      columnKeys={['company', 'website', 'bio', 'visible']}
+      centerColumns={['Operational']}
       isLoading={isLoading}
       data={isLoading ? undefined : parseData(data.data.map((e) => ({ ...e, isSelected: true })))}
       onChange={onChangeHandler}
       footer={
         <div className="flex justify-between bg-none">
+          {/* Company suspension/reinstation */}
           <button
             className="btn btn-primary text-white"
             onClick={suspendCompanies}
@@ -109,6 +111,7 @@ const RegisteredCompaniesTable = ({ className }) => {
             SUSPEND SELECTED
           </button>
           <div className="flex justify-end bg-none">
+            {/* Table pagination buttons */}
             <TableButton
               index={0}
               selectedIndex={selectedIndex}
