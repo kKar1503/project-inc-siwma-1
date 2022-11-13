@@ -1,8 +1,10 @@
+import PropTypes from 'prop-types';
 import BaseModal from './BaseModal';
 
-const UserInvite = () => (
+const UserInvite = ({ isOpen, onRequestClose }) => (
   <BaseModal
-    id="user-invite"
+    isOpen={isOpen}
+    onRequestClose={onRequestClose}
     header={
       <div>
         <h3 className="text-lg font-bold">Create an individual invite</h3>
@@ -47,5 +49,10 @@ const UserInvite = () => (
     </div>
   </BaseModal>
 );
+
+UserInvite.propTypes = {
+  isOpen: PropTypes.bool,
+  onRequestClose: PropTypes.func,
+};
 
 export default UserInvite;
