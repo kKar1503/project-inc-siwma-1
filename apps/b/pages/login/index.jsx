@@ -2,8 +2,9 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import dynamic from 'next/dynamic';
 import React from 'react';
 import { useMutation } from 'react-query';
+import { useRouter } from 'next/router';
 import SignInAndUpLayout from '../../components/layouts/SignInAndUpLayout';
-import SignInForm from '../../components/layouts/SignInForm';
+import LoginForm from '../../components/layouts/LoginForm';
 
 /**
  * To minimise the amount of components needed to be rendered,
@@ -13,19 +14,47 @@ import SignInForm from '../../components/layouts/SignInForm';
  * @type {React.FC}
  */
 const LoginFormWrap = () => {
+  const router = useRouter();
   const supabase = useSupabaseClient();
-  const register = useMutation(async ({ email, password }) => {
-    supabase.auth.admin.createUser({
-      email,
-      password,
-    });
-    supabase.auth.signUp({
-      email,
-      password,
-    });
-  });
+  const {
+    mutate: login,
+    isLoading: loginIsLoading,
+    error: loginError,
+    isSuccess: loginIsSuccess,
+    isError: loginIsError,
+  } = useMutation(
+    async ({ email, password }) => {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        throw error;
+      }
+      return data;
+    },
+    {
+      onSuccess: () => {
+        router.push(router.query.redirect ?? '/');
+      },
+    }
+  );
 
-  return <SignInForm />;
+  let formNote = null;
+  if (loginIsError) {
+    formNote = (
+      <div className="flex flex-col items-start alert alert-error">
+        <p className="font-bold">Error!</p>
+        <p>{loginError?.message ?? 'Something went wrong!'}</p>
+      </div>
+    );
+  } else if (loginIsSuccess) {
+    formNote = (
+      <div className="flex flex-col items-start alert alert-success">
+        <p className="font-bold">Success</p>
+        <p>You have successfully logged in!</p>
+      </div>
+    );
+  }
+
+  return <LoginForm onLogin={login} formNote={formNote} disabled={loginIsLoading} />;
 };
 
 /**
