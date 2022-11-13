@@ -1,8 +1,10 @@
+import PropTypes from 'prop-types';
 import BaseModal from './BaseModal';
 
-const CompanyRegister = () => (
+const CompanyRegister = ({ isOpen, onRequestClose }) => (
   <BaseModal
-    id="company-register"
+    isOpen={isOpen}
+    onRequestClose={onRequestClose}
     header={
       <div>
         <h3 className="text-lg font-bold">Create an individual company</h3>
@@ -82,5 +84,10 @@ const CompanyRegister = () => (
     </div>
   </BaseModal>
 );
+
+CompanyRegister.propTypes = {
+  isOpen: PropTypes.bool,
+  onRequestClose: PropTypes.func,
+};
 
 export default CompanyRegister;
