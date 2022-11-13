@@ -77,6 +77,10 @@ const RegisterForm = ({
             placeholder="Your full name"
             {...register('fullname', {
               required: 'Please enter your full name',
+              maxLength: {
+                value: 255,
+                message: 'Full name should not be more than 255 characters',
+              },
             })}
           />
           {errors.name && <span className="text-error">{errors.name.message}</span>}
@@ -114,6 +118,10 @@ const RegisterForm = ({
               type="tel"
               {...register('phone', {
                 required: 'Please enter your mobile number',
+                maxLength: {
+                  value: 255,
+                  message: 'Mobile number should not be more than 255 characters',
+                },
               })}
             />
             {errors.mobile && <span className="text-error">{errors.mobile.message}</span>}
