@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import RegisteredCompaniesTable from '../../../components/Tables/RegisteredCompaniesTable';
-import pic from '../../../public/siwma-logo-sm.png';
-import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
-import NavBar from '../../../components/NavBar';
-import CompanyRegister from '../../../components/Forms/CompanyRegister';
+import RegisteredCompaniesTable from '../components/Tables/RegisteredCompaniesTable';
+import pic from '../public/siwma-logo-sm.png';
+import AdminPageLayout from '../components/layouts/AdminPageLayout';
+import NavBar from '../components/NavBar';
+import CompanyRegister from '../components/Forms/CompanyRegister';
 
 /**
  * The below is for rendering the Companies Management Page

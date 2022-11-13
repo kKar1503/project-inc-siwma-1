@@ -1,8 +1,8 @@
-import FileUpload from '../../../components/FileUpload';
-import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
-import NavBar from '../../../components/NavBar';
-import CompanyProfilesPreviewTable from '../../../components/Tables/CompanyProfilesPreviewTable';
-import UserInvitesPreviewTable from '../../../components/Tables/UserInvitesPreviewTable';
+import FileUpload from '../components/FileUpload';
+import AdminPageLayout from '../components/layouts/AdminPageLayout';
+import NavBar from '../components/NavBar';
+import CompanyProfilesPreviewTable from '../components/Tables/CompanyProfilesPreviewTable';
+import UserInvitesPreviewTable from '../components/Tables/UserInvitesPreviewTable';
 
 /**
  * Sample data
