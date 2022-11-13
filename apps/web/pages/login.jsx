@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
-import SignInAndUpLayout from '../../components/layouts/SignInAndUpLayout';
-import SignUpForm from '../../components/layouts/SignUpForm';
+import SignInAndUpLayout from '../components/layouts/SignInAndUpLayout';
+import SignInForm from '../components/layouts/SignInForm';
 
 /**
  * @type {import("next").NextPage}
@@ -8,10 +8,10 @@ import SignUpForm from '../../components/layouts/SignUpForm';
 const Page = () => (
   <div className="flex flex-col gap-4">
     <div className="flex flex-col">
-      <h1 className="font-bold text-xl">Register</h1>
-      <p>Register your account here.</p>
+      <h1 className="font-bold text-xl">Login</h1>
+      <p>Please sign in to your account.</p>
     </div>
-    <SignUpForm />
+    <SignInForm />
   </div>
 );
 
