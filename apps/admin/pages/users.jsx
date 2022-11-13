@@ -1,8 +1,8 @@
-import NavBar from '../../../components/NavBar';
-import UserInvite from '../../../components/Forms/UserInvite';
-import RegisteredUsersTable from '../../../components/Tables/RegisteredUsersTable';
-import PendingInvitesTable from '../../../components/Tables/PendingInvitesTable';
-import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
+import NavBar from '../components/NavBar';
+import UserInvite from '../components/Forms/UserInvite';
+import RegisteredUsersTable from '../components/Tables/RegisteredUsersTable';
+import PendingInvitesTable from '../components/Tables/PendingInvitesTable';
+import AdminPageLayout from '../components/layouts/AdminPageLayout';
 
 const inviteTableData = (id) => ({
   id,

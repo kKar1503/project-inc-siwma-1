@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import PropTypes from 'prop-types';
+import { lazyReference } from '@inc/utils';
 import SidebarItem, { parseSidebarItem } from './SidebarItem';
-import { lazyReference } from '../../utils';
 
 /**
  * Navigation list for admin sidebars

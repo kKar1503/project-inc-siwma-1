@@ -1,8 +1,8 @@
 /* eslint-disable no-plusplus */
-import AdminFigure from '../../../components/AdminFigure';
-import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
-import SearchBar from '../../../components/SearchBar';
-import NavBar from '../../../components/NavBar';
+import AdminFigure from '../components/AdminFigure';
+import AdminPageLayout from '../components/layouts/AdminPageLayout';
+import SearchBar from '../components/SearchBar';
+import NavBar from '../components/NavBar';
 
 const UserOverview = () => (
   <div className="flex flex-col w-full h-full gap-8 p-8 overflow-auto">
