@@ -2,6 +2,8 @@ import React from 'react';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 // This is the base table component that every other table is built on.
 
@@ -40,49 +42,63 @@ const BaseTable = ({
   showCheckbox,
   className,
   columnKeys,
+  isLoading,
   data,
   footer,
-}) => {
-  if (!data || data.length === 0) {
-    return (
-      <div className="flex flex-col text-center">
-        <p className="text-secondary">No Data Found</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className={cx(className, 'bg-base-100 rounded-lg shadow-lg xl:flex-1 overflow-y-hidden')}>
-      <div className="h-full flex flex-col gap-3 py-3">
-        <div className="px-6">{header}</div>
-        <div className="w-full h-auto overflow-hidden border-b">
-          <div className="w-full max-h-full overflow-auto">
-            <table className="table w-full">
-              <thead>
-                <tr>
-                  {showCheckbox && (
+  onChange,
+}) => (
+  <div
+    className={cx(className, 'bg-base-100 rounded-lg shadow-lg xl:flex-1 overflow-y-hidden w-full')}
+  >
+    <div className="h-full flex flex-col gap-3 py-3">
+      <div className="px-6">{header}</div>
+      <div className="w-full h-auto overflow-hidden border-b">
+        <div className="w-full max-h-full overflow-auto">
+          <table className="table w-full">
+            <thead>
+              <tr>
+                {
+                  showCheckbox && (
                     <th className={cx('top-0 sticky rounded-none', headingColor)}> </th>
-                  )}
-                  {headings.map((heading) => (
+                  )
+                }
+                {
+                  headings.map((heading) => (
                     <th
                       key={heading}
                       className={cx('top-0 sticky rounded-none text-white', headingColor)}
                     >
                       {heading}
                     </th>
-                  ))}
-                  <th className={cx('top-0 sticky rounded-none text-white', headingColor)}>
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((row) => (
+
+                  ))
+                }
+                <th className={cx('top-0 sticky rounded-none text-white', headingColor)}>
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                // Render a skeleton if the table is in a loading state
+                isLoading && (
+                  <tr>
+                    {/* Loop through all columns and render a skeleton for each one */}
+                    <td colSpan={headings.length + 1 + (showCheckbox ? 1 : 0)}>
+                      <Skeleton className="my-2 h-6" count={10} />
+                    </td>
+                  </tr>
+                )
+              }
+              {
+                // Table is not in a loading state, render the data
+                data &&
+                data.map((row) => (
                   <tr key={row.id}>
                     {showCheckbox && (
                       <td>
                         <label>
-                          <input type="checkbox" className="checkbox" />
+                          <input type="checkbox" className="checkbox" onChange={(e) => onChange(e.currentTarget)} />
                         </label>
                       </td>
                     )}
@@ -107,16 +123,30 @@ const BaseTable = ({
                       <Image src="/icons/edit.svg" alt="Edit" width={20} height={20} />
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                ))
+              }
+              {
+                // Render a placeholder text if no data is found
+                !data ||
+                (data.length === 0 && (
+                  <tr>
+                    <td
+                      className="h-52 text-center"
+                      colSpan={headings.length + 1 + (showCheckbox ? 1 : 0)}
+                    >
+                      <h2 className="font-bold text-lg">No data found</h2>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
         </div>
-        <div className="px-3 bg-base-100">{footer}</div>
       </div>
+      <div className="px-3 bg-base-100">{footer}</div>
     </div>
-  );
-};
+  </div>
+);
 
 const propTypes = {
   header: PropTypes.element,
@@ -125,9 +155,11 @@ const propTypes = {
   showCheckbox: PropTypes.bool,
   className: PropTypes.string,
   columnKeys: PropTypes.arrayOf(PropTypes.string),
+  isLoading: PropTypes.bool,
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.
   footer: PropTypes.element,
+  onChange: PropTypes.func,
 };
 
 BaseTable.propTypes = propTypes;

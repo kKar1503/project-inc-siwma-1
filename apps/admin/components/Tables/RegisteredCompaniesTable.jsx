@@ -1,13 +1,82 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useQuery } from '@tanstack/react-query';
 import BaseTable from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
+import supabase from '../../pages/api/supabase';
+import pic from '../../public/siwma-logo-sm.png';
+
+/**
+ * Parses data retrieved from Supabase into a format accepted by the tables
+ * @param {{}} data Data retrieved from Supabase
+ * @returns {{id: number, profilePicture: Object, company: string, website: string, bio: string, isSelected: boolean}} Table-renderable data
+ */
+function parseData(data) {
+  return data.map((e) => ({
+    id: e.id,
+    profilePicture: pic,
+    company: e.name,
+    website: e.website,
+    bio: e.bio,
+    isSelected: e.isSelected,
+  }));
+}
 
 // This table shows Registered Companies and is built on the BaseTable component.
-
-const RegisteredCompaniesTable = ({ data, className }) => {
+const RegisteredCompaniesTable = ({ className }) => {
+  // Set states
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedRows, setSelectedRows] = useState([]);
+
+  /**
+   * Handles for when a table item is checked/unchecked
+   * @param {{}} element The element that was checked/unchecked
+   */
+  const onChangeHandler = (element) => {
+    // Retrieve the checked state of the element, as well as the id of the row
+    const { checked, name } = element;
+
+    // Update the selectedRows state
+    // Checks if the row has been unselected
+    if (!checked && selectedRows.includes(name)) {
+      // The checkbox is no longer checked, remove the row from selectedRows
+      const result = [...selectedRows].filter((value) => value !== name);
+
+      // Update the state with the updated array
+      setSelectedRows(result);
+    }
+
+    // Checks if the row has been selected
+    if (checked && !selectedRows.includes(name)) {
+      // The checkbox has been selected, add the row to selectedRows
+      const result = [...selectedRows];
+      result.push(name);
+
+      // Update the state with the updated array
+      setSelectedRows(result);
+    }
+  };
+
+  // Retrieve all companies from Supabase
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['companies'],
+    queryFn: async () =>
+      supabase
+        .from('companies')
+        .select('*')
+        .order('visible', { ascending: false })
+        .order('name', { ascending: true }),
+  });
+
+  // Suspends selected companies
+  const suspendCompanies = async () => {
+    // Set the 'visible' column of every selected company to false
+    await supabase.from('companies').update({ visible: 0 }).in('id', selectedRows);
+
+    // Refetch data
+    refetch();
+  };
 
   return (
     <BaseTable
@@ -27,10 +96,18 @@ const RegisteredCompaniesTable = ({ data, className }) => {
       showCheckbox
       className={className}
       columnKeys={['company', 'website', 'bio']}
-      data={data}
+      isLoading={isLoading}
+      data={isLoading ? undefined : parseData(data.data.map((e) => ({ ...e, isSelected: true })))}
+      onChange={onChangeHandler}
       footer={
         <div className="flex justify-between bg-none">
-          <button className="btn btn-primary text-white">SUSPEND SELECTED</button>
+          <button
+            className="btn btn-primary text-white"
+            onClick={suspendCompanies}
+            disabled={selectedRows.length === 0}
+          >
+            SUSPEND SELECTED
+          </button>
           <div className="flex justify-end bg-none">
             <TableButton
               index={0}
@@ -60,16 +137,16 @@ const RegisteredCompaniesTable = ({ data, className }) => {
 };
 
 RegisteredCompaniesTable.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      // eslint-disable-next-line react/forbid-prop-types
-      profilePicture: PropTypes.object,
-      company: PropTypes.string,
-      website: PropTypes.string,
-      bio: PropTypes.string,
-    })
-  ),
+  // data: PropTypes.arrayOf(
+  //   PropTypes.shape({
+  //     id: PropTypes.number,
+  //     // eslint-disable-next-line react/forbid-prop-types
+  //     profilePicture: PropTypes.object,
+  //     company: PropTypes.string,
+  //     website: PropTypes.string,
+  //     bio: PropTypes.string,
+  //   })
+  // ),
   className: PropTypes.string,
 };
 
