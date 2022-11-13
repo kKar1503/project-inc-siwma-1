@@ -69,6 +69,15 @@ const RegisteredCompaniesTable = ({ className }) => {
         .order('name', { ascending: true }),
   });
 
+  // Reinstates selected companies
+  const reinstateCompanies = async () => {
+    // Set the 'visible' column of every selected company to true
+    await supabase.from('companies').update({ visible: 1 }).in('id', selectedRows);
+
+    // Refetch data
+    refetch();
+  };
+
   // Suspends selected companies
   const suspendCompanies = async () => {
     // Set the 'visible' column of every selected company to false
@@ -77,6 +86,14 @@ const RegisteredCompaniesTable = ({ className }) => {
     // Refetch data
     refetch();
   };
+
+  // Checks that all selected companies are suspended
+  const selectedAreSuspended = () =>
+    selectedRows.every((id) => data.data.find((f) => f.id === Number(id)).visible === 0);
+
+  // Checks that all selected companies are not suspended
+  const selectedAreNotSuspended = () =>
+    selectedRows.every((id) => data.data.find((f) => f.id === Number(id)).visible === 1);
 
   return (
     <BaseTable
@@ -103,13 +120,25 @@ const RegisteredCompaniesTable = ({ className }) => {
       footer={
         <div className="flex justify-between bg-none">
           {/* Company suspension/reinstation */}
-          <button
-            className="btn btn-primary text-white"
-            onClick={suspendCompanies}
-            disabled={selectedRows.length === 0}
-          >
-            SUSPEND SELECTED
-          </button>
+          <div className="flex gap-3">
+            <button
+              className="btn btn-primary text-white"
+              onClick={reinstateCompanies}
+              // Disable the button if one or more of the companies selected are not suspended
+              disabled={selectedRows.length > 0 ? !selectedAreSuspended() : true}
+            >
+              REINSTATE SELECTED
+            </button>
+            <button
+              className="btn btn-primary text-white"
+              onClick={suspendCompanies}
+              // Disable the button if one or more of the companies selected are suspended
+              disabled={selectedRows.length > 0 ? !selectedAreNotSuspended() : true}
+            >
+              SUSPEND SELECTED
+            </button>
+          </div>
+
           <div className="flex justify-end bg-none">
             {/* Table pagination buttons */}
             <TableButton
