@@ -105,6 +105,7 @@ const BaseTable = ({
                         <td>
                           <label>
                             <input
+                              name={row.id}
                               type="checkbox"
                               className="checkbox"
                               onChange={(e) => onChange(e.currentTarget)}
