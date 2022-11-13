@@ -56,6 +56,7 @@ const RegisterForm = ({
   return (
     <form
       onSubmit={handleSubmit((data) => {
+        if (disabled) return;
         onRegister(data);
       })}
       className={cx(className, 'flex flex-col w-full gap-12')}
