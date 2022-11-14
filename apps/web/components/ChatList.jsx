@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import ChatDiv from './chatDiv';
+import ChatDiv from './ChatDiv';
 
 const data = [
   {
@@ -106,7 +106,7 @@ const ChatList = () => {
           {/* <div className="drawer-content flex flex-col items-center justify-center">
              <label htmlFor="my-drawer-2" className="btn btn-primary drawer-button lg:hidden">
               Open drawer
-            </label> 
+            </label>
           </div> */}
           <div onMouseOver={handleMouseOver} onFocus={handleMouseOver} className="drawer-side">
             {/* <label htmlFor="my-drawer-2" className="drawer-overlay" />

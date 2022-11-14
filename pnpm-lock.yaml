@@ -254,6 +254,7 @@ importers:
       classnames: ^2.3.2
       cypress: ^10.11.0
       daisyui: ^2.33.0
+      emoji-mart: ^5.2.2
       eslint: 8.26.0
       eslint-config-custom: workspace:*
       luxon: ^3.0.4
@@ -279,6 +280,7 @@ importers:
       '@supabase/supabase-js': 2.1.0
       classnames: 2.3.2
       daisyui: 2.33.0_lycaqaeny3mp632atgvyvqdgwe
+      emoji-mart: 5.2.2
       luxon: 3.0.4
       next: 13.0.0_biqbaboplfbrettd7655fr4n2y
       next-transpile-modules: 9.1.0
