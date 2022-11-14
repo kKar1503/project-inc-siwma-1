@@ -4,7 +4,6 @@ import { BsEmojiSmile } from 'react-icons/bs';
 
 const InputTextArea = () => (
   <div className="flex space-x-2">
-  
     <div className="pt-4">
       <button type="select">
         <BsEmojiSmile size={20} />
