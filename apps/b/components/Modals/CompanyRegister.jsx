@@ -12,9 +12,9 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => (
       </div>
     }
   >
-    <div className="flex flex-wrap">
+    <form className="flex flex-wrap">
       <div className="flex-1 md:mr-10">
-        <form>
+        <div>
           <div className="form-control">
             <div className="label">
               <span className="label-text">Company name</span>
@@ -41,7 +41,7 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => (
             </div>
             <textarea className="textarea textarea-bordered h-32" placeholder="Company bio" />
           </div>
-        </form>
+        </div>
       </div>
       <div className="md:w-1/2 flex flex-col">
         <div className="label">
@@ -81,7 +81,7 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => (
           <button className="btn btn-outline btn-primary w-full">Register Company</button>
         </div>
       </div>
-    </div>
+    </form>
   </BaseModal>
 );
 
