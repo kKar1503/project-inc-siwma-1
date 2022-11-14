@@ -1,51 +1,19 @@
-import { useState } from 'react';
-import NavBar from '../../../components/NavBar';
-import UserInvite from '../../../components/Modals/UserInvite';
-import RegisteredUsersTable from '../../../components/Tables/RegisteredUsersTable';
-import PendingInvitesTable from '../../../components/Tables/PendingInvitesTable';
-import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
+import { QueryClientProvider, QueryClient } from 'react-query';
+import NavBar from '../components/NavBar';
+import UserInvite from '../components/Modals/UserInvite';
+import RegisteredUsersTable from '../components/Tables/RegisteredUsersTable';
+import PendingInvitesTable from '../components/Tables/PendingInvitesTable';
+import AdminPageLayout from '../components/layouts/AdminPageLayout';
 
-const inviteTableData = (id) => ({
-  id,
-  company: 'GUANGZHAO METALWORKS, PTE. LTD',
-  email: 'sallyknox_slfi@gmail.com',
-  mobileNumber: '+65 9832 0293',
-});
+/**
+ * Comment to be written
+ */
 
-const registerTableData = (id) => ({
-  id,
-  name: 'Sally Knox',
-  email: 'sallyknox_slfi@gmail.com',
-  company: 'Shi Lin Fang Ironwork PTE, LTD',
-  mobileNumber: '+65 9832 0293',
-});
+const queryClient = new QueryClient();
 
-function populateArray(element, count) {
-  const result = [];
-
-  // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < count; i++) {
-    result[i] = element(i + 1);
-  }
-
-  return result;
-}
-
-const UsersPage = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const openModal = () => {
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
-  return (
-    <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto xl:max-h-screen">
-      {/* The user invite modal will be teleported to the end of the DOM because it uses React Portals */}
-      <UserInvite isOpen={isOpen} onRequestClose={closeModal} />
+const Page = () => (
+  <QueryClientProvider client={queryClient}>
+    <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
       <NavBar />
       <div className="grid grid-cols-2 gap-10">
         <div className="rounded-lg card bg-base-100 shadow-lg">
@@ -53,9 +21,9 @@ const UsersPage = () => {
             <h2 className="card-title">Create an individual invite</h2>
             <p>Invite an individual user to the system</p>
             <div className="card-actions justify-center">
-              <button className="btn btn-primary btn-outline grow" onClick={() => openModal()}>
+              <label htmlFor="user-invite" className="btn btn-primary btn-outline grow">
                 Send Invite
-              </button>
+              </label>
             </div>
           </div>
         </div>
@@ -69,12 +37,16 @@ const UsersPage = () => {
           </div>
         </div>
       </div>
-      <PendingInvitesTable data={populateArray(inviteTableData, 15)} />
-      <RegisteredUsersTable data={populateArray(registerTableData, 30)} />
+
+      <div>
+        <PendingInvitesTable className="mb-10" />
+        <RegisteredUsersTable />
+      </div>
+      <UserInvite />
     </div>
-  );
-};
+  </QueryClientProvider>
+);
 
-UsersPage.getLayout = (page) => <AdminPageLayout pageName="Users">{page}</AdminPageLayout>;
+Page.getLayout = (page) => <AdminPageLayout pageName="Users">{page}</AdminPageLayout>;
 
-export default UsersPage;
+export default Page;
