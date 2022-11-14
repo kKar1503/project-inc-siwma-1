@@ -82,11 +82,13 @@ const BaseModal = ({ header, isOpen, onRequestClose, children }) => {
   );
 };
 
-BaseModal.propTypes = {
+const propTypes = {
   header: PropTypes.node,
   isOpen: PropTypes.bool,
   onRequestClose: PropTypes.func,
   children: PropTypes.node.isRequired,
 };
+
+BaseModal.propTypes = propTypes;
 
 export default BaseModal;
