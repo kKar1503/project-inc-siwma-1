@@ -4,9 +4,8 @@
  * @param {*} ref Reference
  * @returns A lazy reference
  */
-const lazyReference =
-  (ref) =>
-  (...args) =>
-    ref.apply(this, args);
+function lazyReference(ref) {
+  return (...args) => ref.apply(this, args);
+}
 
 export default lazyReference;

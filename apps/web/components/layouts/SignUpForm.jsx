@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import Link from 'next/link';
+import Link from 'next/link'; // ! Unused Var
 
 /**
  * This Form is closely related to the SignInForm.

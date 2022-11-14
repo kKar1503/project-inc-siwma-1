@@ -2,8 +2,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import Image from 'next/image';
 import Link from 'next/link';
-import SIWMALogo from '../public/siwma-logo.png';
-import SIWMALogoFull from '../public/siwma-logo-full.png';
+import SIWMALogo from './public/siwma-logo.png';
+import SIWMALogoFull from './public/siwma-logo-full.png';
 
 const Header = () => (
   <div className="navbar bg-base-100 bg-gray-200">

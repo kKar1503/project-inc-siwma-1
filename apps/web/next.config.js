@@ -1,6 +1,5 @@
-const withTM = require('next-transpile-modules')(['@inc/ui']);
+const withTM = require('next-transpile-modules')(['@inc/ui', '@inc/styles']);
 
 module.exports = withTM({
   reactStrictMode: true,
-  swcMinify: true,
 });
