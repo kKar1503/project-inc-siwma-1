@@ -12,6 +12,7 @@
     "@inc/styles": "workspace:*",
     "@inc/ui": "workspace:*",
     "@inc/utils": "workspace:*",
+    "@inc/charts": "workspace:*",
     "@supabase/auth-helpers-nextjs": "^0.5.1",
     "@supabase/auth-helpers-react": "^0.3.1",
     "@supabase/supabase-js": "^2.1.0",
@@ -29,7 +30,8 @@
     "react-modal": "^3.16.1",
     "react-query": "^3.39.2",
     "react-responsive": "^9.0.0",
-    "react-table": "^7.8.0"
+    "react-table": "^7.8.0",
+    "victory": "^36.6.8"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
