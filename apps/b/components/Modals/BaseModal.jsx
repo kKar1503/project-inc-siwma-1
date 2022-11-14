@@ -10,14 +10,14 @@ const ModalOverlay = (props, contentElement) => (
   <div className="modalOverlay">{contentElement}</div>
 );
 
+// Bind modal to the app element https://www.npmjs.com/package/react-modal
+Modal.setAppElement('#__next');
+
 /**
  * Base modal for other modals to be built on top of
  * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
  */
 const BaseModal = ({ header, isOpen, onRequestClose, children }) => {
-  // Bind modal to the app element https://www.npmjs.com/package/react-modal
-  Modal.setAppElement('#__next');
-
   // Initialise reference to the modal box
   let modalRef = null;
 
