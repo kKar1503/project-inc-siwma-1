@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import CategoryCard from '../../components/category/CategoryCard';
+import CategoryBanner from '../../components/category/CategoryBanner';
 
 const Category = () => {
   const router = useRouter();
@@ -8,15 +9,7 @@ const Category = () => {
   return (
     <div className="mt-10 ml-28 mr-28 mb-10 h-screen">
       <div className="mb-10 h-1/2">
-        <div
-          style={{
-            backgroundImage: `url("https://images.unsplash.com/photo-1563642900777-eb44ab05eaf8")`,
-            backgroundSize: 'cover',
-          }}
-          className="w-full rounded-lg h-full"
-        >
-          ** Insert search bar here **
-        </div>
+        <CategoryBanner img="https://images.unsplash.com/photo-1563642900777-eb44ab05eaf8" />
       </div>
       <div className="h-2/3">
         <p className="font-bold text-2xl">{category} shapes</p>
