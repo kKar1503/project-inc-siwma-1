@@ -1,3 +1,4 @@
+import { FaUserCheck } from 'react-icons/fa';
 import AdminFigure from '../../../components/AdminFigure';
 import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
 import NavBar from '../../../components/NavBar';
@@ -37,20 +38,23 @@ const UserOverview = () => (
 
     <div className="flex flex-row gap-8 flex-wrap">
       <AdminFigure title="Active Companies" value="20" color="text-primary" />
-      <AdminFigure title="Total Users" value="14" color="text-accent" />
+      <AdminFigure
+        title="Total Users"
+        value="14"
+        color="text-accent"
+        icon={<FaUserCheck size={144} color="#34d399" />}
+      />
       <AdminFigure title="Pending Invites" value="15" color="text-secondary" />
     </div>
 
     <div className="flex flex-row flex-wrap gap-8">
-      <RegisteredUsersTableWithoutCheckbox
-        className="flex md:flex-[7] flex-wrap md:overflow-hidden"
-        data={populateArray(registerTableData, 14)}
-      />
+      <div className="flex flex-[7]">
+        <RegisteredUsersTableWithoutCheckbox className="" data={registeredUsersData} />
+      </div>
 
-      <PendingInvitesTable
-        className="flex md:flex-[5] w-full grow-none flex-wrap md:overflow-hidden"
-        data={populateArray(inviteTableData, 15)}
-      />
+      <div className="flex flex-[5]">
+        <PendingInvitesTableWithoutCheckbox className="w-full grow-none" data={inviteTableData} />
+      </div>
     </div>
   </div>
 );
