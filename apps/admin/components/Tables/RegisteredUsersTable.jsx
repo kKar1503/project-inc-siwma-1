@@ -1,13 +1,33 @@
 import React, { useState } from 'react';
+import { useQuery } from 'react-query';
 import PropTypes from 'prop-types';
 import BaseTable from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
+import pic from '../../public/avatar.png';
+import CreateSupabaseClient from '../../utils/supabase';
 
 // This table shows Registered Users and is built on the BaseTable component.
 
-const RegisteredUsersTable = ({ data, className }) => {
+const parseData = (data) =>
+  data.map((e) => ({
+    id: e.id,
+    profilePicture: pic,
+    name: e.fullname,
+    email: e.email,
+    company: e.companyid,
+    mobileNumber: e.phone,
+  }));
+
+const supabase = CreateSupabaseClient();
+
+const RegisteredUsersTable = ({ className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['users'],
+    queryFn: async () => supabase.from('users').select('*'),
+  });
 
   return (
     <BaseTable
@@ -33,7 +53,7 @@ const RegisteredUsersTable = ({ data, className }) => {
       showCheckbox
       className={className}
       columnKeys={['name', 'email', 'company', 'mobileNumber']}
-      data={data}
+      data={isLoading ? undefined : parseData(data.data)}
       footer={
         <div className="flex justify-between bg-none">
           <button className="btn btn-primary text-white">DEACTIVATE SELECTED</button>
@@ -67,16 +87,6 @@ const RegisteredUsersTable = ({ data, className }) => {
 };
 
 RegisteredUsersTable.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      profilePicture: PropTypes.string,
-      name: PropTypes.string,
-      email: PropTypes.string,
-      company: PropTypes.string,
-      mobileNumber: PropTypes.string,
-    })
-  ),
   className: PropTypes.string,
 };
 
