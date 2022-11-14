@@ -42,7 +42,7 @@ N/A if not applicable.
 - [ ] Related issues linked using `fixes #number`. / There is no issue fix.
 - [ ] Unit tests or E2E tests added for any new feature changes. / There is no new feature that requires test.
 - [ ] Ensured that there's no linter errors.
-- [ ] Ran the full set of testings and coverage reports exceed 80%.
+- [ ] Ran the full set of testings and coverage reports exceed 80%. / There is currently no test.
 - [ ] All Merge Conflicts have been fully resolved.
 - [ ] Branch is rebased off the target branch.
 - [ ] This PR is complete and does not have incomplete work that'll break the application.

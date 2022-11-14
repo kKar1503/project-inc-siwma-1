@@ -40,6 +40,8 @@ module.exports = {
       },
     ],
     'jsx-a11y/label-has-associated-control': ['error', { assert: 'either' }],
+    'react/jsx-props-no-spreading': 'off',
+    'no-plusplus': 'off',
   },
   overrides: [
     {

@@ -9,6 +9,21 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['import'],
+  rules: {
+    'no-plusplus': 'off',
+    'object-curly-newline': 'off',
+    'operator-linebreak': ['error', 'after', { overrides: { '?': 'before', ':': 'before' } }],
+    'no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        args: 'after-used',
+        ignoreRestSiblings: true,
+      },
+    ],
+    indent: ['error', 2, { SwitchCase: 1 }],
+    quotes: ['error', 'single', { allowTemplateLiterals: true, avoidEscape: true }],
+  },
   overrides: [
     {
       env: {
