@@ -55,6 +55,8 @@ const SidebarItem = ({ label, link, selected, subPages }) => {
   useEffect(() => {
     setIsSelected(checkSelected());
   }, [selected]);
+  // ! Is it possible for us to nest the checkSelected() instead of letting the
+  // ! lint warning sit here?
 
   // Check if the sidebar item being rendered has any subpages
   if (subPages === undefined) {
