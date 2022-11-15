@@ -182,17 +182,18 @@ const BaseTable = ({
               }
               {
                 // Render a placeholder text if no data is found
-                !data ||
-                  (data.length === 0 && (
-                    <tr>
-                      <td
-                        className="h-52 text-center"
-                        colSpan={headings.length + 1 + (showCheckbox ? 1 : 0)}
-                      >
-                        <h2 className="font-bold text-lg">No data found</h2>
-                      </td>
-                    </tr>
-                  ))
+                !isLoading &&
+                  (!data ||
+                    (data.length === 0 && (
+                      <tr>
+                        <td
+                          className="h-52 text-center"
+                          colSpan={headings.length + 1 + (showCheckbox ? 1 : 0)}
+                        >
+                          <h2 className="font-bold text-lg">No companies found</h2>
+                        </td>
+                      </tr>
+                    )))
               }
             </tbody>
           </table>
