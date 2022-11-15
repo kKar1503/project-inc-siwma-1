@@ -5,6 +5,7 @@ import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import SignInAndUpLayout from '../../components/layouts/SignInAndUpLayout';
 import LoginForm from '../../components/layouts/LoginForm';
+import Alert from '../../components/alerts/Alert';
 
 /**
  * To minimise the amount of components needed to be rendered,
@@ -39,19 +40,9 @@ const LoginFormWrap = () => {
 
   let formNote = null;
   if (loginIsError) {
-    formNote = (
-      <div className="flex flex-col items-start alert alert-error">
-        <p className="font-bold">Error!</p>
-        <p>{loginError?.message ?? 'Something went wrong!'}</p>
-      </div>
-    );
+    formNote = <Alert level="error" message={loginError?.message ?? 'Something went wrong!'} />;
   } else if (loginIsSuccess) {
-    formNote = (
-      <div className="flex flex-col items-start alert alert-success">
-        <p className="font-bold">Success</p>
-        <p>You have successfully logged in!</p>
-      </div>
-    );
+    formNote = <Alert level="success" message="You have successfully logged in!" />;
   }
 
   return <LoginForm onLogin={login} formNote={formNote} disabled={loginIsLoading} />;

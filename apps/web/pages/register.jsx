@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useMutation } from 'react-query';
+import Alert from '../../components/alerts/Alert';
 import RegisterForm from '../../components/layouts/RegisterForm';
 import SignInAndUpLayout from '../../components/layouts/SignInAndUpLayout';
 import { createServiceSupabaseClient } from '../../utils';
@@ -81,17 +82,17 @@ const RegisterFormWrap = ({ email, companyName, defaultFullname }) => {
   let formNote = null;
   if (registerIsError) {
     formNote = (
-      <div className="flex flex-col items-start alert alert-error">
-        <p className="font-bold">Error!</p>
-        <p>{registerError?.message ?? 'Something went wrong!'}</p>
-      </div>
+      <Alert
+        level="error"
+        message={registerError?.message || 'Something went wrong. Please try again later.'}
+      />
     );
   } else if (registerIsSuccess) {
     formNote = (
-      <div className="flex flex-col items-start alert alert-success">
-        <p className="font-bold">Success</p>
-        <p>Your account was successfully registered! Redirecting you to the login page.</p>
-      </div>
+      <Alert
+        level="success"
+        message="You have successfully registered. You will be redirected to the login page shortly."
+      />
     );
   }
 
