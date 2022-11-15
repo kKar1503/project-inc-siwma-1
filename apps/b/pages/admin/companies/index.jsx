@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import RegisteredCompaniesTable from '../../../components/Tables/RegisteredCompaniesTable';
 import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
 import NavBar from '../../../components/NavBar';
@@ -81,7 +81,7 @@ const Page = () => {
         </div>
       </div>
     </QueryClientProvider>
-  )
+  );
 };
 
 Page.getLayout = (page) => <AdminPageLayout pageName="Companies">{page}</AdminPageLayout>;
