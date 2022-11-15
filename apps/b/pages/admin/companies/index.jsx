@@ -1,9 +1,10 @@
 import Link from 'next/link';
+import { useState } from 'react';
 import RegisteredCompaniesTable from '../../../components/Tables/RegisteredCompaniesTable';
 import pic from '../../../public/siwma-logo-sm.png';
 import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
 import NavBar from '../../../components/NavBar';
-import CompanyRegister from '../../../components/Forms/CompanyRegister';
+import CompanyRegister from '../../../components/Modals/CompanyRegister';
 
 /**
  * The below is for rendering the Companies Management Page
@@ -86,51 +87,57 @@ const registeredCompaniesData = [
     bio: 'Very Very Long Company Bio',
   },
 ];
-const Modals = () => (
-  <div className="absolute">
-    <CompanyRegister />
-  </div>
-);
-const Page = () => (
-  <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
-    <NavBar />
 
-    <div className="flex flex-row gap-6">
-      <div className="mb-4 gap-4 flex-1">
-        <div className="rounded-xl shadow-lg p-4 bg-base-100">
-          <div className="pb-3">
-            <h3 className="text-lg font-bold">Register an individual company</h3>
-            <p className="text-sm">Register a company profile to the system</p>
+const Page = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
+      {/* The company register modal will be teleported to the end of the DOM because it uses React Portals */}
+      <CompanyRegister isOpen={isOpen} onRequestClose={closeModal} />
+      <NavBar />
+
+      <div className="flex flex-row gap-6">
+        <div className="mb-4 gap-4 flex-1">
+          <div className="rounded-xl shadow-lg p-4 bg-base-100">
+            <div className="pb-3">
+              <h3 className="text-lg font-bold">Register an individual company</h3>
+              <p className="text-sm">Register a company profile to the system</p>
+            </div>
+            <button className="btn w-full btn-outline btn-primary" onClick={openModal}>
+              Register Company
+            </button>
           </div>
-          <label htmlFor="company-register" className="btn w-full btn-outline btn-primary">
-            Register Company
-          </label>
+        </div>
+        <div className="mb-4 gap-4 flex-1">
+          <div className="rounded-xl shadow-lg p-4 bg-base-100">
+            <div className="pb-3">
+              <h3 className="text-lg font-bold">Bulk Register Companies</h3>
+              <p className="text-sm">Register a company profile to the system</p>
+            </div>
+            <Link href="invite/" className="w-full btn btn-outline btn-primary">
+              Bulk Register Companies
+            </Link>
+          </div>
         </div>
       </div>
-      <div className="mb-4 gap-4 flex-1">
-        <div className="rounded-xl shadow-lg p-4 bg-base-100">
-          <div className="pb-3">
-            <h3 className="text-lg font-bold">Bulk Register Companies</h3>
-            <p className="text-sm">Register a company profile to the system</p>
-          </div>
-          <Link href="invite/" className="w-full btn btn-outline btn-primary">
-            Open
-          </Link>
+      <div className="flex mb-4 gap-4 xl:overflow-hidden shadow-lg bg-base-100">
+        <div className="w-full h-full flex flex-row">
+          <RegisteredCompaniesTable data={registeredCompaniesData} />
         </div>
       </div>
     </div>
-    <div className="flex mb-4 gap-4 xl:overflow-hidden shadow-lg bg-base-100">
-      <div className="w-full h-full flex flex-row">
-        <RegisteredCompaniesTable data={registeredCompaniesData} />
-      </div>
-    </div>
-  </div>
-);
+  );
+};
 
-Page.getLayout = (page) => (
-  <AdminPageLayout pageName="Companies" siblings={<Modals />}>
-    {page}
-  </AdminPageLayout>
-);
+Page.getLayout = (page) => <AdminPageLayout pageName="Companies">{page}</AdminPageLayout>;
 
 export default Page;

@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import NavBar from '../../../components/NavBar';
-import UserInvite from '../../../components/Forms/UserInvite';
+import UserInvite from '../../../components/Modals/UserInvite';
 import RegisteredUsersTable from '../../../components/Tables/RegisteredUsersTable';
 import PendingInvitesTable from '../../../components/Tables/PendingInvitesTable';
 import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
@@ -30,36 +31,49 @@ function populateArray(element, count) {
   return result;
 }
 
-const UsersPage = () => (
-  <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto xl:max-h-screen">
-    <NavBar />
-    <div className="grid grid-cols-2 gap-10">
-      <div className="rounded-lg card bg-base-100 shadow-lg">
-        <div className="card-body">
-          <h2 className="card-title">Create an individual invite</h2>
-          <p>Invite an individual user to the system</p>
-          <div className="card-actions justify-center">
-            <label htmlFor="user-invite" className="btn btn-primary btn-outline grow">
-              Send Invite
-            </label>
+const UsersPage = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto xl:max-h-screen">
+      {/* The user invite modal will be teleported to the end of the DOM because it uses React Portals */}
+      <UserInvite isOpen={isOpen} onRequestClose={closeModal} />
+      <NavBar />
+      <div className="grid grid-cols-2 gap-10">
+        <div className="rounded-lg card bg-base-100 shadow-lg">
+          <div className="card-body">
+            <h2 className="card-title">Create an individual invite</h2>
+            <p>Invite an individual user to the system</p>
+            <div className="card-actions justify-center">
+              <button className="btn btn-primary btn-outline grow" onClick={() => openModal()}>
+                Send Invite
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="rounded-lg card bg-base-100 shadow-lg">
+          <div className="card-body">
+            <h2 className="card-title">Bulk invite users</h2>
+            <p>Invite multiple users at once through a file import</p>
+            <div className="card-actions justify-center">
+              <button className="btn btn-primary btn-outline grow">Send Invite</button>
+            </div>
           </div>
         </div>
       </div>
-      <div className="rounded-lg card bg-base-100 shadow-lg">
-        <div className="card-body">
-          <h2 className="card-title">Bulk invite users</h2>
-          <p>Invite multiple users at once through a file import</p>
-          <div className="card-actions justify-center">
-            <button className="btn btn-primary btn-outline grow">Send Invite</button>
-          </div>
-        </div>
-      </div>
+      <PendingInvitesTable data={populateArray(inviteTableData, 15)} />
+      <RegisteredUsersTable data={populateArray(registerTableData, 30)} />
     </div>
-    <PendingInvitesTable data={populateArray(inviteTableData, 15)} />
-    <RegisteredUsersTable data={populateArray(registerTableData, 30)} />
-    <UserInvite />
-  </div>
-);
+  );
+};
 
 UsersPage.getLayout = (page) => <AdminPageLayout pageName="Users">{page}</AdminPageLayout>;
 
