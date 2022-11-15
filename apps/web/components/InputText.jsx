@@ -3,7 +3,7 @@ import { GrAttachment } from 'react-icons/gr';
 import { BsEmojiSmile } from 'react-icons/bs';
 
 const InputTextArea = () => (
-  <div className="flex space-x-2">
+  <div className="flex space-x-2 pl-2 h-20">
     <div className="pt-4">
       <button type="select">
         <BsEmojiSmile size={20} />
@@ -14,7 +14,7 @@ const InputTextArea = () => (
       <input
         type="text"
         placeholder="Type a message"
-        className="input input-bordered w-full max-w-xs rounded-3xl w-200"
+        className="input input-bordered rounded-3xl w-[590px]"
       />
     </div>
 

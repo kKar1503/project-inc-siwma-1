@@ -8,7 +8,7 @@ const chatHeader = () => (
   <div>
     <main>
       <div>
-        <div className="navbar bg-base-100 rounded-t-md w-[700px] border relative z-1">
+        <div className="navbar bg-base-100 w-[700px] border relative z-1">
           <div className="flex-1">
             <div className="btn btn-ghost btn-circle avatar">
               <div className="rounded-full">
@@ -49,7 +49,7 @@ const chatHeader = () => (
             </div>
           </div>
         </div>
-        <div className="navbar bg-base-100 rounded-b-md w-[700px] border relative block">
+        <div className="navbar bg-base-100 w-[700px] border relative block">
           <div className="flex-1">
             <div className="btn btn-circle btn-ghost avatar">
               <div className="w-10 rounded-md">
