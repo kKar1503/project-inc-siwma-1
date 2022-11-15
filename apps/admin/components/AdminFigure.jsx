@@ -8,8 +8,8 @@ const AdminFigure = ({ title, value, icon, color, className }) => (
       className
     )}
   >
-    <div className="flex flex-col mt-4 mr-8 h-full items-left">
-      <p className={cx('text-6xl font-black py-1 pr-4 select-none', color ?? 'text-gray-700')}>
+    <div className="flex flex-col mr-8 h-full items-left">
+      <p className={cx('text-7xl font-black py-1 pr-4 select-none', color ?? 'text-gray-700')}>
         {value}
       </p>
       <h2 className="text-lg text-left text-gray-700 py-1 select-none">{title}</h2>
