@@ -112,7 +112,7 @@ const Page = () => {
   ];
 
   return (
-    <div className="bg-[#FAFAFA]">
+    <div className="bg-[#FAFAFA] w-full">
       <div className="flex flex-row m-5">
         {/* Fixed Height ensures the table doesn't take up the entire page, and allows scrolling. For best results, this should be at least h-96. */}
         <RegisteredUsersTable data={registeredUsersData} className="h-96" />
@@ -120,11 +120,13 @@ const Page = () => {
       <div className="flex flex-row m-5">
         <RegisteredUsersTableWithoutCheckbox data={registeredUsersData} className="h-96" />
       </div>
-      <div className="flex flex-row m-5">
-        <PendingInvitesTable data={pendingInvitesData} className="h-96" />
-      </div>
-      <div className="flex flex-row m-5">
-        <RegisteredCompaniesTable data={registeredCompaniesData} className="h-96" />
+      <div className="flex flex-row w-full">
+        <div className="flex flex-row m-5">
+          <PendingInvitesTable data={pendingInvitesData} className="h-96" />
+        </div>
+        <div className="flex flex-row m-5">
+          <RegisteredCompaniesTable data={registeredCompaniesData} className="h-96" />
+        </div>
       </div>
       <div className="flex flex-row m-5">
         <UserInvitesPreviewTable data={userInvitesPreviewData} className="h-96" />
