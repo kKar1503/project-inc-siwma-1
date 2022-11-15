@@ -17,6 +17,9 @@ import { ImCross, ImCheckmark } from 'react-icons/im';
   - showCheckbox (A boolean that determines whether or not to show the checkbox column)
   - height (The height of the table, defaults to h-fit)
   - columnKeys (An array of strings that will be the keys of the data object)
+  - centerColumns (Columns that should have both their header and content centered)
+  - selectedRows (Rows of the table which have been selected; requires showCheckbox to be true)
+  - isLoading (Whether or not the table is in a loading state)
   - data (An array of objects that you want to be the rows of the table)
   - footer (A div that you want to be the footer of the table)
 
@@ -46,6 +49,7 @@ const BaseTable = ({
   className,
   columnKeys,
   centerColumns,
+  selectedRows,
   isLoading,
   data,
   footer,
@@ -109,6 +113,10 @@ const BaseTable = ({
                               type="checkbox"
                               className="checkbox"
                               onChange={(e) => onChange(e.currentTarget)}
+                              // Give the checkbox a checked state if the current row being rendered is selected
+                              defaultChecked={
+                                selectedRows ? selectedRows.find((e) => e === row.id) : false
+                              }
                             />
                           </label>
                         </td>
@@ -203,6 +211,7 @@ const propTypes = {
   className: PropTypes.string,
   columnKeys: PropTypes.arrayOf(PropTypes.string),
   centerColumns: PropTypes.arrayOf(PropTypes.string),
+  selectedRows: PropTypes.arrayOf(PropTypes.string),
   isLoading: PropTypes.bool,
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.
