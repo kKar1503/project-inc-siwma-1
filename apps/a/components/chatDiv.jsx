@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-const ChatDiv = ({ isCheckCallback }) => {
+const ChatDiv = ({ isCheckCallback, members }) => {
   const [isChecked, setIsChecked] = useState(false);
 
   // const handleOnChange = () => {
@@ -14,26 +14,27 @@ const ChatDiv = ({ isCheckCallback }) => {
   // }, [isChecked]);
 
   // cannot uncheck checkbox need help
-  const handleOnChange = (checked) => {
-    setIsChecked(checked);
-    if (typeof isCheckCallback === 'function') isCheckCallback(checked);
+  const handleOnChange = () => {
+    setIsChecked(!isChecked);
   };
 
-  const toggleChecked = (checked) => handleOnChange(!checked);
+  useEffect(() => {
+    isCheckCallback(isChecked);
+  }, [isChecked]);
+  // console.log(members);
+  //  console.log(members?.name)
 
   return (
     <li className=" group border-b border-gray-300">
       {/* TODO: Change href link */}
       <a href="localhost:3000/">
         <div className="w-1/6">
-          {true && (
-            <input
-              type="checkbox"
-              checked={isChecked}
-              onChange={handleOnChange}
-              className={`checkbox ${isChecked ? '' : 'hidden'} group-hover:flex`}
-            />
-          )}
+          <input
+            type="checkbox"
+            checked={isChecked}
+            onChange={handleOnChange}
+            className={`checkbox ${isChecked ? '' : 'hidden'} group-hover:flex`}
+          />
         </div>
         <div className="avatar online">
           <div className="w-12 rounded-full">
@@ -43,9 +44,7 @@ const ChatDiv = ({ isCheckCallback }) => {
 
         <div className="w-full pb-2">
           <div className="flex justify-between">
-            <span className="block ml-2 font-semibold text-bs text-gray-600">
-              Aditya Adeeb (Leong Seng Metal Pte.Ltd.)
-            </span>
+            <span className="block ml-2 font-semibold text-bs text-gray-600">{members?.name}</span>
             <span className="block ml-2 text-xs text-gray-600">31/10/2022</span>
           </div>
           <div className="avatar">
@@ -67,6 +66,7 @@ const ChatDiv = ({ isCheckCallback }) => {
 
 ChatDiv.propTypes = {
   isCheckCallback: PropTypes.func.isRequired,
+  members: PropTypes.func.isRequired,
 };
 
 export default ChatDiv;
