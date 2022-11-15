@@ -220,14 +220,6 @@ const RegisteredCompaniesTable = ({ className }) => {
             >
               SUSPEND SELECTED
             </button>
-            <button
-              className="btn btn-primary text-white"
-              onClick={() => {
-                console.log(selectedRows);
-              }}
-            >
-              TEST
-            </button>
           </div>
 
           <div className="flex justify-end bg-none">
