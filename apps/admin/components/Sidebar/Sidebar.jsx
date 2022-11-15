@@ -16,16 +16,16 @@ export const adminSidebar = [
   {
     'User Management': [
       {
-        Overview: '/admin/overview',
+        Overview: '/overview',
       },
       {
-        Companies: '/admin/companies',
+        Companies: '/companies',
       },
       {
-        Users: '/admin/users',
+        Users: '/users',
       },
       {
-        Invites: '/admin/invite',
+        Invites: '/invite',
       },
     ],
   },
