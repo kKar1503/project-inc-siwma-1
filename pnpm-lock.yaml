@@ -5834,6 +5834,13 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
+  '@cdn.sheetjs.com/xlsx-0.19.0/xlsx-0.19.0.tgz':
+    resolution: {tarball: https://cdn.sheetjs.com/xlsx-0.19.0/xlsx-0.19.0.tgz}
+    name: xlsx
+    version: 0.19.0
+    engines: {node: '>=0.8'}
+    hasBin: true
+    dev: false
   /yup/0.32.11:
     resolution: {integrity: sha512-Z2Fe1bn+eLstG8DRR6FTavGD+MeAwyfmouhHsIUgaADz8jvFKbO/fXc2trJKZg+5EBjh4gGm3iU/t3onKlXHIg==}
     engines: {node: '>=10'}
