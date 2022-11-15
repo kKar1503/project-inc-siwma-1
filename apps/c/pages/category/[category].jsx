@@ -14,7 +14,7 @@ const Category = () => {
       <div className="h-2/3">
         <p className="font-bold text-2xl">{category} shapes</p>
         {/* dynamically generate each category when queried */}
-        <div className="flex flex-row mb-10">
+        <div className="flex flex-wrap mb-10">
           {/* image temporarily grabbed from metalsupermarkets.com */}
           <CategoryCard
             name="Carbon Steel Round Tube"
@@ -23,6 +23,26 @@ const Category = () => {
           <CategoryCard
             name="Mild Steel Angle"
             img="https://www.metalsupermarkets.com/wp-content/uploads/2021/03/Mild-Steel-Angle-Metal-Supermarkets-150x150.png"
+          />
+          <CategoryCard
+            name="Mild Steel Bar Grating"
+            img="https://www.metalsupermarkets.com/wp-content/uploads/2021/10/Mild-Steel-Bar-Grating-Metal-Supermarkets-150x150.png"
+          />
+          <CategoryCard
+            name="Mild Steel Bar Grating"
+            img="https://www.metalsupermarkets.com/wp-content/uploads/2021/10/Mild-Steel-Bar-Grating-Metal-Supermarkets-150x150.png"
+          />
+          <CategoryCard
+            name="Mild Steel Bar Grating"
+            img="https://www.metalsupermarkets.com/wp-content/uploads/2021/10/Mild-Steel-Bar-Grating-Metal-Supermarkets-150x150.png"
+          />
+          <CategoryCard
+            name="Mild Steel Bar Grating"
+            img="https://www.metalsupermarkets.com/wp-content/uploads/2021/10/Mild-Steel-Bar-Grating-Metal-Supermarkets-150x150.png"
+          />
+          <CategoryCard
+            name="Mild Steel Bar Grating"
+            img="https://www.metalsupermarkets.com/wp-content/uploads/2021/10/Mild-Steel-Bar-Grating-Metal-Supermarkets-150x150.png"
           />
           <CategoryCard
             name="Mild Steel Bar Grating"
