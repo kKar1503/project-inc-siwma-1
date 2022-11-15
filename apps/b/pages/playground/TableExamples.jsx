@@ -11,7 +11,8 @@ const Page = () => {
   const registeredUsersData = [
     {
       id: 1,
-      profilePicture:  'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+      profilePicture:
+        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
       name: 'John Doe',
       email: 'john@doe.com',
       company: 'Company',
@@ -19,7 +20,8 @@ const Page = () => {
     },
     {
       id: 2,
-      profilePicture:  'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+      profilePicture:
+        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
       name: 'Veryvery Long Name',
       email: 'veryverylongname@veryverylongdomain.com',
       company: 'Very Very Long Company Name',
@@ -27,7 +29,8 @@ const Page = () => {
     },
     {
       id: 3,
-      profilePicture:  'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+      profilePicture:
+        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
       name: 'John Doe',
       email: 'john@doe.com',
       company: 'Company',
@@ -35,7 +38,8 @@ const Page = () => {
     },
     {
       id: 4,
-      profilePicture:  'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+      profilePicture:
+        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
       name: 'John Doe',
       email: 'john@doe.com',
       company: 'Company',
@@ -43,7 +47,8 @@ const Page = () => {
     },
     {
       id: 5,
-      profilePicture:  'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+      profilePicture:
+        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
       name: 'John Doe',
       email: 'john@doe.com',
       company: 'Company',
@@ -69,14 +74,16 @@ const Page = () => {
   const registeredCompaniesData = [
     {
       id: 1,
-      profilePicture:  'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+      profilePicture:
+        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
       company: 'Company',
       website: 'www.company.com',
       bio: 'Company Bio',
     },
     {
       id: 2,
-      profilePicture:  'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+      profilePicture:
+        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
       company: 'Very Very Long Company Name',
       website: 'veryverylongname@veryverylongdomain.com',
       bio: 'Very Very Long Company Bio',
@@ -86,7 +93,8 @@ const Page = () => {
   const userInvitesPreviewData = [
     {
       id: 1,
-      profilePicture:  'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+      profilePicture:
+        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
       name: 'John Doe',
       email: 'hello@hello.com',
       company: 'Company',
@@ -94,7 +102,8 @@ const Page = () => {
     },
     {
       id: 2,
-      profilePicture:  'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+      profilePicture:
+        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
       name: 'John Doe',
       email: 'hello@hello.com',
       company: 'Company',
@@ -103,7 +112,7 @@ const Page = () => {
   ];
 
   return (
-    <div className="bg-[#FAFAFA]">
+    <div className="bg-[#FAFAFA] w-full">
       <div className="flex flex-row m-5">
         {/* Fixed Height ensures the table doesn't take up the entire page, and allows scrolling. For best results, this should be at least h-96. */}
         <RegisteredUsersTable data={registeredUsersData} className="h-96" />
@@ -111,11 +120,13 @@ const Page = () => {
       <div className="flex flex-row m-5">
         <RegisteredUsersTableWithoutCheckbox data={registeredUsersData} className="h-96" />
       </div>
-      <div className="flex flex-row m-5">
-        <PendingInvitesTable data={pendingInvitesData} className="h-96" />
-      </div>
-      <div className="flex flex-row m-5">
-        <RegisteredCompaniesTable data={registeredCompaniesData} className="h-96" />
+      <div className="flex flex-row w-full">
+        <div className="flex flex-row m-5">
+          <PendingInvitesTable data={pendingInvitesData} className="h-96" />
+        </div>
+        <div className="flex flex-row m-5">
+          <RegisteredCompaniesTable data={registeredCompaniesData} className="h-96" />
+        </div>
       </div>
       <div className="flex flex-row m-5">
         <UserInvitesPreviewTable data={userInvitesPreviewData} className="h-96" />
