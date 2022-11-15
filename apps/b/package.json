@@ -11,6 +11,9 @@
   "dependencies": {
     "@inc/styles": "workspace:*",
     "@inc/ui": "workspace:*",
+    "@supabase/auth-helpers-nextjs": "^0.5.1",
+    "@supabase/auth-helpers-react": "^0.3.1",
+    "@supabase/supabase-js": "^2.0.6",
     "classnames": "^2.3.2",
     "daisyui": "^2.33.0",
     "luxon": "^3.0.4",
@@ -20,6 +23,9 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.6.0",
+    "react-loading-skeleton": "^3.1.0",
+    "react-modal": "^3.16.1",
+    "react-query": "^3.39.2",
     "react-responsive": "^9.0.0"
   },
   "devDependencies": {
