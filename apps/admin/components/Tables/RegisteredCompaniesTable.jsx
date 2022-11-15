@@ -6,7 +6,6 @@ import BaseTable from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 import supabase from '../../pages/api/supabase';
-import pic from '../../public/siwma-logo-sm.png';
 
 /**
  * Parses data retrieved from Supabase into a format accepted by the tables
@@ -16,7 +15,8 @@ import pic from '../../public/siwma-logo-sm.png';
 function parseData(data) {
   return data.map((e) => ({
     id: e.id,
-    profilePicture: pic,
+    profilePicture:
+      'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
     company: e.name,
     website: e.website,
     bio: e.bio,
