@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@inc/charts": "workspace:*",
-    "@inc/database": "workspace:^0.0.0",
     "@inc/styles": "workspace:*",
     "@inc/ui": "workspace:*",
     "@inc/utils": "workspace:*",
@@ -33,7 +32,7 @@
     "react-responsive": "^9.0.0",
     "react-table": "^7.8.0",
     "victory": "^36.6.8",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.0/xlsx-0.19.0.tgz"
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
