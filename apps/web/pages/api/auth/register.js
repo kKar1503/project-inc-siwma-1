@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import * as yup from 'yup';
-import { createServiceSupabaseClient } from '../../../utils';
+import { createServiceSupabaseClient } from '@inc/utils';
 
 const querySchema = yup.object().shape({
   token: yup.string().required(),

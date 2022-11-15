@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import RegisteredCompaniesTable from '../../../components/Tables/RegisteredCompaniesTable';
-import pic from '../../../public/siwma-logo-sm.png';
-import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
-import NavBar from '../../../components/NavBar';
-import CompanyRegister from '../../../components/Modals/CompanyRegister';
+import RegisteredCompaniesTable from '../components/Tables/RegisteredCompaniesTable';
+import pic from '../public/siwma-logo-sm.png';
+import AdminPageLayout from '../components/layouts/AdminPageLayout';
+import NavBar from '../components/NavBar';
+import CompanyRegister from '../components/Modals/CompanyRegister';
 
 /**
  * The below is for rendering the Companies Management Page
