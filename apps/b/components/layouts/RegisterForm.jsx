@@ -74,7 +74,9 @@ const RegisterForm = ({
         <label className="flex flex-col gap-2">
           Full Name
           <input
-            className="input input-bordered rounded-lg"
+            className={cx('input input-bordered rounded-lg', {
+              'input-error': errors.fullname !== undefined,
+            })}
             placeholder="Your full name"
             {...register('fullname', {
               required: 'Please enter your full name',
@@ -84,7 +86,7 @@ const RegisterForm = ({
               },
             })}
           />
-          {errors.name && <span className="text-error">{errors.name.message}</span>}
+          {errors.fullname && <span className="text-error">{errors.fullname.message}</span>}
         </label>
         <div className="flex flex-col md:flex-row gap-4">
           <label className="flex flex-col gap-2 flex-1">
@@ -98,23 +100,11 @@ const RegisterForm = ({
             {errors.email && <span className="text-error">{errors.email.message}</span>}
           </label>
           <label className="flex flex-col gap-2 flex-1">
-            Password
-            <input
-              className="input input-bordered rounded-lg w-full"
-              placeholder="Your password"
-              type="password"
-              {...register('password', {
-                required: 'Please enter your password',
-              })}
-            />
-            {errors.password && <span className="text-error">{errors.password.message}</span>}
-          </label>
-        </div>
-        <div className="flex flex-col md:flex-row gap-4">
-          <label className="flex flex-col gap-2 flex-1">
             Mobile Number
             <input
-              className="input input-bordered rounded-lg w-full"
+              className={cx('input input-bordered rounded-lg w-full', {
+                'input-error': errors.phone !== undefined,
+              })}
               placeholder="Your mobile number"
               type="tel"
               {...register('phone', {
@@ -125,12 +115,30 @@ const RegisterForm = ({
                 },
               })}
             />
-            {errors.mobile && <span className="text-error">{errors.mobile.message}</span>}
+            {errors.phone && <span className="text-error">{errors.phone.message}</span>}
+          </label>
+        </div>
+        <div className="flex flex-col md:flex-row gap-4">
+          <label className="flex flex-col gap-2 flex-1">
+            Password
+            <input
+              className={cx('input input-bordered rounded-lg w-full', {
+                'input-error': errors.password !== undefined,
+              })}
+              placeholder="Your password"
+              type="password"
+              {...register('password', {
+                required: 'Please enter your password',
+              })}
+            />
+            {errors.password && <span className="text-error">{errors.password.message}</span>}
           </label>
           <label className="flex flex-col gap-2 flex-1">
             Confirm Password
             <input
-              className="input input-bordered rounded-lg w-full"
+              className={cx('input input-bordered rounded-lg w-full', {
+                'input-error': errors.confirmPassword !== undefined,
+              })}
               placeholder="Confirm your password"
               type="password"
               {...register('confirmPassword', {
