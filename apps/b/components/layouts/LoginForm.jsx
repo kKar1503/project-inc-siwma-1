@@ -44,7 +44,9 @@ const LoginForm = ({ onLogin, formNote, disabled, className }) => {
         <label className="flex flex-col gap-2">
           E-Mail
           <input
-            className="input input-bordered"
+            className={cx('input input-bordered', {
+              'input-error': errors.email !== undefined,
+            })}
             placeholder="Your company e-mail"
             type="email"
             {...register('email', {
@@ -56,7 +58,9 @@ const LoginForm = ({ onLogin, formNote, disabled, className }) => {
         <label className="flex flex-col gap-2">
           Password
           <input
-            className="input input-bordered"
+            className={cx('input input-bordered', {
+              'input-error': errors.password !== undefined,
+            })}
             placeholder="Your password"
             type="password"
             {...register('password', {
