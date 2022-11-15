@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@inc/charts": "workspace:*",
-    "@inc/database": "workspace:^0.0.0",
     "@inc/styles": "workspace:*",
     "@inc/ui": "workspace:*",
     "@inc/utils": "workspace:*",
