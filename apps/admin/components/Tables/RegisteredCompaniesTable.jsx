@@ -139,6 +139,7 @@ const RegisteredCompaniesTable = ({ className }) => {
       buttons.push(
         <TableButton
           index={i}
+          key={`pagination-btn-${i}`}
           selectedIndex={selectedIndex}
           setSelectedIndex={setSelectedIndex}
           selectedColor="bg-primary"
