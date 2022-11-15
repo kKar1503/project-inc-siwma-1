@@ -73,21 +73,25 @@ const RegisteredCompaniesTable = ({ className }) => {
     // Retrieve the checked state of the element, as well as the id of the row
     const { checked, name } = element;
 
+    // Ids retrieved from Supabase are stored as an integer, but names retrieved from checkboxes are strings
+    // Convert the name of the checkbox to a number and use it as the id
+    const id = Number(name);
+
     // Update the selectedRows state
     // Checks if the row has been unselected
-    if (!checked && selectedRows.includes(name)) {
+    if (!checked && selectedRows.includes(id)) {
       // The checkbox is no longer checked, remove the row from selectedRows
-      const result = [...selectedRows].filter((value) => value !== name);
+      const result = [...selectedRows].filter((value) => value !== id);
 
       // Update the state with the updated array
       setSelectedRows(result);
     }
 
     // Checks if the row has been selected
-    if (checked && !selectedRows.includes(name)) {
-      // The checkbox has been selected, add the row to selectedRows
+    if (checked && !selectedRows.includes(id)) {
+      // The checkbox has been selected, convert the value to a number and add the row to selectedRows
       const result = [...selectedRows];
-      result.push(name);
+      result.push(Number(id));
 
       // Update the state with the updated array
       setSelectedRows(result);
@@ -99,14 +103,14 @@ const RegisteredCompaniesTable = ({ className }) => {
    * @returns Whether or not all currently selected companies are suspended
    */
   const selectedAreSuspended = () =>
-    selectedRows.every((id) => data.data.find((f) => f.id === Number(id)).visible === 0);
+    selectedRows.every((id) => data.data.find((f) => f.id === id).visible === 0);
 
   /**
    * Checks that all selected companies are not suspended
    * @returns Whether or not all currently selected companies are not suspended
    */
   const selectedAreNotSuspended = () =>
-    selectedRows.every((id) => data.data.find((f) => f.id === Number(id)).visible === 1);
+    selectedRows.every((id) => data.data.find((f) => f.id === id).visible === 1);
 
   // -- Render functions --//
   /**
@@ -180,6 +184,7 @@ const RegisteredCompaniesTable = ({ className }) => {
       className={className}
       columnKeys={['company', 'website', 'bio', 'visible']}
       centerColumns={['Operational']}
+      selectedRows={selectedRows}
       isLoading={isLoading}
       data={
         isLoading
@@ -206,6 +211,14 @@ const RegisteredCompaniesTable = ({ className }) => {
               disabled={selectedRows.length > 0 ? !selectedAreNotSuspended() : true}
             >
               SUSPEND SELECTED
+            </button>
+            <button
+              className="btn btn-primary text-white"
+              onClick={() => {
+                console.log(selectedRows);
+              }}
+            >
+              TEST
             </button>
           </div>
 
