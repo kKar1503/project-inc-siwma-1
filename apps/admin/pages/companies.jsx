@@ -81,7 +81,7 @@ const Page = () => {
         </div>
       </div>
     </QueryClientProvider>
-  )
+  );
 };
 
 Page.getLayout = (page) => <AdminPageLayout pageName="Companies">{page}</AdminPageLayout>;
