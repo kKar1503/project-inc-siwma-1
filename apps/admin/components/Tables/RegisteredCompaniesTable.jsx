@@ -29,6 +29,7 @@ const RegisteredCompaniesTable = ({ className }) => {
   // Set states
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [searchInput, setSearchInput] = useState('');
 
   // Fetches companies from supabase
   const { data, isLoading, error, refetch } = useQuery({
@@ -40,6 +41,17 @@ const RegisteredCompaniesTable = ({ className }) => {
         .order('visible', { ascending: false })
         .order('name', { ascending: true }),
   });
+
+  // -- Prepare fetched data for rendering & processing -- //
+  // Filter the companies retrieved based on the search input
+  const filteredCompanies = isLoading
+    ? []
+    : data.data.filter((company) => company.name.toLowerCase().includes(searchInput.toLowerCase()));
+
+  // Slice the array of companies so that only the ones on the currently selected page are rendered
+  const companies = parseData(
+    filteredCompanies.slice(selectedIndex * 10, (selectedIndex + 1) * 10)
+  );
 
   // -- Data fetch/update functions --//
   /**
@@ -132,7 +144,7 @@ const RegisteredCompaniesTable = ({ className }) => {
     }
 
     // Data has already been fetched from supabase, determine the number of pagination buttons to be rendered
-    const buttonCount = data.data.length / 10;
+    const buttonCount = filteredCompanies.length / 10;
 
     // Initialise an array of buttons
     const buttons = [];
@@ -174,7 +186,7 @@ const RegisteredCompaniesTable = ({ className }) => {
             </h1>
           </div>
           <div className="flex flex-row gap-4">
-            <SearchBar placeholder="Search by name" />
+            <SearchBar placeholder="Search by name" value={searchInput} setValue={setSearchInput} />
           </div>
         </div>
       }
@@ -186,11 +198,7 @@ const RegisteredCompaniesTable = ({ className }) => {
       centerColumns={['Operational']}
       selectedRows={selectedRows}
       isLoading={isLoading}
-      data={
-        isLoading
-          ? undefined
-          : parseData(data.data.slice(selectedIndex * 10, (selectedIndex + 1) * 10))
-      }
+      data={companies}
       onChange={onChangeHandler}
       footer={
         <div className="flex justify-between bg-none">
@@ -211,14 +219,6 @@ const RegisteredCompaniesTable = ({ className }) => {
               disabled={selectedRows.length > 0 ? !selectedAreNotSuspended() : true}
             >
               SUSPEND SELECTED
-            </button>
-            <button
-              className="btn btn-primary text-white"
-              onClick={() => {
-                console.log(selectedRows);
-              }}
-            >
-              TEST
             </button>
           </div>
 
