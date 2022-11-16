@@ -212,7 +212,7 @@ const propTypes = {
   className: PropTypes.string,
   columnKeys: PropTypes.arrayOf(PropTypes.string),
   centerColumns: PropTypes.arrayOf(PropTypes.string),
-  selectedRows: PropTypes.arrayOf(PropTypes.string),
+  selectedRows: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
   isLoading: PropTypes.bool,
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.
