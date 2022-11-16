@@ -7,8 +7,6 @@ import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 import CreateSupabaseClient from '../../utils/supabase';
 
-// This table shows Pending Invites and is built on the BaseTable component.
-
 const parseData = (data) =>
   data.map((e) => ({
     id: e.id,
@@ -17,10 +15,11 @@ const parseData = (data) =>
     email: e.email,
   }));
 
-const supabase = CreateSupabaseClient();
-
+// This table shows Pending Invites and is built on the BaseTable component.
 const PendingInvitesTable = ({ className }) => {
-  const paginationValues = [1, 2, 3];
+  const paginationValues = [10, 20, 30];
+  const supabase = CreateSupabaseClient();
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [option, setOption] = useState(paginationValues[0]);
 
@@ -28,10 +27,15 @@ const PendingInvitesTable = ({ className }) => {
     setSelectedIndex(0);
   }, [option]);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['invites'],
     queryFn: async () => supabase.from('invite').select(`id, name, companies:company(name), email`),
   });
+
+  const revokeInvites = async () => {
+    await supabase.from('invite').delete().match({ id: '7' });
+    refetch();
+  };
 
   const renderTableButtons = () => {
     const tableButtons = [];
@@ -91,7 +95,9 @@ const PendingInvitesTable = ({ className }) => {
       }
       footer={
         <div className="flex justify-between bg-none">
-          <button className="btn btn-warning text-white">REVOKE SELECTED</button>
+          <button className="btn btn-warning text-white" onClick={revokeInvites}>
+            REVOKE SELECTED
+          </button>
           <div className="flex justify-end bg-none">{renderTableButtons()}</div>
         </div>
       }
