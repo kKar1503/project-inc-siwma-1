@@ -8,8 +8,6 @@ import TableButton from './TableButton';
 import pic from '../../public/avatar.png';
 import CreateSupabaseClient from '../../utils/supabase';
 
-// This table shows Registered Users and is built on the BaseTable component.
-
 const parseData = (data) =>
   data.map((e) => ({
     id: e.id,
@@ -18,12 +16,13 @@ const parseData = (data) =>
     email: e.email,
     company: e.companies.name,
     mobileNumber: e.phone,
+    enabled: e.enabled === 0 ? `Suspended` : `Activated`,
   }));
 
-const supabase = CreateSupabaseClient();
-
+// This table shows Registered Users and is built on the BaseTable component.
 const RegisteredUsersTable = ({ className }) => {
   const paginationValues = [1, 2, 3];
+  const supabase = CreateSupabaseClient();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [option, setOption] = useState(paginationValues[0]);
@@ -32,16 +31,34 @@ const RegisteredUsersTable = ({ className }) => {
     setSelectedIndex(0);
   }, [option]);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['users'],
     queryFn: async () =>
-      supabase.from('users').select(`id, email, fullname, phone, companies:companyid(name)`),
+      supabase
+        .from('users')
+        .select(`id, email, fullname, phone, companies:companyid(name), enabled`),
   });
+
+  const suspendUsers = async () => {
+    await supabase
+      .from('users')
+      .update({ enabled: 0 })
+      .match({ id: '4b6891ff-8956-4ed0-b06c-a79ba3c4741c' });
+    refetch();
+  };
+
+  const activateUsers = async () => {
+    await supabase
+      .from('users')
+      .update({ enabled: 1 })
+      .match({ id: '4b6891ff-8956-4ed0-b06c-a79ba3c4741c' });
+    refetch();
+  };
 
   const renderTableButtons = () => {
     const tableButtons = [];
     if (isLoading) return;
-    const count = data.data.length / option;
+    const count = 3 / option;
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < count; i++) {
       tableButtons.push(
@@ -84,11 +101,11 @@ const RegisteredUsersTable = ({ className }) => {
           </div>
         </div>
       }
-      headings={['User', 'E-mail', 'Company', 'Mobile Number']}
+      headings={['User', 'E-mail', 'Company', 'Mobile Number', 'Status']}
       headingColor="bg-primary"
       showCheckbox
       className={className}
-      columnKeys={['name', 'email', 'company', 'mobileNumber']}
+      columnKeys={['name', 'email', 'company', 'mobileNumber', 'enabled']}
       data={
         isLoading
           ? undefined
@@ -96,7 +113,15 @@ const RegisteredUsersTable = ({ className }) => {
       }
       footer={
         <div className="flex justify-between bg-none">
-          <button className="btn btn-primary text-white">DEACTIVATE SELECTED</button>
+          <div className="flex gap-4">
+            <button className="btn btn-primary text-white" onClick={suspendUsers}>
+              DEACTIVATE SELECTED
+            </button>
+            <button className="btn btn-primary text-white" onClick={activateUsers}>
+              ACTIVATE SELECTED
+            </button>
+          </div>
+
           <div className="flex justify-end bg-none">{renderTableButtons()}</div>
         </div>
       }
