@@ -117,20 +117,14 @@ const RegisteredCompaniesTable = ({ className }) => {
 
   // -- Logic functions -- //
   /**
-   * Handles for when a table item is checked/unchecked
-   * @param {{}} element The element that was checked/unchecked
+   * Handles for when a table item is selected/unselected
+   * @param {{}} targetCompany The company that was selected/unselected
+   * @param {boolean} isSelected Whether or not the company was selected/unselected
    */
-  const onChangeHandler = (element) => {
-    // Retrieve the checked state of the element, as well as the id of the company the row represents
-    const { checked, name: id } = element;
-
-    // Ids retrieved from Supabase are stored as an integer, but names retrieved from checkboxes are strings
-    // Convert the name retrived from the checkbox to an integer, so that it can be used to retrieve the target company
-    const targetCompany = companies.find((e) => e.id === Number(id));
-
+  const onChangeHandler = (targetCompany, isSelected) => {
     // -- Update the selectedCompanies state -- //
     // Checks if the company was already selected, and has now been unselected
-    if (!checked && selectedCompanies.find((company) => company.id === targetCompany.id)) {
+    if (!isSelected && selectedCompanies.find((company) => company.id === targetCompany.id)) {
       // The company has been unselected, remove the company from selectedCompanies
       const result = [...selectedCompanies].filter((company) => company.id !== targetCompany.id);
 
@@ -139,7 +133,7 @@ const RegisteredCompaniesTable = ({ className }) => {
     }
 
     // Checks if the company has been selected
-    if (checked && !selectedCompanies.find((company) => company.id === targetCompany.id)) {
+    if (isSelected && !selectedCompanies.find((company) => company.id === targetCompany.id)) {
       // The company has been selected, add it to the selectedCompanies array
       const result = [...selectedCompanies];
       result.push(targetCompany);
