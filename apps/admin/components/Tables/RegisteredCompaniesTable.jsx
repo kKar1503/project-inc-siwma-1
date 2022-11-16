@@ -82,11 +82,11 @@ const RegisteredCompaniesTable = ({ className }) => {
    * @param {{}} element The element that was checked/unchecked
    */
   const onChangeHandler = (element) => {
-    // Retrieve the checked state of the element, as well as the id of the row
+    // Retrieve the checked state of the element, as well as the name of the row
     const { checked, name } = element;
 
     // Ids retrieved from Supabase are stored as an integer, but names retrieved from checkboxes are strings
-    // Convert the name of the checkbox to a number and use it as the id
+    // Convert the name retrived from the checkbox to an integer, so that it can be used as the id
     const id = Number(name);
 
     // Update the selectedRows state
