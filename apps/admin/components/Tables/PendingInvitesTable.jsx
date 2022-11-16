@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import BaseTable from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
@@ -12,19 +13,44 @@ const parseData = (data) =>
   data.map((e) => ({
     id: e.id,
     name: e.name,
-    company: e.company,
+    company: e.companies.name,
     email: e.email,
   }));
 
 const supabase = CreateSupabaseClient();
 
 const PendingInvitesTable = ({ className }) => {
+  const paginationValues = [1, 2, 3];
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [option, setOption] = useState(paginationValues[0]);
 
   const { data, isLoading } = useQuery({
     queryKey: ['invites'],
-    queryFn: async () => supabase.from('invite').select('*'),
+    queryFn: async () => supabase.from('invite').select(`id, name, companies:company(name), email`),
   });
+
+  const renderTableButtons = () => {
+    const tableButtons = [];
+    if (isLoading) return;
+    const count = data.data.length / option;
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < count; i++) {
+      tableButtons.push(
+        <TableButton
+          index={i}
+          selectedIndex={selectedIndex}
+          setSelectedIndex={setSelectedIndex}
+          selectedColor="bg-primary"
+          className={cx('hover:bg-primary', {
+            'rounded-l-lg': i === 0,
+            'rounded-r-lg': i >= count - 1,
+          })}
+        />
+      );
+    }
+    // eslint-disable-next-line consistent-return
+    return tableButtons;
+  };
 
   return (
     <BaseTable
@@ -32,14 +58,18 @@ const PendingInvitesTable = ({ className }) => {
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">Pending Invites</h1>
-            <h1 className="pr-2">Showing 1 to 10 of 100 entries</h1>
+            <h1 className="pr-2">Showing 1 to 10 of {data?.data.length} entries</h1>
           </div>
           <div className="flex flex-row gap-4">
             <h1 className="mt-3">Show</h1>
-            <select className="select select-bordered w-25">
-              <option>8 per page</option>
-              <option>15 per page</option>
-              <option>50 per page</option>
+            <select
+              value={option}
+              className="select select-bordered w-25"
+              onChange={(e) => setOption(e.target.value)}
+            >
+              <option value={paginationValues[0]}>{paginationValues[0]} per page</option>
+              <option value={paginationValues[1]}>{paginationValues[1]} per page</option>
+              <option value={paginationValues[2]}>{paginationValues[2]} per page</option>
             </select>
             <SearchBar placeholder="Search by e-mail" />
           </div>
@@ -50,33 +80,15 @@ const PendingInvitesTable = ({ className }) => {
       showCheckbox
       className={className}
       columnKeys={['name', 'company', 'email']}
-      data={isLoading ? undefined : parseData(data.data)}
+      data={
+        isLoading
+          ? undefined
+          : parseData(data.data.slice(selectedIndex * option, (selectedIndex + 1) * option))
+      }
       footer={
         <div className="flex justify-between bg-none">
           <button className="btn btn-warning text-white">REVOKE SELECTED</button>
-          <div className="flex justify-end bg-none">
-            <TableButton
-              index={0}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-warning"
-              className="rounded-l-lg hover:bg-warning"
-            />
-            <TableButton
-              index={1}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-warning"
-              className="hover:bg-warning"
-            />
-            <TableButton
-              index={2}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-warning"
-              className="rounded-r-lg hover:bg-warning"
-            />
-          </div>
+          <div className="flex justify-end bg-none">{renderTableButtons()}</div>
         </div>
       }
     />
