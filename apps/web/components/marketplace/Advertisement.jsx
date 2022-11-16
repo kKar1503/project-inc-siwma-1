@@ -1,48 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
-const Advertisement = () => {
-  const [open, setOpen] = React.useState(false);
+const Advertisement = ({ company, content }) => {
+  // Count the number of clicks of the advertisement banners
+  // This is used to determine engagement rate
+  // Will be used in the future to determine the ranking of the advertisement in the dashboards
+  const [count, setCount] = useState(0);
 
-  const handleClick = () => {
-    setOpen(!open);
+  const handleCount = () => {
+    setCount(count + 1);
+    // console.log(count);
   };
 
   return (
     <>
-      <div
-        htmlFor="my-modal-4"
-        onClick={handleClick}
-        onKeyPress={handleClick}
-        role="button"
-        tabIndex={0}
-      >
-        <picture>
-          <img
-            src="https://via.placeholder.com/1500x500"
-            className="object-cover w-full h-[200px]"
-            alt="Banner"
-          />
-        </picture>
+      <div onClick={handleCount} onKeyPress={handleCount} role="button" tabIndex={0}>
+        <label htmlFor="modal" className="image">
+          <picture>
+            <img
+              src="https://via.placeholder.com/1500x500"
+              className="object-cover w-full h-[200px]"
+              alt="Banner"
+            />
+          </picture>
+        </label>
       </div>
 
-      {open ? (
-        <div className="modal" style={{ opacity: 1, visibility: 'visible' }}>
-          <div className="modal-box">
-            <h3 className="font-bold text-lg">Congratulations random Internet user!</h3>
-            <p className="py-4">
-              You have been selected for a chance to get one year of subscription to use Wikipedia
-              for free!
-            </p>
-            <div className="modal-action">
-              <label htmlFor="my-modal" className="btn">
-                Yay!
-              </label>
-            </div>
+      <input type="checkbox" id="modal" className="modal-toggle" />
+      <label htmlFor="modal" className="modal cursor-pointer">
+        <label className="modal-box relative" htmlFor="placeholder">
+          <h3 className="text-lg font-bold text-center">{company}</h3>
+          <p className="py-4">{content}</p>
+          <div className="modal-action">
+            <label htmlFor="my-modal" className="btn">
+              Show me!
+            </label>
           </div>
-        </div>
-      ) : null}
+        </label>
+      </label>
     </>
   );
+};
+
+Advertisement.propTypes = {
+  company: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
 };
 
 export default Advertisement;
