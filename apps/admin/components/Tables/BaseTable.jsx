@@ -109,10 +109,9 @@ const BaseTable = ({
                         <td>
                           <label>
                             <input
-                              name={row.id}
                               type="checkbox"
                               className="checkbox"
-                              onChange={(e) => onChange(e.currentTarget)}
+                              onChange={(e) => onChange(row, e.currentTarget.checked)}
                               // Give the checkbox a checked state if the current row being rendered is selected
                               defaultChecked={
                                 selectedRows ? selectedRows.find((e) => e === row.id) : false
