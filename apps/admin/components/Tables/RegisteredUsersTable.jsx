@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -27,6 +27,10 @@ const RegisteredUsersTable = ({ className }) => {
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [option, setOption] = useState(paginationValues[0]);
+
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [option]);
 
   const { data, isLoading } = useQuery({
     queryKey: ['users'],
