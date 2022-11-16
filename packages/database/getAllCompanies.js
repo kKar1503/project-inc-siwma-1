@@ -9,11 +9,7 @@ import supabase from './supabase';
  */
 const getAllCompanies = ({ from, to, matching }) => {
   // Construct the base query
-  const query = supabase
-    .from('companies')
-    .select('*')
-    .order('visible', { ascending: false })
-    .order('name', { ascending: true });
+  const query = supabase.from('companies').select('*').order('name', { ascending: true });
 
   // Add a range filter if the user provides both 'from' and 'to' values
   if (from != null && to != null) {
