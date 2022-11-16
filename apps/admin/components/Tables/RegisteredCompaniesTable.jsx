@@ -278,16 +278,6 @@ const RegisteredCompaniesTable = ({ className }) => {
 };
 
 RegisteredCompaniesTable.propTypes = {
-  // data: PropTypes.arrayOf(
-  //   PropTypes.shape({
-  //     id: PropTypes.number,
-  //     // eslint-disable-next-line react/forbid-prop-types
-  //     profilePicture: PropTypes.object,
-  //     company: PropTypes.string,
-  //     website: PropTypes.string,
-  //     bio: PropTypes.string,
-  //   })
-  // ),
   className: PropTypes.string,
 };
 
