@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ChatDiv from './chatDiv';
 //  const [selected, setSelected] = useState(options[0]);
 const data = [
@@ -153,11 +153,11 @@ const ChatList = () => {
           <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
           <div onMouseOver={handleMouseOver} onFocus={handleMouseOver} className="drawer-side">
             <ul className="menu p-4 overflow-y-auto bg-base-200 text-base-content">
-              {filteredData.map((item, index) => (
+              {filteredData.map((item) => (
                 <ChatDiv
                   key={item.id}
                   isCheckCallback={(isChecked) => handleCheck(item.id, isChecked)}
-                  members={data[index]}
+                  members={data[item.id - 1]}
                 />
               ))}
             </ul>
