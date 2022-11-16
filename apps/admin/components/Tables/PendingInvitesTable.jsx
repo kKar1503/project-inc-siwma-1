@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -23,6 +23,10 @@ const PendingInvitesTable = ({ className }) => {
   const paginationValues = [1, 2, 3];
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [option, setOption] = useState(paginationValues[0]);
+
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [option]);
 
   const { data, isLoading } = useQuery({
     queryKey: ['invites'],
