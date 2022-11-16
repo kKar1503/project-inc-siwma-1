@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useQuery } from 'react-query';
+import { useQueries, useQueryClient } from 'react-query';
 import cx from 'classnames';
+import { getAllCompanies, getCompanyCount } from '@inc/database';
 import BaseTable from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
@@ -28,30 +29,50 @@ function parseData(data) {
 const RegisteredCompaniesTable = ({ className }) => {
   // Set states
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedCompanies, setselectedCompanies] = useState([]);
   const [searchInput, setSearchInput] = useState('');
 
-  // Fetches companies from supabase
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['companies'],
-    queryFn: async () =>
-      supabase
-        .from('companies')
-        .select('*')
-        .order('visible', { ascending: false })
-        .order('name', { ascending: true }),
-  });
+  // -- Queries Supabase --//
+  // Get QueryClient from the context
+  const queryClient = useQueryClient();
+
+  // Run all supabase queries in parallel
+  const queries = useQueries([
+    {
+      // Fetches the total number of companies from supabase
+      queryKey: ['getCompanyCount', { matching: searchInput }],
+      keepPreviousData: true,
+      queryFn: async () =>
+        getCompanyCount({
+          matching: searchInput,
+        }),
+    },
+    {
+      // Fetches companies from supabase
+      queryKey: [
+        'getAllCompanies',
+        { from: selectedIndex * 10, to: (selectedIndex + 1) * 9, matching: searchInput },
+      ],
+      keepPreviousData: true,
+      queryFn: async () =>
+        getAllCompanies({
+          from: selectedIndex * 10,
+          to: (selectedIndex + 1) * 9,
+          matching: searchInput,
+        }),
+    },
+  ]);
 
   // -- Prepare fetched data for rendering & processing -- //
-  // Filter the companies retrieved based on the search input
-  const filteredCompanies = isLoading
-    ? []
-    : data.data.filter((company) => company.name.toLowerCase().includes(searchInput.toLowerCase()));
+  // Set isLoading to true if any of theq queries are still loading
+  const isLoading = queries.some((e) => e.isLoading);
 
-  // Slice the array of companies so that only the ones on the currently selected page are rendered
-  const companies = parseData(
-    filteredCompanies.slice(selectedIndex * 10, (selectedIndex + 1) * 10)
-  );
+  // Destructure query data
+  const [companyCountQuery, companiesQuery] = queries;
+
+  // Retrieve query data
+  const companyCount = isLoading ? 0 : companyCountQuery.data.count;
+  const companies = isLoading ? [] : parseData(companiesQuery.data.data);
 
   // -- Data fetch/update functions --//
   /**
@@ -59,10 +80,19 @@ const RegisteredCompaniesTable = ({ className }) => {
    */
   const reinstateCompanies = async () => {
     // Set the 'visible' column of every selected company to true
-    await supabase.from('companies').update({ visible: 1 }).in('id', selectedRows);
+    await supabase
+      .from('companies')
+      .update({ visible: 1 })
+      .in(
+        'id',
+        selectedCompanies.map((e) => e.id)
+      );
 
-    // Refetch data
-    refetch();
+    // Invalidate old query to cause a refetch
+    queryClient.invalidateQueries({ queryKey: ['getAllCompanies'] });
+
+    // Update the visible property of every company in the selectedCompanies array
+    setselectedCompanies(selectedCompanies.map((e) => ({ ...e, visible: true })));
   };
 
   /**
@@ -70,10 +100,19 @@ const RegisteredCompaniesTable = ({ className }) => {
    */
   const suspendCompanies = async () => {
     // Set the 'visible' column of every selected company to false
-    await supabase.from('companies').update({ visible: 0 }).in('id', selectedRows);
+    await supabase
+      .from('companies')
+      .update({ visible: 0 })
+      .in(
+        'id',
+        selectedCompanies.map((e) => e.id)
+      );
 
-    // Refetch data
-    refetch();
+    // Invalidate old query to cause a refetch
+    queryClient.invalidateQueries({ queryKey: ['getAllCompanies'] });
+
+    // Update the visible property of every company in the selectedCompanies array
+    setselectedCompanies(selectedCompanies.map((e) => ({ ...e, visible: false })));
   };
 
   // -- Logic functions -- //
@@ -82,31 +121,31 @@ const RegisteredCompaniesTable = ({ className }) => {
    * @param {{}} element The element that was checked/unchecked
    */
   const onChangeHandler = (element) => {
-    // Retrieve the checked state of the element, as well as the name of the row
-    const { checked, name } = element;
+    // Retrieve the checked state of the element, as well as the id of the company the row represents
+    const { checked, name: id } = element;
 
     // Ids retrieved from Supabase are stored as an integer, but names retrieved from checkboxes are strings
-    // Convert the name retrived from the checkbox to an integer, so that it can be used as the id
-    const id = Number(name);
+    // Convert the name retrived from the checkbox to an integer, so that it can be used to retrieve the target company
+    const targetCompany = companies.find((e) => e.id === Number(id));
 
-    // Update the selectedRows state
-    // Checks if the row has been unselected
-    if (!checked && selectedRows.includes(id)) {
-      // The checkbox is no longer checked, remove the row from selectedRows
-      const result = [...selectedRows].filter((value) => value !== id);
+    // -- Update the selectedCompanies state -- //
+    // Checks if the company was already selected, and has now been unselected
+    if (!checked && selectedCompanies.find((company) => company.id === targetCompany.id)) {
+      // The company has been unselected, remove the company from selectedCompanies
+      const result = [...selectedCompanies].filter((company) => company.id !== targetCompany.id);
 
       // Update the state with the updated array
-      setSelectedRows(result);
+      setselectedCompanies(result);
     }
 
-    // Checks if the row has been selected
-    if (checked && !selectedRows.includes(id)) {
-      // The checkbox has been selected, convert the value to a number and add the row to selectedRows
-      const result = [...selectedRows];
-      result.push(Number(id));
+    // Checks if the company has been selected
+    if (checked && !selectedCompanies.find((company) => company.id === targetCompany.id)) {
+      // The company has been selected, add it to the selectedCompanies array
+      const result = [...selectedCompanies];
+      result.push(targetCompany);
 
       // Update the state with the updated array
-      setSelectedRows(result);
+      setselectedCompanies(result);
     }
   };
 
@@ -114,15 +153,13 @@ const RegisteredCompaniesTable = ({ className }) => {
    * Checks that all selected companies are suspended
    * @returns Whether or not all currently selected companies are suspended
    */
-  const selectedAreSuspended = () =>
-    selectedRows.every((id) => data.data.find((f) => f.id === id).visible === 0);
+  const selectedAreSuspended = () => selectedCompanies.every((e) => e.visible === false);
 
   /**
    * Checks that all selected companies are not suspended
    * @returns Whether or not all currently selected companies are not suspended
    */
-  const selectedAreNotSuspended = () =>
-    selectedRows.every((id) => data.data.find((f) => f.id === id).visible === 1);
+  const selectedAreNotSuspended = () => selectedCompanies.every((e) => e.visible === true);
 
   // -- Render functions --//
   /**
@@ -144,7 +181,7 @@ const RegisteredCompaniesTable = ({ className }) => {
     }
 
     // Data has already been fetched from supabase, determine the number of pagination buttons to be rendered
-    const buttonCount = filteredCompanies.length / 10;
+    const buttonCount = companyCount / 10;
 
     // Initialise an array of buttons
     const buttons = [];
@@ -179,11 +216,14 @@ const RegisteredCompaniesTable = ({ className }) => {
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">Registered Companies</h1>
-            <h1 className="pr-2">
-              Showing {isLoading ? 0 : Math.min(selectedIndex * 10 + 1, data.data.length)} to{' '}
-              {isLoading ? 0 : Math.min((selectedIndex + 1) * 10, data.data.length)} of{' '}
-              {isLoading ? 0 : data.data.length} entries
-            </h1>
+            {isLoading ? (
+              <h1 className="pr-2">Showing 0 to 0 of 0 entries</h1>
+            ) : (
+              <h1 className="pr-2">
+                Showing {Math.min(selectedIndex * 10 + 1, companyCount)} to{' '}
+                {Math.min((selectedIndex + 1) * 10, companyCount)} of {companyCount} entries
+              </h1>
+            )}
           </div>
           <div className="flex flex-row gap-4">
             <SearchBar placeholder="Search by name" value={searchInput} setValue={setSearchInput} />
@@ -196,7 +236,8 @@ const RegisteredCompaniesTable = ({ className }) => {
       className={className}
       columnKeys={['company', 'website', 'bio', 'visible']}
       centerColumns={['Operational']}
-      selectedRows={selectedRows}
+      // We only need to pass in an array of the ids of the companies that have been selected
+      selectedRows={selectedCompanies.map((e) => e.id)}
       isLoading={isLoading}
       data={companies}
       onChange={onChangeHandler}
@@ -208,7 +249,7 @@ const RegisteredCompaniesTable = ({ className }) => {
               className="btn btn-primary text-white"
               onClick={reinstateCompanies}
               // Disable the button if one or more of the companies selected are not suspended
-              disabled={selectedRows.length > 0 ? !selectedAreSuspended() : true}
+              disabled={!isLoading && selectedCompanies.length > 0 ? !selectedAreSuspended() : true}
             >
               REINSTATE SELECTED
             </button>
@@ -216,7 +257,9 @@ const RegisteredCompaniesTable = ({ className }) => {
               className="btn btn-primary text-white"
               onClick={suspendCompanies}
               // Disable the button if one or more of the companies selected are suspended
-              disabled={selectedRows.length > 0 ? !selectedAreNotSuspended() : true}
+              disabled={
+                !isLoading && selectedCompanies.length > 0 ? !selectedAreNotSuspended() : true
+              }
             >
               SUSPEND SELECTED
             </button>
