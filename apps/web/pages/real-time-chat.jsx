@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import PropTypes from 'prop-types';
 import '@inc/styles/globals.css';
-import Header from '../components/header';
-import ChatList from '../components/chatList';
-import ChatHeader from '../components/chatHeader';
+import Header from '@inc/ui/Header';
+import ChatList from '../components/ChatList';
+import ChatHeader from '../components/ChatHeader';
 import ChatBubbles from '../components/ChatBubbles';
 import InputText from '../components/InputText';
 
