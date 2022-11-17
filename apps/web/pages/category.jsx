@@ -22,7 +22,12 @@ const Category = () => {
       </p>
       <div className="flex flex-wrap mb-10">
         {categoryData?.data.map((item) => (
-          <CategoryCard name={item.name} img={item.image} href={`/category/${item.name}`} />
+          <CategoryCard
+            name={item.name}
+            img={item.image}
+            href={`/category/${item.name}?id=${item.id}`}
+            key={item.name}
+          />
         ))}
 
         {/* image temporarily grabbed from metalsupermarkets.com */}
