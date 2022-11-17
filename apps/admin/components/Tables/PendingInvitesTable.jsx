@@ -5,7 +5,7 @@ import cx from 'classnames';
 import BaseTable from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
-import CreateSupabaseClient from '../../utils/supabase';
+import supabase from '../../pages/api/supabase';
 
 const parseData = (data) =>
   data.map((e) => ({
@@ -18,7 +18,6 @@ const parseData = (data) =>
 // This table shows Pending Invites and is built on the BaseTable component.
 const PendingInvitesTable = ({ className }) => {
   const paginationValues = [10, 20, 30];
-  const supabase = CreateSupabaseClient();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [option, setOption] = useState(paginationValues[0]);
