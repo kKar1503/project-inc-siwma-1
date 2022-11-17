@@ -38,6 +38,7 @@ importers:
   apps/admin:
     specifiers:
       '@inc/charts': workspace:*
+      '@inc/database': workspace:^0.0.0
       '@inc/styles': workspace:*
       '@inc/ui': workspace:*
       '@inc/utils': workspace:*
@@ -66,8 +67,10 @@ importers:
       react-table: ^7.8.0
       tailwindcss: ^3.2.1
       victory: ^36.6.8
+      xlsx: https://cdn.sheetjs.com/xlsx-0.19.0/xlsx-0.19.0.tgz
     dependencies:
       '@inc/charts': link:../../packages/charts
+      '@inc/database': link:../../packages/database
       '@inc/styles': link:../../packages/styles
       '@inc/ui': link:../../packages/ui
       '@inc/utils': link:../../packages/utils
@@ -90,6 +93,7 @@ importers:
       react-responsive: 9.0.0_react@18.2.0
       react-table: 7.8.0_react@18.2.0
       victory: 36.6.8_react@18.2.0
+      xlsx: '@cdn.sheetjs.com/xlsx-0.19.0/xlsx-0.19.0.tgz'
     devDependencies:
       autoprefixer: 10.4.13_postcss@8.4.18
       cypress: 10.11.0
@@ -101,7 +105,7 @@ importers:
   apps/web:
     specifiers:
       '@inc/chat': workspace:*
-      '@inc/database': workspace:*
+      '@inc/database': workspace:0.0.0
       '@inc/notifications': workspace:*
       '@inc/styles': workspace:*
       '@inc/ui': workspace:*
@@ -201,13 +205,15 @@ importers:
 
   packages/database:
     specifiers:
+      '@supabase/supabase-js': ^2.1.0
       eslint: ^7.32.0
       eslint-config-custom: workspace:*
       react: ^18.2.0
       react-hot-toast: ^2.4.0
     dependencies:
+      '@supabase/supabase-js': 2.1.0
       react: 18.2.0
-      react-hot-toast: 2.4.0_owo25xnefcwdq3zjgtohz6dbju
+      react-hot-toast: 2.4.0_react@18.2.0
     devDependencies:
       eslint: 7.32.0
       eslint-config-custom: link:../eslint-config-custom
@@ -2983,6 +2989,12 @@ packages:
       slash: 3.0.0
     dev: false
 
+  /goober/2.1.11:
+    resolution: {integrity: sha512-5SS2lmxbhqH0u9ABEWq7WPU69a4i2pYcHeCxqaNq6Cw3mnrF0ghWNM4tEGid4dKy8XNIAUbuThuozDHHKJVh3A==}
+    peerDependencies:
+      csstype: ^3.0.10
+    dev: false
+
   /goober/2.1.11_csstype@3.1.1:
     resolution: {integrity: sha512-5SS2lmxbhqH0u9ABEWq7WPU69a4i2pYcHeCxqaNq6Cw3mnrF0ghWNM4tEGid4dKy8XNIAUbuThuozDHHKJVh3A==}
     peerDependencies:
@@ -4214,6 +4226,19 @@ packages:
       goober: 2.1.11_csstype@3.1.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+    transitivePeerDependencies:
+      - csstype
+    dev: false
+
+  /react-hot-toast/2.4.0_react@18.2.0:
+    resolution: {integrity: sha512-qnnVbXropKuwUpriVVosgo8QrB+IaPJCpL8oBI6Ov84uvHZ5QQcTp2qg6ku2wNfgJl6rlQXJIQU5q+5lmPOutA==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      goober: 2.1.11
+      react: 18.2.0
     transitivePeerDependencies:
       - csstype
     dev: false
@@ -5667,3 +5692,11 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  '@cdn.sheetjs.com/xlsx-0.19.0/xlsx-0.19.0.tgz':
+    resolution: {tarball: https://cdn.sheetjs.com/xlsx-0.19.0/xlsx-0.19.0.tgz}
+    name: xlsx
+    version: 0.19.0
+    engines: {node: '>=0.8'}
+    hasBin: true
+    dev: false
