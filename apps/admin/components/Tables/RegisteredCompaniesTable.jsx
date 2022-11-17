@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { useQueries, useQueryClient } from 'react-query';
 import cx from 'classnames';
 import { getAllCompanies, getCompanyCount } from '@inc/database';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import BaseTable from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
-import supabase from '../../pages/api/supabase';
 
 /**
  * Parses data retrieved from Supabase into a format accepted by the tables
@@ -33,6 +33,9 @@ const RegisteredCompaniesTable = ({ className }) => {
   const [searchInput, setSearchInput] = useState('');
 
   // -- Queries Supabase --//
+  // Initialise supabase client
+  const supabase = useSupabaseClient();
+
   // Get QueryClient from the context
   const queryClient = useQueryClient();
 
@@ -44,6 +47,7 @@ const RegisteredCompaniesTable = ({ className }) => {
       keepPreviousData: true,
       queryFn: async () =>
         getCompanyCount({
+          supabase,
           matching: searchInput,
         }),
     },
@@ -56,6 +60,7 @@ const RegisteredCompaniesTable = ({ className }) => {
       keepPreviousData: true,
       queryFn: async () =>
         getAllCompanies({
+          supabase,
           from: selectedIndex * 10,
           to: (selectedIndex + 1) * 9,
           matching: searchInput,
@@ -64,15 +69,16 @@ const RegisteredCompaniesTable = ({ className }) => {
   ]);
 
   // -- Prepare fetched data for rendering & processing -- //
-  // Set isLoading to true if any of theq queries are still loading
+  // Set isLoading to true if any of the queries are still loading or has errored
   const isLoading = queries.some((e) => e.isLoading);
 
   // Destructure query data
   const [companyCountQuery, companiesQuery] = queries;
 
   // Retrieve query data
-  const companyCount = isLoading ? 0 : companyCountQuery.data.count;
-  const companies = isLoading ? [] : parseData(companiesQuery.data.data);
+  const companyCount = isLoading || !companyCountQuery.data ? 0 : companyCountQuery.data.count;
+  const companies =
+    isLoading || !companiesQuery.data.data ? [] : parseData(companiesQuery.data.data);
 
   // -- Data fetch/update functions --//
   /**
