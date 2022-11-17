@@ -9,12 +9,21 @@ const FileUpload = ({ className }) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const changeHandler = async (event) => {
+    if (event.target.files[0].size > 64000000) {
+      // 64000000 bytes = 64 MB
+      alert('File is too big!');
+      return;
+    }
+
     setSelectedFile(event.target.files[0]);
 
     const reader = new FileReader();
     reader.onload = (evt) => {
-      // evt = on_file_select event
-      /* Parse data */
+      /*
+      XLSX Workbooks are essentially just a zip containing XMLs called Worksheets.
+      As we are only interested in the first sheet, we can just grab it directly and it is guaranteed to exist unless the XLSX itself is corrupt.
+       */
+
       const bstr = evt.target.result;
       const wb = XLSX.read(bstr, { type: 'binary' });
       /* Get first worksheet */
@@ -22,7 +31,7 @@ const FileUpload = ({ className }) => {
       const ws = wb.Sheets[wsname];
       /* Convert array of arrays */
       const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
-      console.log('data');
+      console.log(data);
     };
     reader.readAsBinaryString(event.target.files[0]);
   };
@@ -31,7 +40,7 @@ const FileUpload = ({ className }) => {
     <div className={cx(className, 'flex flex-col bg-base-100 rounded-lg shadow-lg')}>
       <div className="p-6">
         <h2 className="text-lg font-bold">Bulk Add Companies & Invite Users</h2>
-        <p>Import a .xlsx file below to bulk add company profiles and bulk invite users</p>
+        <p>Import an .xlsx file below to bulk add company profiles and bulk invite users</p>
       </div>
       <hr />
       <div className="flex-1 p-6">
@@ -56,7 +65,7 @@ const FileUpload = ({ className }) => {
             <p className="text-center">{selectedFile.name}</p>
           ) : (
             <p className="text-lg text-center w-3/4">
-              Click to upload or drag and drop .xslx or .csv (MAX. 64MB)
+              Click to upload or drag and drop .xslx (MAX. 64MB)
             </p>
           )}
         </div>
