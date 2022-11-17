@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@inc/chat": "workspace:*",
-    "@inc/database": "workspace:*",
+    "@inc/database": "workspace:0.0.0",
     "@inc/notifications": "workspace:*",
     "@inc/styles": "workspace:*",
     "@inc/ui": "workspace:*",

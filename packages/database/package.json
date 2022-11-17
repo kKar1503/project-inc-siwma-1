@@ -12,7 +12,8 @@
     "eslint-config-custom": "workspace:*"
   },
   "dependencies": {
-    "react-hot-toast": "^2.4.0",
-    "react": "^18.2.0"
+    "@supabase/supabase-js": "^2.1.0",
+    "react": "^18.2.0",
+    "react-hot-toast": "^2.4.0"
   }
 }
