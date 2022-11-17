@@ -6,7 +6,7 @@ import BaseTable from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 import pic from '../../public/avatar.png';
-import CreateSupabaseClient from '../../utils/supabase';
+import supabase from '../../pages/api/supabase';
 
 const parseData = (data) =>
   data.map((e) => ({
@@ -22,7 +22,6 @@ const parseData = (data) =>
 // This table shows Registered Users and is built on the BaseTable component.
 const RegisteredUsersTable = ({ className }) => {
   const paginationValues = [1, 2, 3];
-  const supabase = CreateSupabaseClient();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [option, setOption] = useState(paginationValues[0]);
