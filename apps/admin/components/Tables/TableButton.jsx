@@ -11,13 +11,13 @@ const TableButton = ({
   selectedIndex,
   setSelectedIndex,
   selectedColor,
-  styles,
+  className,
   disabled,
 }) => (
   <button
     className={cx(
       'btn px-4 py-2 text-white rounded-none border-none',
-      styles,
+      className,
       index === selectedIndex ? selectedColor : 'bg-black'
     )}
     onClick={() => setSelectedIndex(index)}
@@ -32,7 +32,7 @@ TableButton.propTypes = {
   selectedIndex: PropTypes.number,
   setSelectedIndex: PropTypes.func,
   selectedColor: PropTypes.string,
-  styles: PropTypes.string,
+  className: PropTypes.string,
   disabled: PropTypes.bool,
 };
 
