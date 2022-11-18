@@ -5,7 +5,7 @@ import { FiUpload } from 'react-icons/fi';
 import { BsFileEarmarkSpreadsheet } from 'react-icons/bs';
 import * as XLSX from 'xlsx';
 
-const FileUpload = ({ className }) => {
+const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const changeHandler = async (event) => {
@@ -26,12 +26,38 @@ const FileUpload = ({ className }) => {
 
       const bstr = evt.target.result;
       const wb = XLSX.read(bstr, { type: 'binary' });
-      /* Get first worksheet */
+      // Get first worksheet
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
-      /* Convert array of arrays */
-      const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
-      console.log(data);
+      // Parse data into objects
+      let userData = XLSX.utils.sheet_to_json(ws, { header: 1 });
+      // Remove header row
+      userData.shift();
+
+      let companyData = [];
+      userData.forEach((element) => {
+        companyData.push(element[0]);
+      });
+
+      // Remove duplicate company names from companyData
+      companyData = [...new Set(companyData)];
+
+      // Remove incomplete rows
+      userData = userData.filter((element) => element[0] !== '');
+
+      // Add ids
+      userData = userData.map((user, index) => ({
+        id: index,
+        company: user[0],
+        email: user[1],
+        mobileNumber: user[2],
+      }));
+
+      companyData = companyData.map((company, index) => ({ id: index, name: company }));
+      console.log(companyData);
+
+      setCompanyTableData(companyData);
+      setUserTableData(userData);
     };
     reader.readAsBinaryString(event.target.files[0]);
   };
@@ -76,7 +102,8 @@ const FileUpload = ({ className }) => {
 
 FileUpload.propTypes = {
   className: PropTypes.string,
+  setUserTableData: PropTypes.func,
+  setCompanyTableData: PropTypes.func,
 };
 
 export default FileUpload;
-
