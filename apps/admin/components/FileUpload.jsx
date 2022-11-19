@@ -8,6 +8,8 @@ import * as XLSX from 'xlsx';
 const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
+  // TODO:  Add .csv support
+
   const changeHandler = async (event) => {
     if (event.target.files[0].size > 64000000) {
       // 64000000 bytes = 64 MB
@@ -44,6 +46,26 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
 
       // Remove incomplete rows
       userData = userData.filter((element) => element[0] !== '');
+
+      // Identify duplicate emails and mobile numbers
+      const duplicateEmails = [];
+      const duplicateMobileNumbers = [];
+      userData.forEach((element) => {
+        const email = element[2];
+        const mobileNumber = element[4];
+        if (duplicateEmails.includes(email)) {
+          // TODO: Replace with custom alert component
+          alert(`Duplicate email found: ${email}`);
+        } else {
+          duplicateEmails.push(email);
+        }
+        if (duplicateMobileNumbers.includes(mobileNumber)) {
+          // TODO: Replace with custom alert component
+          alert(`Duplicate mobile number found: ${mobileNumber}`);
+        } else {
+          duplicateMobileNumbers.push(mobileNumber);
+        }
+      });
 
       // Add ids
       userData = userData.map((user, index) => ({
