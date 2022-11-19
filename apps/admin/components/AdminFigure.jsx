@@ -8,17 +8,18 @@ const AdminFigure = ({ title, value, icon, color, className }) => (
       className
     )}
   >
-    <div className="flex flex-col mt-4 h-full items-left">
-      <p className={cx('text-6xl font-black py-1 pr-4 select-none', color ?? 'text-gray-700')}>
+    <div className="flex flex-col mr-8 h-full items-left">
+      <p className={cx('text-7xl font-black py-1 pr-4 select-none', color ?? 'text-gray-700')}>
         {value}
       </p>
       <h2 className="text-lg text-left text-gray-700 py-1 select-none">{title}</h2>
     </div>
-    <div className="flex items-center justify-center w-24 h-24 pl-4 bg-blue-500">{icon}</div>
+    <div className="flex items-center justify-center w-28 h-28 pl-4">{icon}</div>
   </div>
 );
 
 // color parameter must be a tailwindcss text color class
+// icon color should be set in the icon itself
 
 AdminFigure.propTypes = {
   title: PropTypes.string,
