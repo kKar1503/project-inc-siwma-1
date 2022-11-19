@@ -31,7 +31,7 @@ const CompanyProfilesPreviewTable = ({ data }) => {
       headings={['Company', 'Website']}
       headingColor="bg-primary"
       showCheckbox
-      columnKeys={['name', 'email']}
+      columnKeys={['name', 'website']}
       data={data}
       footer={
         <div className="flex justify-end bg-none">
@@ -69,6 +69,7 @@ CompanyProfilesPreviewTable.propTypes = {
     PropTypes.shape({
       id: PropTypes.number,
       name: PropTypes.string,
+      website: PropTypes.string,
     })
   ),
 };

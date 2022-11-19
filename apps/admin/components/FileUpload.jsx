@@ -23,7 +23,7 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
     reader.onload = (evt) => {
       /*
       XLSX Workbooks are essentially just a zip containing XMLs called Worksheets.
-      As we are only interested in the first sheet, we can just grab it directly and it is guaranteed to exist unless the XLSX itself is corrupt.
+      As we are only interested in the first Worksheet, we can just grab it directly and it is guaranteed to exist unless the XLSX itself is corrupt.
        */
 
       const bstr = evt.target.result;
@@ -38,21 +38,33 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
 
       let companyData = [];
       userData.forEach((element) => {
-        companyData.push(element[0]);
+        // Check if company already exists in companyData
+        const index = companyData.findIndex((company) => company[0] === element[0]);
+
+        if (index === -1) {
+          // Company does not exist, add it to companyData
+          companyData.push([element[0], element[3]]);
+        } else if (companyData[index][1] === '') {
+          // Company exists but does not have an email, fill in the missing info
+          companyData[index] = {
+            name: companyData[index][0],
+            email: element[3],
+          };
+        }
       });
 
-      // Remove duplicate company names from companyData
-      companyData = [...new Set(companyData)];
-
       // Remove incomplete rows
-      userData = userData.filter((element) => element[0] !== '');
+      userData = userData.filter(
+        (element) =>
+          element[0] !== '' && element[1] !== '' && element[2] !== '' && element[3] !== ''
+      );
 
       // Identify duplicate emails and mobile numbers
       const duplicateEmails = [];
       const duplicateMobileNumbers = [];
       userData.forEach((element) => {
-        const email = element[2];
-        const mobileNumber = element[4];
+        const email = element[1];
+        const mobileNumber = element[2];
         if (duplicateEmails.includes(email)) {
           // TODO: Replace with custom alert component
           alert(`Duplicate email found: ${email}`);
@@ -67,7 +79,12 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
         }
       });
 
-      // Add ids
+      // Add ids and convert to objects
+      companyData = companyData.map((company, index) => ({
+        id: index,
+        name: company[0],
+        website: company[1],
+      }));
       userData = userData.map((user, index) => ({
         id: index,
         company: user[0],
@@ -75,8 +92,8 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
         mobileNumber: user[2],
       }));
 
-      companyData = companyData.map((company, index) => ({ id: index, name: company }));
       console.log(companyData);
+      console.log(userData);
 
       setCompanyTableData(companyData);
       setUserTableData(userData);
