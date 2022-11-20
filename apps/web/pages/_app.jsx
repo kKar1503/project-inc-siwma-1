@@ -1,12 +1,9 @@
 import PropTypes from 'prop-types';
 import '@inc/styles/globals.css';
-
-const propTypes = {
-  // If getServerSideProps is used, we cannot guarantee the shape of the page props
-  // as all page props are passed down through this component.
-  // pageProps: PropTypes.shape({}),
-  Component: PropTypes.elementType,
-};
+import { useState } from 'react';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { QueryClientProvider, QueryClient } from 'react-query';
 
 /**
  * TODO: NextJS 13 Future migrations with layouts.
@@ -19,12 +16,27 @@ const propTypes = {
  * @type {import('next').NextPage<PropTypes.InferProps<typeof propTypes>>}
  */
 const MyApp = ({ Component, pageProps }) => {
-  // Use the layout defined at the page level, if available
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
+  const [queryClient] = useState(() => new QueryClient());
+
   const getLayout = Component.getLayout || ((page) => page);
 
-  return getLayout(<Component {...pageProps} />);
+  return (
+    <SessionContextProvider
+      supabaseClient={supabaseClient}
+      initialSession={pageProps.initialSession}
+    >
+      <QueryClientProvider client={queryClient}>
+        {getLayout(<Component {...pageProps} />)}
+      </QueryClientProvider>
+    </SessionContextProvider>
+  );
 };
 
-MyApp.propTypes = propTypes;
+MyApp.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  pageProps: PropTypes.any,
+  Component: PropTypes.elementType,
+};
 
 export default MyApp;
