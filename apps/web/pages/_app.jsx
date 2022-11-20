@@ -41,10 +41,6 @@ const MyApp = ({ Component, pageProps }) => {
   );
 };
 
-MyApp.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  pageProps: PropTypes.any,
-  Component: PropTypes.elementType,
-};
+MyApp.propTypes = propTypes;
 
 export default MyApp;
