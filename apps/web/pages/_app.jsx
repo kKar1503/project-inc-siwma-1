@@ -1,11 +1,9 @@
 import PropTypes from 'prop-types';
 import '@inc/styles/globals.css';
-import { SessionContextProvider, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useState } from 'react';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { QueryClientProvider, QueryClient } from 'react-query';
-
-const queryClient = new QueryClient();
 
 const propTypes = {
   // If getServerSideProps is used, we cannot guarantee the shape of the page props
@@ -26,12 +24,16 @@ const propTypes = {
  * @type {import('next').NextPage<PropTypes.InferProps<typeof propTypes>>}
  */
 const MyApp = ({ Component, pageProps }) => {
-  const [supabase] = useState(() => createBrowserSupabaseClient());
-  // Use the layout defined at the page level, if available
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
+  const [queryClient] = useState(() => new QueryClient());
+
   const getLayout = Component.getLayout || ((page) => page);
 
   return (
-    <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
+    <SessionContextProvider
+      supabaseClient={supabaseClient}
+      initialSession={pageProps.initialSession}
+    >
       <QueryClientProvider client={queryClient}>
         {getLayout(<Component {...pageProps} />)}
       </QueryClientProvider>
