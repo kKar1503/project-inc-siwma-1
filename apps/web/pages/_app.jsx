@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
 import '@inc/styles/globals.css';
-import { useState } from 'react';
-import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { QueryClientProvider, QueryClient } from 'react-query';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const propTypes = {
   // If getServerSideProps is used, we cannot guarantee the shape of the page props
@@ -41,6 +41,10 @@ const MyApp = ({ Component, pageProps }) => {
   );
 };
 
-MyApp.propTypes = propTypes;
+MyApp.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  pageProps: PropTypes.any,
+  Component: PropTypes.elementType,
+};
 
 export default MyApp;
