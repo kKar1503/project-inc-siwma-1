@@ -1,6 +1,8 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import Container from '../components/Container';
-import Carousel from '../components/marketplace/Carousel';
+import Carousel from '../components/marketplace/carousel/Carousel';
+import CarouselItemWrapper from '../components/marketplace/carousel/CarouselItemWrapper';
 import CategoryListingItem from '../components/marketplace/CategoryListingItem';
 import ProductListingItem from '../components/marketplace/ProductListingItem';
 
@@ -13,9 +15,8 @@ const categories = [
   },
   {
     id: 2,
-    name: 'Category 2',
-
-    img: 'https://via.placeholder.com/150',
+    name: 'Scrap Metal',
+    img: 'https://images.unsplash.com/photo-1606337321936-02d1b1a4d5ef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
     href: '#',
   },
 
@@ -187,13 +188,30 @@ const MarketplacePage = () => (
     {/* Image banner */}
     <div className="mb-10">
       {/* Image banner - Object cover covers the image (zoom crop) */}
-      <picture>
-        <img
-          src="https://via.placeholder.com/1500x500"
-          className="object-cover w-full h-[200px]"
-          alt="Banner"
-        />
-      </picture>
+
+      <Carousel>
+        <CarouselItemWrapper wrapperClassName="w-full">
+          <div className="w-full relative">
+            <Image
+              src="https://images.unsplash.com/photo-1598638567141-696be94b464a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+              fill
+              className="object-cover"
+              alt="Banner"
+            />
+          </div>
+        </CarouselItemWrapper>
+
+        <CarouselItemWrapper wrapperClassName="w-full">
+          <div className="w-full h-[200px] relative">
+            <Image
+              src="https://images.unsplash.com/photo-1598638567141-696be94b464a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+              fill
+              className="object-cover"
+              alt="Banner"
+            />
+          </div>
+        </CarouselItemWrapper>
+      </Carousel>
     </div>
 
     {/* Container just adds margin from left and right */}
@@ -211,50 +229,47 @@ const MarketplacePage = () => (
       </div>
 
       {/* Carousel of categories */}
-
-      <Carousel
-        items={categories.map((category) => (
-          <CategoryListingItem
-            key={category.id}
-            img={category.img}
-            name={category.name}
-            href={category.href}
-          />
+      <Carousel name="categories">
+        {categories.map((category) => (
+          <CarouselItemWrapper key={category.id}>
+            <CategoryListingItem name={category.name} img={category.img} href={category.href} />
+          </CarouselItemWrapper>
         ))}
-        name="categories"
-      />
+      </Carousel>
 
       {/* Title */}
       <h3 className="text-xl font-bold my-2">Popular</h3>
 
       {/* Carousel of products */}
-      <Carousel
-        items={products.map((product) => (
-          <ProductListingItem
-            img={product.img}
-            name={product.name}
-            rating={product.rating}
-            href={product.href}
-          />
+      <Carousel name="popular-products">
+        {products.map((product) => (
+          <CarouselItemWrapper key={product.id}>
+            <ProductListingItem
+              img={product.img}
+              name={product.name}
+              rating={product.rating}
+              href={product.href}
+            />
+          </CarouselItemWrapper>
         ))}
-        name="popular-products"
-      />
+      </Carousel>
 
       {/* Title */}
       <h3 className="text-xl font-bold my-2">Recommended</h3>
 
       {/* Carousel of products */}
-      <Carousel
-        items={products.map((product) => (
-          <ProductListingItem
-            img={product.img}
-            name={product.name}
-            rating={product.rating}
-            href={product.href}
-          />
+      <Carousel name="recommended-products">
+        {products.map((product) => (
+          <CarouselItemWrapper key={product.id}>
+            <ProductListingItem
+              img={product.img}
+              name={product.name}
+              rating={product.rating}
+              href={product.href}
+            />
+          </CarouselItemWrapper>
         ))}
-        name="recommended-products"
-      />
+      </Carousel>
     </Container>
   </div>
 );

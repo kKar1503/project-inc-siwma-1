@@ -1,21 +1,28 @@
 // Import prop types
+import Image from 'next/image';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 
+/**
+ * CategoryListingItem is a component that displays a category listing item.
+ * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
+ */
+
 const CategoryListingItem = ({ img, name, href }) => (
-  <div className="card relative">
-    <a href={href}>
-      <picture>
+  <Link href={href}>
+    <div className="card relative">
+      <div className="aspect-square object-cover h-[150px]">
         {/* Actual image */}
-        <img src={img} alt={name} className="aspect-square object-cover h-[150px]" />
+        <Image src={img} fill alt={name} className="object-cover" />
 
         {/* Overlay gradient */}
         <div className="bg-gradient-to-b from-transparent to-black/40 w-full h-full z-10 absolute top-0 left-0" />
-      </picture>
+      </div>
 
       {/* Category text */}
       <p className="absolute z-10 bottom-0 text-center w-full mb-3 text-white">{name}</p>
-    </a>
-  </div>
+    </div>
+  </Link>
 );
 
 CategoryListingItem.propTypes = {
