@@ -80,7 +80,7 @@ const LoginForm = ({ onLogin, formNote, disabled, className }) => {
           />
           Remember Me
         </label>
-        <Link href="/">
+        <Link href="/forget-password">
           <p className="text-primary underline">Forgot Password?</p>
         </Link>
       </div>
