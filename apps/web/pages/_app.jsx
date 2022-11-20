@@ -5,6 +5,14 @@ import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { QueryClientProvider, QueryClient } from 'react-query';
 
+const propTypes = {
+  // If getServerSideProps is used, we cannot guarantee the shape of the page props
+  // as all page props are passed down through this component.
+  // eslint-disable-next-line react/forbid-prop-types
+  pageProps: PropTypes.any,
+  Component: PropTypes.elementType,
+};
+
 /**
  * TODO: NextJS 13 Future migrations with layouts.
  * NextJS 13 offers a new layout system that will allow us to have a more
