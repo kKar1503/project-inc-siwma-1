@@ -13,7 +13,7 @@ const CategoryListingItem = ({ img, name, href }) => (
     <div className="card relative">
       <div className="aspect-square object-cover h-[150px]">
         {/* Actual image */}
-        <Image src={img} fill alt={name} className="object-cover" />
+        {img && <Image src={img} fill alt={name} className="object-cover" />}
 
         {/* Overlay gradient */}
         <div className="bg-gradient-to-b from-transparent to-black/40 w-full h-full z-10 absolute top-0 left-0" />
