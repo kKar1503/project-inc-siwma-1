@@ -2,9 +2,10 @@ import { Database } from '@inc/database';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import Container from '../components/Container';
+import InfiniteScroll from '../components/InfiniteScroll';
 import Carousel from '../components/marketplace/carousel/Carousel';
 import CategoryListingItem from '../components/marketplace/CategoryListingItem';
 import ProductListingItem from '../components/marketplace/listing/ProductListingItem';
@@ -14,6 +15,11 @@ const MarketplacePage = () => {
 
   const [listingData, setListingData] = useState([]);
   const [categoriesData, setCategoriesData] = useState([]);
+
+  const [infiniteScrollMockData, setInfiniteScrollMockData] = useState([]);
+  const [infiniteScrollMockDataLoading, setInfiniteScrollMockDataLoading] = useState(false);
+
+  const infiniteScrollRef = useRef(null);
 
   const {
     data: categoriesAPIData,
@@ -37,14 +43,40 @@ const MarketplacePage = () => {
     if (listingStatus === 'success') {
       console.log('Success listing', listingAPIData.data);
       setListingData(listingAPIData.data);
+      setInfiniteScrollMockData([
+        ...listingAPIData.data,
+        ...listingAPIData.data,
+        ...listingAPIData.data,
+        ...listingAPIData.data,
+        ...listingAPIData.data,
+      ]);
     }
-  }, [listingStatus]);
+  }, [listingStatus, listingAPIData]);
 
   useEffect(() => {
     if (categoriesAPIStatus === 'success') {
       setCategoriesData(categoriesAPIData.data);
     }
-  }, [categoriesAPIStatus]);
+  }, [categoriesAPIStatus, categoriesAPIData]);
+
+  const handleInfiniteScrollLoadMore = () => {
+    setInfiniteScrollMockDataLoading(true);
+    console.log('Loading more items');
+
+    setTimeout(() => {
+      setInfiniteScrollMockData((oldData) => [
+        ...oldData,
+        ...listingAPIData.data,
+        ...listingAPIData.data,
+        ...listingAPIData.data,
+        ...listingAPIData.data,
+        ...listingAPIData.data,
+      ]);
+
+      setInfiniteScrollMockDataLoading(false);
+      console.log('Done loading more!');
+    }, 1000);
+  };
 
   return (
     <div>
@@ -100,7 +132,7 @@ const MarketplacePage = () => {
             <h3 className="text-xl font-bold my-2">Popular</h3>
 
             {/* Carousel of products */}
-            <Carousel name="popular-products" wrapperClassName="my-3">
+            <Carousel name="popular-products" wrapperClassName="my-3 w-[150px]">
               {listingData.map(({ name, description, id, price, type }) => (
                 <ProductListingItem
                   type={type}
@@ -121,7 +153,7 @@ const MarketplacePage = () => {
             <h3 className="text-xl font-bold my-2">Recommended</h3>
 
             {/* Carousel of products */}
-            <Carousel name="recommended-products" wrapperClassName="my-3">
+            <Carousel name="recommended-products" wrapperClassName="my-3 w-[150px]">
               {listingData.map(({ name, description, id, price, type }) => (
                 <ProductListingItem
                   type={type}
@@ -136,30 +168,30 @@ const MarketplacePage = () => {
           </>
         )}
 
-        {listingData && listingData.length > 0 && (
+        {infiniteScrollMockData && infiniteScrollMockData.length > 0 && (
           <>
             {/* Title */}
             <h3 className="text-xl font-bold my-2">New Items</h3>
 
-            {/* <InfiniteScroll
-              itemsToShow={listingData}
-              as={ProductListingItem}
-              numberOfItemsToDisplay={10}
-            /> */}
-
-            {/* Carousel of products */}
-            {/* <Carousel name="popular-products">
-              {listingData.map(({ name, description, id, price, type }) => (
-                <ProductListingItem
-                  type={type}
-                  key={id}
-                  img={null}
-                  name={name}
-                  rating={Math.floor(Math.random() * 5) + 1}
-                  href={`/products/${id}`}
-                />
-              ))}
-            </Carousel> */}
+            <div ref={infiniteScrollRef}>
+              <InfiniteScroll
+                className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6"
+                onLoadMore={handleInfiniteScrollLoadMore}
+                loading={infiniteScrollMockDataLoading}
+                reachedMaxItems={infiniteScrollMockData.length > 100}
+              >
+                {infiniteScrollMockData.map(({ name, description, id, price, type }) => (
+                  <ProductListingItem
+                    type={type}
+                    key={id}
+                    img={null}
+                    name={name}
+                    rating={Math.floor(Math.random() * 5) + 1}
+                    href={`/products/${id}`}
+                  />
+                ))}
+              </InfiniteScroll>
+            </div>
           </>
         )}
       </Container>
