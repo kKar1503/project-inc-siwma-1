@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useRef } from 'react';
+import { Children, useEffect, useRef, useState } from 'react';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import IconRoundButton from './IconRoundButton';
 
@@ -28,30 +28,97 @@ import IconRoundButton from './IconRoundButton';
     </CarouselItemWrapper>
   </Carousel>
 */
-const Carousel = ({ children }) => {
-  const carouselContainerRef = useRef(null);
+const Carousel = ({
+  name,
+  children,
+  carouselWrapperClassName = '',
+  wrapperClassName = '',
+  itemsToMoveBy = 1,
+}) => {
+  const mainCarouselRef = useRef(null);
 
-  const nextButtonHandler = () => {
-    const elem = carouselContainerRef.current;
-    if (elem) {
-      const elemDimensions = elem.getBoundingClientRect();
-      const { width } = elemDimensions;
-      elem.scrollLeft += width;
+  // These ref are the first and last item in the carousel
+  const firstItemRef = useRef(null);
+  const lastItemRef = useRef(null);
+
+  // These state are for the first item visible and last item visible, this is so that the buttons will show up when the user scrolls to the end of the carousel
+  const [firstItemVisible, setFirstItemVisible] = useState(false);
+  const [lastItemVisible, setLastItemVisible] = useState(false);
+
+  useEffect(() => {
+    let firstItem;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setFirstItemVisible(true);
+          } else {
+            setFirstItemVisible(false);
+          }
+        });
+      },
+      { threshold: 0.8, rootMargin: '100% 0% 100% 0%' }
+    );
+
+    if (firstItemRef.current) {
+      firstItem = firstItemRef.current;
+      observer.observe(firstItemRef.current);
+    }
+
+    return () => {
+      if (firstItem) {
+        observer.unobserve(firstItem);
+      }
+    };
+  }, [firstItemRef, children]);
+
+  // A hook for the last item
+  useEffect(() => {
+    let lastItem;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setLastItemVisible(true);
+          } else {
+            setLastItemVisible(false);
+          }
+        });
+      },
+      { threshold: 0.8, rootMargin: '100% 0% 100% 0%' }
+    );
+
+    if (lastItemRef.current) {
+      lastItem = lastItemRef.current;
+      observer.observe(lastItemRef.current);
+    }
+
+    return () => {
+      if (lastItem) {
+        observer.unobserve(lastItem);
+      }
+    };
+  }, [lastItemRef, children]);
+
+  const scrollRight = () => {
+    const widthToMoveBy = firstItemRef.current.getBoundingClientRect().width;
+    if (mainCarouselRef.current) {
+      mainCarouselRef.current.scrollBy({
+        left: widthToMoveBy * itemsToMoveBy,
+        behavior: 'smooth',
+      });
     }
   };
 
-  const previousButtonHandler = () => {
-    const elem = carouselContainerRef.current;
-    if (elem) {
-      // Get bounding client rect is so that we can get the width of the carousel container
-      // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
-      const elemDimensions = elem.getBoundingClientRect();
-
-      const { width } = elemDimensions;
-
-      // Scroll left is like the user scrolling left on the element but we take the width of the container / 2
-      // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
-      elem.scrollLeft -= width;
+  const scrollLeft = () => {
+    const widthToMoveBy = firstItemRef.current.getBoundingClientRect().width;
+    if (mainCarouselRef.current) {
+      mainCarouselRef.current.scrollBy({
+        left: -widthToMoveBy * itemsToMoveBy,
+        behavior: 'smooth',
+      });
     }
   };
 
@@ -62,11 +129,27 @@ const Carousel = ({ children }) => {
     <div className="flex items-center relative">
       {/* Carousel buttons */}
       {/* Carousel buttons are position absolutely */}
-      <div className="carousel-buttons z-30 flex w-full justify-between px-1 absolute">
-        <IconRoundButton icon={<IoChevronBack size={16} />} onClick={previousButtonHandler} />
+      <div className="carousel-buttons flex w-full justify-between px-1 absolute">
+        {!firstItemVisible ? (
+          <IconRoundButton
+            icon={<IoChevronBack size={16} />}
+            onClick={scrollLeft}
+            className="z-30"
+          />
+        ) : (
+          <div />
+        )}
 
         {/* Next button */}
-        <IconRoundButton icon={<IoChevronForward size={16} />} onClick={nextButtonHandler} />
+        {!lastItemVisible ? (
+          <IconRoundButton
+            icon={<IoChevronForward size={16} />}
+            onClick={scrollRight}
+            className="z-30"
+          />
+        ) : (
+          <div />
+        )}
       </div>
 
       {/* <div className="left-0 w-[20px] h-full bg-gradient-to-r from-white to-transparent absolute z-20" />
@@ -74,10 +157,28 @@ const Carousel = ({ children }) => {
 
       {/* Carousel items itself */}
       <div
-        className="w-full carousel carousel-center space-x-4 rounded-box"
-        ref={carouselContainerRef}
+        className={`w-full carousel carousel-center space-x-4 rounded-box ${carouselWrapperClassName}`}
+        ref={mainCarouselRef}
       >
-        {children}
+        {Children.map(children, (child, index) => {
+          if (index === 0) {
+            return (
+              <div className={`carousel-item ${wrapperClassName}`} ref={firstItemRef}>
+                {child}
+              </div>
+            );
+          }
+
+          if (index === Children.count(children) - 1) {
+            return (
+              <div className={`carousel-item ${wrapperClassName}`} ref={lastItemRef}>
+                {child}
+              </div>
+            );
+          }
+
+          return <div className={`carousel-item ${wrapperClassName}`}>{child}</div>;
+        })}
       </div>
     </div>
   );
@@ -85,6 +186,10 @@ const Carousel = ({ children }) => {
 
 Carousel.propTypes = {
   children: PropTypes.node,
+  name: PropTypes.string,
+  carouselWrapperClassName: PropTypes.string,
+  wrapperClassName: PropTypes.string,
+  itemsToMoveBy: PropTypes.number,
 };
 
 export default Carousel;
