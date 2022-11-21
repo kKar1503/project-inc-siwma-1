@@ -8,8 +8,6 @@ import * as XLSX from 'xlsx';
 const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
-  // TODO:  Add .csv support
-
   const changeHandler = async (event) => {
     if (event.target.files[0].size > 64000000) {
       // 64000000 bytes = 64 MB
@@ -91,9 +89,6 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
         email: user[1],
         mobileNumber: user[2],
       }));
-
-      console.log(companyData);
-      console.log(userData);
 
       setCompanyTableData(companyData);
       setUserTableData(userData);
