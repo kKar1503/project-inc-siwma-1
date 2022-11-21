@@ -13,11 +13,13 @@
   },
   "dependencies": {
     "@inc/styles": "workspace:*",
+    "@inc/utils": "workspace:*",
+    "@supabase/supabase-js": "^2.1.0",
     "luxon": "^3.0.4",
     "prop-types": "^15.8.1",
-    "@inc/styles": "workspace:*",
     "react": "^18.2.0",
     "react-hot-toast": "^2.4.0",
+    "react-query": "^3.39.2",
     "victory": "^36.6.8"
   }
 }

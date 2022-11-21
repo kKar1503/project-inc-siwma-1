@@ -172,19 +172,23 @@ importers:
   packages/charts:
     specifiers:
       '@inc/styles': workspace:*
+      '@supabase/supabase-js': ^2.1.0
       eslint: ^7.32.0
       eslint-config-custom: workspace:*
       luxon: ^3.0.4
       prop-types: ^15.8.1
       react: ^18.2.0
       react-hot-toast: ^2.4.0
+      react-query: ^3.39.2
       victory: ^36.6.8
     dependencies:
       '@inc/styles': link:../styles
+      '@supabase/supabase-js': 2.1.0
       luxon: 3.0.4
       prop-types: 15.8.1
       react: 18.2.0
-      react-hot-toast: 2.4.0_owo25xnefcwdq3zjgtohz6dbju
+      react-hot-toast: 2.4.0_react@18.2.0
+      react-query: 3.39.2_react@18.2.0
       victory: 36.6.8_react@18.2.0
     devDependencies:
       eslint: 7.32.0
@@ -4296,6 +4300,24 @@ packages:
       match-sorter: 6.3.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /react-query/3.39.2_react@18.2.0:
+    resolution: {integrity: sha512-F6hYDKyNgDQfQOuR1Rsp3VRzJnWHx6aRnnIZHMNGGgbL3SBgpZTDg8MQwmxOgpCAoqZJA+JSNCydF1xGJqKOCA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: '*'
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.19.4
+      broadcast-channel: 3.7.0
+      match-sorter: 6.3.1
+      react: 18.2.0
     dev: false
 
   /react-responsive/9.0.0_react@18.2.0:
