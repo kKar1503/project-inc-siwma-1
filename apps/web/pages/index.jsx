@@ -2,7 +2,7 @@ import { Database } from '@inc/database';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import Container from '../components/Container';
 import InfiniteScroll from '../components/InfiniteScroll';
