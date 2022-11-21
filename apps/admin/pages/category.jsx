@@ -25,8 +25,6 @@ const AvailableParametersData = (id) => ({
 
 function populateArray(element, count) {
   const result = [];
-
-  // eslint-disable-next-line no-plusplus
   for (let i = 0; i < count; i++) {
     result[i] = element(i + 1);
   }
