@@ -12,7 +12,9 @@
     "react": "^18.2.0"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.1.0",
     "next": "13.0.0",
-    "prop-types": "^15.8.1"
+    "prop-types": "^15.8.1",
+    "react-query": "^3.39.2"
   }
 }
