@@ -1,89 +1,115 @@
 import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
+import cx from 'classnames';
 import BaseModal from './BaseModal';
+import FormError from '../Forms/FormError';
+import FormInput from '../Forms/FormTextInput';
+import FormInputGroup from '../Forms/FormInputGroup';
 
-const CompanyRegister = ({ isOpen, onRequestClose }) => (
-  <BaseModal
-    isOpen={isOpen}
-    onRequestClose={onRequestClose}
-    header={
-      <div>
-        <h3 className="text-lg font-bold">Create an individual company</h3>
-        <p className="text-sm">Register a company profile to the system</p>
-      </div>
-    }
-  >
-    <form className="flex flex-wrap">
-      <div className="flex-1 md:mr-10">
+/**
+ * Company creation modal
+ * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
+ * @returns
+ */
+const CompanyRegister = ({ isOpen, onRequestClose }) => {
+  // Initialise react hook forms
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm();
+
+  // -- Handler Functions --//
+  // Handles form submission
+  const onSubmit = (data) => {
+    // Deconstruct values from data
+    const { companyName, companyWebsite, companyComment, companyLogo } = data;
+
+    // Create company in Supabase
+    console.log({ data });
+  };
+
+  return (
+    <BaseModal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      header={
         <div>
-          <div className="form-control">
-            <div className="label">
-              <span className="label-text">Company name</span>
-            </div>
-            <input
-              type="text"
-              className="input-group input input-bordered"
-              placeholder="Company name"
-            />
-          </div>
-          <div className="form-control">
-            <div className="label">
-              <span className="label-text">Company website</span>
-            </div>
-            <input
-              type="text"
-              className="input-group input input-bordered"
-              placeholder="Company website"
-            />
-          </div>
-          <div className="form-control">
-            <div className="label">
-              <span className="label-text">Company bio (optional)</span>
-            </div>
-            <textarea className="textarea textarea-bordered h-32" placeholder="Company bio" />
-          </div>
+          <h3 className="text-lg font-bold">Create an individual company</h3>
+          <p className="text-sm">Register a company profile to the system</p>
         </div>
-      </div>
-      <div className="md:w-1/2 flex flex-col">
-        <div className="label">
-          <span className="label-text ">Company Logo (optional)</span>
-        </div>
-        <label className="flex flex-1 justify-center w-full px-8 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
-          <span className="flex items-center space-x-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-20 h-20 text-gray-600"
-              fill="full"
-              viewBox="0 0 490 490"
-              stroke="currentColor"
-              strokeWidth="10"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M245,0c-9.5,0-17.2,7.7-17.2,17.2v331.2L169,289.6c-6.7-6.7-17.6-6.7-24.3,0s-6.7,17.6,0,24.3l88.1,88.1
-				c3.3,3.3,7.7,5,12.1,5c4.4,0,8.8-1.7,12.1-5l88.1-88.1c6.7-6.7,6.7-17.6,0-24.3c-6.7-6.7-17.6-6.7-24.3,0L262,348.4V17.1
-				C262.1,7.6,254.5,0,245,0z"
+      }
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-wrap">
+          <div className="flex-1 md:mr-10">
+            <div className="flex flex-col">
+              {/* Company name input field */}
+              <FormInputGroup
+                label="Company name"
+                name="companyName"
+                register={register}
+                error={errors.companyName}
+                required
               />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M462.1,472.9v-99.7c0-9.5-7.7-17.2-17.2-17.2s-17.2,7.7-17.2,17.2v82.6H62.2v-82.6c0-9.5-7.7-17.2-17.1-17.2
-				s-17.2,7.7-17.2,17.2v99.7c0,9.5,7.7,17.1,17.2,17.1h399.8C454.4,490,462.1,482.4,462.1,472.9z"
+              {/* Company website input field */}
+              <FormInputGroup
+                label="Company website"
+                name="companyWebsite"
+                register={register}
+                error={errors.companyWebsite}
+                required
+                customValidation={{
+                  // Regexp for validating urls taken from https://regexr.com/39nr7
+                  pattern: {
+                    value:
+                      /[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi,
+                    message: 'Company website must be a valid URL',
+                  },
+                }}
               />
-            </svg>
-            <span className="font-medium text-sm text-gray-600">
-              Click to upload or drag and drop SVG, PNG or JPG (MAX. 800 x 400px)
-            </span>
-          </span>
-          <input type="file" name="file_upload" className="hidden" />
-        </label>
-        <div className="modal-action">
-          <button className="btn btn-outline btn-primary w-full">Register Company</button>
+              {/* Company comments input field */}
+              <FormInputGroup
+                type="textarea"
+                label="Company comment"
+                name="companyComment"
+                register={register}
+                error={errors.companyComment}
+                placeholder="Add a comment (only visible to you)"
+                hideError
+              />
+            </div>
+          </div>
+          <div className="w-full md:w-1/2 flex flex-col">
+            {/* Company logo upload input */}
+            <FormInputGroup
+              className="flex-1"
+              onError={setError}
+              onValid={clearErrors}
+              type="fileupload"
+              label="Company Logo"
+              name="companyLogo"
+              register={register}
+              error={errors.companyLogo}
+            />
+            <div className="modal-action">
+              <button className="btn btn-outline btn-primary w-full">Register Company</button>
+            </div>
+          </div>
         </div>
-      </div>
-    </form>
-  </BaseModal>
-);
+        {/* Display any errors pertaining to the company comments
+         * We display it here instead of within the input group so that the submit button aligns with the bottom of the company comment input
+         */}
+        <div className="flex-1 md:w-1/2 md:pr-10">
+          <FormError error={errors.companyComment} className="mb-0 pb-0" />
+        </div>
+      </form>
+    </BaseModal>
+  );
+};
 
 CompanyRegister.propTypes = {
   isOpen: PropTypes.bool,
