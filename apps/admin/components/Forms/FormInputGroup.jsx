@@ -11,11 +11,8 @@ import FormFileInput from './FormFileInput';
  * @returns An input group that contains a label, input and error message
  */
 const FormInputGroup = ({
-  register,
+  form,
   type,
-  error,
-  onError,
-  onValid,
   label,
   name,
   customValidation,
@@ -24,72 +21,76 @@ const FormInputGroup = ({
   hideError,
   className,
   style,
-}) => (
-  <div className={cx(className, 'form-control')} style={style}>
-    <div className="label pt-0">
-      <span className="label-text">
-        {label} {!required ? '(optional)' : ''}
-      </span>
+}) => {
+  // Deconstruct the individual hooks from the form object
+  const {
+    register,
+    formState: { errors },
+  } = form;
+
+  return (
+    <div className={cx(className, 'form-control')} style={style}>
+      <div className="label pt-0">
+        <span className="label-text">
+          {label} {!required ? '(optional)' : ''}
+        </span>
+      </div>
+      {
+        // Render a text input if the type is text
+        (!type || type === 'text') && (
+          <FormTextInput
+            register={register}
+            isErrored={errors[name]}
+            label={label}
+            name={name}
+            customValidation={{ ...customValidation }}
+            placeholder={placeholder}
+            required={required}
+          />
+        )
+      }
+      {
+        // Render a textarea if the type is textarea
+        type && type === 'textarea' && (
+          <FormTextArea
+            register={register}
+            isErrored={errors[name]}
+            label={label}
+            name={name}
+            customValidation={{ ...customValidation }}
+            placeholder={placeholder}
+            required={required}
+          />
+        )
+      }
+      {
+        // Render a file input if the type is fileinput
+        type && type === 'fileupload' && (
+          <FormFileInput
+            register={register}
+            isErrored={errors[name]}
+            form={form}
+            label={label}
+            name={name}
+            customValidation={{ ...customValidation }}
+            placeholder={placeholder}
+            required={required}
+          />
+        )
+      }
+      {
+        // Show the error if hideError is not set
+        !hideError && <FormError error={errors[name]} />
+      }
     </div>
-    {
-      // Render a text input if the type is text
-      (!type || type === 'text') && (
-        <FormTextInput
-          register={register}
-          isErrored={error}
-          label={label}
-          name={name}
-          customValidation={{ ...customValidation }}
-          placeholder={placeholder}
-          required={required}
-        />
-      )
-    }
-    {
-      // Render a textarea if the type is textarea
-      type && type === 'textarea' && (
-        <FormTextArea
-          register={register}
-          isErrored={error}
-          label={label}
-          name={name}
-          customValidation={{ ...customValidation }}
-          placeholder={placeholder}
-          required={required}
-        />
-      )
-    }
-    {
-      // Render a file input if the type is fileinput
-      type && type === 'fileupload' && (
-        <FormFileInput
-          register={register}
-          isErrored={error}
-          onError={onError}
-          onValid={onValid}
-          label={label}
-          name={name}
-          customValidation={{ ...customValidation }}
-          placeholder={placeholder}
-          required={required}
-        />
-      )
-    }
-    {
-      // Show the error if hideError is not set
-      !hideError && <FormError error={error} />
-    }
-  </div>
-);
+  );
+};
 
 const propTypes = {
-  register: PropTypes.func.isRequired,
+  // The object is massive, its impossible to document its shape
+  // eslint-disable-next-line react/forbid-prop-types
+  form: PropTypes.object.isRequired,
   type: PropTypes.string,
-  error: PropTypes.shape({
-    message: PropTypes.string.isRequired,
-  }),
-  onError: PropTypes.func,
-  onValid: PropTypes.func,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   // We do not know what the shape of the object will be
