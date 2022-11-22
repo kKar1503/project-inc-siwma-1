@@ -19,18 +19,18 @@
     "prepare:default": "husky install"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.1.2",
-    "@commitlint/config-conventional": "^17.1.0",
+    "@commitlint/cli": "^17.3.0",
+    "@commitlint/config-conventional": "^17.3.0",
     "autoprefixer": "^10.4.13",
-    "daisyui": "^2.33.0",
+    "daisyui": "^2.41.0",
     "eslint-config-custom": "workspace:0.0.0",
-    "husky": "^8.0.1",
+    "husky": "^8.0.2",
     "lint-staged": "^13.0.3",
     "next": "13.0.0",
-    "postcss": "^8.4.18",
+    "postcss": "^8.4.19",
     "prettier": "latest",
     "run-script-os": "^1.1.6",
-    "tailwindcss": "^3.2.1",
+    "tailwindcss": "^3.2.4",
     "turbo": "latest"
   },
   "engines": {
