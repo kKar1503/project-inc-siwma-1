@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import cx from 'classnames';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useEffect, useState } from 'react';
 import BaseModal from './BaseModal';
 import FormError from '../Forms/FormError';
 import FormInputGroup from '../Forms/FormInputGroup';
@@ -11,24 +13,73 @@ import FormInputGroup from '../Forms/FormInputGroup';
  * @returns
  */
 const CompanyRegister = ({ isOpen, onRequestClose }) => {
+  // -- Component states -- //
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  // -- Initialise libraries -- //
+  // Initialise supabase client
+  const supabase = useSupabaseClient();
+
   // Initialise react hook forms
   const formHook = useForm();
 
   // Deconstruct the individual hooks from the object
   const {
     handleSubmit,
+    reset,
     formState: { errors },
   } = formHook;
 
-  // -- Handler Functions --//
+  // -- Handler Functions -- //
   // Handles form submission
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     // Deconstruct values from data
     const { companyName, companyWebsite, companyComment, companyLogo } = data;
 
-    // Create company in Supabase
-    // console.log({ data });
+    // -- Create company in Supabase -- //
+    // Create company record and return it
+    const { data: companyData } = await supabase
+      .from('companies')
+      .insert([
+        {
+          name: companyName,
+          website: companyWebsite,
+        },
+      ])
+      .select();
+
+    // Create a record in companies_comments if a comment was given
+    if (companyComment) {
+      // Create a comment for the company
+      await supabase.from('companies_comments').insert([
+        {
+          companyid: companyData[0].id,
+          comments: companyComment,
+        },
+      ]);
+    }
+
+    // Upload the company logo if provided
+    if (companyLogo) {
+      // Upload company logo
+      await supabase.storage.from('companyprofilepictures').upload(companyLogo.name, companyLogo);
+
+      // Update the newly created company record with the name of the logo uploaded
+      await supabase
+        .from('companies')
+        .update({ image: companyLogo.name })
+        .eq('id', companyData[0].id);
+    }
+
+    // Success, clear inputs and show success message
+    setSubmitSuccess(true);
   };
+
+  // Invokes on successful form submission
+  useEffect(() => {
+    // Reset form inputs
+    if (submitSuccess) reset();
+  }, [submitSuccess]);
 
   return (
     <BaseModal
