@@ -124,7 +124,12 @@ const FormFileInput = ({
         (selectedFile && (
           <div className="rounded-full flex flex-1 justify-center items-center">
             <div className="h-36 w-36 relative">
-              <Image src={selectedFile.src} alt="company logo" className="rounded-full" fill />
+              <Image
+                src={selectedFile.src}
+                alt="company logo"
+                className="rounded-full object-cover"
+                fill
+              />
             </div>
           </div>
         )) || (
