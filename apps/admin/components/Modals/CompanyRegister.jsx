@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import cx from 'classnames';
 import BaseModal from './BaseModal';
 import FormError from '../Forms/FormError';
-import FormInput from '../Forms/FormTextInput';
 import FormInputGroup from '../Forms/FormInputGroup';
 
 /**
@@ -13,14 +12,13 @@ import FormInputGroup from '../Forms/FormInputGroup';
  */
 const CompanyRegister = ({ isOpen, onRequestClose }) => {
   // Initialise react hook forms
+  const formHook = useForm();
+
+  // Deconstruct the individual hooks from the object
   const {
-    register,
     handleSubmit,
-    watch,
-    setError,
-    clearErrors,
     formState: { errors },
-  } = useForm();
+  } = formHook;
 
   // -- Handler Functions --//
   // Handles form submission
@@ -29,7 +27,7 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
     const { companyName, companyWebsite, companyComment, companyLogo } = data;
 
     // Create company in Supabase
-    console.log({ data });
+    // console.log({ data });
   };
 
   return (
@@ -48,19 +46,12 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
           <div className="flex-1 md:mr-10">
             <div className="flex flex-col">
               {/* Company name input field */}
-              <FormInputGroup
-                label="Company name"
-                name="companyName"
-                register={register}
-                error={errors.companyName}
-                required
-              />
+              <FormInputGroup form={formHook} label="Company name" name="companyName" required />
               {/* Company website input field */}
               <FormInputGroup
+                form={formHook}
                 label="Company website"
                 name="companyWebsite"
-                register={register}
-                error={errors.companyWebsite}
                 required
                 customValidation={{
                   // Regexp for validating urls taken from https://regexr.com/39nr7
@@ -73,11 +64,10 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
               />
               {/* Company comments input field */}
               <FormInputGroup
+                form={formHook}
                 type="textarea"
                 label="Company comment"
                 name="companyComment"
-                register={register}
-                error={errors.companyComment}
                 placeholder="Add a comment (only visible to you)"
                 hideError
               />
@@ -86,14 +76,11 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
           <div className="w-full md:w-1/2 flex flex-col">
             {/* Company logo upload input */}
             <FormInputGroup
+              form={formHook}
               className="flex-1"
-              onError={setError}
-              onValid={clearErrors}
               type="fileupload"
               label="Company Logo"
               name="companyLogo"
-              register={register}
-              error={errors.companyLogo}
             />
             <div className="modal-action">
               <button className="btn btn-outline btn-primary w-full">Register Company</button>

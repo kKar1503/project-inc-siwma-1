@@ -12,8 +12,7 @@ import { hasFileExt, arrayToString } from '@inc/utils';
 const FormFileInput = ({
   register,
   isErrored,
-  onError,
-  onValid,
+  form,
   name,
   label,
   placeholder,
@@ -22,7 +21,11 @@ const FormFileInput = ({
   className,
   style,
 }) => {
+  // States
   const [selectedFile, setSelectedFile] = useState();
+
+  // Deconstruct required hooks from the form object
+  const { setError, clearErrors, setValue } = form;
 
   // Hooks inputs to using react form hook
   const hookInput = (inputName, inputLabel, options) =>
@@ -60,7 +63,7 @@ const FormFileInput = ({
     const allowedFileTypes = ['svg', 'png', 'jpg', 'jpeg'];
     if (!hasFileExt(file.name, allowedFileTypes)) {
       // Invalid file type received
-      onError(name, {
+      setError(name, {
         type: 'invalidFileType',
         message: `Only ${arrayToString(
           allowedFileTypes.map((e) => e.toUpperCase())
@@ -71,17 +74,18 @@ const FormFileInput = ({
 
     // Valid filetype received
     // Clear any errors present
-    onValid(name);
+    clearErrors(name);
 
     // Get a reference to the blob of the image
     const imageUrl = URL.createObjectURL(file);
 
     // Update the file object to to have the image url
-    const result = { ...file };
+    const result = file;
     result.src = imageUrl;
 
     // Set the value of the file input
     setSelectedFile(result);
+    setValue(name, result);
   };
 
   /**
@@ -181,8 +185,9 @@ const propTypes = {
   isErrored: PropTypes.shape({
     message: PropTypes.string.isRequired,
   }),
-  onError: PropTypes.func,
-  onValid: PropTypes.func,
+  // The object is massive, its impossible to document its shape
+  // eslint-disable-next-line react/forbid-prop-types
+  form: PropTypes.object.isRequired,
   name: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
