@@ -8,8 +8,6 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { HiDotsVertical } from 'react-icons/hi';
 import { ImCross, ImCheckmark } from 'react-icons/im';
 
-import { HiDotsVertical } from 'react-icons/hi';
-
 // This is the base table component that every other table is built on.
 
 //! Note: tentatively, the table header uses inline styles due to a DaisyUI issue that sets the table header's left property to 0px. This may be a temporary fix until the issue is resolved.
