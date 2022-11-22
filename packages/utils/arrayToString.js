@@ -6,11 +6,15 @@
  * @returns A readable string
  */
 const arrayToString = (arr) => {
-  // Join up all elements of the array, except for the last
-  let result = arr.join(', ');
+  // Remove the last element from the array
+  const arrWithoutLast = [...arr];
+  const poppedElement = arrWithoutLast.pop();
+
+  // Join up all elements of the array (with the last element already removed)
+  let result = arrWithoutLast.join(', ');
 
   // Join the last element to the array
-  result += `, and ${arr.at(-1)}`;
+  result += `, and ${poppedElement}`;
 
   return result;
 };
