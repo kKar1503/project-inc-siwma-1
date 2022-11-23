@@ -8,6 +8,11 @@ module.exports = {
   theme: {
     extend: {},
   },
+  variants: {
+    extend: {
+      display: ['group-hover'],
+    },
+  },
   plugins: [require('daisyui')],
   daisyui: {
     themes: ['corporate'],
