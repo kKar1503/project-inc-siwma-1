@@ -52,7 +52,7 @@ const UploadCard = ({ id, des }) => {
     }
 
     if (data) {
-      console.log(data);
+      setMessage('Image have been updated');
     }
   };
 
@@ -62,9 +62,8 @@ const UploadCard = ({ id, des }) => {
         <span className="items-center space-x-2">
           <FiUpload className="h-16 w-16 text-black m-auto my-4" />
           <p className="text-xs text-gray-600 text-center my-6">
-            Click to upload or drag and drop PNG or JPG (MAX. 1200px x 900px)
+            Click to upload or drag and drop SVG, PNG or JPG (MAX. 800 x 400px)
           </p>
-          {errorMessage !== '' && <p className="text-center">{errorMessage}</p>}
         </span>
         <input
           type="file"
