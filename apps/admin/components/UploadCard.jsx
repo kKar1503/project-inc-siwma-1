@@ -4,33 +4,31 @@ import { FiUpload } from 'react-icons/fi';
 import { useState } from 'react';
 import supabase from '../supabase';
 
-const UploadCard = ({ id, des }) => {
+const UploadCard = ({ id }) => {
   const [image, setImage] = useState(null);
   const [imageURL, setImageURL] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [message, setMessage] = useState('');
+  // note: if file is successfully uploaded -> "Create" button is abled
 
-  const checkFile = async (e) => {
-    if (e.target.files[0].type === 'image/png' || e.target.files[0].type === 'image/jpeg') {
-      setImage(e.target.files[0]);
-      setErrorMessage('Please click "Create file"');
+  const checkFile = async (img) => {
+    if (img.type === 'image/png' || img.type === 'image/jpeg') {
+      setImage(img);
     } else {
-      console.log(e.target.files[0].type);
-      e.target.files = null;
+      console.log(img.type);
       console.log('not image');
       setErrorMessage('Only image file is allowed');
-      console.log(errorMessage);
     }
   };
 
   const handleUpload = async (e) => {
     e.preventDefault();
     console.log(image);
+    // let uploadedURL = '';
 
     if (image) {
-      console.log(image.type);
       const { data, error } = await supabase.storage
         .from('advertisement')
-        .upload(`${image.name}`, image);
+        .upload(`${Date.now()}_${image.name}`, image);
 
       if (error) {
         console.log(error);
@@ -43,8 +41,8 @@ const UploadCard = ({ id, des }) => {
 
     const { data, error } = await supabase.from('advertisements').upsert({
       company_id: id,
-      image: image.name,
-      description: des,
+      img_file_name: image.name,
+      ad_space_id: 1,
     });
 
     if (error) {
@@ -52,7 +50,7 @@ const UploadCard = ({ id, des }) => {
     }
 
     if (data) {
-      setMessage('Image have been updated');
+      console.log(data);
     }
   };
 
@@ -62,22 +60,23 @@ const UploadCard = ({ id, des }) => {
         <span className="items-center space-x-2">
           <FiUpload className="h-16 w-16 text-black m-auto my-4" />
           <p className="text-xs text-gray-600 text-center my-6">
-            Click to upload or drag and drop SVG, PNG or JPG (MAX. 800 x 400px)
+            Click to upload or drag and drop PNG or JPG (MAX. 1200px x 900px)
           </p>
+          {errorMessage !== '' && <p>{errorMessage}</p>}
         </span>
         <input
           type="file"
           name="file_upload"
-          accept="image/*"
+          accept="image/jpeg image/png"
           className="hidden"
-          disabled={id === '' || des === ''}
-          onChange={(e) => checkFile(e)}
+          disabled={id === ''}
+          onChange={(e) => setImage(e.target.files[0])}
         />
       </label>
       <div className="flex items-center justify-center">
         <button
           className="btn btn-ghost rounded-md w-full h-6 my-8 normal-case text-base btn btn-outline btn-primary"
-          disabled={errorMessage === '' || errorMessage === 'Only image file is allowed'}
+          disabled={image === null}
           onClick={handleUpload}
         >
           Create
@@ -88,7 +87,6 @@ const UploadCard = ({ id, des }) => {
 };
 
 UploadCard.propTypes = {
-  id: PropType.number.isRequired,
-  des: PropType.string.isRequired,
+  id: PropType.string.isRequired,
 };
 export default UploadCard;
