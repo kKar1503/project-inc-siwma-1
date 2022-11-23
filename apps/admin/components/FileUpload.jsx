@@ -11,6 +11,7 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
   const changeHandler = async (event) => {
     if (event.target.files[0].size > 64000000) {
       // 64000000 bytes = 64 MB
+      // TODO: Replace with custom alert component
       alert('File is too big!');
       return;
     }
@@ -34,19 +35,20 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
       // Remove header row
       userData.shift();
 
+      // Create userData and companyData arrays
       let companyData = [];
-      userData.forEach((element) => {
+      userData.forEach((row) => {
         // Check if company already exists in companyData
-        const index = companyData.findIndex((company) => company[0] === element[0]);
+        const index = companyData.findIndex((company) => company[0] === row[0]);
 
         if (index === -1) {
           // Company does not exist, add it to companyData
-          companyData.push([element[0], element[3]]);
+          companyData.push([row[0], row[3]]);
         } else if (companyData[index][1] === '') {
           // Company exists but does not have an email, fill in the missing info
           companyData[index] = {
             name: companyData[index][0],
-            email: element[3],
+            email: row[3],
           };
         }
       });
@@ -58,22 +60,23 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
       );
 
       // Identify duplicate emails and mobile numbers
-      const duplicateEmails = [];
-      const duplicateMobileNumbers = [];
+      const duplicateEmails = new Set();
+      const duplicateMobileNumbers = new Set();
+
       userData.forEach((element) => {
         const email = element[1];
         const mobileNumber = element[2];
-        if (duplicateEmails.includes(email)) {
+        if (duplicateEmails.has(email)) {
           // TODO: Replace with custom alert component
           alert(`Duplicate email found: ${email}`);
         } else {
-          duplicateEmails.push(email);
+          duplicateEmails.add(email);
         }
-        if (duplicateMobileNumbers.includes(mobileNumber)) {
+        if (duplicateMobileNumbers.has(mobileNumber)) {
           // TODO: Replace with custom alert component
           alert(`Duplicate mobile number found: ${mobileNumber}`);
         } else {
-          duplicateMobileNumbers.push(mobileNumber);
+          duplicateMobileNumbers.add(mobileNumber);
         }
       });
 
