@@ -4,6 +4,7 @@ interface SearchComponentProps {
   searchCallback: (searchInput: string) => void;
   focusCallback?: (focus: boolean) => void;
   placeholder?: string;
+  useFocusShadow?: boolean;
 }
 
 declare const Search: React.FC<SearchComponentProps>;
