@@ -56,7 +56,7 @@ const Page = () => {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col">
         <h1 className="font-bold text-xl">Forget Password</h1>
-        <p>Please specify the email of the account you forgot your password.</p>
+        <p>Please enter an email associated with your account.</p>
       </div>
       <ForgetPasswordFormWrap />
     </div>
