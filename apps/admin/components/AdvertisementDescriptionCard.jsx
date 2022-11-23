@@ -1,4 +1,4 @@
-const DescriptionCard = () => (
+const AdvertisementDescriptionCard = () => (
   <div className="max-w-xl">
     <h1 className="ml-4 leading-loose font-bold text-xl mt-6">Description of Advertisement</h1>
     <div className="flex justify-center">
@@ -12,4 +12,4 @@ const DescriptionCard = () => (
   </div>
 );
 
-export default DescriptionCard;
+export default AdvertisementDescriptionCard;
