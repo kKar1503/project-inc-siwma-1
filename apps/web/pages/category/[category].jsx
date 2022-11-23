@@ -11,6 +11,7 @@ const Category = () => {
   const router = useRouter();
   const { category } = router.query;
   const supabase = useSupabaseClient();
+
   const {
     data: categoryData,
     // status: categoryStatus,
@@ -19,7 +20,6 @@ const Category = () => {
     supabase.rpc('get_category_listing', { catid: router.query.id })
   );
 
-  console.log(categoryData);
   return (
     <div className="mt-10 ml-28 mr-28 mb-10 h-screen">
       <div className="mb-10 h-1/2">
