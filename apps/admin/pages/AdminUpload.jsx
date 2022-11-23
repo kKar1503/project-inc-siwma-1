@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import DescriptionCard from '../components/AdvertisementDescriptionCard';
 import UploadCard from '../components/UploadCard';
 import supabase from '../client';
 
@@ -8,9 +7,10 @@ const AdminUpload = () => {
   const [userInput, setUserInput] = useState('');
   const [selected, setSelected] = useState('');
   const [companyData, setCompanyData] = useState(null);
+  const [description, setDescription] = useState('');
 
   const getCompanyData = async () => {
-    const { data, error } = await supabase.from('Company').select('*');
+    const { data, error } = await supabase.from('companies').select('*');
     if (error) {
       console.log(error);
     }
@@ -26,9 +26,7 @@ const AdminUpload = () => {
 
   const filter = () => {
     if (userInput !== '') {
-      return companyData.filter((val) =>
-        val.company_name.toLowerCase().includes(userInput.toLowerCase())
-      );
+      return companyData.filter((val) => val.name.toLowerCase().includes(userInput.toLowerCase()));
     }
 
     return companyData;
@@ -88,17 +86,32 @@ const AdminUpload = () => {
                       className="mr-2 h-4 w-4"
                       onChange={() => setSelected(item.id)}
                     />
-                    {item.company_name}
+                    {item.name}
                   </li>
                 ))}
             </ul>
           </div>
         </div>
         <div className="card w-1/3  max-sm:w-full h-80 bg-base-100 shadow-xl mr-10 max-sm:mb-10">
-          <DescriptionCard />
+          <div className="max-w-xl">
+            <h1 className="ml-4 leading-loose font-bold text-xl mt-6">
+              Description of Advertisement
+            </h1>
+            <div className="flex justify-center">
+              <input
+                type="text"
+                name="description"
+                placeholder="Description"
+                value={description}
+                disabled={selected === ''}
+                className="w-11/12 h-40 px-4 mt-4 text-base placeholder-gray-500 break-normal border rounded-lg focus:shadow-outline"
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+          </div>
         </div>
         <div className="card w-1/3  max-sm:w-full h-80 bg-base-100 shadow-xl px-8 py-8 ">
-          <UploadCard id={selected} />
+          <UploadCard id={selected} des={description} />
         </div>
       </div>
     </>
