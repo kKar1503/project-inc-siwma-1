@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 /** @type {React.CSSProperties} */
@@ -11,12 +11,19 @@ const unfocusShadowStyle = {
   boxShadow: '0 0 0 9999px #00000000',
 };
 
+const searchPropTypes = {
+  searchCallback: PropTypes.func.isRequired,
+  focusCallback: PropTypes.func,
+  placeholder: PropTypes.string,
+  useFocusShadow: PropTypes.bool,
+};
+
 /**
  * A search bar component that takes dynamic data for dynamic query.
  * The database query function should receive a single parameter RPC call
- * @param {ComponentProps}
+ * @type {React.FC<import('prop-types').InferProps<searchPropTypes>>}
  */
-const Search = ({ placeholder, searchCallback, focusCallback }) => {
+const Search = ({ placeholder, searchCallback, focusCallback, useFocusShadow }) => {
   /**
    * Setting up the input ref, as the search text is really only need to
    * be set once during the onClick() event
@@ -36,18 +43,31 @@ const Search = ({ placeholder, searchCallback, focusCallback }) => {
   const [rawText, setRawText] = useState('');
   const [focusStyle, setFocusStyle] = useState(unfocusShadowStyle);
 
-  // const debouncedInputs = useCallback(
-  //   (...args) => {
-  //     const later = () => {
-  //       clearTimeout(timeout.current);
-  //       searchFocusHandler(...args);
-  //     };
+  /**
+   * searchFocusHandler sets the state of the shadowBox style.
+   * @param {boolean} isFocus
+   */
+  const searchFocusHandler = (isFocus) => {
+    if (isFocus && inputRef.current.value !== '') {
+      setFocusStyle(focusShadowStyle);
+    } else {
+      setFocusStyle(unfocusShadowStyle);
+    }
+    if (focusCallback) focusCallback(isFocus);
+  };
 
-  //     clearTimeout(timeout.current);
-  //     timeout.current = setTimeout(later, 500);
-  //   },
-  //   [func, wait]
-  // );
+  /** @param {boolean} isFocus */
+  const debouncedInputs = (isFocus) => {
+    if (!useFocusShadow) return;
+
+    const later = () => {
+      clearTimeout(timeout.current);
+      searchFocusHandler(isFocus);
+    };
+
+    clearTimeout(timeout.current);
+    timeout.current = setTimeout(later, 500);
+  };
 
   /**
    * The setInput function would not be using the text / rawText state
@@ -58,7 +78,10 @@ const Search = ({ placeholder, searchCallback, focusCallback }) => {
     const eventType = e.type;
     switch (eventType) {
       case 'keydown':
-        if (e.key !== 'Enter') return;
+        if (e.key !== 'Enter') {
+          debouncedInputs(true);
+          return;
+        }
         break;
       case 'click':
         if (e.button !== 0) return;
@@ -71,23 +94,12 @@ const Search = ({ placeholder, searchCallback, focusCallback }) => {
     searchCallback(textValue);
   };
 
-  /**
-   * searchFocusHandler sets the state on a debounce when the use first type.
-   * @param {boolean} isFocus
-   */
-  const searchFocusHandler = (isFocus) => {
-    if (isFocus) {
-      setFocusStyle(focusShadowStyle);
-    } else {
-      setFocusStyle(unfocusShadowStyle);
-    }
-    if (focusCallback) focusCallback(isFocus);
-  };
-
   return (
     <div
       className="form-control w-full"
       style={{ transition: 'box-shadow 0.3s ease-in-out', ...focusStyle }}
+      onFocus={() => debouncedInputs(true)}
+      onBlur={() => debouncedInputs(false)}
     >
       <div className="input-group">
         <input
@@ -118,14 +130,11 @@ const Search = ({ placeholder, searchCallback, focusCallback }) => {
   );
 };
 
-Search.propTypes = {
-  searchCallback: PropTypes.func.isRequired,
-  focusCallback: PropTypes.func,
-  placeholder: PropTypes.string,
-};
+Search.propTypes = searchPropTypes;
 
 Search.defaultProps = {
   placeholder: 'Search...',
+  useFocusShadow: true,
 };
 
 export default Search;
