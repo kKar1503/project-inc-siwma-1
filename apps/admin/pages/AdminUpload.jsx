@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import DescriptionCard from '../components/DescriptionCard';
+import DescriptionCard from '../components/AdvertisementDescriptionCard';
 import UploadCard from '../components/UploadCard';
 import supabase from '../client';
 
