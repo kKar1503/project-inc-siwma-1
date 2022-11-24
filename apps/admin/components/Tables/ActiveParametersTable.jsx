@@ -10,25 +10,27 @@ import supabase from '../../supabaseClient';
 
 const parseData = (data) =>
   data.map((e) => ({
-    id: e.id,
-    name: e.name,
-    display_name: e.description,
-    parameter_type_id: e.parameter_type.id,
-    parameter_type_name: e.parameter_type.name,
-    datatype_id: e.datatype.id,
-    datatype_name: e.datatype.name,
-    active: e.active ? `Active` : `Disabled`,
+    id: e.parameter.id,
+    name: e.parameter.name,
+    display_name: e.parameter.description,
+    parameter_type_id: e.parameter.parameter_type.id,
+    parameter_type_name: e.parameter.parameter_type.name,
+    datatype_id: e.parameter.datatype.id,
+    datatype_name: e.parameter.datatype.name,
   }));
 
 const ActiveParametersTable = ({ className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['parameter'],
+    queryKey: ['activeParameters'],
     queryFn: async () =>
       supabase
-        .from('parameter')
-        .select(`id, name, display_name, parameter_type(id, name), datatype(id, name)`),
+        .from('categories_parameters')
+        .select(
+          `category(name), parameter(id, name, display_name, parameter_type(id, name), datatype(id, name))`
+        )
+        .eq('category(id)', '1'),
   });
 
   useEffect(() => {
@@ -47,15 +49,14 @@ const ActiveParametersTable = ({ className }) => {
           </div>
         </div>
       }
-      headings={['Parameter Name', 'Data type', 'Active']}
+      headings={['Parameter Name', 'Data type']}
       headingColor="bg-warning"
       showCheckbox
       className={className}
-      columnKeys={['name', 'parameter_type_name', 'active']}
+      columnKeys={['name', 'parameter_type_name']}
       data={isLoading ? undefined : parseData(data?.data)}
       footer={
         <div className="flex justify-between bg-none">
-          <button className="btn btn-warning text-white">REVOKE SELECTED</button>
           <div className="flex justify-end bg-none">
             <TableButton
               index={0}
