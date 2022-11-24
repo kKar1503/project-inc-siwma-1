@@ -38,6 +38,14 @@ const ActiveParametersTable = ({ className, id }) => {
     enabled: !!id,
   });
 
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => supabase.from('category').select(`id, name, datatype, active`),
+  });
+
+  useEffect(() => {
+    refetch();
+  });
   return (
     <BaseTableParam
       header={
