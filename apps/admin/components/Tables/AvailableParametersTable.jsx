@@ -12,7 +12,11 @@ const parseData = (data) =>
   data.map((e) => ({
     id: e.id,
     name: e.name,
-    description: e.description,
+    display_name: e.description,
+    parameter_type_id: e.parameter_type.id,
+    parameter_type_name: e.parameter_type.name,
+    datatype_id: e.datatype.id,
+    datatype_name: e.datatype.name,
     active: e.active ? `Active` : `Disabled`,
   }));
 
@@ -20,8 +24,11 @@ const AvailableParametersTable = ({ className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['categories'],
-    queryFn: async () => supabase.from('category').select(`id, name, datatype, active`),
+    queryKey: ['parameter'],
+    queryFn: async () =>
+      supabase
+        .from('parameter')
+        .select(`id, name, display_name, parameter_type(id, name), datatype(id, name)`),
   });
 
   useEffect(() => {
@@ -40,11 +47,11 @@ const AvailableParametersTable = ({ className }) => {
           </div>
         </div>
       }
-      headings={['Category Name', 'Category Description']}
+      headings={['Parameter Name', 'Data type', 'Active']}
       headingColor="bg-warning"
       showCheckbox
       className={className}
-      columnKeys={['categoryName', 'categoryDesc']}
+      columnKeys={['name', 'parameter_type_name', 'active']}
       data={isLoading ? undefined : parseData(data?.data)}
       footer={
         <div className="flex justify-between bg-none">
