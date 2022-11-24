@@ -57,7 +57,7 @@ const BaseTableCat = ({
       <div className="h-full flex flex-col gap-3 py-3">
         <div className="px-6">{header}</div>
         <div className="w-full h-auto overflow-hidden border-b">
-          <div className="w-full max-h-full overflow-none">
+          <div className="w-full max-h-full overflow-x-scroll overflow-y-hidden">
             <table className="table w-full">
               <thead>
                 <tr>

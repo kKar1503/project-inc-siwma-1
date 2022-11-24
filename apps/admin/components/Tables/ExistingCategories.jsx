@@ -1,14 +1,32 @@
-import React, { useState } from 'react';
+import { useQuery } from 'react-query';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import BaseTableCat from './BaseTableCat';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
+import supabase from '../../supabaseClient';
 
 // This table shows Categories and is built on the BaseTable component.
 
-const ExistingCategories = ({ data, className }) => {
+const parseData = (data) =>
+  data.map((e) => ({
+    id: e.id,
+    name: e.name,
+    description: e.description,
+    active: e.active ? `Active` : `Disabled`,
+  }));
+
+const ExistingCategories = ({ className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => supabase.from('category').select(`id, name, description, active`),
+  });
+
+  useEffect(() => {
+    refetch();
+  });
   return (
     <BaseTableCat
       header={
@@ -22,12 +40,12 @@ const ExistingCategories = ({ data, className }) => {
           </div>
         </div>
       }
-      headings={['Category Name', 'Category Description']}
+      headings={['Category Name', 'Category Description', 'Status']}
       headingColor="bg-warning"
       showCheckbox
       className={className}
-      columnKeys={['categoryname', 'categorydescription']}
-      data={data}
+      columnKeys={['name', 'description', 'active']}
+      data={isLoading ? undefined : parseData(data?.data)}
       footer={
         <div className="flex justify-between bg-none">
           <div className="flex justify-end bg-none">
@@ -59,13 +77,6 @@ const ExistingCategories = ({ data, className }) => {
 };
 
 ExistingCategories.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      parameterType: PropTypes.string,
-      dataType: PropTypes.string,
-    })
-  ),
   className: PropTypes.string,
 };
 
