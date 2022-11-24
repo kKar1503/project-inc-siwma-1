@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import BaseTableCat from './BaseTableCat';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
+import supabase from '../../supabaseClient';
 
 // This table shows Categories and is built on the BaseTable component.
 
