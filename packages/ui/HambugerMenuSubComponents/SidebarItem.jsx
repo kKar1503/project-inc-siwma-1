@@ -3,7 +3,10 @@
 import { useState } from 'react';
 import { node, string } from 'prop-types';
 import { useRouter } from 'next/router';
+// todo remove eslint ignores
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { MdArrowForwardIos } from 'react-icons/md';
+// eslint-disable-next-line import/no-unresolved
 import cx from 'classnames';
 
 /**
