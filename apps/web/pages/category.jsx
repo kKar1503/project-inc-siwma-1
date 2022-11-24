@@ -16,11 +16,11 @@ const Category = () => {
   // });
   return (
     <div className="mt-10 ml-28 mr-28 mb-10 h-screen">
-      <p className="font-bold text-3xl text-cyan-600 mb-5">More Metal Types</p>
-      <p className="text-slate-400 text-xl mb-10">
+      <p className="font-bold text-3xl text-primary mb-5">More Metal Types</p>
+      <p className="text-secondary text-xl mb-10">
         Choose from over 8,000 types of shapes and grades of metal!
       </p>
-      <div className="flex flex-wrap mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:grid-cols-2 mb-10">
         {categoryData?.data.map((item) => (
           <CategoryCard
             name={item.name}
