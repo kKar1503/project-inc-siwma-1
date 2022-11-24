@@ -24,6 +24,7 @@ const FormFileInput = ({
   // States
   const [selectedFile, setSelectedFile] = useState();
 
+  // -- React Hook Form -- //
   // Deconstruct required hooks from the form object
   const { setError, clearErrors, setValue } = form;
 
@@ -38,15 +39,7 @@ const FormFileInput = ({
   // Initialises a reference to the file input
   const fileInput = useRef(null);
 
-  /**
-   * Prevents the default browser behaviour when the user drags a file into the window
-   * @param {*} e The drag over event
-   */
-  const handleDragOver = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-  };
-
+  // -- Functions -- //
   /**
    * Handles new file selections
    * @param {File} file The file that was selected
@@ -86,6 +79,16 @@ const FormFileInput = ({
     // Set the value of the file input
     setSelectedFile(result);
     setValue(name, result);
+  };
+
+  // -- Event handlers -- //
+  /**
+   * Prevents the default browser behaviour when the user drags a file into the window
+   * @param {*} e The drag over event
+   */
+  const handleDragOver = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
   };
 
   /**
