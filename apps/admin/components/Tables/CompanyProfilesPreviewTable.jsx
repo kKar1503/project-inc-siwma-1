@@ -4,7 +4,7 @@ import BaseTable from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 
-// This table shows Registered Users and is built on the BaseTable component.
+// This table shows a preview of Company Profiles and is built on the BaseTable component.
 
 const CompanyProfilesPreviewTable = ({ data }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -31,7 +31,7 @@ const CompanyProfilesPreviewTable = ({ data }) => {
       headings={['Company', 'Website']}
       headingColor="bg-primary"
       showCheckbox
-      columnKeys={['company', 'email']}
+      columnKeys={['name', 'website']}
       data={data}
       footer={
         <div className="flex justify-end bg-none">
@@ -68,12 +68,8 @@ CompanyProfilesPreviewTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
-      // eslint-disable-next-line react/forbid-prop-types
-      profilePicture: PropTypes.object,
       name: PropTypes.string,
-      email: PropTypes.string,
-      company: PropTypes.string,
-      mobileNumber: PropTypes.string,
+      website: PropTypes.string,
     })
   ),
 };
