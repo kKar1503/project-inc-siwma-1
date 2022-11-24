@@ -33,6 +33,9 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
   // -- Handler Functions -- //
   // Handles form submission
   const onSubmit = async (data) => {
+    // Reset form submission status
+    setSubmitSuccess(false);
+
     // Deconstruct values from data
     const { companyName, companyWebsite, companyComment, companyLogo } = data;
 
@@ -103,7 +106,6 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
                 form={formHook}
                 label="Company website"
                 name="companyWebsite"
-                required
                 customValidation={{
                   // Regexp for validating urls taken from https://regexr.com/39nr7
                   pattern: {
