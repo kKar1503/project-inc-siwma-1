@@ -21,43 +21,81 @@ const parseData = (data) =>
 
 // This table shows Registered Users and is built on the BaseTable component.
 const RegisteredUsersTable = ({ className }) => {
-  const paginationValues = [1, 2, 3];
+  const paginationValues = [10, 20, 30];
 
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const [option, setOption] = useState(paginationValues[0]);
-
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, [option]);
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['users'],
     queryFn: async () =>
       supabase
         .from('users')
-        .select(`id, email, fullname, phone, companies:companyid(name), enabled`),
+        .select(`id, email, fullname, phone, companies:companyid(name), enabled`)
+        .range(selectedIndex * option, (selectedIndex + 1) * option - 1),
+  });
+
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [option]);
+
+  useEffect(() => {
+    refetch();
   });
 
   const suspendUsers = async () => {
     await supabase
       .from('users')
       .update({ enabled: 0 })
-      .match({ id: '4b6891ff-8956-4ed0-b06c-a79ba3c4741c' });
+      .in(
+        'id',
+        selectedUsers.map((e) => e.id)
+      );
     refetch();
+    setSelectedUsers(selectedUsers.map((e) => ({ ...e, enabled: false })));
   };
 
   const activateUsers = async () => {
     await supabase
       .from('users')
       .update({ enabled: 1 })
-      .match({ id: '4b6891ff-8956-4ed0-b06c-a79ba3c4741c' });
+      .in(
+        'id',
+        selectedUsers.map((e) => e.id)
+      );
     refetch();
+    setSelectedUsers(selectedUsers.map((e) => ({ ...e, enabled: true })));
+  };
+
+  const onChangeHandler = (targetUser, selected) => {
+    if (!selected && selectedUsers.find((user) => user.id === targetUser.id)) {
+      const result = [...selectedUsers].filter((user) => user.id !== targetUser.id);
+      setSelectedUsers(result);
+    }
+
+    if (selected && !selectedUsers.find((user) => user.id === targetUser.id)) {
+      const result = [...selectedUsers];
+      result.push(targetUser);
+      setSelectedUsers(result);
+    }
   };
 
   const renderTableButtons = () => {
     const tableButtons = [];
-    if (isLoading) return;
-    const count = 3 / option;
+    if (isLoading) {
+      return (
+        <TableButton
+          index={0}
+          selectedIndex={selectedIndex}
+          setSelectedIndex={setSelectedIndex}
+          selectedColor="bg-primary"
+          className="rounded-lg hover:bg-primary"
+          disabled
+        />
+      );
+    }
+    const count = data.data.length / option;
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < count; i++) {
       tableButtons.push(
@@ -73,7 +111,6 @@ const RegisteredUsersTable = ({ className }) => {
         />
       );
     }
-    // eslint-disable-next-line consistent-return
     return tableButtons;
   };
 
@@ -105,18 +142,23 @@ const RegisteredUsersTable = ({ className }) => {
       showCheckbox
       className={className}
       columnKeys={['name', 'email', 'company', 'mobileNumber', 'enabled']}
-      data={
-        isLoading
-          ? undefined
-          : parseData(data.data.slice(selectedIndex * option, (selectedIndex + 1) * option))
-      }
+      onChange={onChangeHandler}
+      data={isLoading ? undefined : parseData(data?.data)}
       footer={
         <div className="flex justify-between bg-none">
           <div className="flex gap-4">
-            <button className="btn btn-primary text-white" onClick={suspendUsers}>
+            <button
+              className="btn btn-primary text-white"
+              onClick={suspendUsers}
+              disabled={isLoading || selectedUsers.length === 0}
+            >
               DEACTIVATE SELECTED
             </button>
-            <button className="btn btn-primary text-white" onClick={activateUsers}>
+            <button
+              className="btn btn-primary text-white"
+              onClick={activateUsers}
+              disabled={isLoading || selectedUsers.length === 0}
+            >
               ACTIVATE SELECTED
             </button>
           </div>
