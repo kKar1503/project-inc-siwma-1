@@ -8,27 +8,28 @@ import supabase from '../../supabaseClient';
 
 // This table shows Available Parameters and is built on the BaseTable component.
 
-const parseData = (data) =>
-  data.map((e) => ({
-    id: e.id,
-    name: e.name,
-    display_name: e.description,
-    parameter_type_id: e.parameter_type.id,
-    parameter_type_name: e.parameter_type.name,
-    datatype_id: e.datatype.id,
-    datatype_name: e.datatype.name,
-    active: e.active ? `Active` : `Disabled`,
-  }));
+const parseData = (data) => console.log(data);
+// data.map((e) => ({
+//   id: e.id,
+//   name: e.name,
+//   display_name: e.description,
+//   parameter_type_id: e.parameter_type.id,
+//   parameter_type_name: e.parameter_type.name,
+//   datatype_id: e.datatype.id,
+//   datatype_name: e.datatype.name,
+//   active: e.active ? `Active` : `Disabled`,
+// }));
 
 const AvailableParametersTable = ({ className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['parameter'],
+    queryKey: ['availParameters'],
     queryFn: async () =>
       supabase
         .from('parameter')
-        .select(`id, name, display_name, parameter_type(id, name), datatype(id, name)`),
+        .select(`id, name, display_name, parameter_type(id, name), datatype(id, name)`)
+        .filter('id', 'not.in', '(1)'),
   });
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const AvailableParametersTable = ({ className }) => {
       header={
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
-            <h1 className="font-bold text-xl">Categories</h1>
+            <h1 className="font-bold text-xl">Available Parameters</h1>
             <h1>Showing 1 to 10 of X entries</h1>
           </div>
           <div className="flex flex-row gap-4">
@@ -55,7 +56,6 @@ const AvailableParametersTable = ({ className }) => {
       data={isLoading ? undefined : parseData(data?.data)}
       footer={
         <div className="flex justify-between bg-none">
-          <button className="btn btn-warning text-white">REVOKE SELECTED</button>
           <div className="flex justify-end bg-none">
             <TableButton
               index={0}
