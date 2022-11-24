@@ -1,8 +1,9 @@
 import cx from 'classnames';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { hasFileExt, arrayToString } from '@inc/utils';
+import { useWatch } from 'react-hook-form';
 
 /**
  * Wrapper component for a react hook form file input
@@ -21,12 +22,9 @@ const FormFileInput = ({
   className,
   style,
 }) => {
-  // States
-  const [selectedFile, setSelectedFile] = useState();
-
   // -- React Hook Form -- //
   // Deconstruct required hooks from the form object
-  const { setError, clearErrors, setValue } = form;
+  const { setError, clearErrors, setValue, control } = form;
 
   // Hooks inputs to using react form hook
   const hookInput = (inputName, inputLabel, options) =>
@@ -35,6 +33,9 @@ const FormFileInput = ({
       maxLength: { value: 255, message: `${inputLabel} can only be 255 characters long` },
       ...options,
     });
+
+  // Watches the value of this file input
+  const selectedFile = useWatch({ name, control });
 
   // Initialises a reference to the file input
   const fileInput = useRef(null);
@@ -48,7 +49,7 @@ const FormFileInput = ({
     // Check if a file was selected
     if (!file) {
       // No file was selected
-      setSelectedFile();
+      setValue(name, null);
       return;
     }
 
@@ -77,7 +78,6 @@ const FormFileInput = ({
     result.src = imageUrl;
 
     // Set the value of the file input
-    setSelectedFile(result);
     setValue(name, result);
   };
 
