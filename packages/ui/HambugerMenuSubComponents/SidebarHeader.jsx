@@ -1,6 +1,8 @@
 // ------------------ Imports ------------------
 
 import { func } from 'prop-types';
+// todo remove eslint ignores
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { MdClose } from 'react-icons/md';
 
 /**
