@@ -8,28 +8,49 @@ import supabase from '../../supabaseClient';
 
 // This table shows Available Parameters and is built on the BaseTable component.
 
-const parseData = (data) => console.log(data);
-// data.map((e) => ({
-//   id: e.id,
-//   name: e.name,
-//   display_name: e.description,
-//   parameter_type_id: e.parameter_type.id,
-//   parameter_type_name: e.parameter_type.name,
-//   datatype_id: e.datatype.id,
-//   datatype_name: e.datatype.name,
-//   active: e.active ? `Active` : `Disabled`,
-// }));
+const parseId = (data) => {
+  const array = [];
+  data.forEach((e) => {
+    array.push(e.parameter.id);
+  });
+  return array.toString();
+};
+
+const parseData = (data) =>
+  data.map((e) => ({
+    id: e.id,
+    name: e.name,
+    display_name: e.description,
+    parameter_type_id: e.parameter_type.id,
+    parameter_type_name: e.parameter_type.name,
+    datatype_id: e.datatype.id,
+    datatype_name: e.datatype.name,
+  }));
 
 const AvailableParametersTable = ({ className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ['availParameters'],
+  const {
+    data: parameters,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ['categoryParameters'],
+    queryFn: async () =>
+      supabase.from('categories_parameters').select(`parameter(id)`).eq('category(id)', '1'),
+  });
+
+  const paramIds = isLoading ? undefined : parseId(parameters?.data);
+
+  const { data } = useQuery({
+    queryKey: ['availableParameters', paramIds],
     queryFn: async () =>
       supabase
         .from('parameter')
         .select(`id, name, display_name, parameter_type(id, name), datatype(id, name)`)
-        .filter('id', 'not.in', '(1)'),
+        .filter('id', 'not.in', `(${paramIds})`),
+    // The query will not execute until the userId exists
+    enabled: !!paramIds,
   });
 
   useEffect(() => {
