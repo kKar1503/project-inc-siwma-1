@@ -1,14 +1,32 @@
-import React, { useState } from 'react';
+import { useQuery } from 'react-query';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import BaseTableCat from './BaseTableCat';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
+import supabase from '../../supabaseClient';
 
 // This table shows Available Parameters and is built on the BaseTable component.
 
-const AvailableParametersTable = ({ data, className }) => {
+const parseData = (data) =>
+  data.map((e) => ({
+    id: e.id,
+    name: e.name,
+    description: e.description,
+    active: e.active ? `Active` : `Disabled`,
+  }));
+
+const AvailableParametersTable = ({ className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => supabase.from('category').select(`id, name, datatype, active`),
+  });
+
+  useEffect(() => {
+    refetch();
+  });
   return (
     <BaseTableCat
       header={
@@ -27,7 +45,7 @@ const AvailableParametersTable = ({ data, className }) => {
       showCheckbox
       className={className}
       columnKeys={['categoryName', 'categoryDesc']}
-      data={data}
+      data={isLoading ? undefined : parseData(data?.data)}
       footer={
         <div className="flex justify-between bg-none">
           <button className="btn btn-warning text-white">REVOKE SELECTED</button>
@@ -60,13 +78,6 @@ const AvailableParametersTable = ({ data, className }) => {
 };
 
 AvailableParametersTable.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      categoryName: PropTypes.string,
-      categoryDesc: PropTypes.string,
-    })
-  ),
   className: PropTypes.string,
 };
 
