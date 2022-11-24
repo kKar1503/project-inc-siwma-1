@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import BaseTable from './BaseTable';
+import BaseTableCat from './BaseTableCat';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 
@@ -10,7 +10,7 @@ const ExistingCategories = ({ data, className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
-    <BaseTable
+    <BaseTableCat
       header={
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">

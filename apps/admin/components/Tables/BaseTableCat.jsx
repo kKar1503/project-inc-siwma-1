@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import ActionCat from '../ActionCat';
 
 // This is the base table component that every other table is built on.
 
@@ -103,20 +104,7 @@ const BaseTableCat = ({
                       </td>
                     ))}
                     <td>
-                      {/* TODO: Replace with the proper icon once react-icons is set up */}
-                      <div className="dropdown dropdown-bottom dropdown-end">
-                        <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                          <li>Item 1</li>
-                          <li>Item 2</li>
-                        </ul>
-                      </div>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 128 512"
-                        className="h-5 w-5"
-                      >
-                        <path d="M64 360c30.9 0 56 25.1 56 56s-25.1 56-56 56s-56-25.1-56-56s25.1-56 56-56zm0-160c30.9 0 56 25.1 56 56s-25.1 56-56 56s-56-25.1-56-56s25.1-56 56-56zM120 96c0 30.9-25.1 56-56 56S8 126.9 8 96S33.1 40 64 40s56 25.1 56 56z" />
-                      </svg>
+                      <ActionCat />
                     </td>
                   </tr>
                 ))}
