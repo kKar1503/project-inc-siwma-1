@@ -19,7 +19,7 @@ const SidebarSubItem = ({ name, customIcon, redirectLink }) => {
   // ------------------ Return -----------------
   return (
     <div role="presentation" onClick={redirect}>
-      {customIcon && <customIcon />}
+      {customIcon}
       <h1 className="cursor-pointer p-2 hover:bg-primary-focus rounded-md mt-1">{name}</h1>
     </div>
   );

@@ -36,7 +36,7 @@ const SidebarItem = ({ name, customIcon, redirectLink, children }) => {
         role="presentation"
         className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-primary-focus text-white"
       >
-        {customIcon && <customIcon />}
+        {customIcon}
         <span className="text-[15px] ml-4 text-base-200 font-bold">{name}</span>
         {children && (
           <span
