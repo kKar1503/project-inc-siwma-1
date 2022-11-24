@@ -27,9 +27,7 @@ const CreateParam = () => (
       </div>
       <div className="form-control">
         <div className="label">
-          <span className="label-text font-semibold">
-            Choice options (Seperate with a `&apos`,`&apos`)
-          </span>
+          <span className="label-text font-semibold">Choice options (Seperate with a `,`)</span>
         </div>
         <input
           type="text"
