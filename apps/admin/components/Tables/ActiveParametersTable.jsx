@@ -39,8 +39,11 @@ const ActiveParametersTable = ({ className, id }) => {
   });
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['categories'],
-    queryFn: async () => supabase.from('category').select(`id, name, datatype, active`),
+    queryKey: ['parameter'],
+    queryFn: async () =>
+      supabase
+        .from('parameter')
+        .select(`id, name, display_name, parameter_type(id, name), datatype(id, name)`),
   });
 
   useEffect(() => {
