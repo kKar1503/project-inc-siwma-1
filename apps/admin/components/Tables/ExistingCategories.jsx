@@ -21,7 +21,11 @@ const ExistingCategories = ({ className }) => {
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['categories'],
-    queryFn: async () => supabase.from('category').select(`id, name, description, active`),
+    queryFn: async () =>
+      supabase
+        .from('category')
+        .select(`id, name, description, active`)
+        .order('name', { ascending: true }),
   });
 
   useEffect(() => {
