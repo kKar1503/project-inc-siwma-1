@@ -279,6 +279,7 @@ importers:
   packages/ui:
     specifiers:
       '@supabase/supabase-js': ^2.1.0
+      classnames: ^2.3.2
       eslint: ^7.32.0
       eslint-config-custom: workspace:*
       next: 13.0.0
@@ -287,6 +288,7 @@ importers:
       react-query: ^3.39.2
     dependencies:
       '@supabase/supabase-js': 2.1.0
+      classnames: 2.3.2
       next: 13.0.0_react@18.2.0
       prop-types: 15.8.1
       react-query: 3.39.2_react@18.2.0
