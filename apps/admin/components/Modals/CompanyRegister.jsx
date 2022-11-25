@@ -26,6 +26,7 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
   // Deconstruct the individual hooks from the object
   const {
     handleSubmit,
+    watch,
     reset,
     formState: { errors },
   } = formHook;
@@ -100,7 +101,13 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
           <div className="flex-1 md:mr-10">
             <div className="flex flex-col">
               {/* Company name input field */}
-              <FormInputGroup form={formHook} label="Company name" name="companyName" required />
+              <FormInputGroup
+                form={formHook}
+                label="Company name"
+                name="companyName"
+                success={submitSuccess}
+                required
+              />
               {/* Company website input field */}
               <FormInputGroup
                 form={formHook}
@@ -114,6 +121,7 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
                     message: 'Company website must be a valid URL',
                   },
                 }}
+                success={submitSuccess}
               />
               {/* Company comments input field */}
               <FormInputGroup
@@ -122,6 +130,7 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
                 label="Company comment"
                 name="companyComment"
                 placeholder="Add a comment (only visible to you)"
+                success={submitSuccess}
                 hideError
               />
             </div>
@@ -134,6 +143,7 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
               type="fileupload"
               label="Company Logo"
               name="companyLogo"
+              success={submitSuccess}
             />
             <div className="modal-action">
               <button className="btn btn-outline btn-primary w-full">Register Company</button>

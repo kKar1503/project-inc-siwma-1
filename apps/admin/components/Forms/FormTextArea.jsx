@@ -14,6 +14,7 @@ const FormTextArea = ({
   placeholder,
   customValidation,
   required,
+  success,
   className,
   style,
 }) => {
@@ -27,7 +28,10 @@ const FormTextArea = ({
 
   return (
     <textarea
-      className={cx(className, 'textarea textarea-bordered h-32', { 'textarea-error': isErrored })}
+      className={cx(className, 'textarea textarea-bordered h-32', {
+        'textarea-error': isErrored,
+        'textarea-success': success,
+      })}
       placeholder={placeholder || label}
       style={style}
       {...hookInput(name, label, customValidation)}
@@ -47,6 +51,7 @@ const propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   customValidation: PropTypes.object,
   required: PropTypes.bool,
+  success: PropTypes.bool,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
