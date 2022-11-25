@@ -5849,11 +5849,3 @@ packages:
       property-expr: 2.0.5
       toposort: 2.0.2
     dev: false
-
-  '@cdn.sheetjs.com/xlsx-0.19.0/xlsx-0.19.0.tgz':
-    resolution: {tarball: https://cdn.sheetjs.com/xlsx-0.19.0/xlsx-0.19.0.tgz}
-    name: xlsx
-    version: 0.19.0
-    engines: {node: '>=0.8'}
-    hasBin: true
-    dev: false
