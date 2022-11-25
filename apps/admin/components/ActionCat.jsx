@@ -1,5 +1,5 @@
 import { BsThreeDotsVertical, BsFillPencilFill } from 'react-icons/bs';
-import { FaBox } from 'react-icons/fa';
+import { RiInboxArchiveFill, RiInboxUnarchiveFill } from 'react-icons/ri';
 
 const ActionCat = () => (
   <div className="dropdown dropdown-left">
@@ -15,8 +15,14 @@ const ActionCat = () => (
       </li>
       <li>
         <div className="btn btn-ghost w-30">
-          <FaBox />
+          <RiInboxArchiveFill />
           Archive
+        </div>
+      </li>
+      <li>
+        <div className="btn btn-ghost w-30">
+          <RiInboxUnarchiveFill />
+          UnArchive
         </div>
       </li>
     </ul>

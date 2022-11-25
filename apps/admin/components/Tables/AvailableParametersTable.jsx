@@ -42,7 +42,7 @@ const AvailableParametersTable = ({ className }) => {
 
   const paramIds = isLoading ? undefined : parseId(parameters?.data);
 
-  const { data } = useQuery({
+  const { data, status } = useQuery({
     queryKey: ['availableParameters', paramIds],
     queryFn: async () =>
       supabase
@@ -74,7 +74,7 @@ const AvailableParametersTable = ({ className }) => {
       showCheckbox
       className={className}
       columnKeys={['name', 'parameter_type_name', 'active']}
-      data={isLoading ? undefined : parseData(data?.data)}
+      data={status !== 'success' ? undefined : parseData(data?.data)}
       footer={
         <div className="flex justify-between bg-none">
           <div className="flex justify-end bg-none">
