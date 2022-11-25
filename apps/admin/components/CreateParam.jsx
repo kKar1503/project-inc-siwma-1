@@ -1,13 +1,13 @@
 const CreateParam = () => (
   <div>
     <div>
-      <h3 className="text-lg font-bold">Edit Category</h3>
-      <p className="text-sm">Edit Category information</p>
+      <h3 className="text-lg font-bold">Create Parameter</h3>
+      <p className="text-sm">Create New Parameter</p>
     </div>
     <form>
       <div className="form-control">
         <div className="label">
-          <span className="label-text font-semibold">Cateogry Name</span>
+          <span className="label-text font-semibold">Parameter Name</span>
         </div>
         <input
           type="text"
