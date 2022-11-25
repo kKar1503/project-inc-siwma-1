@@ -11,7 +11,6 @@ import FormFileInput from './FormFileInput';
  * @returns An input group that contains a label, input and error message
  */
 const FormInputGroup = ({
-  form,
   type,
   label,
   name,
@@ -22,78 +21,62 @@ const FormInputGroup = ({
   success,
   className,
   style,
-}) => {
-  // Deconstruct the individual hooks from the form object
-  const {
-    register,
-    formState: { errors },
-  } = form;
-
-  return (
-    <div className={cx(className, 'form-control')} style={style}>
-      <div className="label pt-0">
-        <span className="label-text">
-          {label} {!required ? '(optional)' : ''}
-        </span>
-      </div>
-      {
-        // Render a text input if the type is text
-        (!type || type === 'text') && (
-          <FormTextInput
-            register={register}
-            isErrored={errors[name]}
-            label={label}
-            name={name}
-            customValidation={{ ...customValidation }}
-            placeholder={placeholder}
-            required={required}
-            success={success}
-          />
-        )
-      }
-      {
-        // Render a textarea if the type is textarea
-        type && type === 'textarea' && (
-          <FormTextArea
-            register={register}
-            isErrored={errors[name]}
-            label={label}
-            name={name}
-            customValidation={{ ...customValidation }}
-            placeholder={placeholder}
-            required={required}
-            success={success}
-          />
-        )
-      }
-      {
-        // Render a file input if the type is fileinput
-        type && type === 'fileupload' && (
-          <FormFileInput
-            register={register}
-            isErrored={errors[name]}
-            form={form}
-            label={label}
-            name={name}
-            customValidation={{ ...customValidation }}
-            placeholder={placeholder}
-            required={required}
-            success={success}
-          />
-        )
-      }
-      {
-        // Show the error if hideError is not set
-        !hideError && <FormError error={errors[name]} />
-      }
+}) => (
+  <div className={cx(className, 'form-control')} style={style}>
+    <div className="label pt-0">
+      <span className="label-text">
+        {label} {!required ? '(optional)' : ''}
+      </span>
     </div>
-  );
-};
+    {
+      // Render a text input if the type is text
+      (!type || type === 'text') && (
+        <FormTextInput
+          label={label}
+          name={name}
+          customValidation={{ ...customValidation }}
+          placeholder={placeholder}
+          required={required}
+          success={success}
+        />
+      )
+    }
+    {
+      // Render a textarea if the type is textarea
+      type && type === 'textarea' && (
+        <FormTextArea
+          label={label}
+          name={name}
+          customValidation={{ ...customValidation }}
+          placeholder={placeholder}
+          required={required}
+          success={success}
+        />
+      )
+    }
+    {
+      // Render a file input if the type is fileinput
+      type && type === 'fileupload' && (
+        <FormFileInput
+          label={label}
+          name={name}
+          customValidation={{ ...customValidation }}
+          placeholder={placeholder}
+          required={required}
+          success={success}
+        />
+      )
+    }
+    {
+      // Show the error if hideError is not set
+      !hideError && <FormError inputName={name} />
+    }
+  </div>
+);
 
 const propTypes = {
   // The object is massive, its impossible to document its shape
   // eslint-disable-next-line react/forbid-prop-types
-  form: PropTypes.object.isRequired,
   type: PropTypes.string,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,

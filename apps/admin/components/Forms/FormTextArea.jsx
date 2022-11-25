@@ -1,5 +1,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
+import { useFormContext } from 'react-hook-form';
 
 /**
  * Wrapper component for a react hook form textarea input
@@ -7,8 +8,6 @@ import PropTypes from 'prop-types';
  * @returns A input that works with react form hook
  */
 const FormTextArea = ({
-  register,
-  isErrored,
   name,
   label,
   placeholder,
@@ -18,6 +17,12 @@ const FormTextArea = ({
   className,
   style,
 }) => {
+  // Use form context
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
   // Hooks inputs to using react form hook
   const hookInput = (inputName, inputLabel, options) =>
     register(inputName, {
@@ -29,7 +34,7 @@ const FormTextArea = ({
   return (
     <textarea
       className={cx(className, 'textarea textarea-bordered h-32', {
-        'textarea-error': isErrored,
+        'textarea-error': errors[name],
         'textarea-success': success,
       })}
       placeholder={placeholder || label}
@@ -40,10 +45,6 @@ const FormTextArea = ({
 };
 
 const propTypes = {
-  register: PropTypes.func.isRequired,
-  isErrored: PropTypes.shape({
-    message: PropTypes.string.isRequired,
-  }),
   name: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
