@@ -12,7 +12,7 @@ import FormInputGroup from '../Forms/FormInputGroup';
  * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
  * @returns
  */
-const CompanyRegister = ({ isOpen, onRequestClose }) => {
+const CompanyRegister = ({ isOpen, onRequestClose, onSuccess }) => {
   // -- Component states -- //
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
@@ -24,7 +24,7 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
   const formHook = useForm();
 
   // Deconstruct the individual hooks from the object
-  const { handleSubmit, reset } = formHook;
+  const { handleSubmit, reset, touchedFields } = formHook;
 
   // -- Handler Functions -- //
   // Handles form submission
@@ -74,11 +74,25 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
     setSubmitSuccess(true);
   };
 
-  // Invokes on successful form submission
+  // Reset form inputs on successful form submission
   useEffect(() => {
     // Reset form inputs
-    if (submitSuccess) reset();
+    if (submitSuccess) {
+      reset();
+    }
+
+    // Invoke success function
+    if (submitSuccess && onSuccess) {
+      onSuccess();
+    }
   }, [submitSuccess]);
+
+  // Clear success state of the form as soon as a input is touched
+  // useEffect(() => {
+  //   if (submitSuccess)
+  //     setSubmitSuccess(false);
+  //   console.log('yes')
+  // }, [touchedFields]);
 
   return (
     <BaseModal
@@ -157,6 +171,7 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
 CompanyRegister.propTypes = {
   isOpen: PropTypes.bool,
   onRequestClose: PropTypes.func,
+  onSuccess: PropTypes.func,
 };
 
 export default CompanyRegister;

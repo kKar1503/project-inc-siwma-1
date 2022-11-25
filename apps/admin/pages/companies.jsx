@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider, useQueryClient } from 'react-query';
 import RegisteredCompaniesTable from '../components/Tables/RegisteredCompaniesTable';
 import AdminPageLayout from '../components/layouts/AdminPageLayout';
 import NavBar from '../components/NavBar';
@@ -33,6 +33,7 @@ const queryClient = new QueryClient();
  * @type {import("next").NextPage}
  */
 const Page = () => {
+  // -- States -- //
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => {
@@ -43,11 +44,17 @@ const Page = () => {
     setIsOpen(false);
   };
 
+  const refreshQuery = () => {
+    // Invalidate table queries to cause a refetch
+    queryClient.invalidateQueries({ queryKey: ['getCompanyCount'] });
+    queryClient.invalidateQueries({ queryKey: ['getAllCompanies'] });
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
         {/* The company register modal will be teleported to the end of the DOM because it uses React Portals */}
-        <CompanyRegister isOpen={isOpen} onRequestClose={closeModal} />
+        <CompanyRegister isOpen={isOpen} onRequestClose={closeModal} onSuccess={refreshQuery} />
         <NavBar />
 
         <div className="flex flex-row gap-6">
