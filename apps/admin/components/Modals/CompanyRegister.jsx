@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import cx from 'classnames';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useEffect, useState } from 'react';
@@ -24,12 +24,7 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
   const formHook = useForm();
 
   // Deconstruct the individual hooks from the object
-  const {
-    handleSubmit,
-    watch,
-    reset,
-    formState: { errors },
-  } = formHook;
+  const { handleSubmit, reset } = formHook;
 
   // -- Handler Functions -- //
   // Handles form submission
@@ -96,67 +91,65 @@ const CompanyRegister = ({ isOpen, onRequestClose }) => {
         </div>
       }
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-wrap">
-          <div className="flex-1 md:mr-10">
-            <div className="flex flex-col">
-              {/* Company name input field */}
+      <FormProvider {...formHook}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-wrap">
+            <div className="flex-1 md:mr-10">
+              <div className="flex flex-col">
+                {/* Company name input field */}
+                <FormInputGroup
+                  label="Company name"
+                  name="companyName"
+                  success={submitSuccess}
+                  required
+                />
+                {/* Company website input field */}
+                <FormInputGroup
+                  label="Company website"
+                  name="companyWebsite"
+                  customValidation={{
+                    // Regexp for validating urls taken from https://regexr.com/39nr7
+                    pattern: {
+                      value:
+                        /[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi,
+                      message: 'Company website must be a valid URL',
+                    },
+                  }}
+                  success={submitSuccess}
+                />
+                {/* Company comments input field */}
+                <FormInputGroup
+                  type="textarea"
+                  label="Company comment"
+                  name="companyComment"
+                  placeholder="Add a comment (only visible to you)"
+                  success={submitSuccess}
+                  hideError
+                />
+              </div>
+            </div>
+            <div className="w-full md:w-1/2 flex flex-col">
+              {/* Company logo upload input */}
               <FormInputGroup
-                form={formHook}
-                label="Company name"
-                name="companyName"
-                success={submitSuccess}
-                required
-              />
-              {/* Company website input field */}
-              <FormInputGroup
-                form={formHook}
-                label="Company website"
-                name="companyWebsite"
-                customValidation={{
-                  // Regexp for validating urls taken from https://regexr.com/39nr7
-                  pattern: {
-                    value:
-                      /[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi,
-                    message: 'Company website must be a valid URL',
-                  },
-                }}
+                className="flex-1"
+                type="fileupload"
+                label="Company Logo"
+                name="companyLogo"
                 success={submitSuccess}
               />
-              {/* Company comments input field */}
-              <FormInputGroup
-                form={formHook}
-                type="textarea"
-                label="Company comment"
-                name="companyComment"
-                placeholder="Add a comment (only visible to you)"
-                success={submitSuccess}
-                hideError
-              />
+              <div className="modal-action">
+                <button className="btn btn-outline btn-primary w-full">Register Company</button>
+              </div>
             </div>
           </div>
-          <div className="w-full md:w-1/2 flex flex-col">
-            {/* Company logo upload input */}
-            <FormInputGroup
-              form={formHook}
-              className="flex-1"
-              type="fileupload"
-              label="Company Logo"
-              name="companyLogo"
-              success={submitSuccess}
-            />
-            <div className="modal-action">
-              <button className="btn btn-outline btn-primary w-full">Register Company</button>
-            </div>
+          {/* Display any errors pertaining to the company comments
+           * We display it here instead of within the input group so that the submit button aligns with the bottom of the company comment input
+           */}
+          <div className="flex-1 md:w-1/2 md:pr-10">
+            <FormError inputName="companyComment" className="mb-0 pb-0" />
           </div>
-        </div>
-        {/* Display any errors pertaining to the company comments
-         * We display it here instead of within the input group so that the submit button aligns with the bottom of the company comment input
-         */}
-        <div className="flex-1 md:w-1/2 md:pr-10">
-          <FormError error={errors.companyComment} className="mb-0 pb-0" />
-        </div>
-      </form>
+        </form>
+      </FormProvider>
     </BaseModal>
   );
 };
