@@ -3,7 +3,7 @@ import Image from 'next/image';
 import PropTypes from 'prop-types';
 import { useRef } from 'react';
 import { hasFileExt, arrayToString } from '@inc/utils';
-import { useWatch } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 /**
  * Wrapper component for a react hook form file input
@@ -11,9 +11,6 @@ import { useWatch } from 'react-hook-form';
  * @returns A file input that works with react form hook
  */
 const FormFileInput = ({
-  register,
-  isErrored,
-  form,
   name,
   label,
   placeholder,
@@ -24,8 +21,15 @@ const FormFileInput = ({
   style,
 }) => {
   // -- React Hook Form -- //
-  // Deconstruct required hooks from the form object
-  const { setError, clearErrors, setValue, control } = form;
+  // Use form context and deconstruct required hooks from the form object
+  const {
+    register,
+    formState: { errors },
+    setError,
+    clearErrors,
+    setValue,
+    control,
+  } = useFormContext();
 
   // Hooks inputs to using react form hook
   const hookInput = (inputName, inputLabel, options) =>
@@ -122,7 +126,7 @@ const FormFileInput = ({
     <label
       className={cx(
         'flex flex-1 justify-center max-w-full px-8 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none',
-        { 'border-error': isErrored },
+        { 'border-error': errors[name] },
         { 'border-success': success }
       )}
       onDragOver={handleDragOver}
@@ -186,13 +190,6 @@ const FormFileInput = ({
 };
 
 const propTypes = {
-  register: PropTypes.func.isRequired,
-  isErrored: PropTypes.shape({
-    message: PropTypes.string.isRequired,
-  }),
-  // The object is massive, its impossible to document its shape
-  // eslint-disable-next-line react/forbid-prop-types
-  form: PropTypes.object.isRequired,
   name: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,

@@ -1,5 +1,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
+import { useFormContext } from 'react-hook-form';
 
 /**
  * Wrapper component for a react hook form input
@@ -7,8 +8,6 @@ import PropTypes from 'prop-types';
  * @returns A input that works with react form hook
  */
 const FormInput = ({
-  register,
-  isErrored,
   name,
   label,
   placeholder,
@@ -18,6 +17,12 @@ const FormInput = ({
   className,
   style,
 }) => {
+  // Use form context
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
   // Hooks inputs to using react form hook
   const hookInput = (inputName, inputLabel, options) =>
     register(inputName, {
@@ -30,7 +35,7 @@ const FormInput = ({
     <input
       type="text"
       className={cx(className, 'input-group input input-bordered', {
-        'input-error': isErrored,
+        'input-error': errors[name],
         'input-success': success,
       })}
       style={style}
@@ -41,10 +46,6 @@ const FormInput = ({
 };
 
 const propTypes = {
-  register: PropTypes.func.isRequired,
-  isErrored: PropTypes.shape({
-    message: PropTypes.string.isRequired,
-  }),
   name: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
