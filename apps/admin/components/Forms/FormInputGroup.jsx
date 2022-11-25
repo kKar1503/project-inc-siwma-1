@@ -19,6 +19,7 @@ const FormInputGroup = ({
   placeholder,
   required,
   hideError,
+  success,
   className,
   style,
 }) => {
@@ -46,6 +47,7 @@ const FormInputGroup = ({
             customValidation={{ ...customValidation }}
             placeholder={placeholder}
             required={required}
+            success={success}
           />
         )
       }
@@ -60,6 +62,7 @@ const FormInputGroup = ({
             customValidation={{ ...customValidation }}
             placeholder={placeholder}
             required={required}
+            success={success}
           />
         )
       }
@@ -75,6 +78,7 @@ const FormInputGroup = ({
             customValidation={{ ...customValidation }}
             placeholder={placeholder}
             required={required}
+            success={success}
           />
         )
       }
@@ -99,6 +103,7 @@ const propTypes = {
   placeholder: PropTypes.string,
   required: PropTypes.bool,
   hideError: PropTypes.bool,
+  success: PropTypes.bool,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
