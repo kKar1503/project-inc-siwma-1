@@ -24,7 +24,7 @@ const PendingInvitesTable = ({ data, className }) => {
       }
       headings={['Company', 'E-mail', 'Mobile Number']}
       headingColor="bg-warning"
-      showCheckbox
+      showCheckbox={false}
       className={className}
       columnKeys={['company', 'email', 'mobileNumber']}
       data={data}

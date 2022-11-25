@@ -15,7 +15,7 @@ const UserInvitesPreviewTable = ({ data }) => {
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">User Invites Preview</h1>
-            <h1>Processed {data.length} user invites from selected file</h1>
+            <h1 className="pr-2">Processed {data.length} user invites from selected file</h1>
           </div>
           <div className="flex flex-row gap-4">
             <h1 className="mt-3">Show</h1>
@@ -40,21 +40,22 @@ const UserInvitesPreviewTable = ({ data }) => {
               index={0}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-primary"
-              styles="rounded-l-lg"
+              selectedColor="bg-success"
+              className="rounded-l-lg hover:bg-success"
             />
             <TableButton
               index={1}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-primary"
+              selectedColor="bg-success"
+              className="hover:bg-success"
             />
             <TableButton
               index={2}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-primary"
-              styles="rounded-r-lg"
+              selectedColor="bg-success"
+              className="rounded-r-lg hover:bg-success"
             />
           </div>
         </div>
@@ -67,8 +68,7 @@ UserInvitesPreviewTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
-      // eslint-disable-next-line react/forbid-prop-types
-      profilePicture: PropTypes.object,
+      profilePicture: PropTypes.string,
       name: PropTypes.string,
       email: PropTypes.string,
       company: PropTypes.string,
