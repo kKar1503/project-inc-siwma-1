@@ -5,17 +5,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-const propTypes = {
-  defaultFullname: PropTypes.string,
-  defaultPhone: PropTypes.string,
-  email: PropTypes.string,
-  companyName: PropTypes.string,
-  onRegister: PropTypes.func,
-  formNote: PropTypes.node,
-  disabled: PropTypes.bool,
-  className: PropTypes.string,
-};
-
 /**
  * This Form is closely related to the SignInForm.
  * Separating the form logic in this component so if the fields gets changed,
@@ -161,6 +150,17 @@ const RegisterForm = ({
       </div>
     </form>
   );
+};
+
+const propTypes = {
+  defaultFullname: PropTypes.string,
+  defaultPhone: PropTypes.string,
+  email: PropTypes.string,
+  companyName: PropTypes.string,
+  onRegister: PropTypes.func,
+  formNote: PropTypes.node,
+  disabled: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 RegisterForm.propTypes = propTypes;

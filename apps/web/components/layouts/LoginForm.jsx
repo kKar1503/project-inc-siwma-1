@@ -5,13 +5,6 @@ import cx from 'classnames';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 
-const propTypes = {
-  onLogin: PropTypes.func,
-  formNote: PropTypes.node,
-  disabled: PropTypes.bool,
-  className: PropTypes.string,
-};
-
 /**
  * Separating the form logic in this component so if the fields gets changed,
  * it will not call for a rerender for the other components on the page (Separation
@@ -93,6 +86,13 @@ const LoginForm = ({ onLogin, formNote, disabled, className }) => {
       </div>
     </form>
   );
+};
+
+const propTypes = {
+  onLogin: PropTypes.func,
+  formNote: PropTypes.node,
+  disabled: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 LoginForm.propTypes = propTypes;

@@ -8,12 +8,6 @@ import { Alert } from '@inc/ui';
 import RegisterForm from '../components/layouts/RegisterForm';
 import SignInAndUpLayout from '../components/layouts/SignInAndUpLayout';
 
-const propTypes = {
-  email: PropTypes.string,
-  companyName: PropTypes.string,
-  defaultFullname: PropTypes.string,
-};
-
 /**
  * Register form wrapper to deocuple the fetching logic from the from component.
  *
@@ -122,6 +116,12 @@ const Page = ({ companyName, email, defaultFullname }) => (
     <RegisterFormWrap companyName={companyName} email={email} defaultFullname={defaultFullname} />
   </div>
 );
+
+const propTypes = {
+  email: PropTypes.string,
+  companyName: PropTypes.string,
+  defaultFullname: PropTypes.string,
+};
 
 Page.propTypes = propTypes;
 

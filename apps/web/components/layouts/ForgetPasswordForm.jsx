@@ -2,13 +2,6 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 
-const propTypes = {
-  onSendResetPassword: PropTypes.func,
-  formNote: PropTypes.node,
-  disabled: PropTypes.bool,
-  className: PropTypes.string,
-};
-
 /**
  * Separating the form logic in this component so if the fields gets changed,
  * it will not call for a rerender for the other components on the page (Separation
@@ -62,6 +55,13 @@ const ForgetPasswordForm = ({ onSendResetPassword, formNote, disabled, className
       </div>
     </form>
   );
+};
+
+const propTypes = {
+  onSendResetPassword: PropTypes.func,
+  formNote: PropTypes.node,
+  disabled: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 ForgetPasswordForm.propTypes = propTypes;
