@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useMutation } from 'react-query';
 import { createServiceSupabaseClient } from '@inc/utils';
-import Alert from '../components/alerts/Alert';
+import { Alert } from '@inc/ui';
 import RegisterForm from '../components/layouts/RegisterForm';
 import SignInAndUpLayout from '../components/layouts/SignInAndUpLayout';
 

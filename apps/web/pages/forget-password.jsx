@@ -2,7 +2,7 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import dynamic from 'next/dynamic';
 import React from 'react';
 import { useMutation } from 'react-query';
-import Alert from '../components/alerts/Alert';
+import { Alert } from '@inc/ui';
 import ForgetPasswordForm from '../components/layouts/ForgetPasswordForm';
 import SignInAndUpLayout from '../components/layouts/SignInAndUpLayout';
 

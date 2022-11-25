@@ -3,9 +3,9 @@ import dynamic from 'next/dynamic';
 import React from 'react';
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
+import { Alert } from '@inc/ui';
 import SignInAndUpLayout from '../components/layouts/SignInAndUpLayout';
 import LoginForm from '../components/layouts/LoginForm';
-import Alert from '../components/alerts/Alert';
 
 /**
  * To minimise the amount of components needed to be rendered,

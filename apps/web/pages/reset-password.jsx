@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
-import Alert from '../components/alerts/Alert';
+import { Alert } from '@inc/ui';
 import ResetPasswordForm from '../components/layouts/ResetPasswordForm';
 import SignInAndUpLayout from '../components/layouts/SignInAndUpLayout';
 
