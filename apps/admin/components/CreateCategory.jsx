@@ -4,7 +4,7 @@ import supabase from '../supabaseClient';
 const CreateCategory = () => {
   const queryClient = useQueryClient();
 
-  const reinstateCompanies = async (e) => {
+  const addCategory = async (e) => {
     e.preventDefault();
     await supabase.from('category').insert({
       name: `${e.target.categoryName.value}`,
@@ -26,7 +26,7 @@ const CreateCategory = () => {
       </div>
       <form
         onSubmit={async (e) => {
-          await reinstateCompanies(e);
+          await addCategory(e);
           console.log(e.target.categoryName.value);
           console.log(e.target.categoryDescription.value);
         }}
