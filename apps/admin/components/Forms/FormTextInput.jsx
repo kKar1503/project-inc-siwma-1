@@ -14,6 +14,7 @@ const FormInput = ({
   placeholder,
   customValidation,
   required,
+  success,
   className,
   style,
 }) => {
@@ -28,7 +29,10 @@ const FormInput = ({
   return (
     <input
       type="text"
-      className={cx(className, 'input-group input input-bordered', { 'input-error': isErrored })}
+      className={cx(className, 'input-group input input-bordered', {
+        'input-error': isErrored,
+        'input-success': success,
+      })}
       style={style}
       placeholder={placeholder || label}
       {...hookInput(name, label, customValidation)}
@@ -48,6 +52,7 @@ const propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   customValidation: PropTypes.object,
   required: PropTypes.bool,
+  success: PropTypes.bool,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };

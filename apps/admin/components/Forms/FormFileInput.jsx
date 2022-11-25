@@ -19,6 +19,7 @@ const FormFileInput = ({
   placeholder,
   customValidation,
   required,
+  success,
   className,
   style,
 }) => {
@@ -121,7 +122,8 @@ const FormFileInput = ({
     <label
       className={cx(
         'flex flex-1 justify-center max-w-full px-8 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none',
-        { 'border-error': isErrored }
+        { 'border-error': isErrored },
+        { 'border-success': success }
       )}
       onDragOver={handleDragOver}
       onDrop={handleDropOver}
@@ -198,6 +200,7 @@ const propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   customValidation: PropTypes.object,
   required: PropTypes.bool,
+  success: PropTypes.bool,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
