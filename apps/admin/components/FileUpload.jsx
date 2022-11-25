@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import PropTypes from 'prop-types';
+import PropTypes, { object } from 'prop-types';
 import { useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
 import { BsFileEarmarkSpreadsheet } from 'react-icons/bs';
@@ -26,7 +26,16 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
        */
 
       const bstr = evt.target.result;
-      const wb = XLSX.read(bstr, { type: 'binary' });
+
+      let wb = {}; // Declare an empty object to avoid nesting within the try block
+      try {
+        wb = XLSX.read(bstr, { type: 'binary' });
+      } catch (e) {
+        alert('File is corrupt!');
+        setSelectedFile(null);
+        return;
+      }
+
       // Get first worksheet
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
