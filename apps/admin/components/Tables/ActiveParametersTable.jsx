@@ -46,7 +46,8 @@ const ActiveParametersTable = ({ className, id }) => {
         .select(
           `category(name), parameter(id, name, display_name, parameter_type(id, name), datatype(id, name))`
         )
-        .eq('category(id)', '1'),
+        .eq('category(id)', `1`),
+    // .eq('category(id)', `${id}`),
   });
 
   useEffect(() => {
