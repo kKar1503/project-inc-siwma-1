@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import SearchHistory from './components/SearchHistory';
 
 /** @type {React.CSSProperties} */
 const focusShadowStyle = {
@@ -39,7 +40,7 @@ const Search = ({ placeholder, searchCallback, focusCallback, useFocusShadow }) 
    */
   const timeout = useRef();
 
-  const [search, setSearchHistory] = useState([]);
+  const [searchHistory, setSearchHistory] = useState(['hello', 'world']);
   const [rawText, setRawText] = useState('');
   const [focusStyle, setFocusStyle] = useState(unfocusShadowStyle);
 
@@ -48,15 +49,21 @@ const Search = ({ placeholder, searchCallback, focusCallback, useFocusShadow }) 
    * @param {boolean} isFocus
    */
   const searchFocusHandler = (isFocus) => {
+    let callbackFocus = false;
     if (isFocus && inputRef.current.value !== '') {
       setFocusStyle(focusShadowStyle);
+      callbackFocus = true;
     } else {
       setFocusStyle(unfocusShadowStyle);
     }
-    if (focusCallback) focusCallback(isFocus);
+    if (focusCallback) focusCallback(callbackFocus);
   };
 
-  /** @param {boolean} isFocus */
+  /**
+   * Debounce just to make sure the changing of style don't happent too often
+   * else there's too many renders
+   * @param {boolean} isFocus
+   */
   const debouncedInputs = (isFocus) => {
     if (!useFocusShadow) return;
 
@@ -94,6 +101,9 @@ const Search = ({ placeholder, searchCallback, focusCallback, useFocusShadow }) 
     searchCallback(textValue);
   };
 
+  const filteredHistory = () =>
+    searchHistory.filter((history) => history.startsWith(inputRef.current?.value ?? ''));
+
   return (
     <div
       className="form-control w-full"
@@ -126,6 +136,10 @@ const Search = ({ placeholder, searchCallback, focusCallback, useFocusShadow }) 
           </svg>
         </button>
       </div>
+      <SearchHistory
+        searchHistory={filteredHistory()}
+        onClickCallback={(text) => console.log(text)}
+      />
     </div>
   );
 };
