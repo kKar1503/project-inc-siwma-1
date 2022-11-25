@@ -24,10 +24,21 @@ const CompanyRegister = ({ isOpen, onRequestClose, onSuccess }) => {
   const formHook = useForm();
 
   // Deconstruct the individual hooks from the object
-  const { handleSubmit, reset, touchedFields } = formHook;
+  const {
+    handleSubmit,
+    reset,
+    watch,
+    formState: { touchedFields, dirtyFields },
+  } = formHook;
+
+  // Watch all input fields
+  const watchAllFields = watch();
 
   // -- Handler Functions -- //
-  // Handles form submission
+  /**
+   * Handles form submission
+   * @param {{}} data Form data
+   */
   const onSubmit = async (data) => {
     // Reset form submission status
     setSubmitSuccess(false);
@@ -71,28 +82,22 @@ const CompanyRegister = ({ isOpen, onRequestClose, onSuccess }) => {
     }
 
     // Success, clear inputs and show success message
+    reset();
     setSubmitSuccess(true);
-  };
 
-  // Reset form inputs on successful form submission
-  useEffect(() => {
-    // Reset form inputs
-    if (submitSuccess) {
-      reset();
-    }
-
-    // Invoke success function
-    if (submitSuccess && onSuccess) {
+    // Invoke the onSuccess handler if provided
+    if (onSuccess) {
       onSuccess();
     }
-  }, [submitSuccess]);
+  };
 
-  // Clear success state of the form as soon as a input is touched
-  // useEffect(() => {
-  //   if (submitSuccess)
-  //     setSubmitSuccess(false);
-  //   console.log('yes')
-  // }, [touchedFields]);
+  // Clear success state of the form as soon as a input value changes
+  useEffect(() => {
+    // Checks that the form submission state is currently successful, and that there is at least 1 dirty input
+    if (submitSuccess && Object.keys(dirtyFields).length > 0) {
+      setSubmitSuccess(false);
+    }
+  }, [watchAllFields]);
 
   return (
     <BaseModal
