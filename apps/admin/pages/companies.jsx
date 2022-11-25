@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
+import { QueryClient, QueryClientProvider, useQueryClient } from 'react-query';
 import RegisteredCompaniesTable from '../components/Tables/RegisteredCompaniesTable';
 import pic from '../public/siwma-logo-sm.png';
 import AdminPageLayout from '../components/layouts/AdminPageLayout';
@@ -30,6 +31,7 @@ import CompanyRegister from '../components/Modals/CompanyRegister';
  * @type {import("next").NextPage}
  */
 const Page = () => {
+  // -- States -- //
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => {
@@ -40,11 +42,17 @@ const Page = () => {
     setIsOpen(false);
   };
 
+  const refreshQuery = () => {
+    // Invalidate table queries to cause a refetch
+    queryClient.invalidateQueries({ queryKey: ['getCompanyCount'] });
+    queryClient.invalidateQueries({ queryKey: ['getAllCompanies'] });
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
         {/* The company register modal will be teleported to the end of the DOM because it uses React Portals */}
-        <CompanyRegister isOpen={isOpen} onRequestClose={closeModal} />
+        <CompanyRegister isOpen={isOpen} onRequestClose={closeModal} onSuccess={refreshQuery} />
         <NavBar />
 
         <div className="flex flex-row gap-6">

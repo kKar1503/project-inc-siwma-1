@@ -82,7 +82,7 @@ const RegisteredCompaniesTable = ({ className }) => {
     isLoading || !companiesQuery.data.data ? [] : parseData(companiesQuery.data.data);
 
   // Check if the selected pagination index is out of bounds
-  if ((selectedIndex + 1) * 10 > Math.ceil(companyCount / 10) * 10)
+  if (selectedIndex > 0 && (selectedIndex + 1) * 10 > Math.ceil(companyCount / 10) * 10)
     // It is out of bounds, set the selected index to be that of the last button
     setSelectedIndex(Math.floor(companyCount / 10));
 
