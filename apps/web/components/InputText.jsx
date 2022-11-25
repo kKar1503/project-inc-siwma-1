@@ -3,30 +3,25 @@ import { GrAttachment } from 'react-icons/gr';
 import { BsEmojiSmile } from 'react-icons/bs';
 
 const InputTextArea = () => (
-  <div className="flex space-x-2 pl-2 h-20">
+  <div className="flex space-x-2 h-20">
     <div className="pt-4">
       <button type="select">
         <BsEmojiSmile size={20} />
       </button>
     </div>
+    <input
+      type="text"
+      placeholder="Type here"
+      className="input input-bordered rounded-3xl w-full"
+    />
 
-    <div>
-      <input
-        type="text"
-        placeholder="Type a message"
-        className="input input-bordered rounded-3xl w-[590px]"
-      />
-    </div>
+    <button type="select" className="pb-8">
+      <GrAttachment size={20} />
+    </button>
 
-    <div className="pt-4">
-      <button type="select" className="mr-5">
-        <GrAttachment size={20} />
-      </button>
-
-      <button type="submit">
-        <IoSendSharp size={20} />
-      </button>
-    </div>
+    <button type="submit" className="pb-8 pl-3">
+      <IoSendSharp size={20} />
+    </button>
   </div>
 );
 
