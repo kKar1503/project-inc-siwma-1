@@ -19,7 +19,7 @@ const parseData = (data) =>
     datatype_name: e.parameter.datatype.name,
   }));
 
-const ActiveParametersTable = ({ className }) => {
+const ActiveParametersTable = ({ className, id }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const { data, isLoading, refetch } = useQuery({
@@ -30,7 +30,8 @@ const ActiveParametersTable = ({ className }) => {
         .select(
           `category(name), parameter(id, name, display_name, parameter_type(id, name), datatype(id, name))`
         )
-        .eq('category(id)', '1'),
+        .eq('category(id)', `1`),
+    // .eq('category(id)', `${id}`),
   });
 
   useEffect(() => {
@@ -87,6 +88,7 @@ const ActiveParametersTable = ({ className }) => {
 
 ActiveParametersTable.propTypes = {
   className: PropTypes.string,
+  id: PropTypes.string,
 };
 
 export default ActiveParametersTable;
