@@ -60,7 +60,10 @@ const Header = () => (
         </ul>
       </div>
       <Link className="btn btn-ghost" href="http://localhost:3000">
-        <Image src={SIWMALogo} className="h-full w-full object-cover lg:hidden" />
+        <Image
+          src={SIWMALogo}
+          className="min-[320px]:h-[30px] h-full min-[320px]:w-[270px] w-full object-cover lg:hidden"
+        />
         <Image src={SIWMALogoFull} className="h-full w-full object-cover hidden lg:flex" />
       </Link>
       <ul className="menu menu-horizontal p-0 hidden lg:flex">

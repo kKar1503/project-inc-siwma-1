@@ -20,7 +20,9 @@ const ChatBubbles = () => (
         <div className="flex justify-end mx-5">
           <div className="bg-primary rounded-tl-3xl rounded-tr-3xl rounded-bl-3xl w-auto my-3">
             <div className="card-body py-4 px-6">
-              <p className="min-w-fit max-w-sm">{msg.message}</p>
+              <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em]">
+                {msg.message}
+              </p>
             </div>
           </div>
         </div>
@@ -30,7 +32,9 @@ const ChatBubbles = () => (
         <div className="flex justify-start mx-5">
           <div className="bg-secondary rounded-tl-3xl rounded-tr-3xl rounded-br-3xl w-auto my-3">
             <div className="py-4 px-6">
-              <p className="min-w-fit max-w-sm">{msg.message}</p>
+              <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em]">
+                {msg.message}
+              </p>
             </div>
           </div>
         </div>
