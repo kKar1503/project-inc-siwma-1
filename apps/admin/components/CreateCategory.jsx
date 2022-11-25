@@ -13,9 +13,6 @@ const CreateCategory = () => {
 
     // Invalidate old query to cause a refetch
     queryClient.invalidateQueries({ queryKey: ['categories'] });
-
-    // Update the visible property of every company in the selectedCompanies array
-    // setselectedCompanies(selectedCompanies.map((e) => ({ ...e, visible: true })));
   };
 
   return (

@@ -78,7 +78,7 @@ const BaseTableCat = ({
                 </tr>
               </thead>
               <tbody>
-                {data.map((row) => (
+                {data.map((row, rowindex) => (
                   <tr key={row.id}>
                     {showCheckbox && (
                       <td>
@@ -89,7 +89,6 @@ const BaseTableCat = ({
                     )}
                     {columnKeys.map((key, index) => (
                       <td key={key}>
-                        {/* Show a profilePicture if one exists and if we're on the first column */}
                         {index === 0 && row.profilePicture && (
                           <div className="w-10 h-10 ">
                             <Image
@@ -104,7 +103,7 @@ const BaseTableCat = ({
                       </td>
                     ))}
                     <td>
-                      <ActionCat />
+                      <ActionCat data={data === undefined ? undefined : data} row={rowindex} />
                     </td>
                   </tr>
                 ))}
