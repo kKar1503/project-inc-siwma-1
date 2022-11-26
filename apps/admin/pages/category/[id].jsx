@@ -14,6 +14,7 @@ const queryClient = new QueryClient();
 const CategoryPage = () => {
   const router = useRouter();
   const { id } = router.query;
+  console.log(id);
   return (
     <QueryClientProvider client={queryClient}>
       <div className="w-full p-8 gap-8 overflow-auto xl:max-h-screen">
@@ -34,7 +35,7 @@ const CategoryPage = () => {
             <ArrowL />
           </div>
 
-          <AvailableParametersTable />
+          <AvailableParametersTable id={id} />
         </div>
       </div>
     </QueryClientProvider>

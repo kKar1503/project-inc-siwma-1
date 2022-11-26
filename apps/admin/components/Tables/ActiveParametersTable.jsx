@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import BaseTableCat from './BaseTableCat';
 import SearchBar from '../SearchBar';
@@ -8,16 +8,20 @@ import supabase from '../../supabaseClient';
 
 // This table shows Active Parameters and is built on the BaseTable component.
 
-const parseData = (data) =>
-  data.map((e) => ({
-    id: e.parameter.id,
-    name: e.parameter.name,
-    display_name: e.parameter.description,
-    parameter_type_id: e.parameter.parameter_type.id,
-    parameter_type_name: e.parameter.parameter_type.name,
-    datatype_id: e.parameter.datatype.id,
-    datatype_name: e.parameter.datatype.name,
-  }));
+const parseData = (data) => {
+  if (data.length !== 0) {
+    data.map((e) => ({
+      id: e.parameter.id,
+      name: e.parameter.name,
+      display_name: e.parameter.description,
+      parameter_type_id: e.parameter.parameter_type.id,
+      parameter_type_name: e.parameter.parameter_type.name,
+      datatype_id: e.parameter.datatype.id,
+      datatype_name: e.parameter.datatype.name,
+    }));
+  }
+  return [];
+};
 
 const ActiveParametersTable = ({ className, id }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -52,7 +56,7 @@ const ActiveParametersTable = ({ className, id }) => {
       showCheckbox
       className={className}
       columnKeys={['name', 'parameter_type_name']}
-      data={isLoading ? undefined : parseData(data?.data)}
+      data={isLoading || id === undefined ? undefined : parseData(data?.data)}
       footer={
         <div className="flex justify-between bg-none">
           <div className="flex justify-end bg-none">
