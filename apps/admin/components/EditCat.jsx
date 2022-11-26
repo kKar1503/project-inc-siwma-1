@@ -66,9 +66,21 @@ const EditCat = ({ id }) => {
             }}
           />
         </div>
-        <div className="form-control">
-          <div className="label">
-            <span className="label-text font-semibold">Category Description</span>
+        <form
+          onSubmit={async (e) => {
+            await editCategory(e);
+          }}
+        >
+          <div className="form-control">
+            <div className="label">
+              <span className="label-text font-semibold">Cateogry Name</span>
+            </div>
+            <input
+              name="categoryName"
+              type="text"
+              className="input-group input input-bordered"
+              placeholder="Category Name"
+            />
           </div>
           <input
             name="categoryDescription"
