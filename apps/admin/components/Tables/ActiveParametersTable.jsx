@@ -38,7 +38,7 @@ const ActiveParametersTable = ({ className, id }) => {
     enabled: !!id,
   });
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['activeParameters', id],
     queryFn: async () =>
       supabase
@@ -50,9 +50,6 @@ const ActiveParametersTable = ({ className, id }) => {
     enabled: !!id,
   });
 
-  useEffect(() => {
-    refetch();
-  });
   return (
     <BaseTableParam
       header={
