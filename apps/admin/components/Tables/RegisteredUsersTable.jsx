@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQueries, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import BaseTable from './BaseTable';
@@ -21,27 +21,38 @@ const parseData = (data) =>
 
 // This table shows Registered Users and is built on the BaseTable component.
 const RegisteredUsersTable = ({ className }) => {
+  const queryClient = useQueryClient();
   const paginationValues = [10, 20, 30];
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [option, setOption] = useState(paginationValues[0]);
 
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ['users'],
-    queryFn: async () =>
-      supabase
-        .from('users')
-        .select(`id, email, fullname, phone, companies:companyid(name), enabled`)
-        .range(selectedIndex * option, (selectedIndex + 1) * option - 1),
-  });
+  const [usersQuery, userCountQuery] = useQueries([
+    {
+      queryKey: ['getUsers'],
+      queryFn: async () =>
+        supabase
+          .from('users')
+          .select(`id, email, fullname, phone, companies:companyid(name), enabled`)
+          .range(selectedIndex * option, (selectedIndex + 1) * option - 1),
+      keepPreviousData: true,
+    },
+    {
+      queryKey: ['getUserCount'],
+      queryFn: async () => supabase.from('users').select('*', { count: 'exact', head: true }),
+      keepPreviousData: true,
+    },
+  ]);
+
+  const userCount = userCountQuery.isLoading ? 0 : userCountQuery.data.count;
 
   useEffect(() => {
     setSelectedIndex(0);
   }, [option]);
 
   useEffect(() => {
-    refetch();
+    queryClient.invalidateQueries();
   });
 
   const suspendUsers = async () => {
@@ -52,8 +63,8 @@ const RegisteredUsersTable = ({ className }) => {
         'id',
         selectedUsers.map((e) => e.id)
       );
-    refetch();
     setSelectedUsers(selectedUsers.map((e) => ({ ...e, enabled: false })));
+    queryClient.invalidateQueries();
   };
 
   const activateUsers = async () => {
@@ -64,8 +75,8 @@ const RegisteredUsersTable = ({ className }) => {
         'id',
         selectedUsers.map((e) => e.id)
       );
-    refetch();
     setSelectedUsers(selectedUsers.map((e) => ({ ...e, enabled: true })));
+    queryClient.invalidateQueries();
   };
 
   const onChangeHandler = (targetUser, selected) => {
@@ -83,7 +94,7 @@ const RegisteredUsersTable = ({ className }) => {
 
   const renderTableButtons = () => {
     const tableButtons = [];
-    if (isLoading) {
+    if (usersQuery.isLoading) {
       return (
         <TableButton
           index={0}
@@ -95,7 +106,7 @@ const RegisteredUsersTable = ({ className }) => {
         />
       );
     }
-    const count = data.data.length / option;
+    const count = userCount / option;
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < count; i++) {
       tableButtons.push(
@@ -120,7 +131,11 @@ const RegisteredUsersTable = ({ className }) => {
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">Registered Users</h1>
-            <h1 className="pr-2">Showing 1 to 10 of {data?.data.length} entries</h1>
+            <h1 className="pr-2">
+              Showing {selectedIndex * option + 1} to{' '}
+              {(selectedIndex + 1) * option > userCount ? userCount : (selectedIndex + 1) * option}{' '}
+              of {userCount} entries
+            </h1>
           </div>
           <div className="flex flex-row gap-4">
             <h1 className="mt-3">Show</h1>
@@ -129,9 +144,9 @@ const RegisteredUsersTable = ({ className }) => {
               className="select select-bordered w-25"
               onChange={(e) => setOption(e.target.value)}
             >
-              <option value={paginationValues[0]}>{paginationValues[0]} per page</option>
-              <option value={paginationValues[1]}>{paginationValues[1]} per page</option>
-              <option value={paginationValues[2]}>{paginationValues[2]} per page</option>
+              {paginationValues.map((value) => (
+                <option value={value}>{value} per page</option>
+              ))}
             </select>
             <SearchBar placeholder="Search by name" />
           </div>
@@ -143,21 +158,21 @@ const RegisteredUsersTable = ({ className }) => {
       className={className}
       columnKeys={['name', 'email', 'company', 'mobileNumber', 'enabled']}
       onChange={onChangeHandler}
-      data={isLoading ? undefined : parseData(data?.data)}
+      data={usersQuery.isLoading ? undefined : parseData(usersQuery.data?.data)}
       footer={
         <div className="flex justify-between bg-none">
           <div className="flex gap-4">
             <button
               className="btn btn-primary text-white"
               onClick={suspendUsers}
-              disabled={isLoading || selectedUsers.length === 0}
+              disabled={usersQuery.isLoading || selectedUsers.length === 0}
             >
               DEACTIVATE SELECTED
             </button>
             <button
               className="btn btn-primary text-white"
               onClick={activateUsers}
-              disabled={isLoading || selectedUsers.length === 0}
+              disabled={usersQuery.isLoading || selectedUsers.length === 0}
             >
               ACTIVATE SELECTED
             </button>
