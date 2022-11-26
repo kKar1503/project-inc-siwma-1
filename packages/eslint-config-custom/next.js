@@ -59,5 +59,5 @@ module.exports = {
       plugins: ['cypress'],
     },
   ],
-  ignorePatterns: ['**/*.json', 'node_modules', '.turbo', '.next', 'public'],
+  ignorePatterns: ['**/*.json', 'node_modules', '.turbo', '.next', 'public', '**/*.d.ts'],
 };
