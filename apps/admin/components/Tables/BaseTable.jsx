@@ -79,7 +79,6 @@ const BaseTable = ({
                       { 'text-center': centerColumns ? centerColumns.includes(heading) : false },
                       headingColor
                     )}
-<<<<<<< HEAD
                   >
                     {heading}
                   </th>
@@ -99,33 +98,6 @@ const BaseTable = ({
                     {/* Loop through all columns and render a skeleton for each one */}
                     <td colSpan={headings.length + 1 + (showCheckbox ? 1 : 0)}>
                       <Skeleton className="my-2 h-6" count={10} />
-=======
-                    {columnKeys.map((key, index) => (
-                      <td key={key}>
-                        {/* Show a profilePicture if one exists and if we're on the first column */}
-                        {index === 0 && row.profilePicture && (
-                          <div className="w-10 h-10 ">
-                            <Image
-                              src={row.profilePicture}
-                              alt="Profile Picture"
-                              layout="fill"
-                              className="rounded-full"
-                            />
-                          </div>
-                        )}
-                        <span>{row[key]}</span>
-                      </td>
-                    ))}
-                    <td>
-                      {/* TODO: Replace with the proper icon once react-icons is set up */}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 128 512"
-                        className="h-5 w-5"
-                      >
-                        <path d="M64 360c30.9 0 56 25.1 56 56s-25.1 56-56 56s-56-25.1-56-56s25.1-56 56-56zm0-160c30.9 0 56 25.1 56 56s-25.1 56-56 56s-56-25.1-56-56s25.1-56 56-56zM120 96c0 30.9-25.1 56-56 56S8 126.9 8 96S33.1 40 64 40s56 25.1 56 56z" />
-                      </svg>
->>>>>>> c876e39 (style: actions func)
                     </td>
                   </tr>
                 )

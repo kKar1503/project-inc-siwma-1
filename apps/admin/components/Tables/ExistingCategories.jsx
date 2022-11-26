@@ -1,25 +1,27 @@
 import { useQuery } from 'react-query';
 import React, { useState, useEffect } from 'react';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import PropTypes from 'prop-types';
 import BaseTableCat from './BaseTableCat';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
-import supabase from '../../supabaseClient';
 
 // This table shows Categories and is built on the BaseTable component.
 
-const parseData = (data) =>
-  data.map((e) => ({
-    id: e.id,
-    name: e.name,
-    description: e.description,
-    active: e.active ? `Active` : `Disabled`,
-  }));
+const parseData = (data) => console.log(data);
+// data.map((e) => ({
+//   id: e.id,
+//   name: e.name,
+//   description: e.description,
+//   active: e.active ? `Active` : `Disabled`,
+// }));
 
 const ExistingCategories = ({ className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const { data, isLoading, refetch } = useQuery({
+  const supabase = useSupabaseClient();
+
+  const { data, isLoading } = useQuery({
     queryKey: ['categories'],
     queryFn: async () =>
       supabase
@@ -28,9 +30,6 @@ const ExistingCategories = ({ className }) => {
         .order('name', { ascending: true }),
   });
 
-  useEffect(() => {
-    refetch();
-  });
   return (
     <BaseTableCat
       header={

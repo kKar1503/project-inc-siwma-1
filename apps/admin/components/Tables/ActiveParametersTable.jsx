@@ -22,7 +22,7 @@ const parseData = (data) =>
 const ActiveParametersTable = ({ className, id }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['activeParameters', id],
     queryFn: async () =>
       supabase
@@ -34,9 +34,6 @@ const ActiveParametersTable = ({ className, id }) => {
     enabled: !!id,
   });
 
-  useEffect(() => {
-    refetch();
-  });
   return (
     <BaseTableCat
       header={
