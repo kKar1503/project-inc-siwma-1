@@ -22,7 +22,6 @@ const CategoryPage = () => {
   );
   const router = useRouter();
   const { id } = router.query;
-
   return (
     <QueryClientProvider client={queryClient}>
       <DataContext.Provider value={value}>
