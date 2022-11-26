@@ -8,7 +8,6 @@ const UploadCard = ({ id, des }) => {
   const [image, setImage] = useState(null);
   const [imageURL, setImageURL] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  // note: if file is successfully uploaded -> "Create" button is abled
 
   const checkFile = async (img) => {
     if (img.type === 'image/png' || img.type === 'image/jpeg') {
@@ -36,11 +35,10 @@ const UploadCard = ({ id, des }) => {
 
       if (data) {
         setImageURL(data);
-        // uploadedURL = data
       }
     }
 
-    const { data, error } = await supabase.from('Advertisement').upsert({
+    const { data, error } = await supabase.from('advertisements').upsert({
       company_id: id,
       image: image.name,
       description: des,
