@@ -111,7 +111,11 @@ const CompanyRegister = ({ isOpen, onRequestClose, onSuccess }) => {
         </div>
       }
       siblings={
-        <div className={cx('w-full transition', { 'opacity-0': !submitSuccess })}>
+        // TODO: Make the alert fade in and out
+        // Can only be done using either opacity or visibility css properties, but those properties do not remove the alert from the DOM
+        // Using the hidden class alongside any of those properties negate them
+        // So the transition can only be achieved either by Javascript with setTimeouts, or maybe Framer Motion
+        <div className={cx('w-full transition', { hidden: !submitSuccess })}>
           <Alert
             level="success"
             message="Company created successfully"
