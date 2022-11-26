@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useQueries } from 'react-query';
+import { useQueries, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import BaseTable from './BaseTable';
@@ -17,6 +17,7 @@ const parseData = (data) =>
 
 // This table shows Pending Invites and is built on the BaseTable component.
 const PendingInvitesTable = ({ className }) => {
+  const queryClient = useQueryClient();
   const paginationValues = [10, 20, 30];
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -31,22 +32,23 @@ const PendingInvitesTable = ({ className }) => {
           .from('invite')
           .select(`id, name, companies:company(name), email`)
           .range(selectedIndex * option, (selectedIndex + 1) * option - 1),
+      keepPreviousData: true,
     },
     {
       queryKey: ['getInviteCount'],
-      queryFn: async () => supabase.from('invite').select('*', { count: 'exact' }),
+      queryFn: async () => supabase.from('invite').select('*', { count: 'exact', head: true }),
+      keepPreviousData: true,
     },
   ]);
 
-  const inviteCount =
-    inviteCountQuery.isLoading || !inviteCountQuery.data ? 0 : inviteCountQuery.data.count;
+  const inviteCount = inviteCountQuery.isLoading ? 0 : inviteCountQuery.data.count;
 
   useEffect(() => {
     setSelectedIndex(0);
   }, [option]);
 
   useEffect(() => {
-    inviteQuery.refetch();
+    queryClient.invalidateQueries();
   });
 
   const revokeInvites = async () => {
@@ -57,7 +59,7 @@ const PendingInvitesTable = ({ className }) => {
         'id',
         selectedInvites.map((e) => e.id)
       );
-    inviteQuery.refetch();
+    queryClient.invalidateQueries();
   };
 
   const onChangeHandler = (targetInvite, selected) => {
@@ -126,9 +128,9 @@ const PendingInvitesTable = ({ className }) => {
               className="select select-bordered w-25"
               onChange={(e) => setOption(e.target.value)}
             >
-              <option value={paginationValues[0]}>{paginationValues[0]} per page</option>
-              <option value={paginationValues[1]}>{paginationValues[1]} per page</option>
-              <option value={paginationValues[2]}>{paginationValues[2]} per page</option>
+              {paginationValues.map((value) => (
+                <option value={value}>{value} per page</option>
+              ))}
             </select>
             <SearchBar placeholder="Search by e-mail" />
           </div>
