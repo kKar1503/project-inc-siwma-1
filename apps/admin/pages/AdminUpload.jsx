@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
+import { useQuery } from 'react-query';
 import UploadCard from '../components/UploadCard';
 import supabase from '../client';
 
@@ -9,20 +10,27 @@ const AdminUpload = () => {
   const [companyData, setCompanyData] = useState(null);
   const [description, setDescription] = useState('');
 
-  const getCompanyData = async () => {
-    const { data, error } = await supabase.from('companies').select('*');
-    if (error) {
-      console.log(error);
-    }
-    if (data) {
-      console.log(data);
-      setCompanyData(data);
-    }
-  };
+  // const getCompanyData = async () => {
+  //   const { data, error } = await supabase.from('companies').select('*');
+  //   if (error) {
+  //     console.log(error);
+  //   }
+  //   if (data) {
+  //     console.log(data);
+  //     setCompanyData(data);
+  //   }
+  // };
 
-  useEffect(() => {
-    getCompanyData();
-  }, []);
+  const getCompanyData = async () => supabase.from('companies').select('*');
+  const { data, isLoading } = useQuery('company', getCompanyData);
+  if (isLoading) {
+    console.log(data);
+    setCompanyData(data);
+  }
+
+  // useEffect(() => {
+  //   getCompanyData();
+  // }, []);
 
   const filter = () => {
     if (userInput !== '') {
