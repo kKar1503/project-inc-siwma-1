@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import cx from 'classnames';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useEffect, useState } from 'react';
+import { Alert } from '@inc/ui';
 import BaseModal from './BaseModal';
 import FormError from '../Forms/FormError';
 import FormInputGroup from '../Forms/FormInputGroup';
@@ -28,7 +29,7 @@ const CompanyRegister = ({ isOpen, onRequestClose, onSuccess }) => {
     handleSubmit,
     reset,
     watch,
-    formState: { touchedFields, dirtyFields },
+    formState: { dirtyFields },
   } = formHook;
 
   // Watch all input fields
@@ -107,6 +108,17 @@ const CompanyRegister = ({ isOpen, onRequestClose, onSuccess }) => {
         <div>
           <h3 className="text-lg font-bold">Create an individual company</h3>
           <p className="text-sm">Register a company profile to the system</p>
+        </div>
+      }
+      siblings={
+        <div className={cx('w-full transition', { 'opacity-0': !submitSuccess })}>
+          <Alert
+            level="success"
+            message="Company created successfully"
+            className="text-white lg:w-1/3 absolute shadow-lg translate-x-1/2 right-[50%] mt-5"
+            onRequestClose={() => setSubmitSuccess(false)}
+            dismissable
+          />
         </div>
       }
     >
