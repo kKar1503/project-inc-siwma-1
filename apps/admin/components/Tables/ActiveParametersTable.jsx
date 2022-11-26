@@ -39,15 +39,15 @@ const ActiveParametersTable = ({ className, id }) => {
   });
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['activeParameters'],
+    queryKey: ['activeParameters', id],
     queryFn: async () =>
       supabase
         .from('categories_parameters')
         .select(
           `category(name), parameter(id, name, display_name, parameter_type(id, name), datatype(id, name))`
         )
-        .eq('category(id)', `1`),
-    // .eq('category(id)', `${id}`),
+        .eq('category(id)', `${id}`),
+    enabled: !!id,
   });
 
   useEffect(() => {
