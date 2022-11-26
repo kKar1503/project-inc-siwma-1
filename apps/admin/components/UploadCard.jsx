@@ -7,8 +7,7 @@ import supabase from '../supabase';
 const UploadCard = ({ id }) => {
   const [image, setImage] = useState(null);
   const [imageURL, setImageURL] = useState('');
-  const [message, setMessage] = useState('');
-  // note: if file is successfully uploaded -> "Create" button is abled
+  const [errorMessage, setErrorMessage] = useState('');
 
   const checkFile = async (img) => {
     if (img.type === 'image/png' || img.type === 'image/jpeg') {
