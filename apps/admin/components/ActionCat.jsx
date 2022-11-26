@@ -1,3 +1,4 @@
+import { useQueries, useQueryClient } from 'react-query';
 import Link from 'next/link';
 import { BsThreeDotsVertical, BsFillPencilFill } from 'react-icons/bs';
 import { RiInboxArchiveFill, RiInboxUnarchiveFill } from 'react-icons/ri';
@@ -5,7 +6,7 @@ import PropTypes from 'prop-types';
 import supabase from '../supabaseClient';
 
 const ActionCat = ({ data, row, catId }) => {
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   const archiveCategory = async (e) => {
     e.preventDefault();
@@ -16,6 +17,7 @@ const ActionCat = ({ data, row, catId }) => {
         active: false,
       })
       .eq('id', data[row].id);
+    queryClient.invalidateQueries({ queryKey: ['categories'] });
   };
 
   const unarchiveCategory = async (e) => {
@@ -26,6 +28,7 @@ const ActionCat = ({ data, row, catId }) => {
         active: true,
       })
       .eq('id', data[row].id);
+    queryClient.invalidateQueries({ queryKey: ['categories'] });
   };
 
   return (
