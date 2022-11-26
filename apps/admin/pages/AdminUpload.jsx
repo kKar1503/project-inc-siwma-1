@@ -10,28 +10,8 @@ const AdminUpload = () => {
   const [companyData, setCompanyData] = useState(null);
   const [description, setDescription] = useState('');
 
-  // const getCompanyData = async () => {
-  //   const { data, error } = await supabase.from('companies').select('*');
-  //   if (error) {
-  //     console.log(error);
-  //   }
-  //   if (data) {
-  //     console.log(data);
-  //     setCompanyData(data);
-  //   }
-  // };
-
   const getCompanyData = async () => supabase.from('companies').select('*');
   const { data, isLoading } = useQuery('company', getCompanyData);
-  // if (data) {
-  //   console.log(data.data);
-  //   // setCompanyData(data.data);
-
-  // }
-
-  // useEffect(() => {
-  //   getCompanyData();
-  // }, []);
 
   const filter = () => {
     if (userInput !== '') {
@@ -107,7 +87,7 @@ const AdminUpload = () => {
               Description of Advertisement
             </h1>
             <div className="flex justify-center">
-              <input
+              <textarea
                 type="text"
                 name="description"
                 placeholder="Description"
