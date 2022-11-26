@@ -42,10 +42,8 @@ const ActionCat = ({ data, row, catId }) => {
       <div className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-40">
         <li>
           <div className="btn btn-ghost w-30">
-            <Link href={`/category/${catId}`}>
-              <BsFillPencilFill />
-              Edit
-            </Link>
+            <BsFillPencilFill />
+            <Link href={`/category/${catId}`}>Edit</Link>
           </div>
         </li>
         <li>
