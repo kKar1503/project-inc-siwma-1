@@ -2,7 +2,7 @@
 import PropType from 'prop-types';
 import { FiUpload } from 'react-icons/fi';
 import { useState } from 'react';
-import supabase from '../client';
+import supabase from '../supabase';
 
 const UploadCard = ({ id, des }) => {
   const [image, setImage] = useState(null);
