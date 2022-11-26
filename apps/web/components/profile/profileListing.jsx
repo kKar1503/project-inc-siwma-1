@@ -34,10 +34,8 @@ const ProfileListing = () => {
   const handleInfiniteScrollLoadMore = () => {
     setInfiniteScrollMockDataLoading(true);
     console.log('Loading more items');
-
     setTimeout(() => {
       setInfiniteScrollMockData((oldData) => [...oldData, ...listingAPIData.data]);
-
       setInfiniteScrollMockDataLoading(false);
       console.log('Done loading more!');
     }, 1000);
@@ -69,6 +67,7 @@ const ProfileListing = () => {
               name={name}
               //   rating={Math.floor(Math.random() * 5) + 1}
               href={`/products/${id}`}
+              id={id}
             />
           ))}
         </InfiniteScroll>
