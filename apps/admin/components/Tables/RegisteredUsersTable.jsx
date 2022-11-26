@@ -40,11 +40,13 @@ const RegisteredUsersTable = ({ className }) => {
           .select(`id, email, fullname, phone, companies:companyid(name), enabled`)
           .range(selectedIndex * option, (selectedIndex + 1) * option - 1),
       keepPreviousData: true,
+      refetchInterval: 300000,
     },
     {
       queryKey: ['getUserCount'],
       queryFn: async () => supabase.from('users').select('*', { count: 'exact', head: true }),
       keepPreviousData: true,
+      refetchInterval: 300000,
     },
   ]);
 

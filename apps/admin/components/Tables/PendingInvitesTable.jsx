@@ -36,11 +36,13 @@ const PendingInvitesTable = ({ className }) => {
           .select(`id, name, companies:company(name), email`)
           .range(selectedIndex * option, (selectedIndex + 1) * option - 1),
       keepPreviousData: true,
+      refetchInterval: 300000,
     },
     {
       queryKey: ['getInviteCount'],
       queryFn: async () => supabase.from('invite').select('*', { count: 'exact', head: true }),
       keepPreviousData: true,
+      refetchInterval: 300000,
     },
   ]);
 
