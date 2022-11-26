@@ -5,17 +5,16 @@ import PropTypes from 'prop-types';
 import BaseTableCat from './BaseTableCat';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
-import supabase from '../../supabaseClient';
 
 // This table shows Categories and is built on the BaseTable component.
 
-const parseData = (data) =>
-  data.map((e) => ({
-    id: e.id,
-    name: e.name,
-    description: e.description,
-    active: e.active ? `Active` : `Disabled`,
-  }));
+const parseData = (data) => console.log(data);
+// data.map((e) => ({
+//   id: e.id,
+//   name: e.name,
+//   description: e.description,
+//   active: e.active ? `Active` : `Disabled`,
+// }));
 
 const ExistingCategories = ({ className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
