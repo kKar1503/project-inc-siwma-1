@@ -35,7 +35,7 @@ const MyApp = ({ Component, pageProps }) => (
               />
             </svg>
           </label>
-          <div className="flex flex-col min-[320px]:w-[100%] sm:w-[100%] md:w-[60%] lg:w-[60%]">
+          <div className="flex flex-col min-[320px]:w-[100%] sm:w-[100%] md:w-[100%] lg:w-[100%]">
             <ChatHeader />
             <div className="border-2 border-slate-500/20 max-h-screen">
               <ChatBubbles />
@@ -54,7 +54,7 @@ const MyApp = ({ Component, pageProps }) => (
           </ul>
         </div>
       </div>
-      <div className="flex flex-col min-[320px]:w-[100%] sm:w-[100%] md:w-[60%] lg:w-[60%] min-[320px]:hidden md:flex">
+      <div className="flex flex-col min-[320px]:w-[100%] sm:w-[100%] md:w-[100%] lg:w-[100%] min-[320px]:hidden md:flex">
         <ChatHeader />
         <div className="border-2 border-slate-500/20 max-h-screen">
           <ChatBubbles />
