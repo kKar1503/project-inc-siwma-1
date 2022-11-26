@@ -30,7 +30,10 @@ const RegisteredUsersTable = ({ className }) => {
 
   const [usersQuery, userCountQuery] = useQueries([
     {
-      queryKey: ['getUsers'],
+      queryKey: [
+        'getUsers',
+        { from: selectedIndex * option, to: (selectedIndex + 1) * option - 1 },
+      ],
       queryFn: async () =>
         supabase
           .from('users')
@@ -50,10 +53,6 @@ const RegisteredUsersTable = ({ className }) => {
   useEffect(() => {
     setSelectedIndex(0);
   }, [option]);
-
-  useEffect(() => {
-    queryClient.invalidateQueries();
-  });
 
   const suspendUsers = async () => {
     await supabase
