@@ -35,58 +35,55 @@ const EditCat = ({ id }) => {
   };
   return (
     <div>
-      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-      <label className="card rounded-xl">
-        <div>
-          <h3 className="text-lg font-bold">Edit Category</h3>
-          <p className="text-sm">Edit Category information</p>
+      <div>
+        <h3 className="text-lg font-bold">Edit Category</h3>
+        <p className="text-sm">Edit Category information</p>
+      </div>
+      <form
+        onSubmit={async (e) => {
+          await editCategory(e);
+        }}
+      >
+        <div className="form-control">
+          <div className="label">
+            <span className="label-text font-semibold">Cateogry Name</span>
+          </div>
+          <input
+            name="categoryName"
+            type="text"
+            className="input-group input input-bordered"
+            placeholder="Category Name"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
         </div>
-        <form
-          onSubmit={async (e) => {
-            await editCategory(e);
-          }}
-        >
-          <div className="form-control">
-            <div className="label">
-              <span className="label-text font-semibold">Cateogry Name</span>
-            </div>
-            <input
-              name="categoryName"
-              type="text"
-              className="input-group input input-bordered"
-              placeholder="Category Name"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-            />
+        <div className="form-control">
+          <div className="label">
+            <span className="label-text font-semibold">Category Description</span>
           </div>
-          <div className="form-control">
-            <div className="label">
-              <span className="label-text font-semibold">Category Description</span>
-            </div>
-            <input
-              name="categoryDescription"
-              type="text"
-              className="input-group input input-bordered"
-              placeholder="Category Description"
-              value={description}
-              onChange={(e) => {
-                setDescription(e.target.value);
-              }}
-            />
-          </div>
-          <div className="modal-action">
-            <button
-              htmlFor="user-invite"
-              className="btn btn-outline btn-primary w-full"
-              type="submit"
-            >
-              Save
-            </button>
-          </div>
-        </form>
-      </label>
+          <input
+            name="categoryDescription"
+            type="text"
+            className="input-group input input-bordered"
+            placeholder="Category Description"
+            value={description}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+          />
+        </div>
+        <div className="modal-action">
+          <button
+            htmlFor="user-invite"
+            className="btn btn-outline btn-primary w-full"
+            type="submit"
+          >
+            Save
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
