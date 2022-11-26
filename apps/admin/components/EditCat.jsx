@@ -4,6 +4,10 @@ import { Alert } from '@inc/ui';
 import PropTypes from 'prop-types';
 import supabase from '../supabaseClient';
 
+const parseData = (data) => {
+  console.log(data[0].name);
+};
+
 const EditCat = ({ id }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -80,6 +84,7 @@ const EditCat = ({ id }) => {
               type="text"
               className="input-group input input-bordered"
               placeholder="Category Name"
+              value={isLoading || id === undefined ? null : data?.data[0].name}
             />
           </div>
           <input
