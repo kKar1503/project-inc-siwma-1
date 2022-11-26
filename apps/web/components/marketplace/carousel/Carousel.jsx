@@ -3,37 +3,34 @@ import { Children, useEffect, useRef, useState } from 'react';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import IconRoundButton from './IconRoundButton';
 
+// Carousel adapted from Daisy UI's official documentation with functionality that is dynamic and can be used with any number of items.
+
+/*
+  ! How to use:
+  Typical use case:
+  (Read the PropTypes definition below to understand how to use the component)
+
+  <Carousel> <- Carousel component
+    <Item1 />
+
+    <>
+      <Icon />
+      <Item2 />
+    </>
+  </Carousel>
+*/
+
 /**
  * Carousel is a component that renders its items as a carousel item.
  * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
 
-// Carousel adapted from Daisy UI's official documentation
-
-/*
-  ! How to use:
-  Every carousel item must be wrapped in a CarouselItemWrapper component.
-  So in a typical use case:
-
-  <Carousel> <- Carousel component
-    <CarouselItemWrapper> <- Every carousel item must be wrapped in this component
-      <Item1 />
-    </CarouselItemWrapper>
-
-    <CarouselItemWrapper>
-      <>
-        <Icon />
-        <Item2 />
-      </>
-    </CarouselItemWrapper>
-  </Carousel>
-*/
 const Carousel = ({
-  name,
   children,
   carouselWrapperClassName = '',
   wrapperClassName = '',
   itemsToMoveBy = 1,
+  onReachedEnd,
 }) => {
   const mainCarouselRef = useRef(null);
 
@@ -81,7 +78,11 @@ const Carousel = ({
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setLastItemVisible(true);
+            if (onReachedEnd) {
+              onReachedEnd();
+            } else {
+              setLastItemVisible(true);
+            }
           } else {
             setLastItemVisible(false);
           }
@@ -100,7 +101,7 @@ const Carousel = ({
         observer.unobserve(lastItem);
       }
     };
-  }, [lastItemRef, children]);
+  }, [lastItemRef, children, onReachedEnd]);
 
   const scrollRight = () => {
     const widthToMoveBy = firstItemRef.current.getBoundingClientRect().width;
@@ -157,7 +158,7 @@ const Carousel = ({
 
       {/* Carousel items itself */}
       <div
-        className={`w-full carousel carousel-center space-x-4 rounded-box ${carouselWrapperClassName}`}
+        className={`w-full carousel carousel-center space-x-3 rounded-box ${carouselWrapperClassName}`}
         ref={mainCarouselRef}
       >
         {Children.map(children, (child, index) => {
@@ -184,12 +185,20 @@ const Carousel = ({
   );
 };
 
+/*
+  ! PropTypes Definition
+  children: The items to be rendered in the carousel (Just put it inside the Carousel component)
+  carouselWrapperClassName: Optional, the class name for the carousel wrapper
+  wrapperClassName: Optional, the class name for each of the surrounding divs of each item
+  itemsToMoveBy: Optional, the number of items to move by when the user clicks the buttons
+  onReachedEnd: Optional, a callback function that will be called when the user reaches the end of the carousel (can be used to load more items)
+*/
 Carousel.propTypes = {
   children: PropTypes.node,
-  name: PropTypes.string,
   carouselWrapperClassName: PropTypes.string,
   wrapperClassName: PropTypes.string,
   itemsToMoveBy: PropTypes.number,
+  onReachedEnd: PropTypes.func,
 };
 
 export default Carousel;
