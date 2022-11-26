@@ -1,12 +1,13 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useQuery } from 'react-query';
 import InfiniteScroll from '../InfiniteScroll';
-import ProductListingItem from '../marketplace/listing/ProductListingItem';
+import ProfileListingItem from './ProfileListingItem';
 
 const ProfileListing = () => {
   const [infiniteScrollMockData, setInfiniteScrollMockData] = useState([]);
   const [infiniteScrollMockDataLoading, setInfiniteScrollMockDataLoading] = useState(false);
+  const [listingData, setListingData] = useState([]);
 
   const infiniteScrollRef = useRef(null);
   const supabase = useSupabaseClient();
@@ -22,19 +23,20 @@ const ProfileListing = () => {
 
   console.log(listingAPIData);
 
+  useEffect(() => {
+    if (listingStatus === 'success') {
+      console.log('Success listing', listingAPIData.data);
+      setListingData(listingAPIData.data);
+      setInfiniteScrollMockData([...listingAPIData.data]);
+    }
+  }, [listingStatus, listingAPIData]);
+
   const handleInfiniteScrollLoadMore = () => {
     setInfiniteScrollMockDataLoading(true);
     console.log('Loading more items');
 
     setTimeout(() => {
-      setInfiniteScrollMockData((oldData) => [
-        ...oldData,
-        ...listingAPIData.data,
-        ...listingAPIData.data,
-        ...listingAPIData.data,
-        ...listingAPIData.data,
-        ...listingAPIData.data,
-      ]);
+      setInfiniteScrollMockData((oldData) => [...oldData, ...listingAPIData.data]);
 
       setInfiniteScrollMockDataLoading(false);
       console.log('Done loading more!');
@@ -60,12 +62,12 @@ const ProfileListing = () => {
             href={`/products/`}
           /> */}
           {infiniteScrollMockData.map(({ name, description, id, price, type }) => (
-            <ProductListingItem
+            <ProfileListingItem
               type={type}
               key={id}
               img={null}
               name={name}
-              rating={Math.floor(Math.random() * 5) + 1}
+              //   rating={Math.floor(Math.random() * 5) + 1}
               href={`/products/${id}`}
             />
           ))}
