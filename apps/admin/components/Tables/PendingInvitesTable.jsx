@@ -89,7 +89,6 @@ const PendingInvitesTable = ({ className }) => {
       );
     }
     const count = inviteCount / option;
-    // eslint-disable-next-line no-plusplus
     for (let i = 0; i < count; i++) {
       tableButtons.push(
         <TableButton
