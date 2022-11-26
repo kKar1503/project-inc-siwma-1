@@ -106,7 +106,6 @@ const RegisteredUsersTable = ({ className }) => {
       );
     }
     const count = userCount / option;
-    // eslint-disable-next-line no-plusplus
     for (let i = 0; i < count; i++) {
       tableButtons.push(
         <TableButton
