@@ -11,7 +11,6 @@ const CreateCategory = () => {
       description: `${e.target.categoryDescription.value}`,
     });
 
-    // Invalidate old query to cause a refetch
     queryClient.invalidateQueries({ queryKey: ['categories'] });
   };
 

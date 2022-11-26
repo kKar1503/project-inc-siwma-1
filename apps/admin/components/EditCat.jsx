@@ -1,13 +1,13 @@
 import { useQueries, useQueryClient, useQuery } from 'react-query';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import supabase from '../supabaseClient';
 
-const parseData = (data) => {
-  console.log(data[0].name);
-};
-
 const EditCat = ({ id }) => {
-  const { data, isLoading } = useQuery({
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+
+  const { data } = useQuery({
     queryKey: ['categoryData', id],
     queryFn: async () =>
       supabase
@@ -18,15 +18,20 @@ const EditCat = ({ id }) => {
     enabled: !!id,
   });
 
+  useEffect(() => {
+    setName(data?.data[0].name);
+    setDescription(data?.data[0].description);
+  }, [data]);
+
   const editCategory = async (e) => {
     e.preventDefault();
     await supabase
       .from('category')
       .update({
-        name: `${e.target.categoryName.value}`,
-        description: `${e.target.categoryDescription.value}`,
+        name: `${name}`,
+        description: `${description}`,
       })
-      .eq('id', id);
+      .eq('id', `${id}`);
   };
   return (
     <div>
@@ -50,7 +55,10 @@ const EditCat = ({ id }) => {
               type="text"
               className="input-group input input-bordered"
               placeholder="Category Name"
-              value={isLoading || id === undefined ? null : data?.data[0].name}
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
             />
           </div>
           <div className="form-control">
@@ -62,15 +70,22 @@ const EditCat = ({ id }) => {
               type="text"
               className="input-group input input-bordered"
               placeholder="Category Description"
-              value={isLoading || id === undefined ? null : data?.data[0].description}
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
             />
           </div>
+          <div className="modal-action">
+            <button
+              htmlFor="user-invite"
+              className="btn btn-outline btn-primary w-full"
+              type="submit"
+            >
+              Save
+            </button>
+          </div>
         </form>
-        <div className="modal-action">
-          <label htmlFor="user-invite" className="btn btn-outline btn-primary w-full">
-            Save
-          </label>
-        </div>
       </label>
     </div>
   );
