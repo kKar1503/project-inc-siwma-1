@@ -2,16 +2,19 @@ import { useQueries, useQueryClient, useQuery } from 'react-query';
 import PropTypes from 'prop-types';
 import supabase from '../supabaseClient';
 
+const parseData = (data) => {
+  console.log(data[0].name);
+};
+
 const EditCat = ({ id }) => {
   const { data, isLoading } = useQuery({
     queryKey: ['categoryData', id],
     queryFn: async () =>
       supabase
-        .from('categories_parameters')
-        .select(
-          `category(name), parameter(id, name, display_name, parameter_type(id, name), datatype(id, name))`
-        )
-        .eq('category(id)', `${id}`),
+        .from('category')
+        .select(`name, description`)
+        .order('name', { ascending: true })
+        .eq('id', `${id}`),
     enabled: !!id,
   });
 
@@ -47,6 +50,7 @@ const EditCat = ({ id }) => {
               type="text"
               className="input-group input input-bordered"
               placeholder="Category Name"
+              value={isLoading || id === undefined ? null : data?.data[0].name}
             />
           </div>
           <div className="form-control">
@@ -58,6 +62,7 @@ const EditCat = ({ id }) => {
               type="text"
               className="input-group input input-bordered"
               placeholder="Category Description"
+              value={isLoading || id === undefined ? null : data?.data[0].description}
             />
           </div>
         </form>
