@@ -26,7 +26,10 @@ const PendingInvitesTable = ({ className }) => {
 
   const [inviteQuery, inviteCountQuery] = useQueries([
     {
-      queryKey: ['getInvites'],
+      queryKey: [
+        'getInvites',
+        { from: selectedIndex * option, to: (selectedIndex + 1) * option - 1 },
+      ],
       queryFn: async () =>
         supabase
           .from('invite')
@@ -46,10 +49,6 @@ const PendingInvitesTable = ({ className }) => {
   useEffect(() => {
     setSelectedIndex(0);
   }, [option]);
-
-  useEffect(() => {
-    queryClient.invalidateQueries();
-  });
 
   const revokeInvites = async () => {
     await supabase
