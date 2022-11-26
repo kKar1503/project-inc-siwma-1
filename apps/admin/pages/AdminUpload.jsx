@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useQuery } from 'react-query';
 import UploadCard from '../components/UploadCard';
-import supabase from '../client';
+import supabase from '../supabase';
 
 const AdminUpload = () => {
   const [userInput, setUserInput] = useState('');
@@ -23,10 +23,11 @@ const AdminUpload = () => {
 
   const getCompanyData = async () => supabase.from('companies').select('*');
   const { data, isLoading } = useQuery('company', getCompanyData);
-  if (isLoading) {
-    console.log(data);
-    setCompanyData(data);
-  }
+  // if (data) {
+  //   console.log(data.data);
+  //   // setCompanyData(data.data);
+
+  // }
 
   // useEffect(() => {
   //   getCompanyData();
@@ -34,10 +35,10 @@ const AdminUpload = () => {
 
   const filter = () => {
     if (userInput !== '') {
-      return companyData.filter((val) => val.name.toLowerCase().includes(userInput.toLowerCase()));
+      return data.data.filter((val) => val.name.toLowerCase().includes(userInput.toLowerCase()));
     }
 
-    return companyData;
+    return data.data;
   };
 
   return (
@@ -84,7 +85,7 @@ const AdminUpload = () => {
           </div>
           <div className="overflow-y-auto m-6 h-36 ...">
             <ul>
-              {companyData !== null &&
+              {data &&
                 filter().map((item) => (
                   <li key={item.id} className="text-sm p-2">
                     <input
