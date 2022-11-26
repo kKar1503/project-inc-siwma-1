@@ -10,7 +10,6 @@ const ActionCat = ({ data, row, catId }) => {
 
   const archiveCategory = async (e) => {
     e.preventDefault();
-    // console.log(data[row]);
     await supabase
       .from('category')
       .update({
