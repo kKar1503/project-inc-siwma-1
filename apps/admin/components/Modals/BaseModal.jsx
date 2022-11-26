@@ -1,6 +1,7 @@
 import { IoCloseSharp } from 'react-icons/io5';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
+import { useRef } from 'react';
 
 /**
  * Replacement overlay for the default overlay supplied by the Modal component (Actually just removes the default overlay)
@@ -17,9 +18,10 @@ Modal.setAppElement('#__next');
  * Base modal for other modals to be built on top of
  * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
  */
-const BaseModal = ({ header, isOpen, onRequestClose, children }) => {
+const BaseModal = ({ header, isOpen, onRequestClose, children, siblings }) => {
   // Initialise reference to the modal box
   let modalRef = null;
+  let siblingsRef = null;
 
   /**
    * Focuses the modal
@@ -36,12 +38,31 @@ const BaseModal = ({ header, isOpen, onRequestClose, children }) => {
    * Component is supposedly no longer in focus
    * However, we first need to check if the children components are in focus as focusing on children blurs parent elements
    * We also need to check if the focus has actually left the target element (switching tabs/windows will fire onBlur(), but the element is actually still in focus)
+   * Lastly, we want to know if the currently focused element is a sibling element that was passed through (The modal is not in focus, but its sibling is, and so we do not want to close this overlay)
    */
   const handleOnBlur = (e) => {
-    if (!e.currentTarget.contains(e.relatedTarget) && e.target !== document.activeElement) {
-      // The focused element isn't a child element, close the modal
-      onRequestClose();
+    // Check if the currently focused element is the modal or any of its children
+    if (e.relatedTarget === modalRef || modalRef.contains(e.relatedTarget)) {
+      // It is, return early
+      return;
     }
+
+    // Check if the currently focused element is a sibling element or any of its children
+    if (siblings && (e.relatedTarget === siblingsRef || siblingsRef.contains(e.relatedTarget))) {
+      // It is, return early
+      return;
+    }
+
+    // Check if the event was fired from alt-tabbing
+    if (e.target === document.activeElement) {
+      // It was, return early
+      return;
+    }
+
+    // The currently focused element is not the modal, a sibling element nor any of their children.
+    // It is safe to assume that the user clicked on the modal overlay instead.
+    // Attempt to close the modal
+    onRequestClose();
   };
 
   return (
@@ -56,7 +77,7 @@ const BaseModal = ({ header, isOpen, onRequestClose, children }) => {
       overlayClassName="modalOverlay"
     >
       {/* The real modal overlay */}
-      <div className="modal modal-open cursor-pointer">
+      <div className="modal modal-open cursor-pointer flex-col">
         {/* Modal */}
         <div
           // The div must have tabIndex set to 0, otherwise the onBlur() event will not fire
@@ -77,6 +98,22 @@ const BaseModal = ({ header, isOpen, onRequestClose, children }) => {
           <div className="pb-3">{header}</div>
           {children}
         </div>
+        {/* Sibling element */}
+        <div
+          /**
+           * The div needs tabIndex 0 set, otherwise it cannot be focused, causing issues where the modal might be closed prematurely
+           * after the focus has been shifted to the sibling element
+           */
+          // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+          tabIndex={0}
+          onBlur={handleOnBlur}
+          className="cursor-default"
+          ref={(el) => {
+            siblingsRef = el;
+          }}
+        >
+          {siblings}
+        </div>
       </div>
     </Modal>
   );
@@ -87,6 +124,7 @@ const propTypes = {
   isOpen: PropTypes.bool,
   onRequestClose: PropTypes.func,
   children: PropTypes.node.isRequired,
+  siblings: PropTypes.node,
 };
 
 BaseModal.propTypes = propTypes;
