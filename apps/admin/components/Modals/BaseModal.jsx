@@ -59,6 +59,13 @@ const BaseModal = ({ header, isOpen, onRequestClose, children, siblings }) => {
       return;
     }
 
+    // Check if the event was fired because the element dissappeared
+    // This could happen when sibling elements appear conditionally, and whilst the focus is on them, they disappear, causing a onBlur event
+    if (e.relatedTarget == null) {
+      // It was, return early
+      return;
+    }
+
     // The currently focused element is not the modal, a sibling element nor any of their children.
     // It is safe to assume that the user clicked on the modal overlay instead.
     // Attempt to close the modal
