@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 
 const CategoryListingItem = ({ img, name, href }) => (
   <Link href={href}>
-    <div className="card relative">
+    <div className="card relative rounded-md">
       <div className="aspect-square object-cover h-[150px]">
         {/* Actual image */}
         {img && <Image src={img} fill alt={name} className="object-cover" />}
