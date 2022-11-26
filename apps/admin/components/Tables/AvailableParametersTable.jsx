@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import BaseTableCat from './BaseTableCat';
 import SearchBar from '../SearchBar';
@@ -9,11 +9,14 @@ import supabase from '../../supabaseClient';
 // This table shows Available Parameters and is built on the BaseTable component.
 
 const parseId = (data) => {
-  const array = [];
-  data.forEach((e) => {
-    array.push(e.parameter.id);
-  });
-  return array.toString();
+  if (data.length !== 0) {
+    const array = [];
+    data.forEach((e) => {
+      array.push(e.parameter.id);
+    });
+    return array.toString();
+  }
+  return '0';
 };
 
 const parseData = (data) =>
@@ -27,16 +30,17 @@ const parseData = (data) =>
     datatype_name: e.datatype.name,
   }));
 
-const AvailableParametersTable = ({ className }) => {
+const AvailableParametersTable = ({ className, id }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const { data: parameters, isLoading } = useQuery({
-    queryKey: ['categoryParameters'],
+    queryKey: ['categoryParameters', id],
     queryFn: async () =>
-      supabase.from('categories_parameters').select(`parameter(id)`).eq('category(id)', '1'),
+      supabase.from('categories_parameters').select(`parameter(id)`).eq('category(id)', `${id}`),
+    enabled: !!id,
   });
 
-  const paramIds = isLoading ? undefined : parseId(parameters?.data);
+  const paramIds = isLoading || id === undefined ? undefined : parseId(parameters?.data);
 
   const { data, status } = useQuery({
     queryKey: ['availableParameters', paramIds],
@@ -100,6 +104,7 @@ const AvailableParametersTable = ({ className }) => {
 
 AvailableParametersTable.propTypes = {
   className: PropTypes.string,
+  id: PropTypes.string,
 };
 
 export default AvailableParametersTable;

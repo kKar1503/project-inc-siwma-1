@@ -44,7 +44,7 @@ const BaseTableCat = ({
   data,
   footer,
 }) => {
-  if (!data || data.length === 0) {
+  if (!data) {
     return (
       <div className="flex flex-col text-center">
         <p className="text-secondary">No Data Found</p>
