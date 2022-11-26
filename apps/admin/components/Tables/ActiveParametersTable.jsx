@@ -22,8 +22,8 @@ const parseData = (data) =>
 const ActiveParametersTable = ({ className, id }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ['activeParameters'],
+  const { data, isLoading } = useQuery({
+    queryKey: ['activeParameters', id],
     queryFn: async () =>
       supabase
         .from('categories_parameters')
@@ -34,9 +34,6 @@ const ActiveParametersTable = ({ className, id }) => {
     // .eq('category(id)', `${id}`),
   });
 
-  useEffect(() => {
-    refetch();
-  });
   return (
     <BaseTableCat
       header={
