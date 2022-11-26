@@ -43,7 +43,7 @@ const ActionCat = ({ data, row, catId }) => {
         <li>
           <div className="btn btn-ghost w-30">
             <BsFillPencilFill />
-            Edit
+            <Link href={`/category/${catId}`}>Edit</Link>
           </div>
         </li>
         <li>
