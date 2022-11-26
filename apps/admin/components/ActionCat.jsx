@@ -1,10 +1,10 @@
-// import { useQueries, useQueryClient } from 'react-query';
+import Link from 'next/link';
 import { BsThreeDotsVertical, BsFillPencilFill } from 'react-icons/bs';
 import { RiInboxArchiveFill, RiInboxUnarchiveFill } from 'react-icons/ri';
 import PropTypes from 'prop-types';
 import supabase from '../supabaseClient';
 
-const ActionCat = ({ data, row }) => {
+const ActionCat = ({ data, row, catId }) => {
   // const queryClient = useQueryClient();
 
   const archiveCategory = async (e) => {
@@ -40,8 +40,10 @@ const ActionCat = ({ data, row }) => {
       <div className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-40">
         <li>
           <div className="btn btn-ghost w-30">
-            <BsFillPencilFill />
-            Edit
+            <Link href={`/category/${catId}`}>
+              <BsFillPencilFill />
+              Edit
+            </Link>
           </div>
         </li>
         <li>
@@ -55,7 +57,7 @@ const ActionCat = ({ data, row }) => {
             onKeyDown={async (e) => {
               await archiveCategory(e);
             }}
-            disabled={data[row].active === 'Active'}
+            disabled={data[row].active === 'Disabled'}
           >
             <RiInboxArchiveFill />
             Archive
@@ -72,7 +74,7 @@ const ActionCat = ({ data, row }) => {
             onKeyDown={async (e) => {
               await unarchiveCategory(e);
             }}
-            disabled={data[row].active === 'Disabled'}
+            disabled={data[row].active === 'Active'}
           >
             <RiInboxUnarchiveFill />
             UnArchive
@@ -84,6 +86,7 @@ const ActionCat = ({ data, row }) => {
 };
 
 const propTypes = {
+  catId: PropTypes.string,
   row: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.

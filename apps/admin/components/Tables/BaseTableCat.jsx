@@ -103,7 +103,11 @@ const BaseTableCat = ({
                       </td>
                     ))}
                     <td>
-                      <ActionCat data={data === undefined ? undefined : data} row={rowindex} />
+                      <ActionCat
+                        data={data === undefined ? undefined : data}
+                        row={rowindex}
+                        catId={row.id}
+                      />
                     </td>
                   </tr>
                 ))}
