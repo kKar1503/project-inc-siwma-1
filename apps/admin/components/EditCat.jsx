@@ -7,6 +7,7 @@ import supabase from '../supabaseClient';
 const EditCat = ({ id }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [displayAlert, setDisplayAlert] = useState(false);
 
   const { data } = useQuery({
     queryKey: ['categoryData', id],
@@ -34,10 +35,6 @@ const EditCat = ({ id }) => {
       })
       .eq('id', `${id}`);
   };
-
-  // const displayAlert = () => (
-  //    <Alert level="success" message="An error occured while performing the operation" />
-  // )
 
   return (
     <div>
@@ -85,12 +82,20 @@ const EditCat = ({ id }) => {
             htmlFor="user-invite"
             className="btn btn-outline btn-primary w-full"
             type="submit"
-            // onClick= {displayAlert}
+            onClick={() => {
+              setDisplayAlert(true);
+              setTimeout(() => {
+                setDisplayAlert(false);
+              }, 4000);
+            }}
           >
             Save
           </button>
         </div>
       </form>
+      {displayAlert && (
+        <Alert level="success" message="An error occured while performing the operation" />
+      )}
     </div>
   );
 };
