@@ -84,8 +84,8 @@ const PendingInvitesTable = ({ className }) => {
           index={0}
           selectedIndex={selectedIndex}
           setSelectedIndex={setSelectedIndex}
-          selectedColor="bg-primary"
-          className="rounded-lg hover:bg-primary"
+          selectedColor="bg-warning"
+          className="rounded-lg hover:bg-warning"
           disabled
         />
       );
@@ -97,8 +97,8 @@ const PendingInvitesTable = ({ className }) => {
           index={i}
           selectedIndex={selectedIndex}
           setSelectedIndex={setSelectedIndex}
-          selectedColor="bg-primary"
-          className={cx('hover:bg-primary', {
+          selectedColor="bg-warning"
+          className={cx('hover:bg-warning', {
             'rounded-l-lg': i === 0,
             'rounded-r-lg': i >= count - 1,
           })}
