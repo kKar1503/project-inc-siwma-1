@@ -278,18 +278,24 @@ importers:
 
   packages/ui:
     specifiers:
+      '@inc/utils': workspace:^0.0.0
+      '@supabase/supabase-js': ^2.1.0
       classnames: ^2.3.2
       eslint: ^7.32.0
       eslint-config-custom: workspace:*
       next: 13.0.0
       prop-types: ^15.8.1
       react: ^18.2.0
+      react-hook-form: ^7.39.3
       react-icons: ^4.6.0
       react-query: ^3.39.2
     dependencies:
+      '@inc/utils': link:../utils
+      '@supabase/supabase-js': 2.1.0
       classnames: 2.3.2
       next: 13.0.0_biqbaboplfbrettd7655fr4n2y
       prop-types: 15.8.1
+      react-hook-form: 7.39.3_react@18.2.0
       react-icons: 4.6.0_react@18.2.0
       react-query: 3.39.2_react@18.2.0
     devDependencies:
