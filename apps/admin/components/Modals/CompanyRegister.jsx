@@ -3,7 +3,14 @@ import { FormProvider, useForm } from 'react-hook-form';
 import cx from 'classnames';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useEffect, useState } from 'react';
-import { Alert, FormError, FormInputGroup } from '@inc/ui';
+import {
+  Alert,
+  FormError,
+  FormImageInput,
+  FormInputGroup,
+  FormTextArea,
+  FormTextInput,
+} from '@inc/ui';
 import BaseModal from './BaseModal';
 
 /**
@@ -136,45 +143,52 @@ const CompanyRegister = ({ isOpen, onRequestClose, onSuccess }) => {
                   name="companyName"
                   success={submitSuccess}
                   required
-                />
+                >
+                  <FormTextInput />
+                </FormInputGroup>
                 {/* Company website input field */}
                 <FormInputGroup
                   label="Company website"
                   name="companyWebsite"
-                  customValidation={{
-                    // Regexp for validating urls taken from https://regexr.com/39nr7
-                    pattern: {
-                      value:
-                        /[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi,
-                      message: 'Company website must be a valid URL',
-                    },
-                  }}
                   success={submitSuccess}
-                />
+                >
+                  <FormTextInput
+                    customValidation={{
+                      // Regexp for validating urls taken from https://regexr.com/39nr7
+                      pattern: {
+                        value:
+                          /[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi,
+                        message: 'Company website must be a valid URL',
+                      },
+                    }}
+                  />
+                </FormInputGroup>
                 {/* Company comments input field */}
                 <FormInputGroup
-                  type="textarea"
                   label="Company comment"
                   name="companyComment"
-                  placeholder="Add a comment (only visible to you)"
                   success={submitSuccess}
                   hideError
-                />
+                >
+                  <FormTextArea placeholder="Add a comment (only visible to you)" />
+                </FormInputGroup>
               </div>
             </div>
             <div className="w-full md:w-1/2 flex flex-col">
               {/* Company logo upload input */}
               <FormInputGroup
                 className="flex-1"
-                type="imageUpload"
                 label="Company Logo"
                 name="companyLogo"
                 success={submitSuccess}
-                allowedExts={{
-                  name: ['png', 'jpg', 'jpeg', 'svg'],
-                  format: ['image/png', 'image/jpg', 'image/jpeg', 'image/svg'],
-                }}
-              />
+              >
+                <FormImageInput
+                  allowedExts={{
+                    name: ['png', 'jpg', 'jpeg', 'svg'],
+                    format: ['image/png', 'image/jpg', 'image/jpeg', 'image/svg'],
+                  }}
+                />
+              </FormInputGroup>
               <div className="modal-action">
                 <button className="btn btn-outline btn-primary w-full">Register Company</button>
               </div>

@@ -12,6 +12,7 @@ const FormTextArea = ({
   label,
   placeholder,
   customValidation,
+  maxLength,
   required,
   success,
   className,
@@ -27,7 +28,10 @@ const FormTextArea = ({
   const hookInput = (inputName, inputLabel, options) =>
     register(inputName, {
       required: { value: required, message: `${inputLabel} is required` },
-      maxLength: { value: 255, message: `${inputLabel} can only be 255 characters long` },
+      maxLength: {
+        value: maxLength || 255,
+        message: `${inputLabel} can only be ${maxLength || 255} characters long`,
+      },
       ...options,
     });
 
@@ -51,6 +55,7 @@ const propTypes = {
   // We do not know what the shape of the object will be
   // eslint-disable-next-line react/forbid-prop-types
   customValidation: PropTypes.object,
+  maxLength: PropTypes.number,
   required: PropTypes.bool,
   success: PropTypes.bool,
   className: PropTypes.string,
