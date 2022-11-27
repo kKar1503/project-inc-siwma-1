@@ -45,6 +45,10 @@ const EditCat = ({ id }) => {
       <form
         onSubmit={async (e) => {
           await editCategory(e);
+          setDisplayAlert(true);
+          setTimeout(() => {
+            setDisplayAlert(false);
+          }, 4000);
         }}
       >
         <div className="form-control">
@@ -56,6 +60,7 @@ const EditCat = ({ id }) => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Category Name"
+            required
             value={name}
             onChange={(e) => {
               setName(e.target.value);
@@ -71,6 +76,7 @@ const EditCat = ({ id }) => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Category Description"
+            required
             value={description}
             onChange={(e) => {
               setDescription(e.target.value);
@@ -78,23 +84,13 @@ const EditCat = ({ id }) => {
           />
         </div>
         <div className="modal-action">
-          <button
-            htmlFor="user-invite"
-            className="btn btn-outline btn-primary w-full"
-            type="submit"
-            onClick={() => {
-              setDisplayAlert(true);
-              setTimeout(() => {
-                setDisplayAlert(false);
-              }, 4000);
-            }}
-          >
+          <button className="btn btn-outline btn-primary w-full" type="submit">
             Save
           </button>
         </div>
       </form>
       {displayAlert && (
-        <Alert level="success" message="An error occured while performing the operation" />
+        <Alert level="success" message="Category successfully edited" className="mt-14" />
       )}
     </div>
   );
