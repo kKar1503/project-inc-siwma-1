@@ -94,6 +94,7 @@ const CompanyRegister = ({ isOpen, onRequestClose, onSuccess }) => {
   useEffect(() => {
     // Checks that the form submission state is currently successful, and that there is at least 1 dirty input
     if (submitSuccess && Object.keys(dirtyFields).length > 0) {
+      // There is at least 1 dirty input, clear the success status of the form
       setSubmitSuccess(false);
     }
   }, [watchAllFields]);
