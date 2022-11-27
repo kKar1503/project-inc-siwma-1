@@ -1,12 +1,10 @@
-import React from 'react';
-import Image from 'next/image';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-
-import { HiDotsVertical } from 'react-icons/hi';
-import { ImCross, ImCheckmark } from 'react-icons/im';
+import BaseTableRow from './BaseTable/BaseTableRow';
+import BaseTableHeader from './BaseTable/BaseTableHeader';
 
 // This is the base table component that every other table is built on.
 
@@ -22,6 +20,8 @@ import { ImCross, ImCheckmark } from 'react-icons/im';
   - isLoading (Whether or not the table is in a loading state)
   - data (An array of objects that you want to be the rows of the table)
   - footer (A div that you want to be the footer of the table)
+  - onChange (Invoked when a row is selected/deselected)
+  - actionMenu (The menu to be displayed should the action button be clicked on; Action button will only be rendered if this prop is specified)
 
   Data is expected to contain the keys you specify in columnKeys. For example, if you specify columnKeys = ['name', 'profilePicture', 'email', 'company', 'mobileNumber'], then data should look like this:
   id is a COMPULSORY key that is used to uniquely identify each row. Failure to provide it will result in bad things happening. You have been warned.
@@ -54,134 +54,56 @@ const BaseTable = ({
   data,
   footer,
   onChange,
-}) => (
-  <div
-    className={cx(className, 'bg-base-100 rounded-lg shadow-lg xl:flex-1 overflow-y-hidden w-full')}
-  >
-    <div className="h-full flex flex-col gap-3 py-3">
-      <div className="px-6">{header}</div>
-      <div className="w-full h-auto overflow-hidden border-b">
-        <div className="w-full max-h-full overflow-auto">
-          <table className="table w-full">
-            <thead>
-              <tr>
-                {showCheckbox && (
-                  <th className={cx('top-0 sticky rounded-none', headingColor)}> </th>
-                )}
-                {headings.map((heading) => (
-                  <th
-                    key={heading}
-                    // Center the heading if it exists in the centerColumns array
-                    className={cx(
-                      'top-0 sticky rounded-none text-white',
-                      { 'text-center': centerColumns ? centerColumns.includes(heading) : false },
-                      headingColor
-                    )}
-                  >
-                    {heading}
-                  </th>
-                ))}
-                <th
-                  className={cx('top-0 sticky rounded-none text-white text-center', headingColor)}
-                >
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                // Render a skeleton if the table is in a loading state
-                isLoading && (
-                  <tr>
-                    {/* Loop through all columns and render a skeleton for each one */}
-                    <td colSpan={headings.length + 1 + (showCheckbox ? 1 : 0)}>
-                      <Skeleton className="my-2 h-6" count={10} />
-                    </td>
-                  </tr>
-                )
-              }
-              {
-                // Table is not in a loading state, render the data
-                data &&
-                  data.map((row) => (
-                    <tr key={row.id}>
-                      {showCheckbox && (
-                        <td>
-                          <label>
-                            <input
-                              type="checkbox"
-                              className="checkbox"
-                              onChange={(e) => onChange(row, e.currentTarget.checked)}
-                              // Give the checkbox a checked state if the current row being rendered is selected
-                              defaultChecked={
-                                selectedRows ? selectedRows.find((e) => e === row.id) : false
-                              }
-                            />
-                          </label>
-                        </td>
-                      )}
-                      {columnKeys.map((key, index) => (
-                        <td key={key}>
-                          <div className={cx('flex flex-row')}>
-                            {/* Show a profilePicture if one exists and if we're on the first column */}
-                            {index === 0 && row.profilePicture && (
-                              <div className="w-10 h-10 mr-4">
-                                <Image
-                                  src={row.profilePicture}
-                                  alt="Profile Picture"
-                                  layout="fill"
-                                  width={100}
-                                  height={100}
-                                  className="rounded-full aspect-square object-cover"
-                                />
-                              </div>
-                            )}
-                            {
-                              // Vertically center text and horizontally center text (if required)
-                              // Determines if the text should be horizontally centered by checking if the centerColumns array includes the name of the heading this column is being rendered for
-                            }
-                            <div
-                              className={cx('flex align-middle items-center', {
-                                'mx-auto': centerColumns
-                                  ? centerColumns.includes(headings[index])
-                                  : false,
-                              })}
-                            >
-                              {
-                                // Render the value of the column (will not render anything if the value is a boolean)
-                                row[key]
-                              }
-                              {/* Render boolean values as a tick or a cross */}
-                              {
-                                // Render a tick if boolean value is true
-                                typeof row[key] === 'boolean' && row[key] && (
-                                  <ImCheckmark className="text-success" />
-                                )
-                              }
-                              {
-                                // Render a cross if boolean value is false
-                                typeof row[key] === 'boolean' && !row[key] && (
-                                  <ImCross className="text-error" />
-                                )
-                              }
-                            </div>
-                          </div>
-                        </td>
-                      ))}
-                      <td>
-                        <button
-                          type="button"
-                          className="flex items-center flex-grow-0 mx-auto text-center gap-2"
-                        >
-                          <HiDotsVertical />
-                        </button>
+  actionMenu,
+}) => {
+  // Refs
+  const tableBodyRef = useRef();
+
+  return (
+    <div
+      className={cx(className, 'bg-base-100 rounded-lg shadow-lg xl:flex-1 overflow-y-hidden w-full')}
+    >
+      <div className="h-full flex flex-col gap-3 py-3">
+        <div className="px-6">{header}</div>
+        <div className="w-full h-auto overflow-hidden border-b">
+          <div className="w-full max-h-full overflow-auto">
+            <table className="table w-full">
+              <thead>
+                <BaseTableHeader headingColor={headingColor} headings={headings} centerColumns={centerColumns} showActionsColumn={Boolean(actionMenu)} showCheckbox={showCheckbox} />
+              </thead>
+              <tbody ref={tableBodyRef}>
+                {
+                  // Render a skeleton if the table is in a loading state
+                  isLoading && (
+                    <tr>
+                      {/* Loop through all columns and render a skeleton for each one */}
+                      <td colSpan={headings.length + 1 + (showCheckbox ? 1 : 0)}>
+                        <Skeleton className="my-2 h-6" count={10} />
                       </td>
                     </tr>
+                  )
+                }
+                {
+                  // Table is not in a loading state, render the data
+                  data &&
+                  data.map((row) => (
+                    <BaseTableRow
+                      key={row.id}
+                      selected={selectedRows ? selectedRows.find((e) => e === data.id) : false}
+                      columnKeys={columnKeys}
+                      headings={headings}
+                      centerColumns={centerColumns}
+                      data={row}
+                      onChange={onChange}
+                      showCheckbox={showCheckbox}
+                      actionMenu={actionMenu}
+                      ref={tableBodyRef}
+                    />
                   ))
-              }
-              {
-                // Render a placeholder text if no data is found
-                !isLoading &&
+                }
+                {
+                  // Render a placeholder text if no data is found
+                  !isLoading &&
                   (!data ||
                     (data.length === 0 && (
                       <tr>
@@ -193,15 +115,16 @@ const BaseTable = ({
                         </td>
                       </tr>
                     )))
-              }
-            </tbody>
-          </table>
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
+        <div className="px-3 bg-base-100">{footer}</div>
       </div>
-      <div className="px-3 bg-base-100">{footer}</div>
     </div>
-  </div>
-);
+  )
+};
 
 const propTypes = {
   header: PropTypes.element,
@@ -217,6 +140,7 @@ const propTypes = {
   // We don't know what the data object will look like, so we can't specify it.
   footer: PropTypes.element,
   onChange: PropTypes.func,
+  actionMenu: PropTypes.node,
 };
 
 BaseTable.propTypes = propTypes;
