@@ -15,7 +15,7 @@ const Page = () => (
   <QueryClientProvider client={queryClient}>
     <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
       <NavBar />
-      <div className="grid grid-cols-2 gap-10">
+      <div className="grid grid-cols-2 gap-8">
         <div className="rounded-lg card bg-base-100 shadow-lg">
           <div className="card-body">
             <h2 className="card-title">Create an individual invite</h2>
@@ -38,8 +38,8 @@ const Page = () => (
         </div>
       </div>
 
-      <div>
-        <PendingInvitesTable className="mb-10" />
+      <div className="flex flex-col gap-8">
+        <PendingInvitesTable />
         <RegisteredUsersTable />
       </div>
       <UserInvite />
