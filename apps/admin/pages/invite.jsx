@@ -14,40 +14,46 @@ const InvitesPage = () => {
   const [error, setError] = useState(false);
 
   async function inviteUsers(companyData, userData) {
-    console.log(companyData);
-
     /* TODO:
      * Generate token properly
-     * Proper error handling
      * Enter proper company id instead of 0
      * Validation: Don't overwrite existing companies
      * Validation: Don't invite existing users
      */
 
-    companyData.forEach(async (company) => {
-      const { result, err } = await supabase
-        .from('companies')
-        .insert([{ name: company.name }])
-        .single();
-      if (err) {
-        console.error(err);
-      }
-    });
+    await Promise.all(
+      companyData.map(async (company) => {
+        const { res, err } = await supabase
+          .from('companies')
+          .insert([{ name: company.name }])
+          .single();
+        if (err) {
+          // TODO: Replace with custom alert component
+          alert(err);
+        }
+      })
+    );
 
-    console.log(userData);
+    await Promise.all(
+      userData.map(async (row) => {
+        const { result, userErr } = await supabase
+          .from('invite')
+          .insert({
+            name: row.name,
+            email: row.email,
+            company: 1,
+            token: 'token',
+            expiry: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
+          })
+          .single();
+        if (userErr) {
+          // TODO: Replace with custom alert component
+          alert(userErr);
+        }
+      })
+    );
 
-    userData.forEach(async (element) => {
-      const { result, err } = await supabase
-        .from('invite')
-        .insert({
-          name: element.name,
-          email: element.email,
-          company: 1,
-          token: 'token',
-          expiry: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
-        })
-        .single();
-    });
+    alert('Invites sent!');
   }
 
   return (
