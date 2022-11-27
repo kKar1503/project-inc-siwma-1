@@ -2,10 +2,10 @@
 import PropTypes from 'prop-types';
 import '@inc/styles/globals.css';
 import Header from '@inc/ui/Header';
-import ChatList from '../components/ChatList';
-import ChatHeader from '../components/ChatHeader';
-import ChatBubbles from '../components/ChatBubbles';
-import InputText from '../components/InputText';
+import ChatList from '../components/rtc/ChatList';
+import ChatHeader from '../components/rtc/ChatHeader';
+import ChatBubbles from '../components/rtc/ChatBubbles';
+import InputText from '../components/rtc/InputText';
 
 const MyApp = ({ Component, pageProps }) => (
   <div data-theme="">
