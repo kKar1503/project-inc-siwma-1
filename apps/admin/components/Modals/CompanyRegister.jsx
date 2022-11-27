@@ -167,10 +167,14 @@ const CompanyRegister = ({ isOpen, onRequestClose, onSuccess }) => {
               {/* Company logo upload input */}
               <FormInputGroup
                 className="flex-1"
-                type="fileupload"
+                type="imageUpload"
                 label="Company Logo"
                 name="companyLogo"
                 success={submitSuccess}
+                allowedExts={{
+                  name: ['png', 'jpg', 'jpeg', 'svg'],
+                  format: ['image/png', 'image/jpg', 'image/jpeg', 'image/svg'],
+                }}
               />
               <div className="modal-action">
                 <button className="btn btn-outline btn-primary w-full">Register Company</button>
