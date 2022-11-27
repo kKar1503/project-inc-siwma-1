@@ -19,11 +19,8 @@ const CreateParam = () => {
     queryFn: async () => supabase.from('datatype').select(`id, name`),
   });
 
-  useEffect(() => {
-    console.log(tags);
-  }, [tags]);
-
   const addTags = (e) => {
+    e.preventDefault();
     if (e.target.value !== '') {
       setTags([...tags, e.target.value]);
       e.target.value = '';
@@ -31,6 +28,7 @@ const CreateParam = () => {
   };
 
   const removeTags = (indexToRemove) => {
+    console.log('remove');
     setTags(tags.filter((_, index) => index !== indexToRemove));
   };
 
@@ -98,7 +96,6 @@ const CreateParam = () => {
         </div>
         {(paramT === 'TWO CHOICES' || paramT === 'MANY CHOICES') && (
           <div className="form-control">
-            <p>{tags}</p>
             <div className="label">
               <span className="label-text font-semibold">Choices</span>
             </div>
@@ -111,9 +108,13 @@ const CreateParam = () => {
             />
             <ul className="flex gap-3 flex-wrap pt-2">
               {tags.map((tag, index) => (
-                <li key={tag} className="btn btn-primary">
+                <li className="btn btn-primary">
                   <span className="mr-2">{tag}</span>
-                  <button onClick={() => removeTags(index)}>
+                  <button
+                    onClick={(e) => {
+                      removeTags(index);
+                    }}
+                  >
                     <AiFillCloseCircle />
                   </button>
                 </li>
