@@ -16,7 +16,7 @@ const hasFileExt = (fileName, allowedExts) => {
   }
 
   // The file extension is not allowed
-  return false;
+  return null;
 };
 
 export default hasFileExt;
