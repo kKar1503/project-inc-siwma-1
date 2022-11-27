@@ -39,7 +39,7 @@ const CategoryPage = () => {
         <div className="flex flex-row w-full gap-8 flex-1 justify-between xl:overflow-hidden items-center">
           <ActiveParametersTable id={id} paramId={paramId} optionData={optionData} />
           <div className="flex flex-col">
-            <Arrows id={id} optionData={optionData} />
+            <Arrows id={id} optionData={optionData} paramId={paramId} />
           </div>
           <AvailableParametersTable id={id} paramId={paramId} optionData={optionData} />
         </div>
