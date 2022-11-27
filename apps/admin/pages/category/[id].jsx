@@ -1,7 +1,7 @@
 import { QueryClientProvider, QueryClient } from 'react-query';
 import { useRouter } from 'next/router';
-import ArrowL from '../../components/ArrowL';
-import ArrowR from '../../components/ArrowR';
+import { useEffect, useState } from 'react';
+import Arrows from '../../components/Arrows';
 import CreateParam from '../../components/CreateParam';
 import EditCat from '../../components/EditCat';
 import AdminPageLayout from '../../components/layouts/AdminPageLayout';
@@ -12,10 +12,16 @@ import AvailableParametersTable from '../../components/Tables/AvailableParameter
 const queryClient = new QueryClient();
 
 const CategoryPage = () => {
+  const [optionData, setOptionData] = useState();
+
   const router = useRouter();
   const { id } = router.query;
   const paramId = (data) => {
-    console.log(data);
+    if (data !== undefined) {
+      setOptionData(data);
+    } else {
+      setOptionData(undefined);
+    }
   };
 
   return (
@@ -31,13 +37,11 @@ const CategoryPage = () => {
           </div>
         </div>
         <div className="flex flex-row w-full gap-8 flex-1 justify-between xl:overflow-hidden items-center">
-          <ActiveParametersTable id={id} paramId={paramId} />
+          <ActiveParametersTable id={id} paramId={paramId} optionData={optionData} />
           <div className="flex flex-col">
-            <ArrowR />
-            <br />
-            <ArrowL />
+            <Arrows optionData={optionData} />
           </div>
-          <AvailableParametersTable id={id} paramId={paramId} />
+          <AvailableParametersTable id={id} paramId={paramId} optionData={optionData} />
         </div>
       </div>
     </QueryClientProvider>
