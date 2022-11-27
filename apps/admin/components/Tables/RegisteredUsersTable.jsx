@@ -122,8 +122,8 @@ const RegisteredUsersTable = ({ className }) => {
           index={0}
           selectedIndex={selectedIndex}
           setSelectedIndex={setSelectedIndex}
-          selectedColor="bg-primary"
-          className="rounded-lg hover:bg-primary"
+          selectedColor="bg-success"
+          className="rounded-lg hover:bg-success"
           disabled
         />
       );
@@ -135,8 +135,8 @@ const RegisteredUsersTable = ({ className }) => {
           index={i}
           selectedIndex={selectedIndex}
           setSelectedIndex={setSelectedIndex}
-          selectedColor="bg-primary"
-          className={cx('hover:bg-primary', {
+          selectedColor="bg-success"
+          className={cx('hover:bg-success', {
             'rounded-l-lg': i === 0,
             'rounded-r-lg': i >= count - 1,
           })}
@@ -174,7 +174,7 @@ const RegisteredUsersTable = ({ className }) => {
         </div>
       }
       headings={['User', 'E-mail', 'Company', 'Mobile Number', 'Status']}
-      headingColor="bg-primary"
+      headingColor="bg-success"
       showCheckbox
       className={className}
       columnKeys={['name', 'email', 'company', 'mobileNumber', 'enabled']}
