@@ -38,7 +38,8 @@ const RegisteredUsersTable = ({ className }) => {
         supabase
           .from('users')
           .select(`id, email, fullname, phone, companies:companyid(name), enabled`)
-          .range(selectedIndex * option, (selectedIndex + 1) * option - 1),
+          .range(selectedIndex * option, (selectedIndex + 1) * option - 1)
+          .order('fullname', { ascending: true }),
       keepPreviousData: true,
       refetchInterval: 300000,
     },
@@ -64,7 +65,7 @@ const RegisteredUsersTable = ({ className }) => {
         'id',
         selectedUsers.map((e) => e.id)
       );
-    setSelectedUsers(selectedUsers.map((e) => ({ ...e, enabled: false })));
+    setSelectedUsers(selectedUsers.map((e) => ({ ...e, enabled: 'Suspended' })));
     queryClient.invalidateQueries();
   };
 
@@ -76,7 +77,7 @@ const RegisteredUsersTable = ({ className }) => {
         'id',
         selectedUsers.map((e) => e.id)
       );
-    setSelectedUsers(selectedUsers.map((e) => ({ ...e, enabled: true })));
+    setSelectedUsers(selectedUsers.map((e) => ({ ...e, enabled: 'Activated' })));
     queryClient.invalidateQueries();
   };
 
@@ -91,6 +92,26 @@ const RegisteredUsersTable = ({ className }) => {
       result.push(targetUser);
       setSelectedUsers(result);
     }
+  };
+
+  const checkInput = (type) => {
+    if (type === 'Activated') {
+      return selectedUsers.every(
+        (e) =>
+          e.enabled === 'Suspended' ||
+          (!selectedUsers.every((user) => user.enabled === 'Suspended') &&
+            !selectedUsers.every((user) => user.enabled === 'Activated'))
+      );
+    }
+    if (type === 'Suspended') {
+      return selectedUsers.every(
+        (e) =>
+          e.enabled === 'Activated' ||
+          (!selectedUsers.every((user) => user.enabled === 'Suspended') &&
+            !selectedUsers.every((user) => user.enabled === 'Activated'))
+      );
+    }
+    return false;
   };
 
   const renderTableButtons = () => {
@@ -165,14 +186,14 @@ const RegisteredUsersTable = ({ className }) => {
             <button
               className="btn btn-primary text-white"
               onClick={suspendUsers}
-              disabled={usersQuery.isLoading || selectedUsers.length === 0}
+              disabled={usersQuery.isLoading || checkInput('Activated')}
             >
               DEACTIVATE SELECTED
             </button>
             <button
               className="btn btn-primary text-white"
               onClick={activateUsers}
-              disabled={usersQuery.isLoading || selectedUsers.length === 0}
+              disabled={usersQuery.isLoading || checkInput('Suspended')}
             >
               ACTIVATE SELECTED
             </button>
