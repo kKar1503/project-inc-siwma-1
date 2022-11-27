@@ -3,7 +3,7 @@ import cx from 'classnames';
 import FormError from './FormError';
 import FormTextInput from './FormTextInput';
 import FormTextArea from './FormTextArea';
-import FormFileInput from './FormFileInput';
+import FormImageInput from './FormImageInput';
 
 /**
  * Input group that contains a label, input and error message
@@ -19,6 +19,7 @@ const FormInputGroup = ({
   required,
   hideError,
   success,
+  allowedExts,
   className,
   style,
 }) => (
@@ -56,14 +57,15 @@ const FormInputGroup = ({
     }
     {
       // Render a file input if the type is fileinput
-      type && type === 'fileupload' && (
-        <FormFileInput
+      type && type === 'imageUpload' && (
+        <FormImageInput
           label={label}
           name={name}
           customValidation={{ ...customValidation }}
           placeholder={placeholder}
           required={required}
           success={success}
+          allowedExts={allowedExts}
         />
       )
     }
@@ -87,6 +89,10 @@ const propTypes = {
   required: PropTypes.bool,
   hideError: PropTypes.bool,
   success: PropTypes.bool,
+  allowedExts: PropTypes.exact({
+    name: PropTypes.arrayOf(PropTypes.string).isRequired,
+    format: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }).isRequired,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };

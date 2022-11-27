@@ -7,16 +7,28 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 /**
  * Wrapper component for a react hook form file input
+ * @param {string} name The name of the input
+ * @param {string} label The label to be used for the input
+ * @param {string} placeholder Input placeholder
+ * @param {object} customValidation Custom react-hook-form validation to be used against the input
+ * @param {boolean} required Whether or not the input is required
+ * @param {boolean} success Whether or not the form submission was a success
+ * @param {{ name: [string], format: [string]}} allowedExts Filetypes accepted by the input
+ * @param {[string]} allowedExts.name Names of the file types accepted by the input (svg, png, jpg)
+ * @param {[string]} allowedExts.format The input format that corresponds with the filetypes supplied (image/svg, image/png, image/jpg)
+ * @param className Custom classes
+ * @param style Custom styles
  * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
  * @returns A file input that works with react form hook
  */
-const FormFileInput = ({
+const FormImageInput = ({
   name,
   label,
   placeholder,
   customValidation,
   required,
   success,
+  allowedExts,
   className,
   style,
 }) => {
@@ -59,13 +71,14 @@ const FormFileInput = ({
     }
 
     // Checks if the file selected is of a valid filetype
-    const allowedFileTypes = ['svg', 'png', 'jpg', 'jpeg'];
+    const allowedFileTypes = allowedExts.name.map((e) => e.toLowerCase());
     if (!hasFileExt(file.name, allowedFileTypes)) {
       // Invalid file type received
       setError(name, {
         type: 'invalidFileType',
         message: `Only ${arrayToString(
-          allowedFileTypes.map((e) => e.toUpperCase())
+          allowedFileTypes.map((e) => e.toUpperCase()),
+          'and'
         )} file formats are accepted`,
       });
       return;
@@ -171,7 +184,11 @@ const FormFileInput = ({
               />
             </svg>
             <span className="font-medium text-sm text-gray-600">
-              {placeholder || 'Click to upload or drag and drop SVG, PNG or JPG (MAX. 800 x 400px)'}
+              {placeholder ||
+                `Click to upload or drag and drop ${arrayToString(
+                  allowedExts.name.map((e) => e.toUpperCase()),
+                  'or'
+                )} (MAX. 800 x 400px)`}
             </span>
           </span>
         )
@@ -182,7 +199,7 @@ const FormFileInput = ({
         {...hookInput(name, label, customValidation)}
         ref={fileInput}
         onChange={handleOnChange}
-        accept="image/png, image/jpeg, image/jpg, image/svg"
+        accept={allowedExts.format}
         hidden
       />
     </label>
@@ -198,10 +215,14 @@ const propTypes = {
   customValidation: PropTypes.object,
   required: PropTypes.bool,
   success: PropTypes.bool,
+  allowedExts: PropTypes.exact({
+    name: PropTypes.arrayOf(PropTypes.string).isRequired,
+    format: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }).isRequired,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
 
-FormFileInput.propTypes = propTypes;
+FormImageInput.propTypes = propTypes;
 
-export default FormFileInput;
+export default FormImageInput;
