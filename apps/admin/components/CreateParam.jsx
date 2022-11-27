@@ -32,7 +32,6 @@ const CreateParam = () => {
   };
 
   const removeTags = (indexToRemove) => {
-    console.log('remove');
     setTags(tags.filter((_, index) => index !== indexToRemove));
   };
 
