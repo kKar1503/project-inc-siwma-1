@@ -50,6 +50,7 @@ const RegisteredCompaniesTable = ({ className }) => {
       // Fetches the total number of companies from supabase
       queryKey: ['getCompanyCount', { matching: searchInput }],
       keepPreviousData: true,
+      refetchInterval: 60000, // Refresh every minute
       queryFn: async () =>
         getCompanyCount({
           supabase,
@@ -63,6 +64,7 @@ const RegisteredCompaniesTable = ({ className }) => {
         { from: selectedIndex * 10, to: (selectedIndex + 1) * 9, matching: searchInput },
       ],
       keepPreviousData: true,
+      refetchInterval: 60000, // Refresh every minute
       queryFn: async () =>
         getAllCompanies({
           supabase,
