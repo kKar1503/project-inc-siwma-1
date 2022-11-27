@@ -1,5 +1,6 @@
 import { useQueries, useQueryClient, useQuery } from 'react-query';
 import { useEffect, useState } from 'react';
+import { Alert } from '@inc/ui';
 import PropTypes from 'prop-types';
 import supabase from '../supabaseClient';
 
@@ -33,6 +34,11 @@ const EditCat = ({ id }) => {
       })
       .eq('id', `${id}`);
   };
+
+  // const displayAlert = () => (
+  //    <Alert level="success" message="An error occured while performing the operation" />
+  // )
+
   return (
     <div>
       <div>
@@ -79,6 +85,7 @@ const EditCat = ({ id }) => {
             htmlFor="user-invite"
             className="btn btn-outline btn-primary w-full"
             type="submit"
+            // onClick= {displayAlert}
           >
             Save
           </button>
