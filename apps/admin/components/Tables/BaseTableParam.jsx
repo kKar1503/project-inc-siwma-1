@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -43,8 +43,12 @@ const BaseTableParam = ({
   columnKeys,
   data,
   paramId,
+  table,
+  optionData,
   footer,
 }) => {
+  const [options, setOptions] = useState([]);
+
   if (!data) {
     return (
       <div className="flex flex-col text-center">
@@ -85,13 +89,22 @@ const BaseTableParam = ({
                       <td>
                         <label>
                           <input
+                            disabled={optionData !== undefined ? table !== optionData.table : false}
                             type="checkbox"
                             className="checkbox"
                             onChange={(e) => {
                               if (e.target.checked) {
-                                paramId('✅ Checkbox is checked');
+                                const newOptions = [...options, row.id];
+                                setOptions(newOptions);
+                                paramId({ options: newOptions, table });
                               } else {
-                                paramId('⛔️ Checkbox is NOT checked');
+                                const newOptions = options.filter((_, index) => index !== rowindex);
+                                setOptions(newOptions);
+                                if (newOptions.length !== 0) {
+                                  paramId({ options: newOptions, table });
+                                } else {
+                                  paramId(undefined);
+                                }
                               }
                             }}
                           />
@@ -142,6 +155,11 @@ const propTypes = {
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.
   paramId: PropTypes.func,
+  table: PropTypes.string,
+  optionData: PropTypes.shape({
+    options: PropTypes.arrayOf(PropTypes.number),
+    table: PropTypes.string,
+  }),
   footer: PropTypes.element,
 };
 
