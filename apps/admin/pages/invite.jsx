@@ -95,7 +95,7 @@ const InvitesPage = () => {
                 'btn rounded-lg btn-wide disabled:pointer-events-none'
               )}
               onClick={() => inviteUsers(companyTableData, userTableData)}
-              // disabled={error}
+              disabled={error}
             >
               Confirm
             </button>
