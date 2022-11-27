@@ -5,10 +5,10 @@ import ClicksGraph from '../components/Ads/ClicksGraph';
 // import Tableads from '../components/Ads/Tableads';
 
 const adSpaceData = [
-  { id: 1, name: 'Cy Ganderton', email: 'cy@gmail.com', company: 'abc', tel: '98765432' },
-  { id: 2, name: 'Cy Ganderton', email: 'cy@gmail.com', company: 'abc', tel: '98765432' },
-  { id: 3, name: 'Cy Ganderton', email: 'cy@gmail.com', company: 'abc', tel: '98765432' },
-  { id: 4, name: 'Cy Ganderton', email: 'cy@gmail.com', company: 'abc', tel: '98765432' },
+  { id: 1, name: 'Cy Ganderton', email: 'cy@gmail.com', company: 'abc', clicks: '2' },
+  { id: 2, name: 'Cy Ganderton', email: 'cy@gmail.com', company: 'abc', clicks: '2' },
+  { id: 3, name: 'Cy Ganderton', email: 'cy@gmail.com', company: 'abc', clicks: '2' },
+  { id: 4, name: 'Cy Ganderton', email: 'cy@gmail.com', company: 'abc', clicks: '2' },
 ];
 
 const AdvertisementDashboard = () => (
@@ -34,7 +34,7 @@ const AdvertisementDashboard = () => (
     </div>
     <div className="card shadow-xl bg-base-100 rounded-xl lg:order-last lg:row-span-2">
       <div className="card-body">
-        <div className="card-title">Active ad-space per month</div>
+        <div className="card-title">Average clicks per month</div>
         <p>Year 2022</p>
         <NumberOfAdsChart />
       </div>
@@ -46,29 +46,33 @@ const AdvertisementDashboard = () => (
           <table className="table table-compact w-full">
             <thead>
               <tr>
-                <th>User</th>
-                <th>E-mail</th>
+                <th>Advertisement</th>
                 <th>Company</th>
-                <th>Mobile number</th>
+                <th>Clicks</th>
+                <th>Email</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {adSpaceData.map(({ id, name, email, company, tel }) => (
+              {adSpaceData.map(({ id, name, email, company, clicks }) => (
                 <tr key={id}>
                   <td>{name}</td>
-                  <td>{email}</td>
                   <td>{company}</td>
-                  <td>{tel}</td>
+                  <td>{clicks}</td>
+                  <td>{email}</td>
                   <th>
-                    <button className="btn btn-ghost btn-xs">details</button>
+                    <select className="btn btn-ghost btn-xs">
+                      active
+                      <option value="true">active</option>
+                      <option value="false">inactive</option>
+                    </select>
                   </th>
                 </tr>
               ))}
               <tr className="active">
                 <td />
                 <td />
-                <td>Inactive ad-space</td>
+                <td />
                 <td />
                 <td />
               </tr>
