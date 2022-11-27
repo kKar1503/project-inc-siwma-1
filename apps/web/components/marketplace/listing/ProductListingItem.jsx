@@ -9,22 +9,28 @@ import SellBadge from './SellBadge';
 
 const ProductListingItem = ({ img, type, name, rating, href, className = '' }) => (
   <div className={`card shadow-md rounded-lg ${className} transition-all ease-out`}>
+    <div className="z-30 absolute right-0 p-2">
+      {type === Enum.LISTING_TYPE.BUY && <BuyBadge />}
+      {type === Enum.LISTING_TYPE.SELL && <SellBadge />}
+    </div>
+
     <Link href={href}>
       <div className="aspect-square w-full h-[150px] relative ">
         {/* <picture>
           <img src={img} alt="what" className="aspect-square" />
         </picture> */}
         {/* ! The reason why the image below is 150px in height is because smaller images will be zoomed in to fit the height (this is so images > 150px will zoom and crop) */}
+
         {img && <Image fill src={img} alt={name} className="object-cover" />}
       </div>
 
       {/* Listing content */}
-      <div className="p-2 pb-4">
-        {type === Enum.LISTING_TYPE.BUY && <BuyBadge />}
-
-        {type === Enum.LISTING_TYPE.SELL && <SellBadge />}
+      <div className="px-2 pt-2 pb-10">
         <p className="font-bold">{name}</p>
-        <Rating rating={rating} />
+
+        <div className="absolute bottom-1 my-2">
+          <Rating rating={rating} />
+        </div>
       </div>
     </Link>
   </div>
