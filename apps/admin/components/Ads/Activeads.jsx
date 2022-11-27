@@ -4,12 +4,12 @@ import { exact } from 'prop-types';
 import supabase from '../../supabase';
 
 const Activeads = () => {
-  const fetchAds = async () => supabase.from('Advertisement').select('active').eq('active', true);
+  const fetchAds = async () => supabase.from('advertisements').select('active').eq('active', true);
 
   const { data, isFetching } = useQuery('Advertisement', fetchAds);
-  if (data) {
-    console.log(data);
-  }
+  // if (data) {
+  //   console.log(data);
+  // }
   return (
     <>
       <div className="flex flex-col">

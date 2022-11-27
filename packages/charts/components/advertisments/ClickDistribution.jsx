@@ -1,24 +1,17 @@
 import { VictoryPie, VictoryContainer, VictoryLegend, VictoryLabel } from 'victory';
+import PropType from 'prop-types';
 
 const colors = ['#1C1917', '#F43F5E', '#34D399', '#2563EB', '#FACC15'];
 
-const dataset = [
-  { cat: 'SHI LI FANG IRON...', post: 5 },
-  { cat: 'SHI LI FANG IRON...', post: 15 },
-  { cat: 'SHI LI FANG IRON...', post: 15 },
-  { cat: 'SHI LI FANG IRON...', post: 5 },
-  { cat: 'SHI LI FANG IRON...', post: 10 },
-];
-
-const ClickDistribution = () => (
+const ClickDistribution = ({ dataset, total }) => (
   <VictoryContainer width={600} height={300}>
     <VictoryPie
       padding={{ left: 500, bottom: 100 }}
       radius={120}
       standalone={false}
       data={dataset}
-      x="cat"
-      y="post"
+      x="name"
+      y="clicks"
       colorScale={colors}
       innerRadius={140}
       labelRadius={120}
@@ -29,7 +22,7 @@ const ClickDistribution = () => (
       style={{ fontSize: 110, fontWeight: 'bold' }}
       x={450}
       y={140}
-      text="25"
+      text={total}
     />
     <VictoryLabel textAnchor="middle" style={{ fontSize: 30 }} x={450} y={200} text="Clicks" />
     <VictoryLegend
@@ -39,7 +32,7 @@ const ClickDistribution = () => (
       x={20}
       y={50}
       colorScale={colors}
-      data={dataset.map(({ cat }) => ({ name: cat, symbol: { type: 'square' } }))}
+      data={dataset.map(({ name }) => ({ name, symbol: { type: 'square' } }))}
       style={{
         data: { stroke: ({ index }) => colors[index], strokeWidth: 10 },
         labels: { fontSize: 16 },
@@ -47,5 +40,15 @@ const ClickDistribution = () => (
     />
   </VictoryContainer>
 );
+
+ClickDistribution.propTypes = {
+  dataset: PropType.arrayOf(
+    PropType.shape({
+      name: PropType.string.isRequired,
+      clicks: PropType.string.isRequired,
+    }).isRequired
+  ).isRequired,
+  total: PropType.number.isRequired,
+};
 
 export default ClickDistribution;
