@@ -18,8 +18,8 @@ const Page = () => (
       <div className="grid grid-cols-2 gap-8">
         <div className="rounded-lg card bg-base-100 shadow-lg">
           <div className="card-body">
-            <h2 className="card-title">Create an individual invite</h2>
-            <p>Invite an individual user to the system</p>
+            <h1 className="font-bold text-xl">Create an individual invite</h1>
+            <h1 className="pr-2 pb-4">Invite an individual user to the system</h1>
             <div className="card-actions justify-center">
               <label htmlFor="user-invite" className="btn btn-primary btn-outline grow">
                 Send Invite
@@ -29,16 +29,16 @@ const Page = () => (
         </div>
         <div className="rounded-lg card bg-base-100 shadow-lg">
           <div className="card-body">
-            <h2 className="card-title">Bulk invite users</h2>
-            <p>Invite multiple users at once through a file import</p>
+            <h1 className="font-bold text-xl">Bulk invite users</h1>
+            <h1 className="pr-2 pb-4">Invite multiple users at once through a file import</h1>
             <div className="card-actions justify-center">
-              <button className="btn btn-primary btn-outline grow">Send Invite</button>
+              <button className="btn btn-primary btn-outline grow">Send Invites</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col h-full gap-8">
         <PendingInvitesTable />
         <RegisteredUsersTable />
       </div>
