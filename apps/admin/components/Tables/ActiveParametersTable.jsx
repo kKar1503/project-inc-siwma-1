@@ -10,7 +10,7 @@ import supabase from '../../supabaseClient';
 
 const parseData = (data) => {
   if (data.length !== 0) {
-    data.map((e) => ({
+    return data.map((e) => ({
       id: e.parameter.id,
       name: e.parameter.name,
       display_name: e.parameter.description,
@@ -23,7 +23,7 @@ const parseData = (data) => {
   return [];
 };
 
-const ActiveParametersTable = ({ className, id }) => {
+const ActiveParametersTable = ({ className, id, paramId }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const { data, isLoading } = useQuery({
     queryKey: ['activeParameters', id],
@@ -56,6 +56,7 @@ const ActiveParametersTable = ({ className, id }) => {
       className={className}
       columnKeys={['name', 'parameter_type_name']}
       data={isLoading || id === undefined ? undefined : parseData(data?.data)}
+      paramId={paramId}
       footer={
         <div className="flex justify-between bg-none">
           <div className="flex justify-end bg-none">
@@ -89,6 +90,7 @@ const ActiveParametersTable = ({ className, id }) => {
 ActiveParametersTable.propTypes = {
   className: PropTypes.string,
   id: PropTypes.string,
+  paramId: PropTypes.func,
 };
 
 export default ActiveParametersTable;

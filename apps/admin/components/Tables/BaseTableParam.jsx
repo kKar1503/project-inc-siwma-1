@@ -42,6 +42,7 @@ const BaseTableParam = ({
   className,
   columnKeys,
   data,
+  paramId,
   footer,
 }) => {
   if (!data) {
@@ -83,7 +84,17 @@ const BaseTableParam = ({
                     {showCheckbox && (
                       <td>
                         <label>
-                          <input type="checkbox" className="checkbox" />
+                          <input
+                            type="checkbox"
+                            className="checkbox"
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                paramId('✅ Checkbox is checked');
+                              } else {
+                                paramId('⛔️ Checkbox is NOT checked');
+                              }
+                            }}
+                          />
                         </label>
                       </td>
                     )}
@@ -130,6 +141,7 @@ const propTypes = {
   columnKeys: PropTypes.arrayOf(PropTypes.string),
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.
+  paramId: PropTypes.func,
   footer: PropTypes.element,
 };
 
