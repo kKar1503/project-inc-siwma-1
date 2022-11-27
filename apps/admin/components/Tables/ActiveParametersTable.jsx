@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import BaseTableCat from './BaseTableCat';
+import BaseTableParam from './BaseTableParam';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 import supabase from '../../supabaseClient';
@@ -39,7 +39,7 @@ const ActiveParametersTable = ({ className, id }) => {
   });
 
   return (
-    <BaseTableCat
+    <BaseTableParam
       header={
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
