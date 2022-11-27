@@ -67,7 +67,7 @@ const RegisteredCompaniesTable = ({ className }) => {
         getAllCompanies({
           supabase,
           from: selectedIndex * 10,
-          to: (selectedIndex + 1) * 9,
+          to: (selectedIndex + 1) * 10 - 1,
           matching: searchInput,
         }),
     },
