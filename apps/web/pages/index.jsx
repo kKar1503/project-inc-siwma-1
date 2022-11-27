@@ -17,8 +17,13 @@ const MarketplacePage = () => {
   const [listingData, setListingData] = useState([]);
   const [categoriesData, setCategoriesData] = useState([]);
 
-  const [infiniteScrollMockData, setInfiniteScrollMockData] = useState([]);
+  const [infiniteScrollData, setInfiniteScrollData] = useState([]);
   const [infiniteScrollMockDataLoading, setInfiniteScrollMockDataLoading] = useState(false);
+
+  const [totalDataCount, setTotalDataCount] = useState(0);
+
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(10);
 
   const {
     data: categoriesAPIData,
@@ -35,8 +40,34 @@ const MarketplacePage = () => {
     isLoading: listingIsLoading,
     error: listingError,
   } = useQuery(['get_listings'], async () =>
-    supabase.rpc('get_listings', { item_offset: 0, item_limit: 15 })
+    supabase.rpc('get_listings', { item_offset: offset, item_limit: limit })
   );
+
+  const {
+    data: infiniteScrollAPIData,
+    status: infiniteScrollStatus,
+    isLoading: infiniteScrollIsLoading,
+    error: infiniteScrollError,
+    refetch: infiniteScrollRefetch,
+  } = useQuery(['get_infinite_scroll_data', offset, limit], async () =>
+    supabase.rpc('get_listings', { item_offset: offset, item_limit: limit })
+  );
+
+  const {
+    data: totalInfiniteScrollAPIData,
+    status: totalInfiniteScrollStatus,
+    isLoading: totalInfiniteScrollIsLoading,
+    error: totalInfiniteScrollError,
+  } = useQuery(['get_total_infinite_scroll_data'], async () =>
+    supabase.from(Database.TABLES.LISTING.LISTING).select('id', { count: 'exact' })
+  );
+
+  useEffect(() => {
+    if (totalInfiniteScrollStatus === 'success') {
+      console.log('Total listing counts: ', totalInfiniteScrollAPIData.count);
+      setTotalDataCount(totalInfiniteScrollAPIData.count);
+    }
+  }, [totalInfiniteScrollStatus]);
 
   useEffect(() => {
     if (listingStatus === 'success') {
@@ -50,8 +81,6 @@ const MarketplacePage = () => {
       console.log(d);
 
       setListingData(d);
-
-      setInfiniteScrollMockData([...d, ...d, ...d, ...d, ...d, ...d]);
     }
   }, [listingStatus, listingAPIData]);
 
@@ -61,22 +90,21 @@ const MarketplacePage = () => {
     }
   }, [categoriesAPIStatus, categoriesAPIData]);
 
-  const handleInfiniteScrollLoadMore = () => {
-    setInfiniteScrollMockDataLoading(true);
-    console.log('Loading more items');
+  useEffect(() => {
+    if (infiniteScrollStatus === 'success') {
+      console.log(`Fetched more data from ${offset} to ${offset + limit}`);
+      const d = infiniteScrollAPIData.data.map((item) => ({
+        ...item,
+        img: `https://images.unsplash.com/photo-1667925459217-e7b7a9797409?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80`,
+      }));
 
-    setTimeout(() => {
-      setInfiniteScrollMockData((oldData) => [
-        ...oldData,
-        ...oldData,
-        ...oldData,
-        ...oldData,
-        ...oldData,
-      ]);
+      setInfiniteScrollData([...infiniteScrollData, ...d]);
+    }
+  }, [infiniteScrollStatus, infiniteScrollAPIData]);
 
-      setInfiniteScrollMockDataLoading(false);
-      console.log('Done loading more!');
-    }, 1000);
+  const handleInfiniteScrollLoadMore = async () => {
+    setOffset(offset + limit);
+    await infiniteScrollRefetch();
   };
 
   return (
@@ -84,7 +112,7 @@ const MarketplacePage = () => {
       {/* Image banner */}
       <div className="mb-10">
         {/* Image banner - Object cover covers the image (zoom crop) */}
-        <AnimatedCarousel wrapperClassName="w-full" animationDuration={5000}>
+        <AnimatedCarousel wrapperClassName="w-full h-[300px]" animationDuration={5000}>
           <div className="w-full relative">
             <Image
               src="https://images.unsplash.com/photo-1598638567141-696be94b464a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
@@ -94,18 +122,30 @@ const MarketplacePage = () => {
             />
           </div>
 
-          <div className="w-full h-[200px] relative">
+          <div className="w-full relative">
             <Image
-              src="https://images.unsplash.com/photo-1598638567141-696be94b464a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+              src="https://images.unsplash.com/photo-1501166222995-ff31c7e93cef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1934&q=80
+              "
               fill
               className="object-cover"
               alt="Banner"
             />
           </div>
 
-          <div className="w-full h-[200px] relative">
+          <div className="w-full relative">
             <Image
-              src="https://images.unsplash.com/photo-1598638567141-696be94b464a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+              src="https://images.unsplash.com/photo-1594255897691-9d1edad1ecfc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80
+              "
+              fill
+              className="object-cover"
+              alt="Banner"
+            />
+          </div>
+
+          <div className="w-full relative">
+            <Image
+              src="https://images.unsplash.com/photo-1606337321936-02d1b1a4d5ef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80
+              "
               fill
               className="object-cover"
               alt="Banner"
@@ -179,20 +219,25 @@ const MarketplacePage = () => {
           </section>
         )}
 
-        {infiniteScrollMockData && infiniteScrollMockData.length > 0 && (
+        {infiniteScrollData && infiniteScrollData.length > 0 && (
           <>
             {/* Title */}
             <h3 className="text-xl font-bold my-5">Explore more items</h3>
 
+            {/* DEBUG PURPOSES ONLY! */}
+            {/* <p className="bg-red-500">
+              {infiniteScrollData.length} / {totalDataCount}
+            </p> */}
+
             <InfiniteScroll
-              className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5"
+              className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5 auto-rows-fr"
               onLoadMore={handleInfiniteScrollLoadMore}
-              loading={infiniteScrollMockDataLoading}
-              reachedMaxItems={infiniteScrollMockData.length > 100}
+              loading={infiniteScrollStatus === 'loading'}
+              reachedMaxItems={offset + limit >= totalDataCount}
             >
-              {infiniteScrollMockData.map(({ name, img, description, id, price, type }) => (
+              {infiniteScrollData.map(({ name, img, description, id, price, type }) => (
                 <ProductListingItem
-                  className="w-full hover:shadow-lg"
+                  className="w-full hover:shadow-lg h-full"
                   type={type}
                   key={id}
                   img={img}
