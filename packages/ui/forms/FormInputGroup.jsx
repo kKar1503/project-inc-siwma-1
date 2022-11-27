@@ -103,7 +103,7 @@ const propTypes = {
   allowedExts: PropTypes.exact({
     name: PropTypes.arrayOf(PropTypes.string).isRequired,
     format: PropTypes.arrayOf(PropTypes.string).isRequired,
-  }).isRequired,
+  }),
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
