@@ -6,13 +6,7 @@ import supabase from '../../supabase';
 const ClicksGraphs = () => {
   // const [count, setCount] = useState(0);
 
-  let data1 = [
-    { clicks: 5, name: 'SHI LI FANG IRON...' },
-    { clicks: 15, name: 'SHI LI FANG IRON...' },
-    { clicks: 15, name: 'SHI LI FANG IRON...' },
-    { clicks: 5, name: 'SHI LI FANG IRON...' },
-    { clicks: 10, name: 'SHI LI FANG IRON...' },
-  ];
+  let data1 = [];
 
   const fetchClicks = async () => supabase.rpc('get_clicks');
 
