@@ -6,7 +6,7 @@ import supabase from '../supabase';
 
 const AdminUpload = () => {
   const [userInput, setUserInput] = useState('');
-  const [selected, setSelected] = useState('');
+  const [selected, setSelected] = useState(0);
   const [companyData, setCompanyData] = useState(null);
   const [description, setDescription] = useState('');
 
@@ -92,7 +92,7 @@ const AdminUpload = () => {
                 name="description"
                 placeholder="Description"
                 value={description}
-                disabled={selected === ''}
+                disabled={selected === 0}
                 className="w-11/12 h-40 px-4 mt-4 text-base placeholder-gray-500 break-normal border rounded-lg focus:shadow-outline"
                 onChange={(e) => setDescription(e.target.value)}
               />
