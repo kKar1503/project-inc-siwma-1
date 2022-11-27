@@ -18,16 +18,16 @@ const Rating = ({ rating }) => {
 
       {/* TODO: Need a unique-random key */}
       <div className="rating rating-sm rating-half">
-        {[...Array(solid)].map(() => (
-          <FullStar key="solid" />
+        {[...Array(solid)].map((_, index) => (
+          <FullStar key={index} />
         ))}
 
-        {[...Array(half)].map(() => (
-          <HalfStar key="half" />
+        {[...Array(half)].map((_, index) => (
+          <HalfStar key={index} />
         ))}
 
-        {[...Array(Math.max(0, 5 - solid - half))].map(() => (
-          <RemainingStar key="remaining" />
+        {[...Array(Math.max(0, 5 - solid - half))].map((_, index) => (
+          <RemainingStar key={index} />
         ))}
       </div>
 
