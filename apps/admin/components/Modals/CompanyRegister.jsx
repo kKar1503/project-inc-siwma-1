@@ -3,10 +3,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import cx from 'classnames';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useEffect, useState } from 'react';
-import { Alert } from '@inc/ui';
+import { Alert, FormError, FormInputGroup } from '@inc/ui';
 import BaseModal from './BaseModal';
-import FormError from '../Forms/FormError';
-import FormInputGroup from '../Forms/FormInputGroup';
 
 /**
  * Company creation modal
