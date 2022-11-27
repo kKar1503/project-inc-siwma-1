@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import ChatDiv from './chatDiv';
+import ChatDiv from './ChatDiv';
 //  const [selected, setSelected] = useState(options[0]);
 const data = [
   {
