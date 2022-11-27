@@ -15,39 +15,43 @@ const InvitesPage = () => {
   const [error, setError] = useState(false);
 
   async function inviteUsers(companyData, userData) {
-    /* TODO:
-     * Validation: Don't overwrite existing companies
-     * Validation: Don't invite existing users
-     */
-
-    // await Promise.all(
-    //   companyData.map(async (company) => {
-    //     const res = await supabase
-    //       .from('companies')
-    //       .insert([{ name: company.name }])
-    //       .single();
-    //     if (res.error) {
-    //       // TODO: Replace with custom alert component
-    //       alert(res.error);
-    //     }
-    //   })
-    // );
+    await Promise.all(
+      companyData.map(async (company) => {
+        const res = await supabase
+          .from('companies')
+          .insert([{ name: company.name }])
+          .single();
+        if (res.error) {
+          // TODO: Replace with custom alert component
+          alert(res.error);
+        }
+      })
+    );
 
     await Promise.all(
       userData.map(async (user) => {
-        // Create sha256 hash of date and email
-        const token = await crypto.subtle.digest(
+        // Create sha256 hash of the user's name, email, the current date, and a random string
+        const tokenHash = await crypto.subtle.digest(
           'SHA-256',
-          new TextEncoder().encode(`${user.email}${Date.now()}`)
+          new TextEncoder().encode(
+            user.name + user.email + Date.now() + Math.random().toString(16).substr(2, 8)
+          )
         );
+        // Convert the hash to a hex string
+        const token = Array.from(new Uint8Array(tokenHash))
+          .map((b) => b.toString(16).padStart(2, '0'))
+          .join('');
 
-        // ind company id from supabase
-        const res = await supabase.from('companies').select('id').eq('name', user.company).single();
+        // Find company id from supabase
+        const res = await supabase.from('companies').select('id').eq('name', user.company).limit(1);
         if (res.error) {
-          console.log(res.error);
+          // TODO: Replace with custom alert component
+          alert(res.error);
           return;
         }
-        const { id } = res.data;
+
+        const { id } = res.data[0];
+
         const { data, err } = await supabase
           .from('invite')
           .insert({
@@ -58,14 +62,15 @@ const InvitesPage = () => {
             expiry: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
           })
           .single();
+
         if (err) {
-          console.log(err);
-          return;
+          // TODO: Replace with custom alert component
+          alert(err);
         }
-        console.log(data);
       })
     );
 
+    // TODO: Replace with custom alert component
     alert('Invites sent!');
   }
 
