@@ -17,8 +17,9 @@ import TablePagination from './TablePagination';
 function parseData(data) {
   return data.map((e) => ({
     id: e.id,
-    profilePicture:
-      'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+    profilePicture: `https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/${
+      e.image || 'example.jpg'
+    }`,
     company: e.name,
     website: e.website,
     bio: e.bio,
