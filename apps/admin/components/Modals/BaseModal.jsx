@@ -20,8 +20,8 @@ Modal.setAppElement('#__next');
  */
 const BaseModal = ({ header, isOpen, onRequestClose, children, siblings }) => {
   // Initialise reference to the modal box
-  let modalRef = null;
-  let siblingsRef = null;
+  const modalRef = useRef();
+  const siblingsRef = useRef();
 
   /**
    * Focuses the modal
@@ -30,7 +30,7 @@ const BaseModal = ({ header, isOpen, onRequestClose, children, siblings }) => {
     // Check if the modal should be focused
     if (modalRef && isOpen) {
       // Focus the modal box
-      modalRef.focus();
+      modalRef.current.focus();
     }
   };
 
@@ -42,13 +42,16 @@ const BaseModal = ({ header, isOpen, onRequestClose, children, siblings }) => {
    */
   const handleOnBlur = (e) => {
     // Check if the currently focused element is the modal or any of its children
-    if (e.relatedTarget === modalRef || modalRef.contains(e.relatedTarget)) {
+    if (e.relatedTarget === modalRef.current || modalRef.current.contains(e.relatedTarget)) {
       // It is, return early
       return;
     }
 
     // Check if the currently focused element is a sibling element or any of its children
-    if (siblings && (e.relatedTarget === siblingsRef || siblingsRef.contains(e.relatedTarget))) {
+    if (
+      siblings &&
+      (e.relatedTarget === siblingsRef.current || siblingsRef.current.contains(e.relatedTarget))
+    ) {
       // It is, return early
       return;
     }
@@ -63,7 +66,7 @@ const BaseModal = ({ header, isOpen, onRequestClose, children, siblings }) => {
     // This could happen when sibling elements appear conditionally, and whilst the focus is on them, they disappear, causing a onBlur event
     if (e.relatedTarget == null) {
       // It was, set the focus back on the modal and return early
-      modalRef.focus();
+      modalRef.current.focus();
       return;
     }
 
@@ -94,9 +97,7 @@ const BaseModal = ({ header, isOpen, onRequestClose, children, siblings }) => {
           tabIndex={0}
           className="modal-box rounded-xl max-w-4xl cursor-default"
           onBlur={handleOnBlur}
-          ref={(modal) => {
-            modalRef = modal;
-          }}
+          ref={modalRef}
         >
           <button
             onClick={onRequestClose}
@@ -117,9 +118,7 @@ const BaseModal = ({ header, isOpen, onRequestClose, children, siblings }) => {
           tabIndex={0}
           onBlur={handleOnBlur}
           className="cursor-default"
-          ref={(el) => {
-            siblingsRef = el;
-          }}
+          ref={siblingsRef}
         >
           {siblings}
         </div>
