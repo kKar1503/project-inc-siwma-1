@@ -6,6 +6,9 @@ import ChatList from '../components/rtc/ChatList';
 import ChatHeader from '../components/rtc/ChatHeader';
 import ChatBubbles from '../components/rtc/ChatBubbles';
 import InputText from '../components/rtc/InputText';
+import ImageModal from '../components/rtc/ImageModal';
+import FileModal from '../components/rtc/FileModal';
+import OfferModal from '../components/rtc/OfferModal';
 
 const MyApp = ({ Component, pageProps }) => (
   <div data-theme="">
@@ -64,6 +67,9 @@ const MyApp = ({ Component, pageProps }) => (
         </div>
       </div>
     </div>
+    <ImageModal />
+    <FileModal />
+    <OfferModal />
   </div>
 );
 
