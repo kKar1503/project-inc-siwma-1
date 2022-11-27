@@ -24,7 +24,7 @@ const parseData = (data) => {
   return [];
 };
 
-const ActiveParametersTable = ({ className, id, paramId }) => {
+const ActiveParametersTable = ({ className, id, paramId, optionData }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const { data, isLoading } = useQuery({
     queryKey: ['activeParameters', id],
@@ -104,6 +104,10 @@ ActiveParametersTable.propTypes = {
   className: PropTypes.string,
   id: PropTypes.string,
   paramId: PropTypes.func,
+  optionData: PropTypes.shape({
+    options: PropTypes.arrayOf(PropTypes.number),
+    table: PropTypes.string,
+  }),
 };
 
 export default ActiveParametersTable;
