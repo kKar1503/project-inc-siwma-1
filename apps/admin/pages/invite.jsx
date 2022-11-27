@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import { useState } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import cx from 'classnames';
@@ -15,41 +16,53 @@ const InvitesPage = () => {
 
   async function inviteUsers(companyData, userData) {
     /* TODO:
-     * Generate token properly
-     * Enter proper company id instead of 0
      * Validation: Don't overwrite existing companies
      * Validation: Don't invite existing users
      */
 
-    await Promise.all(
-      companyData.map(async (company) => {
-        const { res, err } = await supabase
-          .from('companies')
-          .insert([{ name: company.name }])
-          .single();
-        if (err) {
-          // TODO: Replace with custom alert component
-          alert(err);
-        }
-      })
-    );
+    // await Promise.all(
+    //   companyData.map(async (company) => {
+    //     const res = await supabase
+    //       .from('companies')
+    //       .insert([{ name: company.name }])
+    //       .single();
+    //     if (res.error) {
+    //       // TODO: Replace with custom alert component
+    //       alert(res.error);
+    //     }
+    //   })
+    // );
 
     await Promise.all(
-      userData.map(async (row) => {
-        const { result, userErr } = await supabase
+      userData.map(async (user) => {
+        // Create sha256 hash of date and email
+        const token = await crypto.subtle.digest(
+          'SHA-256',
+          new TextEncoder().encode(`${user.email}${Date.now()}`)
+        );
+
+        // ind company id from supabase
+        const res = await supabase.from('companies').select('id').eq('name', user.company).single();
+        if (res.error) {
+          console.log(res.error);
+          return;
+        }
+        const { id } = res.data;
+        const { data, err } = await supabase
           .from('invite')
           .insert({
-            name: row.name,
-            email: row.email,
-            company: 1,
-            token: 'token',
+            name: user.name,
+            email: user.email,
+            company: id,
+            token,
             expiry: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
           })
           .single();
-        if (userErr) {
-          // TODO: Replace with custom alert component
-          alert(userErr);
+        if (err) {
+          console.log(err);
+          return;
         }
+        console.log(data);
       })
     );
 
