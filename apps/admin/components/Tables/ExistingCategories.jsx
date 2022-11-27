@@ -30,6 +30,7 @@ const ExistingCategories = ({ className }) => {
         .order('name', { ascending: true }),
   });
 
+  // Can use next time?
   // const useCategories = () => {
   //   useQuery({
   //     queryKey: ['categories'],
