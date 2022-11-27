@@ -7,6 +7,17 @@ import FormImageInput from './FormImageInput';
 
 /**
  * Input group that contains a label, input and error message
+ * @param {string} type The input type to be used for this input group
+ * @param {string} label The label to be used for the input
+ * @param {string} name The name of the input
+ * @param {object} customValidation Custom react-hook-form validation to be used against the input
+ * @param {string} placeholder Custom placeholder text for the input
+ * @param {boolean} required Whether or not the input is a required field
+ * @param {boolean} hideError Whether or not to hide the error text (Useful for if you want to display the error outside of the input group component)
+ * @param {boolean} success Whether or not the form submission was successful (Used to determine whether to show a success response)
+ * @param {{name: [string], format: [string]}} allowedExts File extensions allowed by the file input (Only needed if you specify the type prop to be that of a file input)
+ * @param {string} className Custom classes for the component
+ * @param {object} style Custom styling for the component
  * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
  * @returns An input group that contains a label, input and error message
  */
