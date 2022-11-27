@@ -5,12 +5,12 @@ import supabase from '../../supabase';
 
 const Clicks = () => {
   // update this sql
-  const fetchClicks = async () => supabase.from('Advertisement').select('id');
+  const fetchClicks = async () => supabase.from('advertisements').select('id');
 
   const { data, isFetching } = useQuery('a', fetchClicks);
-  if (data) {
-    console.log(data);
-  }
+  // if (data) {
+  //   console.log(data);
+  // }
   return (
     <>
       <div className="flex flex-col">
