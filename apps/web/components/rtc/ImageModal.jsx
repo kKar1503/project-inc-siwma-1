@@ -54,7 +54,9 @@ const ImageModal = () => {
           </div>
         </div>
         <div className="modal-action">
-          <button onClick={handleUpload}>Submit</button>
+          <button className="btn-primary text-white p-2 rounded-md" onClick={handleUpload}>
+            Submit
+          </button>
         </div>
       </div>
     </div>
