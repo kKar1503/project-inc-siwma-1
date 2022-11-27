@@ -10,9 +10,19 @@ import TableButton from './TableButton';
  * @param {number} selectedIndex The pagination index currently selected
  * @param {(index)} onChange The function to invoke with the new index selected
  * @param {boolean} isLoading Whether or not the table element is in a loading state
+ * @param {string} className Custom classnames for the pagination buttons
+ * @param {object} style Custom styles for the pagination buttons
  * @returns Pagination buttons for use with a table component
  */
-const TablePagination = ({ rows, rowsPerPage, selectedIndex, onChange, isLoading }) => {
+const TablePagination = ({
+  rows,
+  rowsPerPage,
+  selectedIndex,
+  onChange,
+  isLoading,
+  className,
+  style,
+}) => {
   // Checks if the data is still being fetched from supabase
   if (isLoading) {
     // Render a disabled pagination button
@@ -22,7 +32,8 @@ const TablePagination = ({ rows, rowsPerPage, selectedIndex, onChange, isLoading
         selectedIndex={selectedIndex}
         setSelectedIndex={onChange}
         selectedColor="bg-primary"
-        className="rounded-lg hover:bg-primary"
+        className={cx('rounded-lg hover:bg-primary', className)}
+        style={style}
       />
     );
   }
@@ -44,10 +55,15 @@ const TablePagination = ({ rows, rowsPerPage, selectedIndex, onChange, isLoading
         selectedColor="bg-primary"
         // Make the left side of the first button and the right side of the last button rounded,
         // also make the entire button rounded if it is the only button
-        className={cx('hover:bg-primary', {
-          'rounded-l-lg': i === 0,
-          'rounded-r-lg': i >= buttonCount - 1,
-        })}
+        className={cx(
+          'hover:bg-primary',
+          {
+            'rounded-l-lg': i === 0,
+            'rounded-r-lg': i >= buttonCount - 1,
+          },
+          className
+        )}
+        style={style}
       />
     );
   }
@@ -62,6 +78,8 @@ const propTypes = {
   selectedIndex: PropTypes.number.isRequired,
   isLoading: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
+  className: PropTypes.string,
+  style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
 
 TablePagination.propTypes = propTypes;
