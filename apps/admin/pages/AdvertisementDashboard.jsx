@@ -1,8 +1,16 @@
-import { ClickDistribution, NumberOfAdsChart } from '@inc/charts';
 import Activeads from '../components/Ads/Activeads';
 import Clicks from '../components/Ads/Clicks';
 import ClicksGraph from '../components/Ads/ClicksGraph';
 import Tableads from '../components/Ads/Tableads';
+import AvgGraphs from '../components/Ads/AvgChart';
+// import Tableads from '../components/Ads/Tableads';
+
+const adSpaceData = [
+  { id: 1, name: 'Cy Ganderton', email: 'cy@gmail.com', company: 'abc', clicks: '2' },
+  { id: 2, name: 'Cy Ganderton', email: 'cy@gmail.com', company: 'abc', clicks: '2' },
+  { id: 3, name: 'Cy Ganderton', email: 'cy@gmail.com', company: 'abc', clicks: '2' },
+  { id: 4, name: 'Cy Ganderton', email: 'cy@gmail.com', company: 'abc', clicks: '2' },
+];
 
 const AdvertisementDashboard = () => (
   <div className="grid lg:grid-cols-3 lg:grid-rows-4 gap-8 p-8 bg-base-200">
@@ -27,9 +35,9 @@ const AdvertisementDashboard = () => (
     </div>
     <div className="card shadow-xl bg-base-100 rounded-xl lg:order-last lg:row-span-2">
       <div className="card-body">
-        <div className="card-title">Average clicks per month</div>
+        <div className="card-title">Number of clicks per month</div>
         <p>Year 2022</p>
-        <NumberOfAdsChart />
+        <AvgGraphs />
       </div>
     </div>
     <div className="card shadow-xl bg-base-100 rounded-xl lg:col-span-2 lg:row-span-3">
