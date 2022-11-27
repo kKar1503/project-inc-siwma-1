@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { Children, useCallback, useEffect, useRef, useState } from 'react';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
-import IconRoundButton from './IconRoundButton';
 
 // Carousel adapted from Daisy UI's official documentation with functionality that is dynamic and can be used with any number of items.
 
@@ -30,7 +29,7 @@ const AnimatedCarousel = ({
   carouselWrapperClassName = '',
   wrapperClassName = '',
   onReachedEnd,
-  aniamtionDuration = 3000,
+  animationDuration = 3000,
 }) => {
   const mainCarouselRef = useRef(null);
 
@@ -52,13 +51,14 @@ const AnimatedCarousel = ({
   }, [children]);
 
   const scrollRight = () => {
-    const widthToMoveBy = firstItemRef.current.getBoundingClientRect().width;
-    if (mainCarouselRef.current) {
-      mainCarouselRef.current.scrollBy({
-        left: widthToMoveBy * activeIndex,
-        behavior: 'smooth',
-      });
-    }
+    setActiveIndex((prev) => prev + 1);
+    // const widthToMoveBy = firstItemRef.current.getBoundingClientRect().width;
+    // if (mainCarouselRef.current) {
+    //   mainCarouselRef.current.scrollBy({
+    //     left: widthToMoveBy * activeIndex,
+    //     behavior: 'smooth',
+    //   });
+    // }
   };
 
   const moveToSlide = (index) => {
@@ -72,13 +72,14 @@ const AnimatedCarousel = ({
   };
 
   const scrollLeft = () => {
-    const widthToMoveBy = firstItemRef.current.getBoundingClientRect().width;
-    if (mainCarouselRef.current) {
-      mainCarouselRef.current.scrollBy({
-        left: -widthToMoveBy * activeIndex,
-        behavior: 'smooth',
-      });
-    }
+    setActiveIndex((prev) => prev - 1);
+    // const widthToMoveBy = firstItemRef.current.getBoundingClientRect().width;
+    // if (mainCarouselRef.current) {
+    //   mainCarouselRef.current.scrollBy({
+    //     left: -widthToMoveBy * activeIndex,
+    //     behavior: 'smooth',
+    //   });
+    // }
   };
 
   // usEffect to increase active index every animationDuration ms
@@ -91,10 +92,10 @@ const AnimatedCarousel = ({
 
         return prev + 1;
       });
-    }, aniamtionDuration);
+    }, animationDuration);
 
     return () => clearInterval(intervalRef.current);
-  }, [aniamtionDuration, numberOfItems, children]);
+  }, [animationDuration, numberOfItems, children]);
 
   useEffect(() => {
     moveToSlide(activeIndex);
@@ -109,8 +110,8 @@ const AnimatedCarousel = ({
 
         return prev + 1;
       });
-    }, aniamtionDuration);
-  }, [activeIndex, aniamtionDuration, numberOfItems, children]);
+    }, animationDuration);
+  }, [activeIndex, animationDuration, numberOfItems, children]);
 
   useEffect(() => {
     let firstItem;
@@ -174,77 +175,77 @@ const AnimatedCarousel = ({
   }, [lastItemRef, children, onReachedEnd]);
 
   return (
-    <>
-      <div className="flex items-center relative">
-        {/* Carousel buttons */}
-        {/* Carousel buttons are position absolutely */}
-        <div className="carousel-buttons flex w-full justify-between px-1 absolute">
-          {!firstItemVisible ? (
-            <IconRoundButton
-              icon={<IoChevronBack size={16} />}
-              onClick={scrollLeft}
-              className="z-30"
-            />
-          ) : (
-            <div />
-          )}
+    <div className="flex items-center relative">
+      {/* Carousel buttons */}
+      {/* Carousel buttons are position absolutely */}
+      <div className="carousel-buttons flex w-full justify-between absolute h-full">
+        {!firstItemVisible ? (
+          <button
+            onClick={scrollLeft}
+            className="z-30 bg-gradient-to-r from-black/50  to-transparent px-5 text-white"
+          >
+            <IoChevronBack size={25} />
+          </button>
+        ) : (
+          <div />
+        )}
 
-          {/* Next button */}
-          {!lastItemVisible ? (
-            <IconRoundButton
-              icon={<IoChevronForward size={16} />}
-              onClick={scrollRight}
-              className="z-30"
-            />
-          ) : (
-            <div />
-          )}
-        </div>
-
-        {/* <div className="left-0 w-[20px] h-full bg-gradient-to-r from-white to-transparent absolute z-20" />
-      <div className="right-0 w-[20px] h-full bg-gradient-to-r from-transparent to-white absolute z-20" /> */}
-
-        {/* Carousel items itself */}
-        <div
-          className={`w-full carousel carousel-center space-x-3 rounded-box ${carouselWrapperClassName}`}
-          ref={mainCarouselRef}
-        >
-          {Children.map(children, (child, index) => {
-            if (index === 0) {
-              return (
-                <div className={`carousel-item ${wrapperClassName}`} ref={firstItemRef}>
-                  {child}
-                </div>
-              );
-            }
-
-            if (index === Children.count(children) - 1) {
-              return (
-                <div className={`carousel-item ${wrapperClassName}`} ref={lastItemRef}>
-                  {child}
-                </div>
-              );
-            }
-
-            return <div className={`carousel-item ${wrapperClassName}`}>{child}</div>;
-          })}
-        </div>
+        {/* Next button */}
+        {!lastItemVisible ? (
+          <button
+            onClick={scrollRight}
+            className="z-30 bg-gradient-to-r to-black/50  from-transparent px-5 text-white"
+          >
+            <IoChevronForward size={25} />
+          </button>
+        ) : (
+          <div />
+        )}
       </div>
 
-      <div className="flex gap-5 my-3 justify-center">
+      {/* <div className="left-0 w-[20px] h-full bg-gradient-to-r from-white to-transparent absolute z-20" />
+      <div className="right-0 w-[20px] h-full bg-gradient-to-r from-transparent to-white absolute z-20" /> */}
+
+      {/* Carousel items itself */}
+      <div
+        className={`w-full carousel carousel-center space-x-3 rounded-box ${carouselWrapperClassName}`}
+        ref={mainCarouselRef}
+      >
+        {Children.map(children, (child, index) => {
+          if (index === 0) {
+            return (
+              <div className={`carousel-item ${wrapperClassName}`} ref={firstItemRef}>
+                {child}
+              </div>
+            );
+          }
+
+          if (index === Children.count(children) - 1) {
+            return (
+              <div className={`carousel-item ${wrapperClassName}`} ref={lastItemRef}>
+                {child}
+              </div>
+            );
+          }
+
+          return <div className={`carousel-item ${wrapperClassName}`}>{child}</div>;
+        })}
+      </div>
+
+      {/* Carousel Slides */}
+      <div className="flex w-full gap-2 my-3 justify-center absolute bottom-0 items-center">
         {[...Array(numberOfItems)].map((_, index) => (
           <button
             aria-label="Carousel button"
-            // TODO: Please fix this
-            key={Math.random()}
-            className={`w-[10px] h-[10px] bg-black/50 rounded-full ${
-              index === activeIndex ? 'bg-black/90' : ''
+            key={index}
+            className={`w-9 h-[3px] drop-shadow-lg bg-white/50 rounded-full ${
+              index === activeIndex ? 'bg-white/90' : ''
             }`}
             onClick={() => setActiveIndex(index)}
           />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
@@ -261,7 +262,7 @@ AnimatedCarousel.propTypes = {
   carouselWrapperClassName: PropTypes.string,
   wrapperClassName: PropTypes.string,
   onReachedEnd: PropTypes.func,
-  aniamtionDuration: PropTypes.number,
+  animationDuration: PropTypes.number,
 };
 
 export default AnimatedCarousel;
