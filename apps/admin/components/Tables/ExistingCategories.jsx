@@ -30,6 +30,19 @@ const ExistingCategories = ({ className }) => {
         .order('name', { ascending: true }),
   });
 
+  // const useCategories = () => {
+  //   useQuery({
+  //     queryKey: ['categories'],
+  //     queryFn: async () =>
+  //       supabase
+  //         .from('category')
+  //         .select(`id, name, description, active`)
+  //         .order('name', { ascending: true }),
+  //   });
+  // };
+
+  // const { data, isLoading } = useCategories();
+
   return (
     <BaseTableCat
       header={
