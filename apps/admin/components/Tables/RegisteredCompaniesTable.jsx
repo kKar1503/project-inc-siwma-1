@@ -7,6 +7,7 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { SlPencil } from 'react-icons/sl';
 import { BsTrash } from 'react-icons/bs';
+import Link from 'next/link';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
 import TablePagination from './TablePagination';
@@ -214,10 +215,10 @@ const RegisteredCompaniesTable = ({ className }) => {
             </button>
           </li>
           <li>
-            <button>
+            <Link href={{ pathname: '/edit-company', query: { companyid: 0 } }}>
               <SlPencil className="h-5 w-5" />
               Edit
-            </button>
+            </Link>
           </li>
           <li>
             <button>
