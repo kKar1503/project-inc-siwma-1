@@ -1,10 +1,11 @@
 import { useQueries, useQueryClient, useQuery } from 'react-query';
-import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import supabase from '../supabaseClient';
 
 const CreateParam = () => {
+  const queryClient = useQueryClient();
+
   const [paramT, setParamtype] = useState('');
   const [dataT, setDataType] = useState('');
   const [tags, setTags] = useState([]);
@@ -28,8 +29,40 @@ const CreateParam = () => {
   };
 
   const removeTags = (indexToRemove) => {
-    console.log('remove');
     setTags(tags.filter((_, index) => index !== indexToRemove));
+  };
+
+  const formatData = () => {};
+
+  const addChoiceParam = async (e) => {
+    const tagsObj = [];
+
+    const { data, error } = await supabase
+      .from('parameter')
+      .insert({
+        name: e.target.paramName.value,
+        display_name: e.target.displayName.value,
+        type: e.target.paramType.value,
+        datatype: e.target.dataType.value,
+      })
+      .select('id');
+
+    // tags.map((tag) => tagsObj.push({ parameter: data[0].id, choice: tag }));
+    // console.log(tagsObj);
+
+    await supabase.from('parameter_choices').insert({ parameter: data[0].id, choice: tags });
+    queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
+  };
+
+  const addParam = async (e) => {
+    await supabase.from('parameter').insert({
+      name: e.target.paramName.value,
+      display_name: e.target.displayName.value,
+      type: e.target.paramType.value,
+      datatype: e.target.dataType.value,
+    });
+
+    queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
   };
 
   return (
@@ -41,13 +74,10 @@ const CreateParam = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (
-            e.target.paramType.value !== 'TWO CHOICES' &&
-            e.target.paramType.value !== 'MANY CHOICES'
-          ) {
-            console.log(e.target.paramName.value);
-            console.log(e.target.paramType.value);
-            console.log(e.target.dataType.value);
+          if (e.target.paramType.value === '3' || e.target.paramType.value === '4') {
+            addChoiceParam(e);
+          } else {
+            addParam(e);
           }
         }}
       >
@@ -59,7 +89,18 @@ const CreateParam = () => {
             name="paramName"
             type="text"
             className="input-group input input-bordered"
-            placeholder="Category Name"
+            placeholder="Parameter Name"
+          />
+        </div>
+        <div className="form-control">
+          <div className="label">
+            <span className="label-text font-semibold">Display Name</span>
+          </div>
+          <input
+            name="displayName"
+            type="text"
+            className="input-group input input-bordered"
+            placeholder="Display Name"
           />
         </div>
         <div className="form-control">
@@ -72,9 +113,12 @@ const CreateParam = () => {
             onChange={(e) => {
               setParamtype(e.target.value);
             }}
+            value={tags.length > 2 && tags.length !== 0 ? '4' : paramT}
           >
             {parameterType?.data.map((e) => (
-              <option>{e.name}</option>
+              <option key={e.id} value={e.id}>
+                {e.name}
+              </option>
             ))}
           </select>
         </div>
@@ -90,11 +134,13 @@ const CreateParam = () => {
             }}
           >
             {dataType?.data.map((e) => (
-              <option>{e.name}</option>
+              <option key={e.id} value={e.id}>
+                {e.name}
+              </option>
             ))}
           </select>
         </div>
-        {(paramT === 'TWO CHOICES' || paramT === 'MANY CHOICES') && (
+        {(paramT === '3' || paramT === '4') && (
           <div className="form-control">
             <div className="label">
               <span className="label-text font-semibold">Choices</span>
@@ -109,12 +155,13 @@ const CreateParam = () => {
             <ul className="flex gap-3 flex-wrap pt-2">
               {tags.map((tag, index) => (
                 <li className="btn btn-primary">
-                  <span className="mr-2">{tag}</span>
                   <button
                     onClick={(e) => {
                       removeTags(index);
                     }}
+                    className="flex"
                   >
+                    <span className="mr-2">{tag}</span>
                     <AiFillCloseCircle />
                   </button>
                 </li>
