@@ -25,7 +25,6 @@ const parseData = (data) => {
 
 const ActiveParametersTable = ({ className, id }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-
   const { data, isLoading } = useQuery({
     queryKey: ['activeParameters', id],
     queryFn: async () =>

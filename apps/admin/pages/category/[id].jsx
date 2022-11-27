@@ -1,7 +1,7 @@
 import { QueryClientProvider, QueryClient } from 'react-query';
 import { useRouter } from 'next/router';
-import ArrowL from '../../components/ArrowL';
-import ArrowR from '../../components/ArrowR';
+import { useState } from 'react';
+import Arrows from '../../components/Arrows';
 import CreateParam from '../../components/CreateParam';
 import EditCat from '../../components/EditCat';
 import AdminPageLayout from '../../components/layouts/AdminPageLayout';
@@ -30,11 +30,8 @@ const CategoryPage = () => {
         <div className="flex flex-row w-full gap-8 flex-1 justify-between xl:overflow-hidden items-center">
           <ActiveParametersTable id={id} />
           <div className="flex flex-col">
-            <ArrowR />
-            <br />
-            <ArrowL />
+            <Arrows />
           </div>
-
           <AvailableParametersTable id={id} />
         </div>
       </div>
