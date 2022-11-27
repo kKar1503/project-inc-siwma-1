@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import BaseTableRow from './BaseTable/BaseTableRow';
-import BaseTableHeader from './BaseTable/BaseTableHeader';
+import BaseTableRow from './BaseTableRow';
+import BaseTableHeader from './BaseTableHeader';
 
 // This is the base table component that every other table is built on.
 
@@ -61,7 +61,10 @@ const BaseTable = ({
 
   return (
     <div
-      className={cx(className, 'bg-base-100 rounded-lg shadow-lg xl:flex-1 overflow-y-hidden w-full')}
+      className={cx(
+        className,
+        'bg-base-100 rounded-lg shadow-lg xl:flex-1 overflow-y-hidden w-full'
+      )}
     >
       <div className="h-full flex flex-col gap-3 py-3">
         <div className="px-6">{header}</div>
@@ -69,7 +72,13 @@ const BaseTable = ({
           <div className="w-full max-h-full overflow-auto">
             <table className="table w-full">
               <thead>
-                <BaseTableHeader headingColor={headingColor} headings={headings} centerColumns={centerColumns} showActionsColumn={Boolean(actionMenu)} showCheckbox={showCheckbox} />
+                <BaseTableHeader
+                  headingColor={headingColor}
+                  headings={headings}
+                  centerColumns={centerColumns}
+                  showActionsColumn={Boolean(actionMenu)}
+                  showCheckbox={showCheckbox}
+                />
               </thead>
               <tbody ref={tableBodyRef}>
                 {
@@ -86,35 +95,35 @@ const BaseTable = ({
                 {
                   // Table is not in a loading state, render the data
                   data &&
-                  data.map((row) => (
-                    <BaseTableRow
-                      key={row.id}
-                      selected={selectedRows ? selectedRows.find((e) => e === data.id) : false}
-                      columnKeys={columnKeys}
-                      headings={headings}
-                      centerColumns={centerColumns}
-                      data={row}
-                      onChange={onChange}
-                      showCheckbox={showCheckbox}
-                      actionMenu={actionMenu}
-                      ref={tableBodyRef}
-                    />
-                  ))
+                    data.map((row) => (
+                      <BaseTableRow
+                        key={row.id}
+                        selected={selectedRows ? selectedRows.find((e) => e === data.id) : false}
+                        columnKeys={columnKeys}
+                        headings={headings}
+                        centerColumns={centerColumns}
+                        data={row}
+                        onChange={onChange}
+                        showCheckbox={showCheckbox}
+                        actionMenu={actionMenu}
+                        ref={tableBodyRef}
+                      />
+                    ))
                 }
                 {
                   // Render a placeholder text if no data is found
                   !isLoading &&
-                  (!data ||
-                    (data.length === 0 && (
-                      <tr>
-                        <td
-                          className="h-52 text-center"
-                          colSpan={headings.length + 1 + (showCheckbox ? 1 : 0)}
-                        >
-                          <h2 className="font-bold text-lg">No companies found</h2>
-                        </td>
-                      </tr>
-                    )))
+                    (!data ||
+                      (data.length === 0 && (
+                        <tr>
+                          <td
+                            className="h-52 text-center"
+                            colSpan={headings.length + 1 + (showCheckbox ? 1 : 0)}
+                          >
+                            <h2 className="font-bold text-lg">No companies found</h2>
+                          </td>
+                        </tr>
+                      )))
                 }
               </tbody>
             </table>
@@ -123,7 +132,7 @@ const BaseTable = ({
         <div className="px-3 bg-base-100">{footer}</div>
       </div>
     </div>
-  )
+  );
 };
 
 const propTypes = {
