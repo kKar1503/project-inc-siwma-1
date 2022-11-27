@@ -20,7 +20,7 @@ const InfiniteScroll = ({
       observerRef.current = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting) {
-            if (reachedMaxItems) return;
+            if (reachedMaxItems || loading) return;
             onLoadMore();
           }
         },
@@ -43,12 +43,16 @@ const InfiniteScroll = ({
         {Children.map(children, (child, index) => {
           if (index === children.length - 1) {
             return (
-              <div className={wrapperClassName} ref={lastItemRef}>
+              <div key={index} className={wrapperClassName} ref={lastItemRef}>
                 {child}
               </div>
             );
           }
-          return <div className={wrapperClassName}>{child}</div>;
+          return (
+            <div key={index} className={wrapperClassName}>
+              {child}
+            </div>
+          );
         })}
       </div>
 
