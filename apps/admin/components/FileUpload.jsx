@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import PropTypes, { object } from 'prop-types';
+import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
 import { BsFileEarmarkSpreadsheet } from 'react-icons/bs';
