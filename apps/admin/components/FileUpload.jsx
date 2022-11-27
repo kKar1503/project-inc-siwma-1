@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
