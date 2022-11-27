@@ -3,7 +3,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { ImCheckmark, ImCross } from 'react-icons/im';
 import { HiDotsVertical } from 'react-icons/hi';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 /**
  * Row component for BaseTable
@@ -15,6 +15,8 @@ import React, { useEffect, useRef, useState } from 'react';
  * @param {[string]} centerColumns The columns to be centered
  * @param {boolean} selected Whether or not the row is currently selected
  * @param {React.ReactNode} actionMenu The action menu to display if the action button is clicked on (Action button only renders if this prop is specified; Setting this prop makes the tableRef prop required)
+ * @param {boolean} showActionMenu Whether or not to show the action menu
+ * @param {()} onToggleActionMenu The function to invoke when the action menu gets shown
  * @param {React.Ref} tableRef Reference to the table (Required if the actionMenu prop is set)
  * @param {()} onChange The function to invoke when the row gets selected/deselected
  * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
@@ -22,12 +24,20 @@ import React, { useEffect, useRef, useState } from 'react';
  */
 const BaseTableRow = React.forwardRef(
   (
-    { data, showCheckbox, columnKeys, headings, centerColumns, selected, actionMenu, onChange },
+    {
+      data,
+      showCheckbox,
+      columnKeys,
+      headings,
+      centerColumns,
+      selected,
+      actionMenu,
+      showActionMenu,
+      onToggleActionMenu,
+      onChange,
+    },
     tableRef
   ) => {
-    // States
-    const [showActionMenu, setShowActionMenu] = useState(false);
-
     // References
     const actionMenuRef = useRef();
 
@@ -118,14 +128,18 @@ const BaseTableRow = React.forwardRef(
               <button
                 type="button"
                 className="flex items-center flex-grow-0 mx-auto text-center gap-2"
-                onClick={() => setShowActionMenu(!showActionMenu)}
+                onClick={() => {
+                  onToggleActionMenu();
+                }}
               >
                 <HiDotsVertical />
               </button>
               {/* Action Menu */}
               <div className="relative">
                 <div
-                  className={cx('absolute right-[6vw] top-0 h-fit', { invisible: !showActionMenu })}
+                  className={cx('absolute right-[6vw] top-0 h-fit transition-all', {
+                    'invisible opacity-0': !showActionMenu,
+                  })}
                   ref={actionMenuRef}
                 >
                   {actionMenu}
@@ -149,6 +163,8 @@ const propTypes = {
   headings: PropTypes.arrayOf(PropTypes.string),
   selected: PropTypes.bool,
   actionMenu: PropTypes.node,
+  showActionMenu: PropTypes.bool,
+  onToggleActionMenu: PropTypes.func,
   onChange: PropTypes.func,
 };
 

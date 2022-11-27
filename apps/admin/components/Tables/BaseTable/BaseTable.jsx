@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Skeleton from 'react-loading-skeleton';
@@ -56,6 +56,10 @@ const BaseTable = ({
   onChange,
   actionMenu,
 }) => {
+  // -- States -- //
+  // Keeps track of the currently shown action menu
+  const [currShownMenu, setCurrShownMenu] = useState(-1);
+
   // Refs
   const tableBodyRef = useRef();
 
@@ -106,6 +110,17 @@ const BaseTable = ({
                         onChange={onChange}
                         showCheckbox={showCheckbox}
                         actionMenu={actionMenu}
+                        showActionMenu={row.id === currShownMenu}
+                        onToggleActionMenu={() => {
+                          // Check if the currently shown menu is the current row
+                          if (currShownMenu === row.id) {
+                            // It is, hide it
+                            return setCurrShownMenu(-1);
+                          }
+
+                          // It is not, show it
+                          return setCurrShownMenu(row.id);
+                        }}
                         ref={tableBodyRef}
                       />
                     ))
