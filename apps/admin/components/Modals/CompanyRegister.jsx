@@ -1,110 +1,33 @@
 import PropTypes from 'prop-types';
-import { FormProvider, useForm } from 'react-hook-form';
 import cx from 'classnames';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { useEffect, useState } from 'react';
-import {
-  Alert,
-  FormError,
-  FormImageInput,
-  FormInputGroup,
-  FormTextArea,
-  FormTextInput,
-} from '@inc/ui';
+import { Alert } from '@inc/ui';
+import { useState } from 'react';
 import BaseModal from './BaseModal';
+import CompanyRegisterFormContext from '../forms/CompanyRegisterFormContext';
 
 /**
  * Company creation modal
  * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
- * @returns
+ * @returns The company registration modal
  */
 const CompanyRegister = ({ isOpen, onRequestClose, onSuccess }) => {
   // -- Component states -- //
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
-  // -- Initialise libraries -- //
-  // Initialise supabase client
-  const supabase = useSupabaseClient();
-
-  // Initialise react hook forms
-  const formHook = useForm();
-
-  // Deconstruct the individual hooks from the object
-  const {
-    handleSubmit,
-    reset,
-    watch,
-    formState: { dirtyFields },
-  } = formHook;
-
-  // Watch all input fields
-  const watchAllFields = watch();
-
-  // -- Handler Functions -- //
+  // -- Handlers -- //
   /**
-   * Handles form submission
-   * @param {{}} data Form data
+   * Handles for when the success state changes
+   * @param {boolean} value The value of the new success state
    */
-  const onSubmit = async (data) => {
-    // Reset form submission status
-    setSubmitSuccess(false);
-
-    // Deconstruct values from data
-    const { companyName, companyWebsite, companyComment, companyLogo } = data;
-
-    // -- Create company in Supabase -- //
-    // Create company record and return it
-    const { data: companyData } = await supabase
-      .from('companies')
-      .insert([
-        {
-          name: companyName,
-          website: companyWebsite,
-        },
-      ])
-      .select();
-
-    // Create a record in companies_comments if a comment was given
-    if (companyComment) {
-      // Create a comment for the company
-      await supabase.from('companies_comments').insert([
-        {
-          companyid: companyData[0].id,
-          comments: companyComment,
-        },
-      ]);
-    }
-
-    // Upload the company logo if provided
-    if (companyLogo) {
-      // Upload company logo
-      await supabase.storage.from('companyprofilepictures').upload(companyLogo.name, companyLogo);
-
-      // Update the newly created company record with the name of the logo uploaded
-      await supabase
-        .from('companies')
-        .update({ image: companyLogo.name })
-        .eq('id', companyData[0].id);
-    }
-
-    // Success, clear inputs and show success message
-    reset();
-    setSubmitSuccess(true);
-
-    // Invoke the onSuccess handler if provided
-    if (onSuccess) {
+  const handleSuccessChange = (value) => {
+    // Invoke the onSuccess handler if the changed state is successful
+    if (value && onSuccess) {
       onSuccess();
     }
-  };
 
-  // Clear success state of the form as soon as a input value changes
-  useEffect(() => {
-    // Checks that the form submission state is currently successful, and that there is at least 1 dirty input
-    if (submitSuccess && Object.keys(dirtyFields).length > 0) {
-      // There is at least 1 dirty input, clear the success status of the form
-      setSubmitSuccess(false);
-    }
-  }, [watchAllFields]);
+    // Update the success state
+    setSubmitSuccess(value);
+  };
 
   return (
     <BaseModal
@@ -132,76 +55,10 @@ const CompanyRegister = ({ isOpen, onRequestClose, onSuccess }) => {
         </div>
       }
     >
-      <FormProvider {...formHook}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-wrap">
-            <div className="flex-1 md:mr-10">
-              <div className="flex flex-col">
-                {/* Company name input field */}
-                <FormInputGroup
-                  label="Company name"
-                  name="companyName"
-                  success={submitSuccess}
-                  required
-                >
-                  <FormTextInput />
-                </FormInputGroup>
-                {/* Company website input field */}
-                <FormInputGroup
-                  label="Company website"
-                  name="companyWebsite"
-                  success={submitSuccess}
-                >
-                  <FormTextInput
-                    customValidation={{
-                      // Regexp for validating urls taken from https://regexr.com/39nr7
-                      pattern: {
-                        value:
-                          /[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi,
-                        message: 'Company website must be a valid URL',
-                      },
-                    }}
-                  />
-                </FormInputGroup>
-                {/* Company comments input field */}
-                <FormInputGroup
-                  label="Company comment"
-                  name="companyComment"
-                  success={submitSuccess}
-                  hideError
-                >
-                  <FormTextArea placeholder="Add a comment (only visible to you)" />
-                </FormInputGroup>
-              </div>
-            </div>
-            <div className="w-full md:w-1/2 flex flex-col">
-              {/* Company logo upload input */}
-              <FormInputGroup
-                className="flex-1"
-                label="Company Logo"
-                name="companyLogo"
-                success={submitSuccess}
-              >
-                <FormImageInput
-                  allowedExts={{
-                    name: ['png', 'jpg', 'jpeg', 'svg'],
-                    format: ['image/png', 'image/jpg', 'image/jpeg', 'image/svg'],
-                  }}
-                />
-              </FormInputGroup>
-              <div className="modal-action">
-                <button className="btn btn-outline btn-primary w-full">Register Company</button>
-              </div>
-            </div>
-          </div>
-          {/* Display any errors pertaining to the company comments
-           * We display it here instead of within the input group so that the submit button aligns with the bottom of the company comment input
-           */}
-          <div className="flex-1 md:w-1/2 md:pr-10">
-            <FormError inputName="companyComment" className="mb-0 pb-0" />
-          </div>
-        </form>
-      </FormProvider>
+      <CompanyRegisterFormContext
+        submitSuccess={submitSuccess}
+        onSuccessChange={handleSuccessChange}
+      />
     </BaseModal>
   );
 };
