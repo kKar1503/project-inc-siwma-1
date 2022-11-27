@@ -14,6 +14,9 @@ const queryClient = new QueryClient();
 const CategoryPage = () => {
   const router = useRouter();
   const { id } = router.query;
+  const paramId = (data) => {
+    console.log(data);
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -28,11 +31,11 @@ const CategoryPage = () => {
           </div>
         </div>
         <div className="flex flex-row w-full gap-8 flex-1 justify-between xl:overflow-hidden items-center">
-          <ActiveParametersTable id={id} />
+          <ActiveParametersTable id={id} paramId={paramId} />
           <div className="flex flex-col">
             <Arrows />
           </div>
-          <AvailableParametersTable id={id} />
+          <AvailableParametersTable id={id} paramId={paramId} />
         </div>
       </div>
     </QueryClientProvider>
