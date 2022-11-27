@@ -1,11 +1,37 @@
-import { useQueries, useQueryClient } from 'react-query';
+import { useQuery, useQueries, useQueryClient } from 'react-query';
 import supabase from '../supabaseClient';
 
 const CreateCategory = () => {
   const queryClient = useQueryClient();
 
+  const { data, isLoading } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => supabase.from('category').select(`id, name, description`),
+  });
+
   const addCategory = async (e) => {
     e.preventDefault();
+
+    // const newCatName = {name: e.target.categoryDescription.value}
+
+    // const catNames = []
+
+    // do {
+    //   catNames.push(data.name)
+    // } while (catNames.length < data.length)
+
+    // console.log(catNames)
+
+    // let i = 0
+
+    // while (catNames[i] !== newCatName.toString()) {
+    //   i++
+    //   alert('Duplicate category name detected!');
+    //   if (catNames[i] !== newCatName.toString() && catNames.length < i) {
+    //     alert('WOO YEAAA BABY!');
+    //   }
+    // }
+
     await supabase.from('category').insert({
       name: `${e.target.categoryName.value}`,
       description: `${e.target.categoryDescription.value}`,
@@ -18,7 +44,6 @@ const CreateCategory = () => {
     <div>
       <div>
         <h3 className="text-lg font-bold">Create a category</h3>
-        <p className="text-sm">Add a new category into the system</p>
       </div>
       <form
         onSubmit={async (e) => {
@@ -36,6 +61,7 @@ const CreateCategory = () => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Category Name"
+            required
           />
         </div>
         <div className="form-control">
@@ -47,6 +73,7 @@ const CreateCategory = () => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Category Description"
+            required
           />
         </div>
         <div className="modal-action">
