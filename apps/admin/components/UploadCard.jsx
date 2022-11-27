@@ -9,11 +9,13 @@ const UploadCard = ({ id, des }) => {
   const [imageURL, setImageURL] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const checkFile = async (img) => {
-    if (img.type === 'image/png' || img.type === 'image/jpeg') {
-      setImage(img);
+  const checkFile = async (e) => {
+    if (e.target.files[0].type === 'image/png' || e.target.files[0].type === 'image/jpeg') {
+      setImage(e.target.files[0]);
+      setErrorMessage('Please click "Create file"');
     } else {
-      console.log(img.type);
+      console.log(e.target.files[0].type);
+      e.target.files = null;
       console.log('not image');
       setErrorMessage('Only image file is allowed');
       console.log(errorMessage);
@@ -70,13 +72,13 @@ const UploadCard = ({ id, des }) => {
           accept="image/*"
           className="hidden"
           disabled={id === '' || des === ''}
-          onChange={(e) => checkFile(e.target.files[0])}
+          onChange={(e) => checkFile(e)}
         />
       </label>
       <div className="flex items-center justify-center">
         <button
           className="btn btn-ghost rounded-md w-full h-6 my-8 normal-case text-base btn btn-outline btn-primary"
-          disabled={errorMessage === ''}
+          disabled={errorMessage === '' || errorMessage === 'Only image file is allowed'}
           onClick={handleUpload}
         >
           Create
