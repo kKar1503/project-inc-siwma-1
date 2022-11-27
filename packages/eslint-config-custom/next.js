@@ -31,6 +31,7 @@ module.exports = {
     quotes: ['error', 'single', { allowTemplateLiterals: true, avoidEscape: true }],
     'object-curly-newline': 'off',
     'operator-linebreak': ['error', 'after', { overrides: { '?': 'before', ':': 'before' } }],
+    'react/no-array-index': 'off',
     'no-unused-vars': [
       'warn',
       {
