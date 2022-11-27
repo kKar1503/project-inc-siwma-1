@@ -16,6 +16,7 @@ const UploadCard = ({ id }) => {
       console.log(img.type);
       console.log('not image');
       setErrorMessage('Only image file is allowed');
+      console.log(errorMessage);
     }
   };
 
@@ -75,7 +76,7 @@ const UploadCard = ({ id }) => {
       <div className="flex items-center justify-center">
         <button
           className="btn btn-ghost rounded-md w-full h-6 my-8 normal-case text-base btn btn-outline btn-primary"
-          disabled={image === null}
+          disabled={errorMessage === ''}
           onClick={handleUpload}
         >
           Create
