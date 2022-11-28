@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
-import { QueryClientProvider, useQueries, QueryClient } from 'react-query';
-import PropTypes from 'prop-types';
+import { QueryClientProvider, useQueries, QueryClient, useMutation } from 'react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import AdminPageLayout from '../components/layouts/AdminPageLayout';
@@ -14,12 +13,16 @@ import supabase from './api/supabase';
 function parseUserData(data) {
   return {
     ...data,
+    company: data.companies.name,
   };
 }
 
 function parseCompanyData(data) {
   const result = [];
-  data.map((e) => result.push(e.name));
+  // eslint-disable-next-line array-callback-return
+  data.map((e) => {
+    result.push({ id: e.id, name: e.name });
+  });
   return result;
 }
 
@@ -33,15 +36,14 @@ const EditUser = () => {
   const router = useRouter();
   const { userid } = router.query;
 
-  console.log(userid);
-
   const queryClient = new QueryClient();
 
   // SET ALL USER DATA HERE (PROBABLY USE THE API CALL TO GET USER DATA)
   const queries = useQueries([
     {
       queryKey: ['getUser', userid],
-      queryFn: async () => supabase.from('users').select('*').eq('id', userid),
+      queryFn: async () =>
+        supabase.from('users').select(`*, companies:companyid(name)`).eq('id', userid),
       keepPreviousData: true,
     },
     {
@@ -62,8 +64,6 @@ const EditUser = () => {
 
   const user = isLoading || !getUserQuery.data.data ? {} : parseUserData(getUserQuery.data.data[0]);
 
-  // console.log(user);
-
   const companies =
     isLoading || !getCompaniesQuery.data.data ? [] : parseCompanyData(getCompaniesQuery.data.data);
 
@@ -83,6 +83,28 @@ const EditUser = () => {
     // console.log(selectedFile);
     // ADD API CALL HERE (UPDATES FIELD TO DB AND UPDATES PROFILE PIC)
   }, [selectedFile]);
+
+  const [fullname, setFullname] = useState(user ? user.fullname : '');
+  const [email, setEmail] = useState(user ? user.email : '');
+  const [company, setCompany] = useState(user ? user.companyid : '');
+  const [phone, setPhone] = useState(user ? user.phone : '');
+
+  const { mutate, isError } = useMutation({
+    mutationKey: ['updateUser'],
+    mutationFn: async () =>
+      supabase
+        .from('users')
+        .update({
+          fullname,
+          email,
+          companyid: company,
+          phone,
+        })
+        .eq('id', user.id),
+  });
+  const onClickHandler = () => {
+    mutate();
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -127,12 +149,17 @@ const EditUser = () => {
               <div className="flex flex-col w-full min-w-96 gap-12">
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col md:flex-row gap-4">
-                    <ToggleSelect value="Softmicro" options={companies} label="Company" />
-                    <ToggleEdit value={user ? user.fullname : ''} label="Full Name" />
+                    <ToggleSelect
+                      value={company}
+                      options={companies}
+                      label="Company"
+                      onSave={setCompany}
+                    />
+                    <ToggleEdit value={fullname} label="Full Name" onSave={setFullname} />
                   </div>
                   <div className="flex flex-col md:flex-row gap-4">
-                    <ToggleEdit value={user ? user.email : ''} label="E-mail" />
-                    <ToggleEdit value={user ? user.phone : ''} label="Mobile Number" />
+                    <ToggleEdit value={email} label="E-mail" onSave={setEmail} />
+                    <ToggleEdit value={phone} label="Mobile Number" onSave={setPhone} />
                   </div>
                   <TogglePass />
                   <div className="flex flex-col gap-4">
@@ -146,6 +173,9 @@ const EditUser = () => {
             </div>
           </div>
           <div className="flex px-8 pb-8 justify-end">
+            <button className="btn btn-success mr-8" onClick={onClickHandler}>
+              Save
+            </button>
             <a href="./users" className="btn btn-primary">
               Return To Users
             </a>

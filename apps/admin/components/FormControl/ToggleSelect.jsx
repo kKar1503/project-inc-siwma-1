@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const ToggleSelect = ({ value, options, label }) => {
+const ToggleSelect = ({ value, options, label, onSave }) => {
   const [initialValue, setInitialValue] = useState(value);
   const [isEditing, setIsEditing] = useState(false);
   const [field, setField] = useState(value);
@@ -31,10 +31,16 @@ const ToggleSelect = ({ value, options, label }) => {
       </div>
       <div className="form-control w-full">
         <div className="input-group">
-          <select className="font-semibold select select-bordered grow" disabled={!isEditing}>
+          <select
+            className="font-semibold select select-bordered grow"
+            disabled={!isEditing}
+            onChange={(e) => {
+              onSave(e.target.value);
+            }}
+          >
             {options.map((option) => (
-              <option value={field} selected={field === option}>
-                {option}
+              <option value={option.id} selected={field === option.name}>
+                {option.name}
               </option>
             ))}
           </select>
@@ -48,6 +54,7 @@ ToggleSelect.propTypes = {
   value: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.string),
   label: PropTypes.string,
+  onSave: PropTypes.func,
 };
 
 export default ToggleSelect;
