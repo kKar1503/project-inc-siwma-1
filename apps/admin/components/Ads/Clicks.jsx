@@ -1,9 +1,10 @@
 import { useQuery } from 'react-query';
 
 import { TbHandClick } from 'react-icons/tb';
-import supabase from '../../supabase';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 const Clicks = () => {
+  const supabase = useSupabaseClient();
   const fetchClicks = async () => supabase.from('advertisements').select('clicks (id)');
 
   const { data, isFetching } = useQuery('getClicks', fetchClicks);

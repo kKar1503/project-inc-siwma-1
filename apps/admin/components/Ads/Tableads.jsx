@@ -1,7 +1,8 @@
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import supabase from '../../supabase';
 
 const Tableads = () => {
+  const supabase = useSupabaseClient();
   const queryClient = useQueryClient();
   const setActive = async ({ active, id }) =>
     supabase.from('advertisements').update({ active }).eq('id', id);
