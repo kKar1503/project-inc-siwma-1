@@ -19,6 +19,7 @@
     "prop-types": "^15.8.1",
     "react-hook-form": "^7.39.3",
     "react-icons": "^4.6.0",
+    "react-loading-skeleton": "^3.1.0",
     "react-query": "^3.39.2"
   }
 }
