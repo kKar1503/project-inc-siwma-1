@@ -40,7 +40,6 @@ const EditCat = ({ id }) => {
     <div>
       <div>
         <h3 className="text-lg font-bold">Edit Category</h3>
-        <p className="text-sm">Edit Category information</p>
       </div>
       <form
         onSubmit={async (e) => {
@@ -53,7 +52,7 @@ const EditCat = ({ id }) => {
       >
         <div className="form-control">
           <div className="label">
-            <span className="label-text font-semibold">Cateogry Name</span>
+            <span className="label-text font-semibold">Category Name</span>
           </div>
           <input
             name="categoryName"
