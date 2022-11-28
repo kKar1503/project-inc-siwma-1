@@ -46,7 +46,7 @@ const ProfileListing = () => {
       <h3 className="text-xl font-bold my-2">Your Listings</h3>
       <div ref={infiniteScrollRef}>
         <InfiniteScroll
-          className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6"
+          className="grid gap-3 grid-cols-2 md:grid-cols-4 lg:grid-cols-6"
           onLoadMore={handleInfiniteScrollLoadMore}
           loading={infiniteScrollMockDataLoading}
           reachedMaxItems={infiniteScrollMockData.length > 100}
