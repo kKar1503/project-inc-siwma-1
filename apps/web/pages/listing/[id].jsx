@@ -11,6 +11,7 @@ import Breadcrumbs from '../../components/listing/Breadcrumbs';
 import Title from '../../components/listing/Title';
 import Price from '../../components/listing/Price';
 import Detail from '../../components/listing/Detail';
+import Description from '../../components/listing/Description';
 import Carousel from '../../components/marketplace/carousel/Carousel';
 
 const Listing = () => {
@@ -96,6 +97,8 @@ const Listing = () => {
                   <Detail title="Name" detail="lmao" />
                   <Detail title="Name" detail="lmao" />
                 </FlexContainer>
+                <Title title="Description" />
+                <Description description={listing[0].description} />
               </div>
             </FlexContainer>
           </div>
