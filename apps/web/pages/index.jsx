@@ -122,7 +122,7 @@ const MarketplacePage = () => {
         <Carousel name="categories">
           {categoriesData &&
             categoriesData.map(({ id, name, image }) => (
-              <CategoryListingItem key={id} name={name} img={null} href={`/categories/${name}`} />
+              <CategoryListingItem key={id} name={name} img={null} href={`/category/${name}`} />
             ))}
         </Carousel>
 
