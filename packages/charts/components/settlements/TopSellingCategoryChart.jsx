@@ -7,7 +7,7 @@ const color = '#6D96F2';
 
 const TopSellingCategoryChart = ({ data }) => (
   <VictoryChart domainPadding={50}>
-    <Title text="Top 5 Selling Catagories" />
+    <Title text="Top 5 Selling Categories" />
     <VictoryAxis dependentAxis style={{ grid: { stroke: '#DADADA' } }} tickCount={7} />
     <VictoryAxis dependentAxis label="Posts" />
     <VictoryBar

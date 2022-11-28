@@ -7,6 +7,7 @@ import {
   VictoryClipContainer,
   VictoryVoronoiContainer,
   VictoryTooltip,
+  VictoryLegend,
 } from 'victory';
 import { useId } from 'react';
 import Title from '../Title';
@@ -36,7 +37,7 @@ const NumberOfBuyAndSellChart = ({ data }) => {
   const buyId = useId();
   return (
     <VictoryChart
-      domainPadding={{ y: [20, 20] }}
+      domainPadding={{ y: [50, 50] }}
       containerComponent={
         <VictoryVoronoiContainer
           mouseFollowTooltips
@@ -63,7 +64,7 @@ const NumberOfBuyAndSellChart = ({ data }) => {
         />
       </VictoryGroup>
       <VictoryAxis
-        style={{ tickLabels: { fontSize: 8 } }}
+        style={{ tickLabels: { fontSize: 12 } }}
         tickFormat={(i) => months[i - 1]}
         tickValues={Array(12)
           .fill()
@@ -71,6 +72,13 @@ const NumberOfBuyAndSellChart = ({ data }) => {
         label="Month"
       />
       <VictoryAxis dependentAxis tickCount={7} label="Companies" />
+      <VictoryLegend
+        x={275}
+        y={40}
+        orientation="horizontal"
+        data={['Sell', 'Buy'].map((name) => ({ name, symbol: { type: 'square' } }))}
+        colorScale={colors}
+      />
     </VictoryChart>
   );
 };
