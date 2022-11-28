@@ -112,6 +112,14 @@ const EditUser = () => {
       supabase.from('users_comments').update({ comments: comment }).eq('userid', user.id),
   });
 
+  const { mutate: sendPasswordEmail, isError: passwordEmailError } = useMutation({
+    mutationKey: ['sendPasswordComment'],
+    mutationFn: async () =>
+      supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'http://localhost:3001.com/forget-password',
+      }),
+  });
+
   const onClickHandler = () => {
     editUser();
     if (comment !== 'No Comment' || comment !== commentData.comments) {
@@ -174,7 +182,7 @@ const EditUser = () => {
                     <ToggleEdit value={email} label="E-mail" onSave={setEmail} />
                     <ToggleEdit value={phone} label="Mobile Number" onSave={setPhone} />
                   </div>
-                  <TogglePass />
+                  <TogglePass sendEmail={sendPasswordEmail} />
                   <div className="flex flex-col gap-4">
                     <ToggleEditArea value={comment} label="Comments" onSave={setComment} />
                   </div>
