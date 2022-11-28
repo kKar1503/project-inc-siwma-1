@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import ActionParam from '../ActionParam';
+import DataContext from '../../DataContext';
 
 // This is the base table component that every other table is built on.
 
@@ -42,12 +43,12 @@ const BaseTableParam = ({
   className,
   columnKeys,
   data,
-  paramId,
   table,
-  optionData,
+
   footer,
 }) => {
   const [options, setOptions] = useState([]);
+  const { paramIds, setParamIds } = useContext(DataContext);
 
   if (!data) {
     return (
@@ -89,7 +90,7 @@ const BaseTableParam = ({
                       <td>
                         <label>
                           <input
-                            disabled={optionData !== undefined ? table !== optionData.table : false}
+                            disabled={paramIds !== undefined ? table !== paramIds.table : false}
                             type="checkbox"
                             className="checkbox"
                             onChange={(e) => {
@@ -97,16 +98,16 @@ const BaseTableParam = ({
                                 const newOptions = [...options, row.id];
                                 setOptions(newOptions);
                                 console.log(newOptions);
-                                paramId({ options: newOptions, table });
+                                setParamIds({ options: newOptions, table });
                               } else {
                                 const newOptions = options.filter((_, index) => index !== rowindex);
                                 setOptions(newOptions);
 
                                 if (newOptions.length !== 0) {
-                                  paramId({ options: newOptions, table });
+                                  setParamIds({ options: newOptions, table });
                                 } else {
                                   setOptions([]);
-                                  paramId(undefined);
+                                  setParamIds(undefined);
                                 }
                               }
                             }}
@@ -153,12 +154,7 @@ const propTypes = {
   columnKeys: PropTypes.arrayOf(PropTypes.string),
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.
-  paramId: PropTypes.func,
   table: PropTypes.string,
-  optionData: PropTypes.shape({
-    options: PropTypes.arrayOf(PropTypes.number),
-    table: PropTypes.string,
-  }),
   footer: PropTypes.element,
 };
 
