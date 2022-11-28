@@ -8,7 +8,11 @@ import TableButton from './TableButton';
 
 const CompanyProfilesPreviewTable = ({ data, columns }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [searchbar, setSearchbar] = React.useState('');
 
+  const handleSearch = (event) => {
+    setSearchbar(event.target.value);
+  };
   return (
     <BaseTable
       header={
@@ -24,7 +28,12 @@ const CompanyProfilesPreviewTable = ({ data, columns }) => {
               <option>15 per page</option>
               <option>50 per page</option>
             </select>
-            <SearchBar placeholder="Search by name" />
+            <SearchBar
+              ref={searchbar}
+              value={searchbar}
+              setValue={handleSearch}
+              placeholder="Search by name"
+            />
           </div>
         </div>
       }
@@ -33,6 +42,7 @@ const CompanyProfilesPreviewTable = ({ data, columns }) => {
       showCheckbox
       columns={columns}
       data={data}
+      filterString={searchbar}
       footer={
         <div className="flex justify-end bg-none">
           <div className="flex justify-end bg-none">
@@ -76,7 +86,7 @@ CompanyProfilesPreviewTable.propTypes = {
     PropTypes.shape({
       Header: PropTypes.string,
       accessor: PropTypes.string,
-      Cell: PropTypes.element,
+      Cell: PropTypes.func,
     })
   ),
 };

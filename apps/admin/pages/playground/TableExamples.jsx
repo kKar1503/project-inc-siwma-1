@@ -156,20 +156,6 @@ const Page = () => {
     ],
     []
   );
-  //   const subColumns = registeredUsersColumns.slice(0);
-  //   subColumns.push({
-  //     id: 'button',
-  //     accessor: 'firstName',
-  //     Cell: ({ value }) => (
-  //       <a
-  //         onClick={() => {
-  //           console.log('clicked value', value);
-  //         }}
-  //       >
-  //         Button
-  //       </a>
-  //     ),
-  //   });
 
   const pendingInvitesData = React.useMemo(
     () => [
