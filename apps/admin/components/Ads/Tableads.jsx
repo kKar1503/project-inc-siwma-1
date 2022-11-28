@@ -7,7 +7,13 @@ const Tableads = () => {
     supabase.from('advertisements').update({ active }).eq('id', id);
   const fetchAds = async () => supabase.rpc('get_active_ads');
   const { data, isFetching } = useQuery('ads', fetchAds);
-  const refresh = { onSuccess: () => queryClient.invalidateQueries('ads') };
+  const refresh = {
+    onSuccess: () => {
+      queryClient.invalidateQueries('ads');
+      queryClient.invalidateQueries('activeAd');
+    },
+  };
+
   const { mutate } = useMutation(setActive, refresh);
   return (
     <table className="table table-compact w-full">
