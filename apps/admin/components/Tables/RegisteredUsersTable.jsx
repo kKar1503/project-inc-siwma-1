@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useQueries, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import BaseTable from './BaseTable';
+import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 import pic from '../../public/avatar.png';

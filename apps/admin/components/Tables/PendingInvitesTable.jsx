@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useQueries, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import BaseTable from './BaseTable';
+import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 import supabase from '../../pages/api/supabase';
