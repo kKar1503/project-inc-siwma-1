@@ -62,9 +62,6 @@ const RegisteredUsersTable = ({ className }) => {
               {userCount} entries
             </h1>
           </div>
-          <div className="flex flex-row gap-4">
-            <SearchBar placeholder="Search by name" />
-          </div>
         </div>
       }
       headings={['User', 'E-mail', 'Company', 'Mobile Number', 'Status']}
