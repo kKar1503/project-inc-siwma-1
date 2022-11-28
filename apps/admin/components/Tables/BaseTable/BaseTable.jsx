@@ -135,7 +135,7 @@ const BaseTable = ({
                             className="h-52 text-center"
                             colSpan={headings.length + 1 + (showCheckbox ? 1 : 0)}
                           >
-                            <h2 className="font-bold text-lg">No companies found</h2>
+                            <h2 className="font-bold text-lg">No data found</h2>
                           </td>
                         </tr>
                       )))
