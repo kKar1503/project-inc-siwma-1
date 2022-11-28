@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useQuery } from 'react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Log from '@inc/utils/logger';
@@ -7,7 +8,7 @@ import CardBackground from '../components/CardBackground';
 import Input from '../components/Input';
 import ListingForm from '../components/layouts/ListingForm';
 
-const NewListing = () => {
+const NewListing = ({ session }) => {
   const client = useSupabaseClient();
 
   const [allCategories, setAllCategories] = React.useState([]);
@@ -44,7 +45,7 @@ const NewListing = () => {
       Log('green', data);
       setAllCategories(data);
     }
-  }, [status, data]);
+  }, [session, status, data]);
 
   return (
     <main>
@@ -125,6 +126,10 @@ const NewListing = () => {
       </div>
     </main>
   );
+};
+
+NewListing.propTypes = {
+  session: PropTypes.func,
 };
 
 export default NewListing;
