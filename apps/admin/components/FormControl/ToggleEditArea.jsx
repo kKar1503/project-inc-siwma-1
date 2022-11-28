@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const ToggleEditArea = ({ value, label, maxLength }) => {
+const ToggleEditArea = ({ value, label, maxLength, onSave }) => {
   const [initialValue, setInitialValue] = useState(value);
   const [isEditing, setIsEditing] = useState(false);
   const [field, setField] = useState(value);
@@ -28,6 +28,7 @@ const ToggleEditArea = ({ value, label, maxLength }) => {
               onClick={() => {
                 setIsEditing(!isEditing);
                 setInitialValue(field);
+                onSave(field);
                 // ADD API CALL HERE (UPDATES FIELD TO DB)
               }}
             >
@@ -55,6 +56,7 @@ ToggleEditArea.propTypes = {
   value: PropTypes.string,
   label: PropTypes.string,
   maxLength: PropTypes.number,
+  onSave: PropTypes.func,
 };
 
 export default ToggleEditArea;
