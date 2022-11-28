@@ -26,7 +26,7 @@ const Clicks = () => {
         </p>
         <p>Average clicks</p>
       </div>
-      <TbHandClick fontSize={80} style={{ color: '#34D399' }} />
+      <TbHandClick fontSize={80} className="text-green-500" />
     </>
   );
 };
