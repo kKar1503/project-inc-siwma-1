@@ -1,4 +1,4 @@
-import ProfileListing from '../components/profile/profileListing';
+import ProfileListing from '../components/profile/ProfileListing';
 
 const ComponentTest = () => {
   console.log('test');
