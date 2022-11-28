@@ -5,7 +5,6 @@ import supabase from '../../supabase';
 
 const Clicks = () => {
   const fetchClicks = async () => supabase.from('advertisements').select('clicks (id)');
-  const fetchAdv = async () => supabase.from('clicks').select('id');
 
   const { data, isFetching } = useQuery('getClicks', fetchClicks);
   const count = () => {
