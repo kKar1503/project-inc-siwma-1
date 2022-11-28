@@ -97,7 +97,10 @@ const ProductListingItem = ({
         {/* Listing content */}
         <div className="p-2 pb-4 w-5/6">
           {!open ? (
-            <SoldBadge />
+            <div className="w-full">
+              <SellBadge />
+              <SoldBadge />
+            </div>
           ) : (
             (type === Enum.LISTING_TYPE.BUY && <BuyBadge />) ||
             (type === Enum.LISTING_TYPE.SELL && <SellBadge />)

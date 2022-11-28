@@ -1,7 +1,7 @@
-const SoldBadge = () => (
+const BoughtBadge = () => (
   <div className="badge badge-md bg-[#aaaaaa] border-none text-white rounded-lg shadow-md ml-1">
-    Sold
+    Bought
   </div>
 );
 
-export default SoldBadge;
+export default BoughtBadge;
