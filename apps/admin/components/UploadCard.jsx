@@ -64,7 +64,7 @@ const UploadCard = ({ id }) => {
           <p className="text-xs text-gray-600 text-center my-6">
             Click to upload or drag and drop PNG or JPG (MAX. 1200px x 900px)
           </p>
-          {errorMessage !== '' && <p className="text-center">{errorMessage}</p>}
+          {errorMessage !== '' && <p className="text-center text-red-500 pt-4">{errorMessage}</p>}
         </span>
         <input
           type="file"
