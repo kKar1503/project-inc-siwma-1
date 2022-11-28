@@ -14,8 +14,8 @@ const CreateCategory = () => {
   // });
 
   const { data, isLoading } = useQuery({
-    queryKey: ['categories'],
-    queryFn: async () => supabase.from('category').select(`id, name, description`),
+    queryKey: ['newCategory'],
+    queryFn: async () => supabase.from('category').select(`id, name`),
   });
 
   const addCategory = async (e) => {
