@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const TogglePass = ({ alertFunc, sendEmail }) => {
+const TogglePass = ({ alertFunc, sendEmail, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [field, setField] = useState('');
   const [confirmField, setConfirmField] = useState('');
@@ -59,7 +59,8 @@ const TogglePass = ({ alertFunc, sendEmail }) => {
                       setIsEditing(!isEditing);
                       setField('');
                       setConfirmField('');
-                      alert('Password Changed');
+                      // alert('Password Changed');
+                      onSave(field);
                       // ADD API CALL HERE (UPDATES FIELD TO DB)
                       // alerts will also probably be changed to a boolean to activate daisyui alert
                       if (alertFunc) {
@@ -91,6 +92,7 @@ const TogglePass = ({ alertFunc, sendEmail }) => {
 TogglePass.propTypes = {
   alertFunc: PropTypes.func,
   sendEmail: PropTypes.func,
+  onSave: PropTypes.func,
 };
 
 export default TogglePass;

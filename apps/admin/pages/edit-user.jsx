@@ -88,7 +88,7 @@ const EditUser = () => {
   const [email, setEmail] = useState(user ? user.email : '');
   const [company, setCompany] = useState(user ? user.companyid : 0);
   const [phone, setPhone] = useState(user ? user.phone : '');
-  const [password, setPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [comment, setComment] = useState(
     commentData && !commentData === {} ? commentData.comments : ''
   );
@@ -127,6 +127,11 @@ const EditUser = () => {
       }),
   });
 
+  const { mutate: editPassword, isError: passwordError } = useMutation({
+    mutationKey: ['updatePassword'],
+    mutationFn: async () => supabase.auth.admin.updateUserById(userid, { password: newPassword }),
+  });
+
   const onClickHandler = () => {
     editUser();
     if (comment !== '' || comment !== commentData.comments) {
@@ -135,6 +140,9 @@ const EditUser = () => {
       } else {
         editComment();
       }
+    }
+    if (newPassword !== '') {
+      editPassword();
     }
   };
 
@@ -193,7 +201,7 @@ const EditUser = () => {
                     <ToggleEdit value={email} label="E-mail" onSave={setEmail} />
                     <ToggleEdit value={phone} label="Mobile Number" onSave={setPhone} />
                   </div>
-                  <TogglePass sendEmail={sendPasswordEmail} />
+                  <TogglePass sendEmail={sendPasswordEmail} onSave={setNewPassword} />
                   <div className="flex flex-col gap-4">
                     <ToggleEditArea value={comment} label="Comments" onSave={setComment} />
                   </div>
