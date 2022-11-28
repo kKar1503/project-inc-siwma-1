@@ -23,7 +23,7 @@ const parseData = (data) =>
   data.map((e) => ({
     id: e.id,
     name: e.name,
-    display_name: e.description,
+    display_name: e.display_name,
     parameter_type_id: e.parameter_type.id,
     parameter_type_name: e.parameter_type.name,
     datatype_id: e.datatype.id,
@@ -67,11 +67,11 @@ const AvailableParametersTable = ({ className, id }) => {
           </div>
         </div>
       }
-      headings={['Parameter Name', 'Data type', 'Active']}
+      headings={['Parameter Name', 'Display Name', 'Parameter Type', 'Data type', 'Active']}
       headingColor="bg-warning"
       showCheckbox
       className={className}
-      columnKeys={['name', 'parameter_type_name', 'active']}
+      columnKeys={['name', 'display_name', 'parameter_type_name', 'datatype_name', 'active']}
       data={status !== 'success' ? undefined : parseData(data?.data)}
       table="Available"
       footer={
