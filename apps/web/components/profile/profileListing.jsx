@@ -17,8 +17,8 @@ const ProfileListing = () => {
     status: listingStatus,
     isLoading: listingIsLoading,
     error: listingError,
-  } = useQuery(['get_listings'], async () =>
-    supabase.rpc('get_listings', { item_offset: 0, item_limit: 100 })
+  } = useQuery(['get_listings_ordered'], async () =>
+    supabase.rpc('get_listings_ordered', { item_offset: 0, item_limit: 100 })
   );
 
   console.log(listingAPIData);
