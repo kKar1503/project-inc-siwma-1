@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { useRef } from 'react';
 import { hasFileExt, arrayToString } from '@inc/utils';
 import { useFormContext, useWatch } from 'react-hook-form';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 /**
  * Wrapper component for a react hook form file input
@@ -16,6 +18,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
  * @param {{ name: [string], format: [string]}} allowedExts Filetypes accepted by the input
  * @param {[string]} allowedExts.name Names of the file types accepted by the input (svg, png, jpg)
  * @param {[string]} allowedExts.format The input format that corresponds with the filetypes supplied (image/svg, image/png, image/jpg)
+ * @param {boolean} isLoading Whether or not the component is in a loading state
  * @param {string} className Custom classes
  * @param {{}} style Custom styles
  * @param {{ className: string, style: {} }} imageProps Props for the image preview
@@ -30,6 +33,7 @@ const FormImageInput = ({
   required,
   success,
   allowedExts,
+  isLoading,
   className,
   style,
   imageProps,
@@ -151,18 +155,23 @@ const FormImageInput = ({
     >
       {
         // If a valid image file is selected, render the image
-        (selectedFile && (
+        // If the component is in a loading state, render a spooky skeleton
+        ((selectedFile || isLoading) && (
           <div className="rounded-full flex flex-1 justify-center items-center py-6">
             <div
               className={cx('h-36 w-36 relative', imageProps ? imageProps.className : '')}
               style={imageProps ? imageProps.style : {}}
             >
-              <Image
-                src={selectedFile.src}
-                alt="company logo"
-                className="rounded-full object-cover"
-                fill
-              />
+              {isLoading ? (
+                <Skeleton className="!rounded-full h-full" />
+              ) : (
+                <Image
+                  src={selectedFile.src}
+                  alt="company logo"
+                  className="rounded-full object-cover"
+                  fill
+                />
+              )}
             </div>
           </div>
         )) || (
@@ -226,6 +235,7 @@ const propTypes = {
     name: PropTypes.arrayOf(PropTypes.string).isRequired,
     format: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
+  isLoading: PropTypes.bool,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   imageProps: PropTypes.exact({
