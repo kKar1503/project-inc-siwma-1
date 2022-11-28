@@ -13,7 +13,7 @@ import supabase from './api/supabase';
 function parseUserData(data) {
   return {
     ...data,
-    company: data.companies.name,
+    company: data.companies === null ? '' : data.companies.name,
   };
 }
 
