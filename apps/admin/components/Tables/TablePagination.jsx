@@ -21,6 +21,7 @@ const TablePagination = ({
   onChange,
   isLoading,
   className,
+  selectedColor,
   style,
 }) => {
   // Checks if the data is still being fetched from supabase
@@ -52,11 +53,11 @@ const TablePagination = ({
         key={`pagination-btn-${i}`}
         selectedIndex={selectedIndex}
         setSelectedIndex={onChange}
-        selectedColor="bg-primary"
+        selectedColor={cx(selectedColor ?? 'bg-primary')}
         // Make the left side of the first button and the right side of the last button rounded,
         // also make the entire button rounded if it is the only button
         className={cx(
-          'hover:bg-primary',
+          `hover:${selectedColor ?? 'bg-primary'}`,
           {
             'rounded-l-lg': i === 0,
             'rounded-r-lg': i >= buttonCount - 1,
@@ -78,6 +79,7 @@ const propTypes = {
   selectedIndex: PropTypes.number.isRequired,
   isLoading: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
+  selectedColor: PropTypes.string,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
