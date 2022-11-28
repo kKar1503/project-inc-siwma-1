@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const TogglePass = ({ alertFunc }) => {
+const TogglePass = ({ alertFunc, sendEmail }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [field, setField] = useState('');
   const [confirmField, setConfirmField] = useState('');
@@ -21,11 +21,7 @@ const TogglePass = ({ alertFunc }) => {
         {!isEditing && (
           <button
             className="btn btn-active btn-link pointer-events-auto ml-1 px-2"
-            onClick={
-              () =>
-                // ADD API CALL HERE (SENDS EMAIL TO USER)
-                1 // Remove this line, eslint very unhappy that I add a function with no body
-            }
+            onClick={() => sendEmail()}
           >
             SEND E-MAIL
           </button>
@@ -94,6 +90,7 @@ const TogglePass = ({ alertFunc }) => {
 
 TogglePass.propTypes = {
   alertFunc: PropTypes.func,
+  sendEmail: PropTypes.func,
 };
 
 export default TogglePass;
