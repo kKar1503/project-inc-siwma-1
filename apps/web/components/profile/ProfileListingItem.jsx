@@ -2,6 +2,7 @@
 import { Enum } from '@inc/database';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { HiDotsVertical } from 'react-icons/hi';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
@@ -21,6 +22,16 @@ const ProductListingItem = ({
   setInfiniteScrollMockData,
 }) => {
   const supabase = useSupabaseClient();
+  const router = useRouter();
+
+  const EditListing = (listid) => {
+    // eslint-disable-next-line no-alert
+    alert(`WIP: listid: ${listid}`);
+  };
+
+  const CopyListing = (listid) => {
+    router.push(`/new-listing?copy=1&listing=${listid}`);
+  };
 
   const DeleteListing = async (listid) => {
     await supabase.from('listing').delete().eq('id', listid);
@@ -56,10 +67,10 @@ const ProductListingItem = ({
         <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
           {/* change to a tags accordingly if user needs to be redirected */}
           <li>
-            <button>Edit Listing</button>
+            <button onClick={() => EditListing(id)}>Edit Listing</button>
           </li>
           <li>
-            <button>Duplicate Listing</button>
+            <button onClick={() => CopyListing(id)}>Duplicate Listing</button>
           </li>
           {visibility ? (
             <li>
@@ -84,7 +95,7 @@ const ProductListingItem = ({
         </div>
 
         {/* Listing content */}
-        <div className="p-2 pb-4">
+        <div className="p-2 pb-4 w-5/6">
           {!open ? (
             <SoldBadge />
           ) : (
@@ -93,7 +104,7 @@ const ProductListingItem = ({
           )}
           {visibility === false && <ArchiveBadge />}
 
-          <p className="font-bold">{name}</p>
+          <p className="font-bold truncate w-full">{name}</p>
         </div>
       </Link>
     </div>
