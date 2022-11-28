@@ -17,7 +17,7 @@ const EditUser = () => {
   const companies = ['Company 1', 'Company 2', 'Company 3'];
   const mobileNumber = '9232 3232';
   const profilePic =
-    'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg';
+    'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg';
 
   const [selectedFile, setSelectedFile] = useState(null);
 
