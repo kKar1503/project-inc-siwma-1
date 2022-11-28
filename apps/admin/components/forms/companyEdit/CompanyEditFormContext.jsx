@@ -98,7 +98,7 @@ const CompanyEditFormContext = ({ queryData, onSuccessChange, isLoading, classNa
     if (companyLogo !== company.companyLogo) {
       // The company logo input changed, update it
       // Check if a image was selected
-      if (companyLogo && companyLogo.src !== company.companyLogo) {
+      if (companyLogo && companyLogo.src !== company.companyLogo.src) {
         // Upload the company logo to the bucket
         await supabase.storage.from('company-image-bucket').upload(companyLogo.name, companyLogo);
 
