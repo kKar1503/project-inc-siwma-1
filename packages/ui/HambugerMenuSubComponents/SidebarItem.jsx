@@ -19,15 +19,17 @@ const SidebarItem = ({ name, customIcon, redirectLink, children }) => {
 
   // ------------------ Handles -----------------
 
+  // toggle state : has children
   const toggle = () => {
     setOpen(!open);
   };
 
+  // redirect state : no children
   const redirect = () => {
     router.push(redirectLink);
   };
 
-  const onClickHandle = () => (children ? toggle() : redirect(redirectLink));
+  const onClickHandle = children ? toggle : redirect;
 
   // ------------------ Return -----------------
   return (
