@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { useQuery } from 'react-query';
 import UploadCard from '../components/UploadCard';
 import supabase from '../supabase';
+import NavBar from '../components/NavBar';
+import AdminPageLayout from '../components/layouts/AdminPageLayout';
 
 const AdminUpload = () => {
   const [userInput, setUserInput] = useState('');
@@ -22,11 +24,12 @@ const AdminUpload = () => {
   };
 
   return (
-    <>
+    <div className="w-full p-8 gap-8 overflow-auto xl:max-h-screen">
+      <NavBar />
       <nav className="text-black ml-10 mt-24 mb-14" aria-label="Breadcrumb">
         <ol className="list-none p-0 inline-flex">
           <li className="flex items-center">
-            <Link href="/home" className="hover:underline">
+            <Link href="/AdvertisementDashboard" className="hover:underline">
               Advertisement
             </Link>
             <svg
@@ -38,7 +41,7 @@ const AdminUpload = () => {
             </svg>
           </li>
           <li className="flex items-center">
-            <Link href="/home" className="hover:underline">
+            <Link href="/AdminUpload" className="hover:underline">
               Upload
             </Link>
             <svg
@@ -103,8 +106,10 @@ const AdminUpload = () => {
           <UploadCard id={selected} des={description} />
         </div>
       </div>
-    </>
+    </div>
   );
 };
+
+AdminUpload.getLayout = (page) => <AdminPageLayout pageName="AdminUpload">{page}</AdminPageLayout>;
 
 export default AdminUpload;
