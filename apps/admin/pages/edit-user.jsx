@@ -86,24 +86,25 @@ const EditUser = () => {
 
   const [fullname, setFullname] = useState(user ? user.fullname : '');
   const [email, setEmail] = useState(user ? user.email : '');
-  const [company, setCompany] = useState(user ? user.companyid : '');
+  const [company, setCompany] = useState(user ? user.companyid : 0);
   const [phone, setPhone] = useState(user ? user.phone : '');
+  const [password, setPassword] = useState('');
   const [comment, setComment] = useState(
-    commentData && !commentData === {} ? commentData.comments : 'No Comment'
+    commentData && !commentData === {} ? commentData.comments : ''
   );
+
+  function parseUpdateData() {
+    const updateData = {};
+    if (fullname !== '') updateData.fullname = fullname;
+    if (email !== '') updateData.email = email;
+    if (company !== '') updateData.companyid = company;
+    if (phone !== '') updateData.phone = phone;
+    return updateData;
+  }
 
   const { mutate: editUser, isError: userError } = useMutation({
     mutationKey: ['updateUser'],
-    mutationFn: async () =>
-      supabase
-        .from('users')
-        .update({
-          fullname,
-          email,
-          companyid: company,
-          phone,
-        })
-        .eq('id', user.id),
+    mutationFn: async () => supabase.from('users').update(parseUpdateData()).eq('id', user.id),
   });
 
   const { mutate: editComment, isError: commentUpdatError } = useMutation({
@@ -112,18 +113,28 @@ const EditUser = () => {
       supabase.from('users_comments').update({ comments: comment }).eq('userid', user.id),
   });
 
+  const { mutate: addComment, isError: commentInsertError } = useMutation({
+    mutationKey: ['insertComment'],
+    mutationFn: async () =>
+      supabase.from('users_comments').insert({ userid: user.id, comments: comment }),
+  });
+
   const { mutate: sendPasswordEmail, isError: passwordEmailError } = useMutation({
     mutationKey: ['sendPasswordComment'],
     mutationFn: async () =>
-      supabase.auth.resetPasswordForEmail(email, {
+      supabase.auth.resetPasswordForEmail(user.email, {
         redirectTo: 'http://localhost:3001.com/forget-password',
       }),
   });
 
   const onClickHandler = () => {
     editUser();
-    if (comment !== 'No Comment' || comment !== commentData.comments) {
-      editComment();
+    if (comment !== '' || comment !== commentData.comments) {
+      if (Object.keys(commentData).length === 0) {
+        addComment();
+      } else {
+        editComment();
+      }
     }
   };
 
