@@ -31,7 +31,7 @@ const parseData = (data) =>
     active: e.active ? `Active` : `Disabled`,
   }));
 
-const AvailableParametersTable = ({ className, id, paramId, optionData }) => {
+const AvailableParametersTable = ({ className, id }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const { data: parameters, isLoading } = useQuery({
@@ -73,8 +73,6 @@ const AvailableParametersTable = ({ className, id, paramId, optionData }) => {
       className={className}
       columnKeys={['name', 'parameter_type_name', 'active']}
       data={status !== 'success' ? undefined : parseData(data?.data)}
-      paramId={paramId}
-      optionData={optionData}
       table="Available"
       footer={
         <div className="flex justify-between bg-none">
@@ -109,11 +107,6 @@ const AvailableParametersTable = ({ className, id, paramId, optionData }) => {
 AvailableParametersTable.propTypes = {
   className: PropTypes.string,
   id: PropTypes.string,
-  paramId: PropTypes.func,
-  optionData: PropTypes.shape({
-    options: PropTypes.arrayOf(PropTypes.number),
-    table: PropTypes.string,
-  }),
 };
 
 export default AvailableParametersTable;

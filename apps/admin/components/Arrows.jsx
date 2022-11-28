@@ -1,11 +1,13 @@
 import { useQueries, useQueryClient, useQuery } from 'react-query';
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import supabase from '../supabaseClient';
+import DataContext from '../DataContext';
 
-const Arrows = ({ id, optionData, paramId }) => {
+const Arrows = ({ id }) => {
   const queryClient = useQueryClient();
-
+  const { paramIds, setParamIds } = useContext(DataContext);
   // Can use next time?
   // const useMakeAvailable = async (e) => {
   //   e.preventDefault();
@@ -29,7 +31,7 @@ const Arrows = ({ id, optionData, paramId }) => {
 
   const makeAvailable = async (e) => {
     const options = [];
-    optionData.options.map((item) => options.push(item));
+    paramIds.options.map((item) => options.push(item));
     options.toString();
     await supabase
       .from('categories_parameters')
@@ -38,26 +40,24 @@ const Arrows = ({ id, optionData, paramId }) => {
       .filter('parameter', 'in', `(${options})`);
     queryClient.invalidateQueries({ queryKey: ['activeParameters'] });
     queryClient.invalidateQueries({ queryKey: ['categoryParameters'] });
-    paramId(undefined);
+    setParamIds(undefined);
   };
 
   const makeActive = async (e) => {
     const options = [];
-    optionData.options.map((item) => options.push({ category: id, parameter: item }));
+    paramIds.options.map((item) => options.push({ category: id, parameter: item }));
     await supabase.from('categories_parameters').insert(options);
 
     queryClient.invalidateQueries({ queryKey: ['activeParameters'] });
     queryClient.invalidateQueries({ queryKey: ['categoryParameters'] });
-    paramId(undefined);
+    setParamIds(undefined);
   };
 
   return (
     <div className="flex flex-col gap-5">
       <button
         className="btn btn-ghost bg-base-100 rounded-lg shadow-lg h-12 w-12 self-center items-center"
-        disabled={
-          optionData === undefined || (optionData !== undefined && optionData.table === 'Active')
-        }
+        disabled={paramIds === undefined || (paramIds !== undefined && paramIds.table === 'Active')}
         onClick={(e) => {
           makeActive(e);
         }}
@@ -67,7 +67,7 @@ const Arrows = ({ id, optionData, paramId }) => {
       <button
         className="btn btn-ghost bg-base-100 rounded-lg shadow-lg h-12 w-12 self-center items-center"
         disabled={
-          optionData === undefined || (optionData !== undefined && optionData.table === 'Available')
+          paramIds === undefined || (paramIds !== undefined && paramIds.table === 'Available')
         }
         onClick={(e) => {
           makeAvailable(e);
@@ -81,11 +81,6 @@ const Arrows = ({ id, optionData, paramId }) => {
 
 const propTypes = {
   id: PropTypes.string,
-  optionData: PropTypes.shape({
-    options: PropTypes.arrayOf(PropTypes.number),
-    table: PropTypes.string,
-  }),
-  paramId: PropTypes.func,
 };
 
 Arrows.propTypes = propTypes;
