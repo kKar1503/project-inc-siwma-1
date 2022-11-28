@@ -1,7 +1,9 @@
 import { useQuery, useQueries, useQueryClient } from 'react-query';
 import { useState } from 'react';
+import { FiUpload } from 'react-icons/fi';
 import { Alert } from '@inc/ui';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import crypto from 'crypto';
 
 const CreateCategory = () => {
   const queryClient = useQueryClient();
@@ -9,39 +11,65 @@ const CreateCategory = () => {
 
   const [displayAlert, setDisplayAlert] = useState(null);
   const [error, setError] = useState(null);
+  const [image, setImage] = useState(null);
+  const [colourMessage, setColourMessage] = useState('text-center text-green-500 pt-4');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const checkFile = async (e) => {
+    if (e.target.files[0].type === 'image/png' || e.target.files[0].type === 'image/jpeg') {
+      setImage(e.target.files[0]);
+      setErrorMessage('Please click "Create file"');
+      setColourMessage('text-center text-green-500 pt-4');
+    } else {
+      e.target.files = null;
+      setErrorMessage('Only image file is allowed');
+      setColourMessage('text-center text-red-500 pt-4');
+      setTimeout(() => {
+        setErrorMessage('');
+        setColourMessage('text-center text-green-500 pt-4');
+      }, 4000);
+    }
+  };
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ['newCategory'],
+  //   queryFn: async () => supabase.from('category').select(`id, name`),
+  // });
 
   // const { data, isLoading } = useQuery({
   //   queryKey: ['newCategory'],
   //   queryFn: async () => supabase.from('category').select(`id, name`),
   // });
 
+  const test = (uuid) => {
+    const parts = [];
+    parts.push(uuid.slice(0, 8));
+    parts.push(uuid.slice(8, 12));
+    parts.push(uuid.slice(12, 16));
+    parts.push(uuid.slice(16, 20));
+    parts.push(uuid.slice(20, 32));
+    return parts.join('-');
+  };
+
   const addCategory = async (e) => {
     e.preventDefault();
 
-    // const newCatName = { name: e.target.categoryName.value };
+    const { data, status } = await supabase
+      .from('category')
+      .insert({
+        name: `${e.target.categoryName.value}`,
+        description: `${e.target.categoryDescription.value}`,
+      })
+      .select('id');
 
-    // console.log(data.data);
-    // const currentCatNames = [];
+    const randomUUID = crypto.randomBytes(32).toString('hex');
+    const newUUID = test(randomUUID);
 
-    // for (let i = 0; i < data.data.length; i++) {
-    //   currentCatNames.push(data.data[i].name);
-    // } if (currentCatNames.includes(e.target.categoryName.value)) {
-    //   <Alert level="error" message="Duplicate category name found" className="mt-14" />;
-    // } else {
-    //   await supabase.from('category').insert({
-    //     name: `${e.target.categoryName.value}`,
-    //     description: `${e.target.categoryDescription.value}`,
-    //   });
-    //   <Alert level="success" message="Category successfully edited" className="mt-14" />;
-    // }
-
-    // console.log(currentCatNames);
-
-    const { data, status } = await supabase.from('category').insert({
-      name: `${e.target.categoryName.value}`,
-      description: `${e.target.categoryDescription.value}`,
-    });
-
+    await supabase.storage.from('category-image-bucket').upload(newUUID, image);
+    const { error: message } = await supabase
+      .from('category')
+      .update({ image: newUUID })
+      .eq('id', data[0].id);
+    console.log(message);
     if (status === 409) {
       setDisplayAlert(true);
       setError(true);
@@ -51,7 +79,8 @@ const CreateCategory = () => {
       }, 4000);
     } else {
       setDisplayAlert(true);
-
+      setErrorMessage('');
+      setImage(null);
       setTimeout(() => {
         setDisplayAlert(false);
       }, 4000);
@@ -95,6 +124,32 @@ const CreateCategory = () => {
             placeholder="Category Description"
             required
           />
+        </div>
+        <div className="w-auto">
+          <label className="flex justify-center w-full h-40 px-4 mt-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+            <span className="items-center space-x-2">
+              {image !== null ? (
+                <div>
+                  <p className="text-xl text-gray-600 text-center my-6">{image.name}</p>
+                </div>
+              ) : (
+                <div>
+                  <FiUpload className="h-16 w-16 text-black m-auto my-4" />
+                  <p className="text-xs text-gray-600 text-center my-6">
+                    Click to upload or drag and drop PNG or JPG (MAX. 1200px x 900px)
+                  </p>
+                </div>
+              )}
+              {errorMessage !== '' && <p className={colourMessage}>{errorMessage}</p>}
+            </span>
+            <input
+              type="file"
+              name="file_upload"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => checkFile(e)}
+            />
+          </label>
         </div>
         <div className="modal-action">
           <button
