@@ -35,8 +35,8 @@ const ActiveParametersTable = ({ className, id }) => {
         .select(
           `category(name), parameter(id, name, display_name, parameter_type(id, name), datatype(id, name), active)`
         )
-        .eq('category(id)', `1`),
-    // .eq('category(id)', `${id}`),
+        .eq('category(id)', `${id}`),
+    enabled: !!id,
   });
 
   return (
