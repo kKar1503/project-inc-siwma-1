@@ -18,9 +18,9 @@ import { CompanyEditForm, CompanyEditFormContext } from '../components/forms/com
 function parseData(data) {
   const parsedData = {
     ...data,
-    image: `https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/${
-      data.image || 'example.jpg'
-    }`,
+    image: data.image
+      ? `https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/${data.image}`
+      : null,
     comments: data.companies_comments[0],
   };
 
