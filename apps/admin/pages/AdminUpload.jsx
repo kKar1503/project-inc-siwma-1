@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useQuery } from 'react-query';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import UploadCard from '../components/UploadCard';
-import supabase from '../supabase';
 import NavBar from '../components/NavBar';
 import AdminPageLayout from '../components/layouts/AdminPageLayout';
 
@@ -11,6 +11,7 @@ const AdminUpload = () => {
   const [selected, setSelected] = useState(0);
   const [companyData, setCompanyData] = useState(null);
   const [description, setDescription] = useState('');
+  const supabase = useSupabaseClient();
 
   const getCompanyData = async () => supabase.from('companies').select('*');
   const { data, isLoading } = useQuery('company', getCompanyData);
