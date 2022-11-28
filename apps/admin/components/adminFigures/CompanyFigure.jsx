@@ -21,10 +21,11 @@ const CompanyFigure = () => {
   const { isLoading } = companyCountQuery;
 
   const companyCount = isLoading || !companyCountQuery.data ? 0 : companyCountQuery.data.count;
+
   return (
     <AdminFigure
       title="Active Companies"
-      value={companyCount}
+      value={companyCount.toString()}
       color="text-primary"
       icon={<FaRegBuilding size={144} color="#2563eb" />}
     />
