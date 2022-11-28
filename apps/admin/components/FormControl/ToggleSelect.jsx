@@ -21,7 +21,6 @@ const ToggleSelect = ({ value, options, label, onSave }) => {
               setIsEditing(!isEditing);
               if (isEditing) {
                 setField(initialValue);
-                console.log(initialValue);
               }
             }}
           >
