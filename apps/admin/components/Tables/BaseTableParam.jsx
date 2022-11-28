@@ -102,6 +102,7 @@ const BaseTableParam = ({
 
                                 setOptions(newOptions);
 
+                                setOptions(newOptions);
                                 if (newOptions.length !== 0) {
                                   setParamIds({ options: newOptions, table });
                                 } else {
