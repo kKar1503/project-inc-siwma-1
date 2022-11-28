@@ -6,6 +6,7 @@ import supabase from '../supabaseClient';
 const CreateCategory = () => {
   const queryClient = useQueryClient();
   const [displayAlert, setDisplayAlert] = useState(null);
+  const [error, setError] = useState(null);
 
   // const { data, isLoading } = useQuery({
   //   queryKey: ['newCategory'],
@@ -41,6 +42,14 @@ const CreateCategory = () => {
 
     if (status === 409) {
       setDisplayAlert(true);
+      setError(true);
+      setTimeout(() => {
+        setDisplayAlert(false);
+        setError(false);
+      }, 4000);
+    } else {
+      setDisplayAlert(true);
+
       setTimeout(() => {
         setDisplayAlert(false);
       }, 4000);
@@ -95,8 +104,11 @@ const CreateCategory = () => {
           </button>
         </div>
       </form>
-      {displayAlert && (
+      {displayAlert && error && (
         <Alert level="error" message="Duplicate category name found" className="mt-4" />
+      )}
+      {displayAlert && error === false && (
+        <Alert level="success" message="Category successfully created" className="mt-4" />
       )}
     </div>
   );
