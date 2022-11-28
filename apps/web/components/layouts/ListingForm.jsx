@@ -31,8 +31,8 @@ const CreateListingInformation = ({ options, onChangeValue, typeHandler }) => (
       <RadioButton options={options} onChangeValue={onChangeValue} />
 
       {/* Selling/Buying Form */}
-      {typeHandler && typeHandler === 'Selling' && <SellingForm />}
-      {typeHandler && typeHandler === 'Buying' && <BuyingForm />}
+      {typeHandler && typeHandler === 2 && <SellingForm />}
+      {typeHandler && typeHandler === 1 && <BuyingForm />}
 
       {/* List Now Submit Btn */}
       {typeHandler && (
@@ -52,7 +52,7 @@ const CreateListingInformation = ({ options, onChangeValue, typeHandler }) => (
 CreateListingInformation.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
   onChangeValue: PropTypes.func.isRequired,
-  typeHandler: PropTypes.string,
+  typeHandler: PropTypes.number,
 };
 
 export default CreateListingInformation;

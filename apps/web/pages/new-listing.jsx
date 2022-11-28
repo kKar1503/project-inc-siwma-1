@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 import PropTypes from 'prop-types';
+import crypto from 'crypto';
 import { useQuery } from 'react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Log from '@inc/utils/logger';
@@ -43,13 +44,29 @@ const sampleData = [
 const NewListing = ({ session }) => {
   const client = useSupabaseClient();
 
-  const [type, setType] = React.useState(null);
+  const [type, setType] = React.useState(0);
   const [category, setCategory] = React.useState(null);
   const [allCategories, setAllCategories] = React.useState([]);
   const [selectedImages, setSelectedImages] = React.useState([]);
 
+  const {
+    data: categoriesData,
+    isLoading: categoriesLoading,
+    isError: categoriesError,
+    status: categoriesStatus,
+  } = useQuery('get_all_categories', async () => client.rpc('get_all_categories'), {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
   const handleTypeChange = (event) => {
-    setType(event.target.value);
+    if (event.target.value === 'Buying') {
+      setType(1);
+      return;
+    }
+
+    setType(2);
   };
 
   const handleCategoryChange = (event) => {
@@ -57,11 +74,7 @@ const NewListing = ({ session }) => {
   };
 
   const onSelectFile = (event) => {
-    const selectedImagesArray = Array.from(event.target.files).map((image) =>
-      URL.createObjectURL(image)
-    );
-
-    setSelectedImages((prevImages) => prevImages.concat(selectedImagesArray));
+    setSelectedImages((prevImages) => prevImages.concat(Array.from(event.target.files)));
 
     // chrome bug fix
     // eslint-disable-next-line no-param-reassign
@@ -72,33 +85,49 @@ const NewListing = ({ session }) => {
     setSelectedImages((prevImages) => prevImages.filter((img) => img !== image));
   };
 
-  const { data, isLoading, isError, status } = useQuery(
-    'get_all_categories',
-    async () => client.rpc('get_all_categories'),
-    {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-    }
-  );
+  const insertNewListingHandler = async () => {
+    const { data } = await client
+      .from('listing')
+      .insert({
+        name: '',
+        description: '',
+        price: 0,
+        unit_price: false || true,
+        negotiable: true || false,
+        category: category.id,
+        type,
+        owner: 'c078a5eb-e75e-4259-8fdf-2dc196f06cbd', // THIS IS ELON MUSK
+      })
+      .returns('id');
+
+    const uuidArray = [];
+    selectedImages.forEach(async (image, index) => {
+      const randomUUID = crypto.randomUUID();
+      await client.storage.from('listing-image-bucket').upload(randomUUID, image);
+      uuidArray[index] = { listing: data[0].id, image: randomUUID };
+    });
+
+    await client.from('listing').insert(uuidArray);
+  };
 
   React.useEffect(() => {
-    if (status === 'success') {
-      Log('green', data.data);
-      setAllCategories(data.data);
+    if (categoriesStatus === 'success') {
+      Log('green', categoriesData.data);
+      setAllCategories(categoriesData.data);
     }
-  }, [session, status, data]);
+  }, [session, categoriesStatus, categoriesData]);
 
   return (
     <main>
       <div className="flex justify-around mt-8 mx-32">
         <div className="flex space-y-6 flex-col w-2/6">
-          {/* {!isLoading && !isError && status === 'success' && allCategories && (
-              <CategoricalForm items={allCategories} />
-            )} */}
-          {type && !isLoading && !isError && status === 'success' && allCategories && (
-            <CategoricalForm items={sampleData} onChangeValue={handleCategoryChange} />
-          )}
+          {type &&
+            !categoriesLoading &&
+            !categoriesError &&
+            categoriesStatus === 'success' &&
+            allCategories && (
+              <CategoricalForm items={sampleData} onChangeValue={handleCategoryChange} />
+            )}
 
           {category && (
             <CardBackground>
