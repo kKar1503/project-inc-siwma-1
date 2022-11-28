@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const ToggleEdit = ({ value, label }) => {
+const ToggleEdit = ({ value, label, onSave }) => {
   const [initialValue, setInitialValue] = useState(value);
   const [isEditing, setIsEditing] = useState(false);
   const [field, setField] = useState(value);
@@ -38,8 +38,7 @@ const ToggleEdit = ({ value, label }) => {
               onClick={() => {
                 setIsEditing(!isEditing);
                 setInitialValue(field);
-
-                // ADD API CALL HERE (UPDATES FIELD TO DB)
+                onSave(field);
               }}
             >
               Save
@@ -54,6 +53,7 @@ const ToggleEdit = ({ value, label }) => {
 ToggleEdit.propTypes = {
   value: PropTypes.string,
   label: PropTypes.string,
+  onSave: PropTypes.func,
 };
 
 export default ToggleEdit;
