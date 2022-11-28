@@ -13,7 +13,6 @@ const NewListing = ({ session }) => {
   const client = useSupabaseClient();
 
   const [type, setType] = React.useState(null);
-  const [listing, setListing] = React.useState({});
   const [allCategories, setAllCategories] = React.useState([]);
   const [selectedImages, setSelectedImages] = React.useState([]);
 
@@ -58,12 +57,11 @@ const NewListing = ({ session }) => {
     <main>
       <div className="flex justify-around mt-8 mx-32">
         <div className="flex space-y-6 flex-col w-2/6">
-          {!isLoading && !isError && status === 'success' && allCategories && (
-            <CategoricalForm items={allCategories} />
-          )}
+          {/* {!isLoading && !isError && status === 'success' && allCategories && (
+              <CategoricalForm items={allCategories} />
+            )} */}
 
           <CardBackground>
-            {/* max 10 images alert */}
             <div className="alert alert-info shadow-lg">
               <div>
                 <svg
