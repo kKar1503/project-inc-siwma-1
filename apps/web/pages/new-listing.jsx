@@ -6,13 +6,20 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Log from '@inc/utils/logger';
 import CardBackground from '../components/CardBackground';
 import Input from '../components/Input';
+import CategoricalForm from '../components/layouts/CategoricalForm';
 import ListingForm from '../components/layouts/ListingForm';
 
 const NewListing = ({ session }) => {
   const client = useSupabaseClient();
 
+  const [type, setType] = React.useState(null);
+  const [listing, setListing] = React.useState({});
   const [allCategories, setAllCategories] = React.useState([]);
   const [selectedImages, setSelectedImages] = React.useState([]);
+
+  const handleTypeChange = (event) => {
+    setType(event.target.value);
+  };
 
   const onSelectFile = (event) => {
     const selectedImagesArray = Array.from(event.target.files).map((image) =>
@@ -42,8 +49,8 @@ const NewListing = ({ session }) => {
 
   React.useEffect(() => {
     if (status === 'success') {
-      Log('green', data);
-      setAllCategories(data);
+      Log('green', data.data);
+      setAllCategories(data.data);
     }
   }, [session, status, data]);
 
@@ -51,6 +58,10 @@ const NewListing = ({ session }) => {
     <main>
       <div className="flex justify-around mt-8 mx-32">
         <div className="flex space-y-6 flex-col w-2/6">
+          {!isLoading && !isError && status === 'success' && allCategories && (
+            <CategoricalForm items={allCategories} />
+          )}
+
           <CardBackground>
             {/* max 10 images alert */}
             <div className="alert alert-info shadow-lg">
@@ -112,15 +123,14 @@ const NewListing = ({ session }) => {
               </div>
             )}
           </CardBackground>
-          <CardBackground>
-            <h1 className="font-bold text-3xl">Optional Parameters</h1>
-            <Input text="Width" />
-            <Input text="Height" />
-          </CardBackground>
         </div>
         <div className="flex flex-col w-3/5">
           <CardBackground>
-            <ListingForm />
+            <ListingForm
+              options={['Buying', 'Selling']}
+              onChangeValue={handleTypeChange}
+              typeHandler={type}
+            />
           </CardBackground>
         </div>
       </div>
