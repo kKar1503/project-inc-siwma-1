@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useQueries, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { HiDotsVertical } from 'react-icons/hi';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
@@ -90,6 +91,31 @@ const PendingInvitesTable = ({ className }) => {
         Header: 'MOBILE NUMBER',
         accessor: 'mobileNumber',
       },
+      {
+        Header: 'ACTIONS',
+        accessor: 'action',
+        // eslint-disable-next-line react/no-unstable-nested-components
+        Cell: (props) => (
+          <div className="flex items-center gap-2 dropdown dropdown-bottom dropdown-end">
+            <button htmlFor="actionDropdown">
+              <div>
+                <HiDotsVertical />
+              </div>
+            </button>
+            <ul
+              id="actionDropdown"
+              className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <button>Edit</button>
+              </li>
+              <li>
+                <button>View More</button>
+              </li>
+            </ul>
+          </div>
+        ),
+      },
     ],
     []
   );
@@ -157,9 +183,9 @@ const PendingInvitesTable = ({ className }) => {
       headingColor="bg-warning"
       showCheckbox
       className={className}
-      columnKeys={pendingInvitesColumns}
+      columns={pendingInvitesColumns}
       onChange={onChangeHandler}
-      data={inviteQuery.isLoading ? undefined : parseData(inviteQuery?.data.data)}
+      data={inviteQuery.isLoading ? [] : parseData(inviteQuery?.data.data)}
       footer={
         <div className="flex justify-between bg-none">
           <button

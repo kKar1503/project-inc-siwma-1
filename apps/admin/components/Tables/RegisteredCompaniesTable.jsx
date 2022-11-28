@@ -210,7 +210,33 @@ const RegisteredCompaniesTable = ({ className }) => {
         Header: 'BIO',
         accessor: 'bio',
       },
+      {
+        Header: 'ACTIONS',
+        accessor: 'action',
+        // eslint-disable-next-line react/no-unstable-nested-components
+        Cell: (props) => (
+          <div className="flex items-center gap-2 dropdown dropdown-bottom dropdown-end">
+            <button htmlFor="actionDropdown">
+              <div>
+                <HiDotsVertical />
+              </div>
+            </button>
+            <ul
+              id="actionDropdown"
+              className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <button>Edit</button>
+              </li>
+              <li>
+                <button>View More</button>
+              </li>
+            </ul>
+          </div>
+        ),
+      },
     ],
+
     []
   );
   return (

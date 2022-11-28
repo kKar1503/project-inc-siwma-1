@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { useTable } from 'react-table';
 import BaseTableRow from './BaseTableRow';
 import BaseTableHeader from './BaseTableHeader';
 
@@ -49,7 +50,7 @@ const BaseTable = ({
   headingColor,
   showCheckbox,
   className,
-  columnKeys,
+  columns,
   centerColumns,
   selectedRows,
   isLoading,
@@ -65,6 +66,10 @@ const BaseTable = ({
   // Refs
   const tableBodyRef = useRef();
 
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
+    columns,
+    data,
+  });
   return (
     <div
       className={cx(
@@ -76,17 +81,17 @@ const BaseTable = ({
         <div className="px-6">{header}</div>
         <div className="w-full h-auto overflow-hidden border-b">
           <div className="w-full max-h-full overflow-auto">
-            <table className="table w-full">
+            <table {...getTableProps()} className="table w-full">
               <thead>
                 <BaseTableHeader
                   headingColor={headingColor}
-                  headings={headings}
+                  //   headings={headings}
                   centerColumns={centerColumns}
-                  showActionsColumn={Boolean(actionMenu)}
                   showCheckbox={showCheckbox}
+                  headerGroups={headerGroups}
                 />
               </thead>
-              <tbody ref={tableBodyRef}>
+              <tbody ref={tableBodyRef} {...getTableBodyProps()}>
                 {
                   // Render a skeleton if the table is in a loading state
                   isLoading && (
@@ -100,32 +105,35 @@ const BaseTable = ({
                 }
                 {
                   // Table is not in a loading state, render the data
-                  data &&
-                    data.map((row) => (
-                      <BaseTableRow
-                        key={row.id}
-                        selected={selectedRows ? selectedRows.find((e) => e === data.id) : false}
-                        columnKeys={columnKeys}
-                        headings={headings}
-                        centerColumns={centerColumns}
-                        data={row}
-                        onChange={onChange}
-                        showCheckbox={showCheckbox}
-                        actionMenu={actionMenu}
-                        showActionMenu={row.id === currShownMenu}
-                        onToggleActionMenu={() => {
-                          // Check if the currently shown menu is the current row
-                          if (currShownMenu === row.id) {
-                            // It is, hide it
-                            return setCurrShownMenu(-1);
-                          }
+                  rows &&
+                    rows.map((row) => {
+                      prepareRow(row);
+                      return (
+                        <BaseTableRow
+                          key={row.id}
+                          selected={selectedRows ? selectedRows.find((e) => e === data.id) : false}
+                          columns={columns}
+                          headings={headings}
+                          centerColumns={centerColumns}
+                          data={row}
+                          onChange={onChange}
+                          showCheckbox={showCheckbox}
+                          actionMenu={actionMenu}
+                          showActionMenu={row.id === currShownMenu}
+                          onToggleActionMenu={() => {
+                            // Check if the currently shown menu is the current row
+                            if (currShownMenu === row.id) {
+                              // It is, hide it
+                              return setCurrShownMenu(-1);
+                            }
 
-                          // It is not, show it
-                          return setCurrShownMenu(row.id);
-                        }}
-                        ref={tableBodyRef}
-                      />
-                    ))
+                            // It is not, show it
+                            return setCurrShownMenu(row.id);
+                          }}
+                          ref={tableBodyRef}
+                        />
+                      );
+                    })
                 }
                 {
                   // Render a placeholder text if no data is found
@@ -158,7 +166,8 @@ const propTypes = {
   headingColor: PropTypes.string,
   showCheckbox: PropTypes.bool,
   className: PropTypes.string,
-  columnKeys: PropTypes.arrayOf(PropTypes.string),
+  // eslint-disable-next-line react/forbid-prop-types
+  columns: PropTypes.arrayOf(PropTypes.object),
   centerColumns: PropTypes.arrayOf(PropTypes.string),
   selectedRows: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
   isLoading: PropTypes.bool,

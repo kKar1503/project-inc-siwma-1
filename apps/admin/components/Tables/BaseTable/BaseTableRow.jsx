@@ -10,7 +10,7 @@ import React, { useEffect, useRef } from 'react';
  * Not the best because a lot of props are passed in lol
  * @param {object} data Data for the row
  * @param {boolean} showCheckbox Whether or not to render a checkbox for the row
- * @param {[string]} columnKeys Keys for each table column
+ * @param {[string]} columns Keys for each table column
  * @param {[string]} headings The heading for each table column
  * @param {[string]} centerColumns The columns to be centered
  * @param {boolean} selected Whether or not the row is currently selected
@@ -26,8 +26,9 @@ const BaseTableRow = React.forwardRef(
   (
     {
       data,
+      key,
       showCheckbox,
-      columnKeys,
+      columns,
       headings,
       centerColumns,
       selected,
@@ -69,7 +70,7 @@ const BaseTableRow = React.forwardRef(
     }, []);
 
     return (
-      <tr>
+      <tr {...data.getRowProps()}>
         {showCheckbox && (
           <td>
             <label>
@@ -83,49 +84,50 @@ const BaseTableRow = React.forwardRef(
             </label>
           </td>
         )}
-        {columnKeys.map((key, index) => (
-          <td key={key}>
-            <div className={cx('flex flex-data')}>
-              {/* Show a profilePicture if one exists and if we're on the first column */}
-              {index === 0 && data.profilePicture && (
-                <div className="w-10 h-10 mr-4">
-                  <Image
-                    src={data.profilePicture}
-                    alt="Profile Picture"
-                    layout="fill"
-                    width={100}
-                    height={100}
-                    className="rounded-full aspect-square object-cover"
-                  />
-                </div>
-              )}
-              {
-                // Vertically center text and horizontally center text (if required)
-                // Determines if the text should be horizontally centered by checking if the centerColumns array includes the name of the heading this column is being rendered for
-              }
-              <div
-                className={cx('flex align-middle items-center', {
-                  'mx-auto': centerColumns ? centerColumns.includes(headings[index]) : false,
-                })}
-              >
-                {
-                  // Render the value of the column (will not render anything if the value is a boolean)
-                  data[key]
-                }
-                {/* Render boolean values as a tick or a cross */}
-                {
-                  // Render a tick if boolean value is true
-                  typeof data[key] === 'boolean' && data[key] && (
-                    <ImCheckmark className="text-success" />
-                  )
-                }
-                {
-                  // Render a cross if boolean value is false
-                  typeof data[key] === 'boolean' && !data[key] && <ImCross className="text-error" />
-                }
-              </div>
-            </div>
-          </td>
+        {data.cells.map((cell) => (
+          <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+          //   <td key={cell}>
+          //     <div className={cx('flex flex-data')}>
+          //       {/* Show a profilePicture if one exists and if we're on the first column
+          //       {index === 0 && data.profilePicture && (
+          //         <div className="w-10 h-10 mr-4">
+          //           <Image
+          //             src={data.profilePicture}
+          //             alt="Profile Picture"
+          //             layout="fill"
+          //             width={100}
+          //             height={100}
+          //             className="rounded-full aspect-square object-cover"
+          //           />
+          //         </div>
+          //       )} */}
+          //       {
+          //         // Vertically center text and horizontally center text (if required)
+          //         // Determines if the text should be horizontally centered by checking if the centerColumns array includes the name of the heading this column is being rendered for
+          //       }
+          //       {/* <div
+          //         className={cx('flex align-middle items-center', {
+          //           'mx-auto': centerColumns ? centerColumns.includes(headings[index]) : false,
+          //         })}
+          //       > */}
+          //         {
+          //           // Render the value of the column (will not render anything if the value is a boolean)
+          //           data[key]
+          //         }
+          //         {/* Render boolean values as a tick or a cross */}
+          //         {
+          //           // Render a tick if boolean value is true
+          //           typeof data[key] === 'boolean' && data[key] && (
+          //             <ImCheckmark className="text-success" />
+          //           )
+          //         }
+          //         {
+          //           // Render a cross if boolean value is false
+          //           typeof data[key] === 'boolean' && !data[key] && <ImCross className="text-error" />
+          //         }
+          //       </div>
+          //     </div>
+          //   </td>
         ))}
         {
           // Render the action button if the actionMenu prop is specified
@@ -164,7 +166,8 @@ const propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   data: PropTypes.object.isRequired,
   showCheckbox: PropTypes.bool,
-  columnKeys: PropTypes.arrayOf(PropTypes.string).isRequired,
+  key: PropTypes.number,
+  columns: PropTypes.arrayOf(PropTypes.string).isRequired,
   centerColumns: PropTypes.arrayOf(PropTypes.string),
   headings: PropTypes.arrayOf(PropTypes.string),
   selected: PropTypes.bool,

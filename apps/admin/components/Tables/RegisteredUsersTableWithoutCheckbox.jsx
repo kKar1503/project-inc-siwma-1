@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useQueries, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import Image from 'next/image';
 import { HiDotsVertical } from 'react-icons/hi';
+import Image from 'next/image';
 import { BaseTable } from './BaseTable';
+import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 import pic from '../../public/avatar.png';
 import supabase from '../../pages/api/supabase';
@@ -24,6 +25,33 @@ const parseData = (data) =>
 // This table shows Registered Users and is built on the BaseTable component.
 const RegisteredUsersTable = ({ className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const [usersQuery, userCountQuery] = useQueries([
+    {
+      queryKey: ['getUsers', selectedIndex * 10, (selectedIndex + 1) * 10 - 1],
+      queryFn: async () =>
+        supabase
+          .from('users')
+          .select(`id, email, fullname, phone, companies:companyid(name), enabled`)
+          .range(selectedIndex * 10, (selectedIndex + 1) * 10 - 1)
+          .order('fullname', { ascending: true }),
+      keepPreviousData: true,
+      refetchInterval: 300000,
+    },
+    {
+      queryKey: ['getUserCount'],
+      queryFn: async () => supabase.from('users').select('*', { count: 'exact', head: true }),
+      keepPreviousData: true,
+      refetchInterval: 300000,
+    },
+  ]);
+
+  const queries = [usersQuery, userCountQuery];
+
+  const isLoading = queries.some((e) => e.isLoading);
+
+  const userCount = userCountQuery.isLoading ? 0 : userCountQuery.data.count;
+
   const innerImage = (props) => (
     <div className="w-10 h-10 mr-4">
       <Image
@@ -38,6 +66,7 @@ const RegisteredUsersTable = ({ className }) => {
       />
     </div>
   );
+
   const registeredUsersColumns = React.useMemo(
     () => [
       {
@@ -89,6 +118,7 @@ const RegisteredUsersTable = ({ className }) => {
     ],
     []
   );
+
   return (
     <BaseTable
       header={
@@ -101,14 +131,17 @@ const RegisteredUsersTable = ({ className }) => {
               {userCount} entries
             </h1>
           </div>
+          <div className="flex flex-row gap-4">
+            <SearchBar placeholder="Search by name" />
+          </div>
         </div>
       }
       headings={['User', 'E-mail', 'Company', 'Mobile Number', 'Status']}
       headingColor="bg-success"
       className={className}
       showCheckbox={false}
-      columnKeys={registeredUsersColumns}
-      data={usersQuery.isLoading ? undefined : parseData(usersQuery.data?.data)}
+      columns={registeredUsersColumns}
+      data={usersQuery.isLoading ? [] : parseData(usersQuery.data?.data)}
       footer={
         <div className="flex justify-end bg-none">
           <div className="flex justify-end bg-none">
