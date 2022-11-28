@@ -15,6 +15,7 @@ const parseData = (data) =>
     name: e.name,
     company: e.companies.name,
     email: e.email,
+    action: 1,
   }));
 
 // This table shows Pending Invites and is built on the BaseTable component.

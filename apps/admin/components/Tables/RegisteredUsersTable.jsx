@@ -3,6 +3,7 @@ import { useQueries, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Image from 'next/image';
+import { ImCheckmark, ImCross } from 'react-icons/im';
 import { HiDotsVertical } from 'react-icons/hi';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
@@ -19,6 +20,7 @@ const parseData = (data) =>
     company: e.companies.name,
     mobileNumber: e.phone,
     enabled: e.enabled === 0 ? `Suspended` : `Activated`,
+    action: 1,
   }));
 
 // This table shows Registered Users and is built on the BaseTable component.
@@ -187,29 +189,16 @@ const RegisteredUsersTable = ({ className }) => {
         accessor: 'mobileNumber',
       },
       {
-        Header: 'ACTIONS',
-        accessor: 'action',
+        Header: 'VISIBLE',
+        accessor: 'visible',
         // eslint-disable-next-line react/no-unstable-nested-components
-        Cell: (props) => (
-          <div className="flex items-center gap-2 dropdown dropdown-bottom dropdown-end">
-            <button htmlFor="actionDropdown">
-              <div>
-                <HiDotsVertical />
-              </div>
-            </button>
-            <ul
-              id="actionDropdown"
-              className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
-            >
-              <li>
-                <button>Edit</button>
-              </li>
-              <li>
-                <button>View More</button>
-              </li>
-            </ul>
-          </div>
-        ),
+        Cell: (props) =>
+          // eslint-disable-next-line react/destructuring-assignment, react/prop-types
+          props.value === true ? (
+            <ImCheckmark className="text-success" />
+          ) : (
+            <ImCross className="text-error" />
+          ),
       },
     ],
     []

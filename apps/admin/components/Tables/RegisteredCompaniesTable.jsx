@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQueries, useQueryClient } from 'react-query';
 import Image from 'next/image';
-import { HiDotsVertical } from 'react-icons/hi';
-import cx from 'classnames';
+// import { HiDotsVertical } from 'react-icons/hi';
+import { ImCheckmark, ImCross } from 'react-icons/im';
+// import cx from 'classnames';
 import { getAllCompanies, getCompanyCount } from '@inc/database';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { MdOutlineRemoveRedEye } from 'react-icons/md';
-import { SlPencil } from 'react-icons/sl';
-import { BsTrash } from 'react-icons/bs';
+// import { MdOutlineRemoveRedEye } from 'react-icons/md';
+// import { SlPencil } from 'react-icons/sl';
+// import { BsTrash } from 'react-icons/bs';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
 import TablePagination from './TablePagination';
-import TableMenu from './TableMenu';
+import ActionMenu from './ActionMenu';
 
 /**
  * Parses data retrieved from Supabase into a format accepted by the tables
@@ -29,6 +30,7 @@ function parseData(data) {
     website: e.website,
     bio: e.bio,
     visible: e.visible === 1,
+    action: 1,
   }));
 }
 
@@ -211,29 +213,22 @@ const RegisteredCompaniesTable = ({ className }) => {
         accessor: 'bio',
       },
       {
+        Header: 'VISIBLE',
+        accessor: 'id',
+        // eslint-disable-next-line react/no-unstable-nested-components
+        Cell: (props) =>
+          // eslint-disable-next-line react/destructuring-assignment, react/prop-types
+          props.value === true ? (
+            <ImCheckmark className="text-success" />
+          ) : (
+            <ImCross className="text-error" />
+          ),
+      },
+      {
         Header: 'ACTIONS',
         accessor: 'action',
-        // eslint-disable-next-line react/no-unstable-nested-components
-        Cell: (props) => (
-          <div className="flex items-center gap-2 dropdown dropdown-bottom dropdown-end">
-            <button htmlFor="actionDropdown">
-              <div>
-                <HiDotsVertical />
-              </div>
-            </button>
-            <ul
-              id="actionDropdown"
-              className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
-            >
-              <li>
-                <button>Edit</button>
-              </li>
-              <li>
-                <button>View More</button>
-              </li>
-            </ul>
-          </div>
-        ),
+        // eslint-disable-next-line react/no-unstable-nested-components, react/prop-types
+        Cell: ({ row }) => <ActionMenu queryLink={{ ...row }} />,
       },
     ],
 
@@ -270,28 +265,7 @@ const RegisteredCompaniesTable = ({ className }) => {
       isLoading={isLoading}
       data={companies}
       onChange={onChangeHandler}
-      actionMenu={
-        <TableMenu>
-          <li>
-            <button>
-              <MdOutlineRemoveRedEye className="h-5 w-5" />
-              View
-            </button>
-          </li>
-          <li>
-            <button>
-              <SlPencil className="h-5 w-5" />
-              Edit
-            </button>
-          </li>
-          <li>
-            <button>
-              <BsTrash className="h-5 w-5" />
-              Delete
-            </button>
-          </li>
-        </TableMenu>
-      }
+      actionMenu={<ActionMenu />}
       footer={
         <div className="flex justify-between bg-none">
           {/* Company suspension/reinstation */}

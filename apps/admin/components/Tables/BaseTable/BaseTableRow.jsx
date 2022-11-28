@@ -26,9 +26,7 @@ const BaseTableRow = React.forwardRef(
   (
     {
       data,
-      key,
       showCheckbox,
-      columns,
       headings,
       centerColumns,
       selected,
@@ -41,7 +39,6 @@ const BaseTableRow = React.forwardRef(
   ) => {
     // References
     const actionMenuRef = useRef();
-
     // -- Hooks -- //
     useEffect(() => {
       // -- Determine where the offset the action menu should have, such that it does not exit the bounds of the table -- //
@@ -84,8 +81,15 @@ const BaseTableRow = React.forwardRef(
             </label>
           </td>
         )}
-        {data.cells.map((cell) => (
-          <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+        {data.cells.map(
+          (cell, i) => {
+            const keyValue = `tablerow${i}`;
+            return (
+              <td key={keyValue} {...cell.getCellProps()}>
+                {cell.render('Cell')}
+              </td>
+            );
+          }
           //   <td key={cell}>
           //     <div className={cx('flex flex-data')}>
           //       {/* Show a profilePicture if one exists and if we're on the first column
@@ -128,7 +132,7 @@ const BaseTableRow = React.forwardRef(
           //       </div>
           //     </div>
           //   </td>
-        ))}
+        )}
         {
           // Render the action button if the actionMenu prop is specified
           actionMenu && (
@@ -166,8 +170,6 @@ const propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   data: PropTypes.object.isRequired,
   showCheckbox: PropTypes.bool,
-  key: PropTypes.number,
-  columns: PropTypes.arrayOf(PropTypes.string).isRequired,
   centerColumns: PropTypes.arrayOf(PropTypes.string),
   headings: PropTypes.arrayOf(PropTypes.string),
   selected: PropTypes.bool,

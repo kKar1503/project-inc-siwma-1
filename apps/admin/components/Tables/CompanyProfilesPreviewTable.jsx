@@ -20,6 +20,7 @@ function parseData(data) {
     website: e.website,
     bio: e.bio,
     visible: e.visible === 1,
+    action: 1,
   }));
 }
 
