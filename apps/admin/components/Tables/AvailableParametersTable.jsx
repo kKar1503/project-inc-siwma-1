@@ -1,10 +1,10 @@
 import { useQuery } from 'react-query';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import BaseTableParam from './BaseTableParam';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
-import supabase from '../../supabaseClient';
 
 // This table shows Available Parameters and is built on the BaseTable component.
 
@@ -32,6 +32,7 @@ const parseData = (data) =>
   }));
 
 const AvailableParametersTable = ({ className, id }) => {
+  const supabase = useSupabaseClient();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const { data: parameters, isLoading } = useQuery({

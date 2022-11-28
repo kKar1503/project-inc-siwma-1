@@ -2,12 +2,13 @@ import { useQueries, useQueryClient, useQuery } from 'react-query';
 import { useEffect, useState } from 'react';
 import { Alert } from '@inc/ui';
 import PropTypes from 'prop-types';
-import supabase from '../supabaseClient';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 const EditCat = ({ id }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [displayAlert, setDisplayAlert] = useState(false);
+  const supabase = useSupabaseClient();
 
   const { data } = useQuery({
     queryKey: ['categoryData', id],

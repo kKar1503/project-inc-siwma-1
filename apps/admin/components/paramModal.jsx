@@ -2,13 +2,14 @@ import { useQueries, useQueryClient, useQuery } from 'react-query';
 import { useState } from 'react';
 import { Alert } from '@inc/ui';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import supabase from '../supabaseClient';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 const ModalParam = () => {
   const queryClient = useQueryClient();
   const [paramT, setParamtype] = useState('');
   const [dataT, setDataType] = useState('');
   const [tags, setTags] = useState([]);
+  const supabase = useSupabaseClient();
 
   const { data: parameterType } = useQuery({
     queryKey: ['parameterType'],

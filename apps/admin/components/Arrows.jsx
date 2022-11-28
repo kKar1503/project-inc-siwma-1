@@ -2,11 +2,12 @@ import { useQueries, useQueryClient, useQuery } from 'react-query';
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
 import { useContext } from 'react';
 import PropTypes from 'prop-types';
-import supabase from '../supabaseClient';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import DataContext from '../DataContext';
 
 const Arrows = ({ id }) => {
   const queryClient = useQueryClient();
+  const supabase = useSupabaseClient();
   const { paramIds, setParamIds, options, setOptions } = useContext(DataContext);
 
   return (
