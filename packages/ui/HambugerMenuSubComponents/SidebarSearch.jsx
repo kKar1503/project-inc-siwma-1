@@ -1,4 +1,5 @@
 // ------------------ Imports ------------------
+import { MdSearch } from 'react-icons/md';
 
 /**
  * The Sidebar search is a search bar that is displayed in the sidebar
@@ -12,6 +13,7 @@ const SidebarSearch = () => (
       placeholder="Search"
       className="text-[15px] ml-4 w-full bg-transparent focus:outline-none"
     />
+    <MdSearch />
   </div>
 );
 

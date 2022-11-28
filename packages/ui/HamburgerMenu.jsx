@@ -1,6 +1,7 @@
 // ------------------ Imports ------------------
 
 import { bool, func } from 'prop-types';
+import { MdHome, MdBookmark, MdChat, MdPeople } from 'react-icons/md';
 import cx from 'classnames';
 import SidebarHeaderIcon from './HambugerMenuSubComponents/SidebarHeader';
 import SidebarDivider from './HambugerMenuSubComponents/SidebarDivider';
@@ -22,22 +23,10 @@ const LayoutEditor = ({ closeHandle }) => (
     <SidebarDivider />
 
     <SidebarSearch />
-    <SidebarItem
-      name="Home"
-      redirectLink="/test#home"
-      customIcon={<i className="bi bi-house-door-fill" />}
-    />
-    <SidebarItem
-      name="Bookmark"
-      redirectLink="/test#bookmark"
-      customIcon={<i className="bi bi-bookmark-fill" />}
-    />
-    <SidebarItem
-      name="Chat"
-      redirectLink="/test#chat"
-      customIcon={<i className="bi bi-chat-left-text-fill" />}
-    >
-      <SidebarSubItem name="Social" redirectLink="/test#chat_socials" />
+    <SidebarItem name="Home" redirectLink="/test#home" customIcon={<MdHome />} />
+    <SidebarItem name="Bookmark" redirectLink="/test#bookmark" customIcon={<MdBookmark />} />
+    <SidebarItem name="Chat" redirectLink="/test#chat" customIcon={<MdChat />}>
+      <SidebarSubItem name="Social" redirectLink="/test#chat_socials" customIcon={<MdPeople />} />
       <SidebarSubItem name="Personal" redirectLink="/test#chat_personal" />
       <SidebarSubItem name="Friends" redirectLink="/test#chat_friends" />
     </SidebarItem>
