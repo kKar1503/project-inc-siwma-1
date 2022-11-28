@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { useTable } from 'react-table';
+import { useTable, useFilters, useGlobalFilter, useAsyncDebounce } from 'react-table';
 
 import { HiDotsVertical } from 'react-icons/hi';
 import { ImCross, ImCheckmark } from 'react-icons/im';
@@ -46,6 +46,7 @@ import { ImCross, ImCheckmark } from 'react-icons/im';
  * Base table component
  * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
  */
+
 const BaseTable = ({
   header,
   headings,
@@ -58,12 +59,29 @@ const BaseTable = ({
   isLoading,
   data,
   footer,
+  filterString,
   onChange,
 }) => {
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
-    columns,
-    data,
-  });
+  const filterTypes = React.useMemo(
+    () => ({
+      text: (rows, id, filterValue) =>
+        rows.filter((row) => {
+          const rowValue = row.values[id];
+          return rowValue !== undefined
+            ? String(rowValue).toLowerCase().startsWith(String(filterValue).toLowerCase())
+            : true;
+        }),
+    }),
+    []
+  );
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
+    {
+      columns,
+      data,
+    },
+    useFilters,
+    useGlobalFilter
+  );
   return (
     <div
       className={cx(
@@ -174,6 +192,7 @@ const propTypes = {
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.
   footer: PropTypes.element,
+  filterString: PropTypes.string,
   onChange: PropTypes.func,
 };
 
