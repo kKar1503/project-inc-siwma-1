@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import { useQuery } from 'react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Skeleton from 'react-loading-skeleton';
@@ -7,6 +8,7 @@ import Log from '@inc/utils/logger';
 import ErrorPage from '../../components/listing/ErrorPage';
 import FlexContainer from '../../components/listing/FlexContainer';
 import Breadcrumbs from '../../components/listing/Breadcrumbs';
+import Carousel from '../../components/marketplace/carousel/Carousel';
 
 const Listing = () => {
   const { query, isReady } = useRouter();
@@ -15,7 +17,7 @@ const Listing = () => {
 
   const [listing, setListing] = React.useState(null);
   const [user, setUser] = React.useState(null);
-  const [carouselImages, setCarouselImages] = React.useState([]);
+  const [carouselImages, setCarouselImages] = React.useState(['/images/placeholder.png']);
 
   const {
     data: listingData,
@@ -34,6 +36,19 @@ const Listing = () => {
     }
   );
 
+  // const {
+  //   data: listingImageData,
+  //   isError: listingImageError,
+  //   error: listingImageErrorData,
+  //   isLoading: listingImageLoading,
+  //   status: listingImageStatus,
+  // } = useQuery(['get_listing_images'], async () => client.rpc('get_listing_images'), {
+  //   enabled: isReady,
+  //   refetchOnMount: false,
+  //   refetchOnWindowFocus: false,
+  //   refetchOnReconnect: false,
+  // });
+
   React.useEffect(() => {
     if (listingStatus === 'success') {
       Log('Listing data', listingData.data[0]);
@@ -51,17 +66,25 @@ const Listing = () => {
         <ErrorPage errorCode={404} errorMessage="Listing not found!" />
       )}
 
-      {isReady &&
-        listing.length !== 0 &&
-        !listingLoading &&
-        !listingError &&
-        listingStatus === 'success' && (
-          <FlexContainer className="flex-col w-full">
-            <div className="mx-20 space-y-4">
-              <Breadcrumbs paths={['Bars', listing.name]} />
-            </div>
-          </FlexContainer>
-        )}
+      {isReady && listing && !listingLoading && !listingError && listingStatus === 'success' && (
+        <FlexContainer className="flex-col w-full">
+          <div className="mx-20 space-y-4">
+            <Breadcrumbs paths={['Bars', listing.name]} />
+            <Carousel>
+              {carouselImages.map((image) => (
+                <div key={image} className="carousel-item w-1/3">
+                  <Image
+                    src={image}
+                    alt={image.name}
+                    className="w-full border border-white rounded-2xl"
+                    fill
+                  />
+                </div>
+              ))}
+            </Carousel>
+          </div>
+        </FlexContainer>
+      )}
     </main>
   );
 };
