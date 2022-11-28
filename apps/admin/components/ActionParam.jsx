@@ -3,10 +3,11 @@ import Link from 'next/link';
 import { BsThreeDotsVertical, BsFillPencilFill } from 'react-icons/bs';
 import { RiInboxArchiveFill, RiInboxUnarchiveFill } from 'react-icons/ri';
 import PropTypes from 'prop-types';
-import supabase from '../supabaseClient';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 const ActionParam = ({ data, row }) => {
   const queryClient = useQueryClient();
+  const supabase = useSupabaseClient();
 
   const archiveParam = async (e) => {
     e.preventDefault();
