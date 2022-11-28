@@ -50,7 +50,7 @@ export function resolveClassnameForLevel(level) {
  * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
 const Alert = ({ level, message, dismissable, onRequestClose, className }) => (
-  <div className={cx(className, 'alert rounded-full', resolveClassnameForLevel(level))}>
+  <div className={cx(className, 'alert rounded-full relative', resolveClassnameForLevel(level))}>
     <div className="flex flex-row gap-4">
       <AlertIcon level={level} />
       <p>{message}</p>

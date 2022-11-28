@@ -1,8 +1,8 @@
 import { FormImageInput, FormInputGroup, FormTextArea, FormTextInput } from '@inc/ui';
 import PropTypes from 'prop-types';
 
-const CompanyEditForm = ({ isLoading }) => (
-  <div>
+const CompanyEditForm = ({ onSubmit, submitSuccess, isLoading, onDeleteImage }) => (
+  <form onSubmit={onSubmit}>
     <div className="flex flex-wrap gap-8 p-8">
       <div className="flex flex-col lg:flex-[3] flex-wrap">
         <div className="flex flex-1">
@@ -11,6 +11,7 @@ const CompanyEditForm = ({ isLoading }) => (
             label="Company Logo"
             name="companyLogo"
             isLoading={isLoading}
+            success={submitSuccess}
           >
             <FormImageInput
               allowedExts={{
@@ -33,6 +34,7 @@ const CompanyEditForm = ({ isLoading }) => (
                 label="Company Name"
                 name="companyName"
                 isLoading={isLoading}
+                success={submitSuccess}
                 required
               >
                 <FormTextInput />
@@ -42,6 +44,7 @@ const CompanyEditForm = ({ isLoading }) => (
                 label="Website"
                 name="companyWebsite"
                 isLoading={isLoading}
+                success={submitSuccess}
                 customValidation={{
                   // Regexp for validating urls taken from https://regexr.com/39nr7
                   pattern: {
@@ -54,24 +57,57 @@ const CompanyEditForm = ({ isLoading }) => (
                 <FormTextInput />
               </FormInputGroup>
             </div>
-            <FormInputGroup label="Company Bio" name="companyBio" isLoading={isLoading}>
-              <FormTextArea />
+            <FormInputGroup
+              label="Company Bio"
+              name="companyBio"
+              isLoading={isLoading}
+              success={submitSuccess}
+            >
+              <FormTextArea maxLength={999} />
             </FormInputGroup>
-            <FormInputGroup label="Comments" name="companyComments" isLoading={isLoading}>
+            <FormInputGroup
+              label="Comments"
+              name="companyComments"
+              isLoading={isLoading}
+              success={submitSuccess}
+            >
               <FormTextArea />
             </FormInputGroup>
           </div>
         </div>
       </div>
     </div>
-    <div className="gap-8 px-8">
-      <button className="btn btn-outline btn-error hover:text-base-100">Delete Image</button>
+    <div className="flex justify-between">
+      <div className="flex">
+        <div className="flex px-8 pb-8">
+          <a href="./companies" className="btn btn-primary">
+            Return To Companies
+          </a>
+        </div>
+        <div className="gap-8 px-8">
+          <button
+            type="button"
+            className="btn btn-outline btn-error hover:text-base-100"
+            onClick={onDeleteImage}
+          >
+            Delete Image
+          </button>
+        </div>
+      </div>
+      <div className="flex px-8 pb-8">
+        <button type="submit" className="btn btn-success text-base-100">
+          Save Changes
+        </button>
+      </div>
     </div>
-  </div>
+  </form>
 );
 
 const propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  submitSuccess: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool,
+  onDeleteImage: PropTypes.func.isRequired,
 };
 
 CompanyEditForm.propTypes = propTypes;
