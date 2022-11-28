@@ -1,5 +1,6 @@
 import { VictoryPie, VictoryContainer, VictoryLegend, VictoryLabel } from 'victory';
 import PropType from 'prop-types';
+import { limit } from '../../utils/format';
 
 const colors = ['#1C1917', '#F43F5E', '#34D399', '#2563EB', '#FACC15'];
 
@@ -40,7 +41,7 @@ const ClickDistribution = ({ dataset }) => {
         x={20}
         y={50}
         colorScale={colors}
-        data={dataset.map(({ name }) => ({ name, symbol: { type: 'square' } }))}
+        data={dataset.map(({ name }) => ({ name: limit(name, 25), symbol: { type: 'square' } }))}
         style={{
           data: { stroke: ({ index }) => colors[index], strokeWidth: 10 },
           labels: { fontSize: 16 },
