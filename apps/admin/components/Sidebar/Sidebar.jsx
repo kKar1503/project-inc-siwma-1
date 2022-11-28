@@ -14,6 +14,9 @@ export const adminSidebar = [
     'Data Analytics': '/',
   },
   {
+    Advertisement: '/AdvertisementDashboard',
+  },
+  {
     'User Management': [
       {
         Overview: '/overview',
