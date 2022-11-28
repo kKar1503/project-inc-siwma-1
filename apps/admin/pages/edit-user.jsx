@@ -1,21 +1,71 @@
 import { useMemo, useState } from 'react';
+import { useQueries, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import AdminPageLayout from '../components/layouts/AdminPageLayout';
 import NavBar from '../components/NavBar';
 import ToggleEdit from '../components/FormControl/ToggleEdit';
 import ToggleEditArea from '../components/FormControl/ToggleEditArea';
 import TogglePass from '../components/FormControl/TogglePass';
 import ToggleSelect from '../components/FormControl/ToggleSelect';
+import supabase from './api/supabase';
+
+function parseUserData(data) {
+  console.log(data);
+  return {
+    ...data,
+  };
+}
+
+function parseCompanyData(data) {
+  const result = [];
+  data.map((e) => result.push(e.name));
+  return result;
+}
+
+function parseCommentData(data) {
+  return {
+    ...data,
+  };
+}
 
 const EditUser = () => {
+  const { query } = useRouter();
+
+  const queryClient = useQueryClient();
+
   // SET ALL USER DATA HERE (PROBABLY USE THE API CALL TO GET USER DATA)
-  const fullName = 'John Doe';
-  const email = 'E-mail';
-  const companyName = 'Company 1';
-  // get all companies below
-  const companies = ['Company 1', 'Company 2', 'Company 3'];
-  const mobileNumber = '9232 3232';
+  const [getUserInfoQuery, getCompaniesQuery, getCommentQuery] = useQueries([
+    {
+      queryKey: ['getUserInfo'],
+      queryFn: async () =>
+        supabase.from('users').select(`*, companies:companyid(name)`).eq('id', query.userid),
+    },
+    {
+      queryKey: ['getCompanies'],
+      queryFn: async () => supabase.from('companies').select('*'),
+    },
+    {
+      queryKey: ['getComment'],
+      queryFn: async () => supabase.from('users_comments').select('*').eq('id', query.userid),
+    },
+  ]);
+
+  const user =
+    getUserInfoQuery.isLoading || !getUserInfoQuery.data
+      ? {}
+      : parseUserData(getUserInfoQuery.data.data[0]);
+
+  const companies = getCompaniesQuery.isLoading
+    ? []
+    : parseCompanyData(getCompaniesQuery.data.data);
+
+  const comment =
+    getCommentQuery.isLoading || !getCommentQuery.data
+      ? {}
+      : parseCommentData(getCommentQuery.data.data);
+
   const profilePic =
     'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg';
 
@@ -72,16 +122,23 @@ const EditUser = () => {
             <div className="flex flex-col w-full min-w-96 gap-12">
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col md:flex-row gap-4">
-                  <ToggleSelect value={companyName} options={companies} label="Company" />
-                  <ToggleEdit value={fullName} label="Full Name" />
+                  <ToggleSelect
+                    value={user ? user.company : ''}
+                    options={companies}
+                    label="Company"
+                  />
+                  <ToggleEdit value={user ? user.fullname : ''} label="Full Name" />
                 </div>
                 <div className="flex flex-col md:flex-row gap-4">
-                  <ToggleEdit value={email} label="E-mail" />
-                  <ToggleEdit value={mobileNumber} label="Mobile Number" />
+                  <ToggleEdit value={user ? user.email : ''} label="E-mail" />
+                  <ToggleEdit value={user ? user.phone : ''} label="Mobile Number" />
                 </div>
                 <TogglePass />
                 <div className="flex flex-col gap-4">
-                  <ToggleEditArea value="Comments" label="Comments" />
+                  <ToggleEditArea
+                    value={comment ? comment.comments : 'Write here...'}
+                    label="Comments"
+                  />
                 </div>
               </div>
             </div>
