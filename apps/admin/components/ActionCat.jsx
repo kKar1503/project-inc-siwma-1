@@ -47,38 +47,30 @@ const ActionCat = ({ data, row, catId }) => {
           </div>
         </li>
         <li>
-          <div
+          <button
             className="btn btn-ghost w-30"
             onClick={async (e) => {
               await archiveCategory(e);
             }}
-            role="button"
             tabIndex={0}
-            onKeyDown={async (e) => {
-              await archiveCategory(e);
-            }}
             disabled={data[row].active === 'Disabled'}
           >
             <RiInboxArchiveFill />
             Archive
-          </div>
+          </button>
         </li>
         <li>
-          <div
+          <button
             className="btn btn-ghost w-30"
             onClick={async (e) => {
               await unarchiveCategory(e);
             }}
-            role="button"
             tabIndex={0}
-            onKeyDown={async (e) => {
-              await unarchiveCategory(e);
-            }}
             disabled={data[row].active === 'Active'}
           >
             <RiInboxUnarchiveFill />
             UnArchive
-          </div>
+          </button>
         </li>
       </div>
     </div>
