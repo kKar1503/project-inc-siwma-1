@@ -8,6 +8,9 @@ import Log from '@inc/utils/logger';
 import ErrorPage from '../../components/listing/ErrorPage';
 import FlexContainer from '../../components/listing/FlexContainer';
 import Breadcrumbs from '../../components/listing/Breadcrumbs';
+import Title from '../../components/listing/Title';
+import Price from '../../components/listing/Price';
+import Detail from '../../components/listing/Detail';
 import Carousel from '../../components/marketplace/carousel/Carousel';
 
 const Listing = () => {
@@ -82,6 +85,19 @@ const Listing = () => {
                 </div>
               ))}
             </Carousel>
+            <FlexContainer className="flex-row space-x-8">
+              <div className="w-3/4 space-y-4">
+                <Title title={listing.name}>
+                  <span className="text-grey-400">Posted on: {listing.created_at}</span>
+                </Title>
+                <Price price={listing.price} />
+                <FlexContainer className="flex-row justify-between">
+                  <Detail title="Name" detail="lmao" />
+                  <Detail title="Name" detail="lmao" />
+                  <Detail title="Name" detail="lmao" />
+                </FlexContainer>
+              </div>
+            </FlexContainer>
           </div>
         </FlexContainer>
       )}
