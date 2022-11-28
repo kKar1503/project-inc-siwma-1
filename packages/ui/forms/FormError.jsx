@@ -12,7 +12,7 @@ const FormError = ({ inputName, error, className, style }) => {
   // Initialise the error message
   let errorMessage;
 
-  // Retrieve form context
+  // Retrieve form context if the component is not in a loading state
   const {
     formState: { errors },
   } = useFormContext();
