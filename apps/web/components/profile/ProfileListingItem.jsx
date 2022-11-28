@@ -8,6 +8,7 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import BuyBadge from '../marketplace/listing/BuyBadge';
 import SellBadge from '../marketplace/listing/SellBadge';
 import ArchiveBadge from '../marketplace/listing/ArchiveBadge';
+import SoldBadge from '../marketplace/listing/SoldBadge';
 
 const ProductListingItem = ({
   img,
@@ -16,6 +17,7 @@ const ProductListingItem = ({
   href,
   id,
   visibility,
+  open,
   setInfiniteScrollMockData,
 }) => {
   const supabase = useSupabaseClient();
@@ -83,10 +85,12 @@ const ProductListingItem = ({
 
         {/* Listing content */}
         <div className="p-2 pb-4">
-          {type === Enum.LISTING_TYPE.BUY && <BuyBadge />}
-
-          {type === Enum.LISTING_TYPE.SELL && <SellBadge />}
-
+          {!open ? (
+            <SoldBadge />
+          ) : (
+            (type === Enum.LISTING_TYPE.BUY && <BuyBadge />) ||
+            (type === Enum.LISTING_TYPE.SELL && <SellBadge />)
+          )}
           {visibility === false && <ArchiveBadge />}
 
           <p className="font-bold">{name}</p>
@@ -103,6 +107,7 @@ ProductListingItem.propTypes = {
   name: PropTypes.string,
   href: PropTypes.string,
   visibility: PropTypes.bool,
+  open: PropTypes.bool,
   setInfiniteScrollMockData: PropTypes.func,
 };
 

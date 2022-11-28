@@ -51,18 +51,21 @@ const ProfileListing = () => {
           loading={infiniteScrollMockDataLoading}
           reachedMaxItems={infiniteScrollMockData.length > 100}
         >
-          {infiniteScrollMockData.map(({ name, description, id, price, type, visibility }) => (
-            <ProfileListingItem
-              type={type}
-              key={id}
-              img={null}
-              name={name}
-              href={`/products/${id}`}
-              id={id}
-              visibility={visibility}
-              setInfiniteScrollMockData={setInfiniteScrollMockData}
-            />
-          ))}
+          {infiniteScrollMockData.map(
+            ({ name, description, id, price, type, open, visibility }) => (
+              <ProfileListingItem
+                type={type}
+                key={id}
+                img={null}
+                name={name}
+                href={`/products/${id}`}
+                id={id}
+                visibility={visibility}
+                open={open}
+                setInfiniteScrollMockData={setInfiniteScrollMockData}
+              />
+            )
+          )}
         </InfiniteScroll>
       </div>
     </div>
