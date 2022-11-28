@@ -21,7 +21,7 @@ import TableMenu from './TableMenu';
 function parseData(data) {
   return data.map((e) => ({
     id: e.id,
-    profilePicture: `https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/${
+    profilePicture: `https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/company-image-bucket/${
       e.image || 'example.jpg'
     }`,
     company: e.name,
