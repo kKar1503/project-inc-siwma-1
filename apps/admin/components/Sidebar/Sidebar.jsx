@@ -32,6 +32,9 @@ export const adminSidebar = [
       },
     ],
   },
+  {
+    Category: '/category_management',
+  },
   // add { Category: '/category_management' }, thanks
 ];
 
