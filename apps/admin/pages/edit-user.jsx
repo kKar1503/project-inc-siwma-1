@@ -2,13 +2,13 @@ import { useMemo, useState } from 'react';
 import { QueryClientProvider, useQueries, QueryClient, useMutation } from 'react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import AdminPageLayout from '../components/layouts/AdminPageLayout';
 import NavBar from '../components/NavBar';
 import ToggleEdit from '../components/FormControl/ToggleEdit';
 import ToggleEditArea from '../components/FormControl/ToggleEditArea';
 import TogglePass from '../components/FormControl/TogglePass';
 import ToggleSelect from '../components/FormControl/ToggleSelect';
-import supabase from './api/supabase';
 
 function parseUserData(data) {
   return {
@@ -33,6 +33,7 @@ function parseCommentData(data) {
 }
 
 const EditUser = () => {
+  const supabase = useSupabaseClient();
   const router = useRouter();
   const { userid } = router.query;
 
