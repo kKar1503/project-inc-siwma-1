@@ -8,9 +8,6 @@ const Clicks = () => {
   const fetchClicks = async () => supabase.from('advertisements').select('id');
 
   const { data, isFetching } = useQuery('a', fetchClicks);
-  // if (data) {
-  //   console.log(data);
-  // }
   return (
     <>
       <div className="flex flex-col">
