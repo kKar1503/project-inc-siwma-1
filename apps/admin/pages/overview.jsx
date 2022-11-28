@@ -143,7 +143,6 @@ const registeredUsersData = [
 
 const UserOverview = () => (
   <div className="flex flex-col w-full h-full gap-8 p-8 overflow-auto">
-    {/* { replace this with sidebar } */}
     <NavBar />
 
     <div className="flex flex-row gap-8 flex-wrap">
