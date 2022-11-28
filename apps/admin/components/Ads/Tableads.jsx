@@ -3,13 +3,12 @@ import supabase from '../../supabase';
 
 const Tableads = () => {
   const queryClient = useQueryClient();
-  const setActive = async (active, id) =>
-    supabase.from('advertisements').update({ active }).eq('id', console.log(id));
+  const setActive = async ({ active, id }) =>
+    supabase.from('advertisements').update({ active }).eq('id', id);
   const fetchAds = async () => supabase.rpc('get_active_ads');
   const { data, isFetching } = useQuery('ads', fetchAds);
   const refresh = { onSuccess: () => queryClient.invalidateQueries('ads') };
   const { mutate } = useMutation(setActive, refresh);
-  console.log(data);
   return (
     <table className="table table-compact w-full">
       <thead>
@@ -32,7 +31,7 @@ const Tableads = () => {
               <th>
                 <select
                   className="btn btn-ghost btn-xs"
-                  onChange={(e) => mutate(e.target.value === 'true', id)}
+                  onChange={(e) => mutate({ active: e.target.value === 'true', id })}
                   value={active}
                 >
                   <option value="true">active</option>
