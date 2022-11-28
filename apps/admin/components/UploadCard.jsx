@@ -6,6 +6,7 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 const UploadCard = ({ id, des }) => {
   const [image, setImage] = useState(null);
   const [imageURL, setImageURL] = useState('');
+  const [colourMessage, setColourMessage] = useState('text-center text-green-500 pt-4');
   const [errorMessage, setErrorMessage] = useState('');
   const supabase = useSupabaseClient();
 
@@ -13,21 +14,18 @@ const UploadCard = ({ id, des }) => {
     if (e.target.files[0].type === 'image/png' || e.target.files[0].type === 'image/jpeg') {
       setImage(e.target.files[0]);
       setErrorMessage('Please click "Create file"');
+      setColourMessage('text-center text-green-500 pt-4');
     } else {
-      console.log(e.target.files[0].type);
       e.target.files = null;
-      console.log('not image');
       setErrorMessage('Only image file is allowed');
-      console.log(errorMessage);
+      setColourMessage('text-center text-red-500 pt-4');
     }
   };
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    console.log(image);
 
     if (image) {
-      console.log(image.type);
       const { data, error } = await supabase.storage
         .from('advertisement')
         .upload(`${image.name}`, image);
@@ -64,7 +62,7 @@ const UploadCard = ({ id, des }) => {
           <p className="text-xs text-gray-600 text-center my-6">
             Click to upload or drag and drop PNG or JPG (MAX. 1200px x 900px)
           </p>
-          {errorMessage !== '' && <p className="text-center text-red-500 pt-4">{errorMessage}</p>}
+          {errorMessage !== '' && <p className={colourMessage}>{errorMessage}</p>}
         </span>
         <input
           type="file"

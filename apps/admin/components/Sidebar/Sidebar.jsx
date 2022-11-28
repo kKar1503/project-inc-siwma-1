@@ -11,7 +11,7 @@ export const adminSidebar = [
     'Home Page': '/',
   },
   {
-    'Data Analytics': '/',
+    'Data Analytics': '/Analytics',
   },
   {
     Advertisement: '/AdvertisementDashboard',
