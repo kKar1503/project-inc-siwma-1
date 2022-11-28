@@ -38,18 +38,6 @@ const ActiveParametersTable = ({ className, id }) => {
     enabled: !!id,
   });
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['activeParameters', id],
-    queryFn: async () =>
-      supabase
-        .from('categories_parameters')
-        .select(
-          `category(name), parameter(id, name, display_name, parameter_type(id, name), datatype(id, name))`
-        )
-        .eq('category(id)', `${id}`),
-    enabled: !!id,
-  });
-
   return (
     <BaseTableParam
       header={
