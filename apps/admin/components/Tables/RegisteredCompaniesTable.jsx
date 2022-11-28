@@ -26,7 +26,7 @@ function parseData(data) {
 }
 
 // This table shows Registered Companies and is built on the BaseTable component.
-const RegisteredCompaniesTable = ({ className }) => {
+const RegisteredCompaniesTable = ({ columns, className }) => {
   // Set states
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedCompanies, setselectedCompanies] = useState([]);
@@ -234,7 +234,7 @@ const RegisteredCompaniesTable = ({ className }) => {
       headingColor="bg-primary"
       showCheckbox
       className={className}
-      columnKeys={['company', 'website', 'bio', 'visible']}
+      columns={columns}
       centerColumns={['Operational']}
       // We only need to pass in an array of the ids of the companies that have been selected
       selectedRows={selectedCompanies.map((e) => e.id)}
@@ -279,6 +279,13 @@ const RegisteredCompaniesTable = ({ className }) => {
 
 RegisteredCompaniesTable.propTypes = {
   className: PropTypes.string,
+  columns: PropTypes.arrayOf(
+    PropTypes.shape({
+      Header: PropTypes.string,
+      accessor: PropTypes.string,
+      Cell: PropTypes.element,
+    })
+  ),
 };
 
 export default RegisteredCompaniesTable;

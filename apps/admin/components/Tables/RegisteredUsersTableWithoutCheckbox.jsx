@@ -6,7 +6,7 @@ import TableButton from './TableButton';
 
 // This table shows Registered Users and is built on the BaseTable component.
 
-const RegisteredUsersTableWithoutCheckbox = ({ data, className }) => {
+const RegisteredUsersTableWithoutCheckbox = ({ data, columns, className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
@@ -26,7 +26,7 @@ const RegisteredUsersTableWithoutCheckbox = ({ data, className }) => {
       headingColor="bg-success"
       showCheckbox={false}
       className={className}
-      columnKeys={['name', 'email', 'company', 'mobileNumber']}
+      columns={columns}
       data={data}
       footer={
         <div className="flex justify-end bg-none">
@@ -66,6 +66,13 @@ RegisteredUsersTableWithoutCheckbox.propTypes = {
       email: PropTypes.string,
       company: PropTypes.string,
       mobileNumber: PropTypes.string,
+    })
+  ),
+  columns: PropTypes.arrayOf(
+    PropTypes.shape({
+      Header: PropTypes.string,
+      accessor: PropTypes.string,
+      Cell: PropTypes.element,
     })
   ),
   className: PropTypes.string,

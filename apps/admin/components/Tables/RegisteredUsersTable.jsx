@@ -6,7 +6,7 @@ import TableButton from './TableButton';
 
 // This table shows Registered Users and is built on the BaseTable component.
 
-const RegisteredUsersTable = ({ data, className }) => {
+const RegisteredUsersTable = ({ data, columns, className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
@@ -32,7 +32,7 @@ const RegisteredUsersTable = ({ data, className }) => {
       headingColor="bg-primary"
       showCheckbox
       className={className}
-      columnKeys={['name', 'email', 'company', 'mobileNumber']}
+      columns={columns}
       data={data}
       footer={
         <div className="flex justify-between bg-none">
@@ -75,6 +75,13 @@ RegisteredUsersTable.propTypes = {
       email: PropTypes.string,
       company: PropTypes.string,
       mobileNumber: PropTypes.string,
+    })
+  ),
+  columns: PropTypes.arrayOf(
+    PropTypes.shape({
+      Header: PropTypes.string,
+      accessor: PropTypes.string,
+      Cell: PropTypes.element,
     })
   ),
   className: PropTypes.string,
