@@ -1,14 +1,30 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import BaseTable from './BaseTable';
-import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 
 // This table shows Pending Invites and is built on the BaseTable component.
 
-const PendingInvitesTable = ({ data, columns, className }) => {
+const PendingInvitesTable = ({ data, className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  const pendingInvitesColumns = React.useMemo(
+    () => [
+      {
+        Header: 'EMAIL',
+        accessor: 'email',
+      },
+      {
+        Header: 'COMPANY',
+        accessor: 'company',
+      },
+      {
+        Header: 'MOBILE NUMBER',
+        accessor: 'mobileNumber',
+      },
+    ],
+    []
+  );
   return (
     <BaseTable
       header={
@@ -21,7 +37,7 @@ const PendingInvitesTable = ({ data, columns, className }) => {
       headingColor="bg-warning"
       showCheckbox={false}
       className={className}
-      columns={columns}
+      columns={pendingInvitesColumns}
       data={data}
       footer={
         <div className="flex justify-between bg-none">
@@ -63,13 +79,6 @@ PendingInvitesTable.propTypes = {
       email: PropTypes.string,
       company: PropTypes.string,
       mobileNumber: PropTypes.string,
-    })
-  ),
-  columns: PropTypes.arrayOf(
-    PropTypes.shape({
-      Header: PropTypes.string,
-      accessor: PropTypes.string,
-      Cell: PropTypes.element,
     })
   ),
   className: PropTypes.string,

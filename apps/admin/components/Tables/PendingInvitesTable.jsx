@@ -6,9 +6,26 @@ import TableButton from './TableButton';
 
 // This table shows Pending Invites and is built on the BaseTable component.
 
-const PendingInvitesTable = ({ data, columns, className }) => {
+const PendingInvitesTable = ({ data, className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  const pendingInvitesColumns = React.useMemo(
+    () => [
+      {
+        Header: 'EMAIL',
+        accessor: 'email',
+      },
+      {
+        Header: 'COMPANY',
+        accessor: 'company',
+      },
+      {
+        Header: 'MOBILE NUMBER',
+        accessor: 'mobileNumber',
+      },
+    ],
+    []
+  );
   return (
     <BaseTable
       header={
@@ -17,16 +34,14 @@ const PendingInvitesTable = ({ data, columns, className }) => {
             <h1 className="font-bold text-xl">Pending Invites</h1>
             <h1 className="pr-2">Showing 1 to 10 of 100 entries</h1>
           </div>
-          <div className="flex flex-row gap-4">
-            <SearchBar placeholder="Search by e-mail" />
-          </div>
         </div>
       }
+      searchPlaceholder="Search by e-mail"
       headings={['Company', 'E-mail', 'Mobile Number']}
       headingColor="bg-warning"
       showCheckbox
       className={className}
-      columns={columns}
+      columns={pendingInvitesColumns}
       data={data}
       footer={
         <div className="flex justify-between bg-none">
@@ -68,13 +83,6 @@ PendingInvitesTable.propTypes = {
       email: PropTypes.string,
       company: PropTypes.string,
       mobileNumber: PropTypes.string,
-    })
-  ),
-  columns: PropTypes.arrayOf(
-    PropTypes.shape({
-      Header: PropTypes.string,
-      accessor: PropTypes.string,
-      Cell: PropTypes.element,
     })
   ),
   className: PropTypes.string,

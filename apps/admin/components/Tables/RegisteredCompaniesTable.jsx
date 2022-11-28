@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQueries, useQueryClient } from 'react-query';
+import Image from 'next/image';
+import { HiDotsVertical } from 'react-icons/hi';
 import cx from 'classnames';
 import { getAllCompanies, getCompanyCount } from '@inc/database';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
@@ -26,7 +28,7 @@ function parseData(data) {
 }
 
 // This table shows Registered Companies and is built on the BaseTable component.
-const RegisteredCompaniesTable = ({ columns, className }) => {
+const RegisteredCompaniesTable = ({ className }) => {
   // Set states
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedCompanies, setselectedCompanies] = useState([]);
@@ -210,6 +212,43 @@ const RegisteredCompaniesTable = ({ columns, className }) => {
     return buttons;
   };
 
+  // column declaration
+  const innerImage = (props) => (
+    <div className="w-10 h-10 mr-4">
+      <Image
+        // remove later
+        // eslint-disable-next-line react/prop-types
+        src={props.row.original.profilePicture}
+        alt="Profile Picture"
+        layout="fill"
+        width={100}
+        height={100}
+        className="rounded-full aspect-square object-cover"
+      />
+    </div>
+  );
+  const registeredCompaniesColumns = React.useMemo(
+    () => [
+      {
+        Header: '',
+        accessor: 'profilePicture',
+        Cell: (props) => innerImage(props),
+      },
+      {
+        Header: 'COMPANY',
+        accessor: 'company',
+      },
+      {
+        Header: 'WEBSITE',
+        accessor: 'website',
+      },
+      {
+        Header: 'BIO',
+        accessor: 'bio',
+      },
+    ],
+    []
+  );
   return (
     <BaseTable
       header={
@@ -234,7 +273,7 @@ const RegisteredCompaniesTable = ({ columns, className }) => {
       headingColor="bg-primary"
       showCheckbox
       className={className}
-      columns={columns}
+      columns={registeredCompaniesColumns}
       centerColumns={['Operational']}
       // We only need to pass in an array of the ids of the companies that have been selected
       selectedRows={selectedCompanies.map((e) => e.id)}
@@ -279,13 +318,6 @@ const RegisteredCompaniesTable = ({ columns, className }) => {
 
 RegisteredCompaniesTable.propTypes = {
   className: PropTypes.string,
-  columns: PropTypes.arrayOf(
-    PropTypes.shape({
-      Header: PropTypes.string,
-      accessor: PropTypes.string,
-      Cell: PropTypes.element,
-    })
-  ),
 };
 
 export default RegisteredCompaniesTable;

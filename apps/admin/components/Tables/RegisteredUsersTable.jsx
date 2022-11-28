@@ -1,14 +1,79 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import Image from 'next/image';
+import { HiDotsVertical } from 'react-icons/hi';
 import BaseTable from './BaseTable';
-import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 
 // This table shows Registered Users and is built on the BaseTable component.
 
-const RegisteredUsersTable = ({ data, columns, className }) => {
+const RegisteredUsersTable = ({ data, className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-
+  const innerImage = (props) => (
+    <div className="w-10 h-10 mr-4">
+      <Image
+        // remove later
+        // eslint-disable-next-line react/prop-types
+        src={props.row.original.profilePicture}
+        alt="Profile Picture"
+        layout="fill"
+        width={100}
+        height={100}
+        className="rounded-full aspect-square object-cover"
+      />
+    </div>
+  );
+  const registeredUsersColumns = React.useMemo(
+    () => [
+      {
+        Header: '',
+        accessor: 'profilePicture',
+        Cell: innerImage,
+      },
+      {
+        Header: 'USER',
+        accessor: 'name',
+      },
+      {
+        Header: 'EMAIL',
+        accessor: 'email',
+      },
+      {
+        Header: 'COMPANY',
+        accessor: 'company',
+      },
+      {
+        Header: 'MOBILE NUMBER',
+        accessor: 'mobileNumber',
+      },
+      {
+        Header: 'ACTIONS',
+        accessor: 'action',
+        // eslint-disable-next-line react/no-unstable-nested-components
+        Cell: (props) => (
+          <div className="flex items-center gap-2 dropdown dropdown-bottom dropdown-end">
+            <button htmlFor="actionDropdown">
+              <div>
+                <HiDotsVertical />
+              </div>
+            </button>
+            <ul
+              id="actionDropdown"
+              className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <button>Edit</button>
+              </li>
+              <li>
+                <button>View More</button>
+              </li>
+            </ul>
+          </div>
+        ),
+      },
+    ],
+    []
+  );
   return (
     <BaseTable
       header={
@@ -28,11 +93,12 @@ const RegisteredUsersTable = ({ data, columns, className }) => {
           </div>
         </div>
       }
+      searchPlaceholder="Search by e-mail"
       headings={['User', 'E-mail', 'Company', 'Mobile Number']}
       headingColor="bg-primary"
       showCheckbox
       className={className}
-      columns={columns}
+      columns={registeredUsersColumns}
       data={data}
       footer={
         <div className="flex justify-between bg-none">
@@ -75,13 +141,6 @@ RegisteredUsersTable.propTypes = {
       email: PropTypes.string,
       company: PropTypes.string,
       mobileNumber: PropTypes.string,
-    })
-  ),
-  columns: PropTypes.arrayOf(
-    PropTypes.shape({
-      Header: PropTypes.string,
-      accessor: PropTypes.string,
-      Cell: PropTypes.element,
     })
   ),
   className: PropTypes.string,
