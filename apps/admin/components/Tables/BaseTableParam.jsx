@@ -47,8 +47,7 @@ const BaseTableParam = ({
 
   footer,
 }) => {
-  const [options, setOptions] = useState([]);
-  const { paramIds, setParamIds } = useContext(DataContext);
+  const { paramIds, setParamIds, options, setOptions } = useContext(DataContext);
 
   if (!data) {
     return (
@@ -97,12 +96,11 @@ const BaseTableParam = ({
                               if (e.target.checked) {
                                 const newOptions = [...options, row.id];
                                 setOptions(newOptions);
-                                console.log(newOptions);
                                 setParamIds({ options: newOptions, table });
                               } else {
-                                const newOptions = options.filter((_, index) => index !== rowindex);
-                                setOptions(newOptions);
+                                const newOptions = options.filter((option) => option !== row.id);
 
+                                setOptions(newOptions);
                                 if (newOptions.length !== 0) {
                                   setParamIds({ options: newOptions, table });
                                 } else {
