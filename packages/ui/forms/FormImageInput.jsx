@@ -72,7 +72,7 @@ const FormImageInput = ({
     // Check if a file was selected
     if (!file) {
       // No file was selected
-      setValue(name, null);
+      setValue(name, null, { shouldTouch: true });
       return;
     }
 
@@ -102,7 +102,7 @@ const FormImageInput = ({
     result.src = imageUrl;
 
     // Set the value of the file input
-    setValue(name, result);
+    setValue(name, result, { shouldTouch: true });
   };
 
   // -- Event handlers -- //
