@@ -5,29 +5,31 @@ import { RiInboxArchiveFill, RiInboxUnarchiveFill } from 'react-icons/ri';
 import PropTypes from 'prop-types';
 import supabase from '../supabaseClient';
 
-const ActionParam = ({ data, row, catId }) => {
+const ActionParam = ({ data, row }) => {
   const queryClient = useQueryClient();
 
-  const archiveCategory = async (e) => {
+  const archiveParam = async (e) => {
     e.preventDefault();
     await supabase
-      .from('category')
+      .from('parameter')
       .update({
         active: false,
       })
       .eq('id', data[row].id);
-    queryClient.invalidateQueries({ queryKey: ['categories'] });
+    queryClient.invalidateQueries({ queryKey: ['activeParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
   };
 
-  const unarchiveCategory = async (e) => {
+  const unarchiveParam = async (e) => {
     e.preventDefault();
     await supabase
-      .from('category')
+      .from('parameter')
       .update({
         active: true,
       })
       .eq('id', data[row].id);
-    queryClient.invalidateQueries({ queryKey: ['categories'] });
+    queryClient.invalidateQueries({ queryKey: ['activeParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
   };
 
   return (
@@ -43,42 +45,34 @@ const ActionParam = ({ data, row, catId }) => {
         <li>
           <div className="btn btn-ghost w-30">
             <BsFillPencilFill />
-            <Link href={`/category/${catId}`}>Edit</Link>
+            Edit
           </div>
         </li>
         <li>
-          <div
+          <button
             className="btn btn-ghost w-30"
             onClick={async (e) => {
-              await archiveCategory(e);
+              await archiveParam(e);
             }}
-            role="button"
             tabIndex={0}
-            onKeyDown={async (e) => {
-              await archiveCategory(e);
-            }}
             disabled={data[row].active === 'Disabled'}
           >
             <RiInboxArchiveFill />
             Archive
-          </div>
+          </button>
         </li>
         <li>
-          <div
+          <button
             className="btn btn-ghost w-30"
             onClick={async (e) => {
-              await unarchiveCategory(e);
+              await unarchiveParam(e);
             }}
-            role="button"
             tabIndex={0}
-            onKeyDown={async (e) => {
-              await unarchiveCategory(e);
-            }}
             disabled={data[row].active === 'Active'}
           >
             <RiInboxUnarchiveFill />
             UnArchive
-          </div>
+          </button>
         </li>
       </div>
     </div>
@@ -86,7 +80,6 @@ const ActionParam = ({ data, row, catId }) => {
 };
 
 const propTypes = {
-  catId: PropTypes.string,
   row: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.

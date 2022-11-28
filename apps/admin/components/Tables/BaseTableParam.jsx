@@ -130,11 +130,7 @@ const BaseTableParam = ({
                       </td>
                     ))}
                     <td>
-                      <ActionParam
-                        data={data === undefined ? undefined : data}
-                        row={rowindex}
-                        catId={row.id}
-                      />
+                      <ActionParam data={data === undefined ? undefined : data} row={rowindex} />
                     </td>
                   </tr>
                 ))}
