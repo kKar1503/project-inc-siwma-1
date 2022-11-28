@@ -1,8 +1,9 @@
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import cx from 'classnames';
+import { Alert } from '@inc/ui';
 import CompanyEditForm from './CompanyEditForm';
 
 /**
@@ -10,41 +11,43 @@ import CompanyEditForm from './CompanyEditForm';
  * @param {{name: string, image: string, website: string, bio: string, comments: string}} data The data to parse into default values
  * @returns A default value object for react-hook-form
  */
-const parseDefaultValues = (data) => ({
+const parseQueryData = (data) => ({
+  id: data.id,
   companyName: data.name,
   companyLogo: data.image
     ? {
-        src: data.image,
+        src: `https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/${data.image}`,
       }
     : null,
   companyWebsite: data.website,
   companyBio: data.bio,
-  companyComments: data.comments ? data.comments.comments : '',
+  companyComments: data.companies_comments ? data.companies_comments[0].comments : '',
 });
 
-const CompanyEditFormContext = ({
-  defaultValues,
-  submitSuccess,
-  onSuccessChange,
-  isLoading,
-  className,
-  style,
-}) => {
+const CompanyEditFormContext = ({ queryData, onSuccessChange, isLoading, className, style }) => {
+  // -- States --//
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
   // -- Initialise libraries -- //
   // Initialise supabase client
   const supabase = useSupabaseClient();
 
-  // -- Retrieve company info from supabase -- //
-
   // Initialise react hook forms
   const formHook = useForm();
+
+  // Parse query data
+  const company =
+    isLoading || !queryData || !queryData.data ? false : parseQueryData(queryData.data[0]);
+
+  console.log({ company, submitSuccess });
 
   // Deconstruct the individual hooks from the object
   const {
     handleSubmit,
     reset,
     watch,
-    formState: { dirtyFields },
+    setValue,
+    formState: { isDirty, dirtyFields, touchedFields },
   } = formHook;
 
   // Watch all input fields
@@ -57,81 +60,112 @@ const CompanyEditFormContext = ({
    */
   const onSubmit = async (data) => {
     // Deconstruct values from data
-    const { companyName, companyWebsite, companyComment, companyLogo } = data;
+    const { companyName, companyWebsite, companyBio, companyComments, companyLogo } = data;
 
     // -- Create company in Supabase -- //
-    // Create company record and return it
-    const { data: companyData } = await supabase
+    // Edit company record
+    await supabase
       .from('companies')
-      .insert([
-        {
-          name: companyName,
-          website: companyWebsite,
-        },
-      ])
-      .select();
+      .update({
+        name: companyName,
+        website: companyWebsite,
+        bio: companyBio,
+      })
+      .eq('id', company.id);
 
-    // Create a record in companies_comments if a comment was given
-    if (companyComment) {
-      // Create a comment for the company
+    // -- Edit/create a new comment -- //
+    // Check if there is an existing comment for the company
+    if (company.companyComments) {
+      // There is an existing comment for the company, update it
+      await supabase
+        .from('companies_comments')
+        .update({
+          comments: companyComments,
+        })
+        .eq('companyid', company.id);
+    } else {
+      // There isn't an existing comment for the company, create a new record
       await supabase.from('companies_comments').insert([
         {
-          companyid: companyData[0].id,
-          comments: companyComment,
+          companyid: company.id,
+          comments: companyComments,
         },
       ]);
     }
 
-    // Upload the company logo if provided
-    if (companyLogo) {
-      // Upload company logo
-      await supabase.storage.from('companyprofilepictures').upload(companyLogo.name, companyLogo);
+    // -- Update/create company logo -- //
+    // Check if the value of the company logo input changed
+    if (companyLogo !== company.companyLogo) {
+      // The company logo input changed, update it
+      // Check if a image was selected
+      if (companyLogo && companyLogo.src !== company.companyLogo) {
+        // Upload the company logo to the bucket
+        await supabase.storage.from('company-image-bucket').upload(companyLogo.name, companyLogo);
 
-      // Update the newly created company record with the name of the logo uploaded
-      await supabase
-        .from('companies')
-        .update({ image: companyLogo.name })
-        .eq('id', companyData[0].id);
+        // Update the image column in the companies table
+        await supabase.from('companies').update({ image: companyLogo.name }).eq('id', company.id);
+        // Check if the image was removed
+      } else if (!companyLogo || (companyLogo.src == null && company.companyLogo == null)) {
+        // A image was not selected, clear the image column in the companies table
+        await supabase.from('companies').update({ image: null }).eq('id', company.id);
+      }
     }
 
-    // Success, clear inputs and show success message
-    reset();
-    onSuccessChange(true);
+    // Success, reset the default value of the inputs and show success message
+    setSubmitSuccess(true);
+    onSuccessChange();
+    console.log('aaa');
   };
+
+  /**
+   * Should be invoked when the "Delete Image" button on the company edit form is triggered
+   */
+  const handleDeleteImage = () => {
+    // Clear the image input
+    setValue('companyLogo', null);
+  };
+
+  // Reset the default values of the input when the queryData provided changes
+  useEffect(() => {
+    if (!isLoading && !submitSuccess) {
+      console.log('feagwregw');
+      reset(
+        { ...company },
+        { keepValues: Object.keys(touchedFields).length > 0, keepTouched: submitSuccess }
+      );
+    }
+  }, [queryData]);
 
   // Clear success state of the form as soon as a input value changes
   useEffect(() => {
     // Checks that the form submission state is currently successful, and that there is at least 1 dirty input
-    if (submitSuccess && Object.keys(dirtyFields).length > 0) {
+    if (submitSuccess && isDirty && Object.keys(touchedFields).length > 0) {
       // There is at least 1 dirty input, clear the success status of the form
-      onSuccessChange(false);
+      setSubmitSuccess(false);
     }
   }, [watchAllFields]);
 
-  // Reset the default values of the input when the defaultValues provided changes
   useEffect(() => {
-    reset({ ...parseDefaultValues(defaultValues) });
-  }, [defaultValues]);
+    console.log('render');
+  });
 
   return (
     <FormProvider {...formHook}>
-      <div className={cx('flex flex-1 flex-col justify-between', className)} style={style}>
+      <div className={cx('flex flex-col justify-between flex-1', className)} style={style}>
         <CompanyEditForm
           onSubmit={handleSubmit(onSubmit)}
-          submitSuccess={submitSuccess}
+          submitSuccess={false}
           isLoading={isLoading}
+          onDeleteImage={handleDeleteImage}
         />
-        <div className="flex justify-between">
-          <div className="flex px-8 pb-8">
-            <a href="./companies" className="btn btn-primary">
-              Return To Companies
-            </a>
-          </div>
-          <div className="flex px-8 pb-8">
-            <a href="./companies" className="btn btn-success text-base-100">
-              Save changes
-            </a>
-          </div>
+        <div className={cx('my-12 transition lg:w-7/12 mx-auto', { hidden: !false })}>
+          <Alert
+            level="success"
+            message="Company created successfully"
+            className="text-white shadow-lg"
+            onRequestClose={() => setSubmitSuccess(false)}
+            dismissable
+          />
         </div>
       </div>
     </FormProvider>
@@ -139,15 +173,21 @@ const CompanyEditFormContext = ({
 };
 
 const propTypes = {
-  defaultValues: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    image: PropTypes.string,
-    website: PropTypes.string.isRequired,
-    bio: PropTypes.string.isRequired,
-    comments: PropTypes.string,
+  queryData: PropTypes.shape({
+    data: {
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      image: PropTypes.exact({
+        src: PropTypes.string.isRequired,
+      }),
+      website: PropTypes.string.isRequired,
+      bio: PropTypes.string.isRequired,
+      comments: PropTypes.shape({
+        companyid: PropTypes.number.isRequired,
+        comments: PropTypes.string.isRequired,
+      }),
+    },
   }),
-  submitSuccess: PropTypes.bool.isRequired,
   onSuccessChange: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   className: PropTypes.string,
