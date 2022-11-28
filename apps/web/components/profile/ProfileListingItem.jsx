@@ -10,6 +10,7 @@ import BuyBadge from '../marketplace/listing/BuyBadge';
 import SellBadge from '../marketplace/listing/SellBadge';
 import ArchiveBadge from '../marketplace/listing/ArchiveBadge';
 import SoldBadge from '../marketplace/listing/SoldBadge';
+import BoughtBadge from '../marketplace/listing/BoughtBadge';
 
 const ProductListingItem = ({
   img,
@@ -62,7 +63,7 @@ const ProductListingItem = ({
 
   return (
     <div className="card shadow-md">
-      <div className="flex w-full justify-end dropdown">
+      <div className="flex w-full justify-end dropdown z-10">
         <HiDotsVertical tabIndex={0} size={23} />
         <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
           {/* change to a tags accordingly if user needs to be redirected */}
@@ -96,15 +97,17 @@ const ProductListingItem = ({
 
         {/* Listing content */}
         <div className="p-2 pb-4 w-5/6">
-          {!open ? (
-            <div className="w-full">
-              <SellBadge />
-              <SoldBadge />
-            </div>
-          ) : (
-            (type === Enum.LISTING_TYPE.BUY && <BuyBadge />) ||
-            (type === Enum.LISTING_TYPE.SELL && <SellBadge />)
-          )}
+          {/* <div className="w-full">
+            <SellBadge />
+            <SoldBadge />
+          </div> */}
+
+          {(type === Enum.LISTING_TYPE.BUY && <BuyBadge />) ||
+            (type === Enum.LISTING_TYPE.SELL && <SellBadge />)}
+
+          {type === Enum.LISTING_TYPE.BUY && !open && <BoughtBadge />}
+          {type === Enum.LISTING_TYPE.SELL && !open && <SoldBadge />}
+
           {visibility === false && <ArchiveBadge />}
 
           <p className="font-bold truncate w-full">{name}</p>
