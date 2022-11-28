@@ -6,7 +6,17 @@ module.exports = {
     './components/**/*.{js,jsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      maxHeight: {
+        'text-limit': 'calc(var(--max-lines) * 1em * var(--line-height))',
+      },
+      lineHeight: {
+        'text-limit': 'var(--line-height)',
+      },
+      height: {
+        'before-text-limit': 'calc(1em * var(--line-height))',
+      },
+    },
   },
   variants: {
     extend: {

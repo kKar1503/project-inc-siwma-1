@@ -12,7 +12,10 @@ import Title from '../../components/listing/Title';
 import Price from '../../components/listing/Price';
 import Detail from '../../components/listing/Detail';
 import Description from '../../components/listing/Description';
+import User from '../../components/listing/User';
+import CardBackground from '../../components/CardBackground';
 import Carousel from '../../components/marketplace/carousel/Carousel';
+import sampleProductImage from '../../public/sample-product-image.jpg';
 
 const Listing = () => {
   const { query, isReady } = useRouter();
@@ -98,7 +101,13 @@ const Listing = () => {
                   <Detail title="Name" detail="lmao" />
                 </FlexContainer>
                 <Title title="Description" />
-                <Description description={listing[0].description} />
+                <Description description={listing.description} />
+              </div>
+              <div className="w-1/4">
+                <CardBackground className="text-center">
+                  <User profilePicture={sampleProductImage} username="xiaoming" />
+                  <button className="btn btn-primary mt-4">Chat now</button>
+                </CardBackground>
               </div>
             </FlexContainer>
           </div>
