@@ -162,7 +162,7 @@ const MarketplacePage = () => {
           {/* Title */}
           <h3 className="text-xl font-bold my-2">Categories</h3>
           {/* View all categories link */}
-          <Link href="/categories">
+          <Link href="/category">
             <p className="link">View all categories</p>
           </Link>
         </div>
