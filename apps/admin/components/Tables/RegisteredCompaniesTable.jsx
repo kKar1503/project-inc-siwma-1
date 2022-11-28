@@ -26,7 +26,7 @@ function parseData(data) {
     }`,
     company: e.name,
     website: e.website,
-    bio: e.bio,
+    bio: e.bio && e.bio.length > 60 ? `${e.bio.substring(0, 59)}...` : e.bio,
     visible: e.visible === 1,
   }));
 }
