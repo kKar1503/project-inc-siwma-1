@@ -13,7 +13,7 @@ import ToggleSelect from '../components/FormControl/ToggleSelect';
 function parseUserData(data) {
   return {
     ...data,
-    company: data.companies === null ? '' : data.companies.name,
+    company: data === undefined ? '' : data.companies.name,
   };
 }
 
