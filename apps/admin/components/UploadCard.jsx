@@ -2,12 +2,13 @@
 import PropType from 'prop-types';
 import { FiUpload } from 'react-icons/fi';
 import { useState } from 'react';
-import supabase from '../supabase';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 const UploadCard = ({ id, des }) => {
   const [image, setImage] = useState(null);
   const [imageURL, setImageURL] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const supabase = useSupabaseClient();
 
   const checkFile = async (e) => {
     if (e.target.files[0].type === 'image/png' || e.target.files[0].type === 'image/jpeg') {
