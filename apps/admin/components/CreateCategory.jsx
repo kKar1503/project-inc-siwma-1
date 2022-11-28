@@ -1,10 +1,12 @@
 import { useQuery, useQueries, useQueryClient } from 'react-query';
 import { useState } from 'react';
 import { Alert } from '@inc/ui';
-import supabase from '../supabaseClient';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 const CreateCategory = () => {
   const queryClient = useQueryClient();
+  const supabase = useSupabaseClient();
+
   const [displayAlert, setDisplayAlert] = useState(null);
   const [error, setError] = useState(null);
 
