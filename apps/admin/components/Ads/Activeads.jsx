@@ -6,7 +6,7 @@ import supabase from '../../supabase';
 const Activeads = () => {
   const fetchAds = async () => supabase.from('advertisements').select('active').eq('active', true);
 
-  const { data, isFetching } = useQuery('Advertisement', fetchAds);
+  const { data, isFetching } = useQuery('activeAd', fetchAds);
   // if (data) {
   //   console.log(data);
   // }
@@ -14,7 +14,7 @@ const Activeads = () => {
     <>
       <div className="flex flex-col">
         <p className="text-blue-500 font-bold text-6xl ">{isFetching || data.data.length}</p>
-        <p>Active ad-spaces</p>
+        <p>Active advertisements</p>
       </div>
 
       <BsMegaphone fontSize={80} style={{ color: '#2563EB' }} />
