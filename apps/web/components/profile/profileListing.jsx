@@ -18,7 +18,7 @@ const ProfileListing = () => {
     isLoading: listingIsLoading,
     error: listingError,
   } = useQuery(['get_listings'], async () =>
-    supabase.rpc('get_listings', { item_offset: 0, item_limit: 10 })
+    supabase.rpc('get_listings', { item_offset: 0, item_limit: 100 })
   );
 
   console.log(listingAPIData);
@@ -68,6 +68,7 @@ const ProfileListing = () => {
               //   rating={Math.floor(Math.random() * 5) + 1}
               href={`/products/${id}`}
               id={id}
+              setInfiniteScrollMockData={setInfiniteScrollMockData}
             />
           ))}
         </InfiniteScroll>

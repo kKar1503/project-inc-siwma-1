@@ -1,4 +1,5 @@
 // Import prop types
+import { useQuery } from 'react-query';
 import { Enum } from '@inc/database';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,17 +9,25 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import BuyBadge from '../marketplace/listing/BuyBadge';
 import SellBadge from '../marketplace/listing/SellBadge';
 
-const ProductListingItem = ({ img, type, name, href, id }) => {
+const ProductListingItem = ({ img, type, name, href, id, setInfiniteScrollMockData }) => {
   const supabase = useSupabaseClient();
 
   const DeleteListing = async (listid) => {
     await supabase.from('listing').delete().eq('id', listid);
-    window.location.reload(false);
+    const { data: listingAPIData } = await supabase.rpc('get_listings', {
+      item_offset: 0,
+      item_limit: 100,
+    });
+    setInfiniteScrollMockData(listingAPIData);
   };
 
   const ArchiveListing = async (listid) => {
     await supabase.rpc('update_listing', { listingid: listid });
-    window.location.reload(false);
+    const { data: listingAPIData } = await supabase.rpc('get_listings', {
+      item_offset: 0,
+      item_limit: 100,
+    });
+    setInfiniteScrollMockData(listingAPIData);
   };
 
   return (
@@ -67,6 +76,7 @@ ProductListingItem.propTypes = {
   id: PropTypes.number,
   name: PropTypes.string,
   href: PropTypes.string,
+  setInfiniteScrollMockData: PropTypes.func,
 };
 
 export default ProductListingItem;
