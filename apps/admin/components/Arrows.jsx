@@ -78,7 +78,7 @@ const Arrows = ({ id }) => {
 
   const makeAvailable = async (e) => {
     const options = [];
-    optionData.options.map((item) => options.push(item));
+    paramIds.options.map((item) => options.push(item));
     options.toString();
     await supabase
       .from('categories_parameters')
@@ -87,17 +87,17 @@ const Arrows = ({ id }) => {
       .filter('parameter', 'in', `(${options})`);
     queryClient.invalidateQueries({ queryKey: ['activeParameters'] });
     queryClient.invalidateQueries({ queryKey: ['categoryParameters'] });
-    paramId(undefined);
+    setParamIds(undefined);
   };
 
   const makeActive = async (e) => {
     const options = [];
-    optionData.options.map((item) => options.push({ category: id, parameter: item }));
+    paramIds.options.map((item) => options.push({ category: id, parameter: item }));
     await supabase.from('categories_parameters').insert(options);
 
     queryClient.invalidateQueries({ queryKey: ['activeParameters'] });
     queryClient.invalidateQueries({ queryKey: ['categoryParameters'] });
-    paramId(undefined);
+    setParamIds(undefined);
   };
 
   return (
