@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { QueryClientProvider, useQueries, QueryClient, useQuery } from 'react-query';
+import { QueryClientProvider, useQueries, QueryClient } from 'react-query';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -33,10 +33,12 @@ const EditUser = () => {
   const router = useRouter();
   const { userid } = router.query;
 
+  console.log(userid);
+
   const queryClient = new QueryClient();
 
   // SET ALL USER DATA HERE (PROBABLY USE THE API CALL TO GET USER DATA)
-  const [getUserQuery, getCompaniesQuery, getCommentQuery] = useQueries([
+  const queries = useQueries([
     {
       queryKey: ['getUser', userid],
       queryFn: async () => supabase.from('users').select('*').eq('id', userid),
@@ -54,22 +56,19 @@ const EditUser = () => {
     },
   ]);
 
-  const user =
-    getUserQuery.isLoading || !getUserQuery.data.data
-      ? {}
-      : parseUserData(getUserQuery.data.data[0]);
+  const isLoading = queries.some((e) => e.isLoading);
 
-  console.log(user);
+  const [getUserQuery, getCompaniesQuery, getCommentQuery] = queries;
+
+  const user = isLoading || !getUserQuery.data.data ? {} : parseUserData(getUserQuery.data.data[0]);
+
+  // console.log(user);
 
   const companies =
-    getCompaniesQuery.isLoading || !getCompaniesQuery.data.data
-      ? []
-      : parseCompanyData(getCompaniesQuery.data.data);
+    isLoading || !getCompaniesQuery.data.data ? [] : parseCompanyData(getCompaniesQuery.data.data);
 
   const comment =
-    getCommentQuery.isLoading || !getCommentQuery.data.data
-      ? {}
-      : parseCommentData(getCommentQuery.data.data[0]);
+    isLoading || !getCommentQuery.data.data ? {} : parseCommentData(getCommentQuery.data.data[0]);
 
   const profilePic =
     'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg';
@@ -81,7 +80,7 @@ const EditUser = () => {
   };
 
   useMemo(() => {
-    console.log(selectedFile);
+    // console.log(selectedFile);
     // ADD API CALL HERE (UPDATES FIELD TO DB AND UPDATES PROFILE PIC)
   }, [selectedFile]);
 
