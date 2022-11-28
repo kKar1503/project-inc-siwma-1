@@ -39,7 +39,7 @@ const AdminUpload = () => {
           </li>
           <li className="flex items-center">
             <Link href="/home" className="hover:underline">
-              Advertisement Post
+              Upload
             </Link>
             <svg
               className="fill-current w-3 h-3 mx-3"
