@@ -156,11 +156,8 @@ const UserOverview = () => (
     </div>
 
     <div className="flex flex-row flex-wrap w-full gap-8">
-      <RegisteredUsersTableWithoutCheckbox
-        className="h-fit max-h-full"
-        data={registeredUsersData}
-      />
-      <PendingInvitesTableWithoutCheckbox className="h-fit max-h-full" data={inviteTableData} />
+      <RegisteredUsersTableWithoutCheckbox className="h-fit max-h-full" />
+      <PendingInvitesTableWithoutCheckbox className="h-fit max-h-full" />
     </div>
   </div>
 );
