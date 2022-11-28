@@ -71,7 +71,7 @@ const MostBuyAndSellChart = ({ data }) => (
         name="buy"
         data={data}
         dataComponent={<BarLine />}
-        style={{ data: data.length === 1 && { width: 30 } }}
+        style={{ data: data.length === 1 ? { width: 30 } : undefined }}
         labels={data.map(({ buy }) => buy)}
         labelComponent={<BarToolTip />}
         x="company"
@@ -81,7 +81,7 @@ const MostBuyAndSellChart = ({ data }) => (
         name="sell"
         data={data}
         dataComponent={<BarLine />}
-        style={{ data: data.length === 1 && { width: 30 } }}
+        style={{ data: data.length === 1 ? { width: 30 } : undefined }}
         labels={data.map(({ buy, sell }) => buy + sell)}
         labelComponent={<BarToolTip />}
         x="company"
