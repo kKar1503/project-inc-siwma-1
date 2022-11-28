@@ -23,13 +23,17 @@ const SidebarItem = ({ name, customIcon, redirectLink, children }) => {
     setOpen(!open);
   };
 
-  const redirect = () => (children ? toggle() : router.push(redirectLink));
+  const redirect = () => {
+    router.push(redirectLink);
+  };
+
+  const onClickHandle = () => (children ? toggle() : redirect(redirectLink));
 
   // ------------------ Return -----------------
   return (
     <>
       <div
-        onClick={redirect}
+        onClick={onClickHandle}
         role="presentation"
         className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-primary-focus text-white"
       >
