@@ -1,9 +1,12 @@
 import { FaUserCheck, FaRegEnvelope, FaRegBuilding } from 'react-icons/fa';
-import AdminFigure from '../components/AdminFigure';
+
 import AdminPageLayout from '../components/layouts/AdminPageLayout';
 import NavBar from '../components/NavBar';
 import RegisteredUsersTableWithoutCheckbox from '../components/Tables/RegisteredUsersTableWithoutCheckbox';
 import PendingInvitesTableWithoutCheckbox from '../components/Tables/PendingInvitesTableWithoutCheckbox';
+import CompanyFigure from '../components/adminFigures/CompanyFigure';
+import UsersFigure from '../components/adminFigures/UsersFigure';
+import InvitesFigure from '../components/adminFigures/InvitesFigure';
 
 const inviteTableData = [
   {
@@ -146,29 +149,17 @@ const UserOverview = () => (
     <NavBar />
 
     <div className="flex flex-row gap-8 flex-wrap">
-      <AdminFigure
-        title="Active Companies"
-        value="20"
-        color="text-primary"
-        icon={<FaRegBuilding size={144} color="#2563eb" />}
-      />
-      <AdminFigure
-        title="Total Users"
-        value="14"
-        color="text-accent"
-        icon={<FaUserCheck size={144} color="#34d399" />}
-      />
-      <AdminFigure
-        title="Pending Invites"
-        value="15"
-        color="text-warning"
-        icon={<FaRegEnvelope size={144} color="#facc15" />}
-      />
+      <CompanyFigure />
+      <UsersFigure />
+      <InvitesFigure />
     </div>
 
-    <div className="flex flex-row w-full gap-8">
-      <RegisteredUsersTableWithoutCheckbox className="" data={registeredUsersData} />
-      <PendingInvitesTableWithoutCheckbox className="" data={inviteTableData} />
+    <div className="flex flex-row flex-wrap w-full gap-8">
+      <RegisteredUsersTableWithoutCheckbox
+        className="h-fit max-h-full"
+        data={registeredUsersData}
+      />
+      <PendingInvitesTableWithoutCheckbox className="h-fit max-h-full" data={inviteTableData} />
     </div>
   </div>
 );
