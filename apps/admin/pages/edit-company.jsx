@@ -19,7 +19,7 @@ function parseData(data) {
   const parsedData = {
     ...data,
     image: data.image
-      ? `https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/${data.image}`
+      ? `https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/company-image-bucket/${data.image}`
       : null,
     comments: data.companies_comments[0],
   };
