@@ -35,26 +35,32 @@ const CreateParam = () => {
     setTags(tags.filter((_, index) => index !== indexToRemove));
   };
 
-  const formatData = () => {};
-
   const addChoiceParam = async (e) => {
-    const tagsObj = [];
+    // const tagsObj = [];
+    if (tags.length === 0) {
+      setDisplayAlert(true);
+      setError('choices');
+      setTimeout(() => {
+        setDisplayAlert(false);
+        setError(false);
+      }, 4000);
+    } else {
+      const { data, status } = await supabase
+        .from('parameter')
+        .insert({
+          name: e.target.paramName.value,
+          display_name: e.target.displayName.value,
+          type: e.target.paramType.value,
+          datatype: e.target.dataType.value,
+        })
+        .select('id');
 
-    const { data, status } = await supabase
-      .from('parameter')
-      .insert({
-        name: e.target.paramName.value,
-        display_name: e.target.displayName.value,
-        type: e.target.paramType.value,
-        datatype: e.target.dataType.value,
-      })
-      .select('id');
+      // tags.map((tag) => tagsObj.push({ parameter: data[0].id, choice: tag }));
+      // console.log(tagsObj);
 
-    // tags.map((tag) => tagsObj.push({ parameter: data[0].id, choice: tag }));
-    // console.log(tagsObj);
-
-    await supabase.from('parameter_choices').insert({ parameter: data[0].id, choice: tags });
-    queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
+      await supabase.from('parameter_choices').insert({ parameter: data[0].id, choice: tags });
+      queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
+    }
   };
 
   const addParam = async (e) => {
@@ -174,7 +180,6 @@ const CreateParam = () => {
               type="text"
               className="input-group input input-bordered"
               placeholder="Choice Options"
-              required
               onKeyDown={(e) => (e.key === 'Enter' ? addTags(e) : null)}
             />
             <ul className="flex gap-3 flex-wrap pt-2">
@@ -209,6 +214,9 @@ const CreateParam = () => {
       )}
       {displayAlert && error === false && (
         <Alert level="success" message="Parameter successfully created" className="mt-4" />
+      )}
+      {displayAlert && error === 'choices' && (
+        <Alert level="error" message="No choices entered" className="mt-4" />
       )}
     </div>
   );
