@@ -64,7 +64,7 @@ const CompanyRegisterFormContext = ({ submitSuccess, onSuccessChange }) => {
     // Upload the company logo if provided
     if (companyLogo) {
       // Upload company logo
-      await supabase.storage.from('companyprofilepictures').upload(companyLogo.name, companyLogo);
+      await supabase.storage.from('company-image-bucket').upload(companyLogo.name, companyLogo);
 
       // Update the newly created company record with the name of the logo uploaded
       await supabase
