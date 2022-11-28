@@ -1,93 +1,72 @@
 import PropTypes from 'prop-types';
+import cx from 'classnames';
+import { Alert } from '@inc/ui';
+import { useState } from 'react';
 import BaseModal from './BaseModal';
+import CompanyRegisterFormContext from '../forms/CompanyRegisterFormContext';
 
-const CompanyRegister = ({ isOpen, onRequestClose }) => (
-  <BaseModal
-    isOpen={isOpen}
-    onRequestClose={onRequestClose}
-    header={
-      <div>
-        <h3 className="text-lg font-bold">Create an individual company</h3>
-        <p className="text-sm">Register a company profile to the system</p>
-      </div>
+/**
+ * Company creation modal
+ * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
+ * @returns The company registration modal
+ */
+const CompanyRegister = ({ isOpen, onRequestClose, onSuccess }) => {
+  // -- Component states -- //
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  // -- Handlers -- //
+  /**
+   * Handles for when the success state changes
+   * @param {boolean} value The value of the new success state
+   */
+  const handleSuccessChange = (value) => {
+    // Invoke the onSuccess handler if the changed state is successful
+    if (value && onSuccess) {
+      onSuccess();
     }
-  >
-    <form className="flex flex-wrap">
-      <div className="flex-1 md:mr-10">
+
+    // Update the success state
+    setSubmitSuccess(value);
+  };
+
+  return (
+    <BaseModal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      header={
         <div>
-          <div className="form-control">
-            <div className="label">
-              <span className="label-text">Company name</span>
-            </div>
-            <input
-              type="text"
-              className="input-group input input-bordered"
-              placeholder="Company name"
-            />
-          </div>
-          <div className="form-control">
-            <div className="label">
-              <span className="label-text">Company website</span>
-            </div>
-            <input
-              type="text"
-              className="input-group input input-bordered"
-              placeholder="Company website"
-            />
-          </div>
-          <div className="form-control">
-            <div className="label">
-              <span className="label-text">Company bio (optional)</span>
-            </div>
-            <textarea className="textarea textarea-bordered h-32" placeholder="Company bio" />
-          </div>
+          <h3 className="text-lg font-bold">Create an individual company</h3>
+          <p className="text-sm">Register a company profile to the system</p>
         </div>
-      </div>
-      <div className="md:w-1/2 flex flex-col">
-        <div className="label">
-          <span className="label-text ">Company Logo (optional)</span>
+      }
+      siblings={
+        // TODO: Make the alert fade in and out
+        // Can only be done using either opacity or visibility css properties, but those properties do not remove the alert from the DOM
+        // Using the hidden class alongside any of those properties negate them
+        // So the transition can only be achieved either by Javascript with setTimeouts, or maybe Framer Motion
+        <div className={cx('w-full transition', { hidden: !submitSuccess })}>
+          <Alert
+            level="success"
+            message="Company created successfully"
+            className="text-white lg:w-1/3 absolute shadow-lg translate-x-1/2 right-[50%] mt-5"
+            onRequestClose={() => setSubmitSuccess(false)}
+            dismissable
+          />
         </div>
-        <label className="flex flex-1 justify-center w-full px-8 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
-          <span className="flex items-center space-x-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-20 h-20 text-gray-600"
-              fill="full"
-              viewBox="0 0 490 490"
-              stroke="currentColor"
-              strokeWidth="10"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M245,0c-9.5,0-17.2,7.7-17.2,17.2v331.2L169,289.6c-6.7-6.7-17.6-6.7-24.3,0s-6.7,17.6,0,24.3l88.1,88.1
-				c3.3,3.3,7.7,5,12.1,5c4.4,0,8.8-1.7,12.1-5l88.1-88.1c6.7-6.7,6.7-17.6,0-24.3c-6.7-6.7-17.6-6.7-24.3,0L262,348.4V17.1
-				C262.1,7.6,254.5,0,245,0z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M462.1,472.9v-99.7c0-9.5-7.7-17.2-17.2-17.2s-17.2,7.7-17.2,17.2v82.6H62.2v-82.6c0-9.5-7.7-17.2-17.1-17.2
-				s-17.2,7.7-17.2,17.2v99.7c0,9.5,7.7,17.1,17.2,17.1h399.8C454.4,490,462.1,482.4,462.1,472.9z"
-              />
-            </svg>
-            <span className="font-medium text-sm text-gray-600">
-              Click to upload or drag and drop SVG, PNG or JPG (MAX. 800 x 400px)
-            </span>
-          </span>
-          <input type="file" name="file_upload" className="hidden" />
-        </label>
-        <div className="modal-action">
-          <button className="btn btn-outline btn-primary w-full">Register Company</button>
-        </div>
-      </div>
-    </form>
-  </BaseModal>
-);
+      }
+    >
+      <CompanyRegisterFormContext
+        submitSuccess={submitSuccess}
+        onSuccessChange={handleSuccessChange}
+      />
+    </BaseModal>
+  );
+};
 
 CompanyRegister.propTypes = {
   isOpen: PropTypes.bool,
   onRequestClose: PropTypes.func,
+  onSuccess: PropTypes.func,
 };
 
 export default CompanyRegister;

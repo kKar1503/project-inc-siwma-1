@@ -4,9 +4,13 @@ import { useQueries, useQueryClient } from 'react-query';
 import cx from 'classnames';
 import { getAllCompanies, getCompanyCount } from '@inc/database';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import BaseTable from './BaseTable';
+import { MdOutlineRemoveRedEye } from 'react-icons/md';
+import { SlPencil } from 'react-icons/sl';
+import { BsTrash } from 'react-icons/bs';
+import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
-import TableButton from './TableButton';
+import TablePagination from './TablePagination';
+import TableMenu from './TableMenu';
 
 /**
  * Parses data retrieved from Supabase into a format accepted by the tables
@@ -16,8 +20,9 @@ import TableButton from './TableButton';
 function parseData(data) {
   return data.map((e) => ({
     id: e.id,
-    profilePicture:
-      'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+    profilePicture: `https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/${
+      e.image || 'example.jpg'
+    }`,
     company: e.name,
     website: e.website,
     bio: e.bio,
@@ -45,6 +50,7 @@ const RegisteredCompaniesTable = ({ className }) => {
       // Fetches the total number of companies from supabase
       queryKey: ['getCompanyCount', { matching: searchInput }],
       keepPreviousData: true,
+      refetchInterval: 60000, // Refresh every minute
       queryFn: async () =>
         getCompanyCount({
           supabase,
@@ -58,11 +64,12 @@ const RegisteredCompaniesTable = ({ className }) => {
         { from: selectedIndex * 10, to: (selectedIndex + 1) * 9, matching: searchInput },
       ],
       keepPreviousData: true,
+      refetchInterval: 60000, // Refresh every minute
       queryFn: async () =>
         getAllCompanies({
           supabase,
           from: selectedIndex * 10,
-          to: (selectedIndex + 1) * 9,
+          to: (selectedIndex + 1) * 10 - 1,
           matching: searchInput,
         }),
     },
@@ -79,6 +86,11 @@ const RegisteredCompaniesTable = ({ className }) => {
   const companyCount = isLoading || !companyCountQuery.data ? 0 : companyCountQuery.data.count;
   const companies =
     isLoading || !companiesQuery.data.data ? [] : parseData(companiesQuery.data.data);
+
+  // Check if the selected pagination index is out of bounds
+  if (selectedIndex > 0 && (selectedIndex + 1) * 10 > Math.ceil(companyCount / 10) * 10)
+    // It is out of bounds, set the selected index to be that of the last button
+    setSelectedIndex(Math.floor(companyCount / 10));
 
   // -- Data fetch/update functions --//
   /**
@@ -121,7 +133,7 @@ const RegisteredCompaniesTable = ({ className }) => {
     setselectedCompanies(selectedCompanies.map((e) => ({ ...e, visible: false })));
   };
 
-  // -- Logic functions -- //
+  // -- Handler functions -- //
   /**
    * Handles for when a table item is selected/unselected
    * @param {{}} targetCompany The company that was selected/unselected
@@ -149,6 +161,7 @@ const RegisteredCompaniesTable = ({ className }) => {
     }
   };
 
+  // -- Logic functions -- //
   /**
    * Checks that all selected companies are suspended
    * @returns Whether or not all currently selected companies are suspended
@@ -160,55 +173,6 @@ const RegisteredCompaniesTable = ({ className }) => {
    * @returns Whether or not all currently selected companies are not suspended
    */
   const selectedAreNotSuspended = () => selectedCompanies.every((e) => e.visible === true);
-
-  // -- Render functions --//
-  /**
-   * Renders pagination buttons
-   */
-  const renderPagination = () => {
-    // Checks if the data is still being fetched from supabase
-    if (isLoading) {
-      // Render a disabled pagination button
-      return (
-        <TableButton
-          index={0}
-          selectedIndex={selectedIndex}
-          setSelectedIndex={setSelectedIndex}
-          selectedColor="bg-primary"
-          className="rounded-lg hover:bg-primary"
-        />
-      );
-    }
-
-    // Data has already been fetched from supabase, determine the number of pagination buttons to be rendered
-    const buttonCount = companyCount / 10;
-
-    // Initialise an array of buttons
-    const buttons = [];
-
-    // Render x number of buttons
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < buttonCount; i++) {
-      buttons.push(
-        <TableButton
-          index={i}
-          key={`pagination-btn-${i}`}
-          selectedIndex={selectedIndex}
-          setSelectedIndex={setSelectedIndex}
-          selectedColor="bg-primary"
-          // Make the left side of the first button and the right side of the last button rounded,
-          // also make the entire button rounded if it is the only button
-          className={cx('hover:bg-primary', {
-            'rounded-l-lg': i === 0,
-            'rounded-r-lg': i >= buttonCount - 1,
-          })}
-        />
-      );
-    }
-
-    // Return the result
-    return buttons;
-  };
 
   return (
     <BaseTable
@@ -241,6 +205,28 @@ const RegisteredCompaniesTable = ({ className }) => {
       isLoading={isLoading}
       data={companies}
       onChange={onChangeHandler}
+      actionMenu={
+        <TableMenu>
+          <li>
+            <button>
+              <MdOutlineRemoveRedEye className="h-5 w-5" />
+              View
+            </button>
+          </li>
+          <li>
+            <button>
+              <SlPencil className="h-5 w-5" />
+              Edit
+            </button>
+          </li>
+          <li>
+            <button>
+              <BsTrash className="h-5 w-5" />
+              Delete
+            </button>
+          </li>
+        </TableMenu>
+      }
       footer={
         <div className="flex justify-between bg-none">
           {/* Company suspension/reinstation */}
@@ -268,7 +254,13 @@ const RegisteredCompaniesTable = ({ className }) => {
           <div className="flex justify-end bg-none">
             {
               // Table pagination buttons
-              renderPagination()
+              <TablePagination
+                rows={companyCount}
+                rowsPerPage={10}
+                selectedIndex={selectedIndex}
+                onChange={setSelectedIndex}
+                isLoading={isLoading}
+              />
             }
           </div>
         </div>
