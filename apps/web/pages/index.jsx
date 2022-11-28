@@ -171,7 +171,12 @@ const MarketplacePage = () => {
         <Carousel name="categories" carouselWrapperClassName="mb-10">
           {categoriesData &&
             categoriesData.map(({ id, name, image }) => (
-              <CategoryListingItem key={id} name={name} img={null} href={`/category/${name}`} />
+              <CategoryListingItem
+                key={id}
+                name={name}
+                img={null}
+                href={`/category/${name}?id=${id}`}
+              />
             ))}
         </Carousel>
 
