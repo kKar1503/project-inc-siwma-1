@@ -9,7 +9,15 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import BuyBadge from '../marketplace/listing/BuyBadge';
 import SellBadge from '../marketplace/listing/SellBadge';
 
-const ProductListingItem = ({ img, type, name, href, id, setInfiniteScrollMockData }) => {
+const ProductListingItem = ({
+  img,
+  type,
+  name,
+  href,
+  id,
+  visibility,
+  setInfiniteScrollMockData,
+}) => {
   const supabase = useSupabaseClient();
 
   const DeleteListing = async (listid) => {
@@ -22,7 +30,16 @@ const ProductListingItem = ({ img, type, name, href, id, setInfiniteScrollMockDa
   };
 
   const ArchiveListing = async (listid) => {
-    await supabase.rpc('update_listing', { listingid: listid });
+    await supabase.rpc('archive_listing', { listingid: listid });
+    const { data: listingAPIData } = await supabase.rpc('get_listings', {
+      item_offset: 0,
+      item_limit: 100,
+    });
+    setInfiniteScrollMockData(listingAPIData);
+  };
+
+  const UnarchiveListing = async (listid) => {
+    await supabase.rpc('unarchive_listing', { listingid: listid });
     const { data: listingAPIData } = await supabase.rpc('get_listings', {
       item_offset: 0,
       item_limit: 100,
@@ -42,9 +59,15 @@ const ProductListingItem = ({ img, type, name, href, id, setInfiniteScrollMockDa
           <li>
             <button>Duplicate Listing</button>
           </li>
-          <li>
-            <button onClick={() => ArchiveListing(id)}>Archive</button>
-          </li>
+          {visibility ? (
+            <li>
+              <button onClick={() => ArchiveListing(id)}>Archive</button>
+            </li>
+          ) : (
+            <li>
+              <button onClick={() => UnarchiveListing(id)}>Unarchive</button>
+            </li>
+          )}
           <li>
             <button onClick={() => DeleteListing(id)} className="text-red-500">
               Delete
@@ -76,6 +99,7 @@ ProductListingItem.propTypes = {
   id: PropTypes.number,
   name: PropTypes.string,
   href: PropTypes.string,
+  visibility: PropTypes.bool,
   setInfiniteScrollMockData: PropTypes.func,
 };
 

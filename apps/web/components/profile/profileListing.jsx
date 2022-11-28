@@ -59,7 +59,7 @@ const ProfileListing = () => {
             rating={Math.floor(Math.random() * 5) + 1}
             href={`/products/`}
           /> */}
-          {infiniteScrollMockData.map(({ name, description, id, price, type }) => (
+          {infiniteScrollMockData.map(({ name, description, id, price, type, visibility }) => (
             <ProfileListingItem
               type={type}
               key={id}
@@ -68,6 +68,7 @@ const ProfileListing = () => {
               //   rating={Math.floor(Math.random() * 5) + 1}
               href={`/products/${id}`}
               id={id}
+              visibility={visibility}
               setInfiniteScrollMockData={setInfiniteScrollMockData}
             />
           ))}
