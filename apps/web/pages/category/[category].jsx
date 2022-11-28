@@ -21,7 +21,7 @@ const Category = () => {
   );
 
   return (
-    <div className="m-auto mt-10 mb-10 flex flex-col justify-center w-10/12 h-screen">
+    <div className="m-auto my-10 flex flex-col justify-center w-10/12 h-screen">
       <div className="mb-10 h-1/2">
         <CategoryBanner img="https://images.unsplash.com/photo-1563642900777-eb44ab05eaf8" />
       </div>

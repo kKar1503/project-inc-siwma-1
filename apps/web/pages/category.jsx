@@ -15,7 +15,7 @@ const Category = () => {
   //   }
   // });
   return (
-    <div className="mt-10 ml-28 mr-28 mb-10 h-screen">
+    <div className="mx-28 my-10 h-screen">
       <p className="font-bold text-3xl text-primary mb-5">More Metal Types</p>
       <p className="text-secondary text-xl mb-10">
         Choose from over 8,000 types of shapes and grades of metal!
