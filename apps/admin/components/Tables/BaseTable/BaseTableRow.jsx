@@ -44,6 +44,12 @@ const BaseTableRow = React.forwardRef(
     // -- Hooks -- //
     useEffect(() => {
       // -- Determine where the offset the action menu should have, such that it does not exit the bounds of the table -- //
+      // Check if the action menu offset needs to be calculated
+      if (!actionMenu) {
+        // No action menu was provided, so there is no need to calculate the offset
+        return;
+      }
+
       // Retrieve the coordinates of the table component and action menu component
       const tableCoords = tableRef.current.getBoundingClientRect();
       const actionMenuCoords = actionMenuRef.current.getBoundingClientRect();
@@ -60,7 +66,7 @@ const BaseTableRow = React.forwardRef(
         actionMenuRef.current.style.top = 'auto';
         actionMenuRef.current.style.bottom = `30px`;
       }
-    });
+    }, []);
 
     return (
       <tr>
