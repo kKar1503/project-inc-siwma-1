@@ -51,21 +51,12 @@ const ProfileListing = () => {
           loading={infiniteScrollMockDataLoading}
           reachedMaxItems={infiniteScrollMockData.length > 100}
         >
-          {/* <ProductListingItem
-            type={'dwa'}
-            key={2}
-            img={null}
-            name={'name'}
-            rating={Math.floor(Math.random() * 5) + 1}
-            href={`/products/`}
-          /> */}
           {infiniteScrollMockData.map(({ name, description, id, price, type, visibility }) => (
             <ProfileListingItem
               type={type}
               key={id}
               img={null}
               name={name}
-              //   rating={Math.floor(Math.random() * 5) + 1}
               href={`/products/${id}`}
               id={id}
               visibility={visibility}

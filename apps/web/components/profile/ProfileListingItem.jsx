@@ -1,5 +1,4 @@
 // Import prop types
-import { useQuery } from 'react-query';
 import { Enum } from '@inc/database';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,6 +7,7 @@ import { HiDotsVertical } from 'react-icons/hi';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import BuyBadge from '../marketplace/listing/BuyBadge';
 import SellBadge from '../marketplace/listing/SellBadge';
+import ArchiveBadge from '../marketplace/listing/ArchiveBadge';
 
 const ProductListingItem = ({
   img,
@@ -86,6 +86,9 @@ const ProductListingItem = ({
           {type === Enum.LISTING_TYPE.BUY && <BuyBadge />}
 
           {type === Enum.LISTING_TYPE.SELL && <SellBadge />}
+
+          {visibility === false && <ArchiveBadge />}
+
           <p className="font-bold">{name}</p>
         </div>
       </Link>
