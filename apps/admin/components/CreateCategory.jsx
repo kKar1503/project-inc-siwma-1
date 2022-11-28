@@ -1,40 +1,50 @@
 import { useQuery, useQueries, useQueryClient } from 'react-query';
+import { useState } from 'react';
+import { Alert } from '@inc/ui';
 import supabase from '../supabaseClient';
 
 const CreateCategory = () => {
   const queryClient = useQueryClient();
+  const [displayAlert, setDisplayAlert] = useState(null);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['newCategory'],
-    queryFn: async () => supabase.from('category').select(`id, name`),
-  });
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ['newCategory'],
+  //   queryFn: async () => supabase.from('category').select(`id, name`),
+  // });
 
   const addCategory = async (e) => {
     e.preventDefault();
 
-    const newCatName = { name: e.target.categoryName.value };
+    // const newCatName = { name: e.target.categoryName.value };
 
-    console.log(data.data);
-    const currentCatNames = [];
+    // console.log(data.data);
+    // const currentCatNames = [];
 
-    for (let i = 0; i < data.data.length; i++) {
-      currentCatNames.push(data.data[i].name);
-    }
-
-    console.log(currentCatNames);
-
-    // while (currentCatNames.length !== i) {
-    //   i++
-    //   // alert('Duplicate category name detected!');
-    //   if (currentCatNames[i] !== newCatName.toString() && currentCatNames.length < i) {
-    //     i++
-    //   }
+    // for (let i = 0; i < data.data.length; i++) {
+    //   currentCatNames.push(data.data[i].name);
+    // } if (currentCatNames.includes(e.target.categoryName.value)) {
+    //   <Alert level="error" message="Duplicate category name found" className="mt-14" />;
+    // } else {
+    //   await supabase.from('category').insert({
+    //     name: `${e.target.categoryName.value}`,
+    //     description: `${e.target.categoryDescription.value}`,
+    //   });
+    //   <Alert level="success" message="Category successfully edited" className="mt-14" />;
     // }
 
-    // await supabase.from('category').insert({
-    //   name: `${e.target.categoryName.value}`,
-    //   description: `${e.target.categoryDescription.value}`,
-    // });
+    // console.log(currentCatNames);
+
+    const { data, status } = await supabase.from('category').insert({
+      name: `${e.target.categoryName.value}`,
+      description: `${e.target.categoryDescription.value}`,
+    });
+
+    if (status === 409) {
+      setDisplayAlert(true);
+      setTimeout(() => {
+        setDisplayAlert(false);
+      }, 4000);
+    }
 
     queryClient.invalidateQueries({ queryKey: ['categories'] });
   };
@@ -85,6 +95,9 @@ const CreateCategory = () => {
           </button>
         </div>
       </form>
+      {displayAlert && (
+        <Alert level="error" message="Duplicate category name found" className="mt-4" />
+      )}
     </div>
   );
 };
