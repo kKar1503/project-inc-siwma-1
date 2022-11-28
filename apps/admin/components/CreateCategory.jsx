@@ -40,7 +40,7 @@ const CreateCategory = () => {
   //   queryFn: async () => supabase.from('category').select(`id, name`),
   // });
 
-  const test = (uuid) => {
+  const changeUUID = (uuid) => {
     const parts = [];
     parts.push(uuid.slice(0, 8));
     parts.push(uuid.slice(8, 12));
@@ -62,14 +62,14 @@ const CreateCategory = () => {
       .select('id');
 
     const randomUUID = crypto.randomBytes(32).toString('hex');
-    const newUUID = test(randomUUID);
+    const newUUID = changeUUID(randomUUID);
 
     await supabase.storage.from('category-image-bucket').upload(newUUID, image);
     const { error: message } = await supabase
       .from('category')
       .update({ image: newUUID })
       .eq('id', data[0].id);
-    console.log(message);
+
     if (status === 409) {
       setDisplayAlert(true);
       setError(true);
@@ -128,6 +128,7 @@ const CreateCategory = () => {
             <span className="items-center space-x-2">
               {image !== null ? (
                 <div>
+                  <p className="text-xl text-gray-600 text-center my-6">Image Name:</p>
                   <p className="text-xl text-gray-600 text-center my-6">{image.name}</p>
                 </div>
               ) : (
