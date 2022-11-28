@@ -108,7 +108,6 @@ const MarketplacePage = () => {
       console.log('Success ads', adsAPIData.data);
       setAdsData(adsAPIData.data);
     }
-    // console.log(adsData);
   }, [adsStatus, adsAPIData]);
 
   useEffect(() => {
@@ -137,7 +136,7 @@ const MarketplacePage = () => {
           <AnimatedCarousel wrapperClassName="w-full h-[300px]" animationDuration={5000}>
             {adsData.map((ad) => (
               <div key={ad.id} className="w-full relative">
-                <Advertisement data={ad} />
+                <Advertisement adData={ad} />
               </div>
             ))}
           </AnimatedCarousel>
