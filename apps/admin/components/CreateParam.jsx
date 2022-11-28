@@ -180,7 +180,6 @@ const CreateParam = () => {
               type="text"
               className="input-group input input-bordered"
               placeholder="Choice Options"
-              required
               onKeyDown={(e) => (e.key === 'Enter' ? addTags(e) : null)}
             />
             <ul className="flex gap-3 flex-wrap pt-2">
