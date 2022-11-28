@@ -12,9 +12,11 @@ import CompanyEditForm from './CompanyEditForm';
  */
 const parseDefaultValues = (data) => ({
   companyName: data.name,
-  companyLogo: {
-    src: data.image,
-  },
+  companyLogo: data.image
+    ? {
+        src: data.image,
+      }
+    : null,
   companyWebsite: data.website,
   companyBio: data.bio,
   companyComments: data.comments ? data.comments.comments : '',
@@ -140,7 +142,7 @@ const propTypes = {
   defaultValues: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
+    image: PropTypes.string,
     website: PropTypes.string.isRequired,
     bio: PropTypes.string.isRequired,
     comments: PropTypes.string,
