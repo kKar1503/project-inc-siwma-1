@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { VictoryAxis, VictoryBar, VictoryChart, VictoryLabel } from 'victory';
+import { VictoryAxis, VictoryBar, VictoryChart } from 'victory';
 import { BarLine, BarToolTip, focus, reset, unfocus } from '../BarHover';
 import Title from '../Title';
 
@@ -20,7 +20,7 @@ const TopBuyingCategoryChart = ({ data }) => (
     padding={{ left: 100, bottom: 50, right: 30, top: 50 }}
     domainPadding={40}
   >
-    <Title text="Top 5 Buying Catagories" />
+    <Title text="Top 5 Buying Categories" />
     <VictoryAxis dependentAxis style={{ grid: { stroke: '#DADADA' } }} tickCount={7} />
     <VictoryAxis dependentAxis label="Posts" />
     <VictoryBar
@@ -52,11 +52,7 @@ const TopBuyingCategoryChart = ({ data }) => (
       y="posts"
       style={{ data: { fill: color } }}
     />
-    <VictoryAxis
-      style={{ tickLabels: { fontSize: 10 } }}
-      label="Category"
-      axisLabelComponent={<VictoryLabel dy={-30} />}
-    />
+    <VictoryAxis style={{ tickLabels: { fontSize: 10 } }} />
   </VictoryChart>
 );
 
