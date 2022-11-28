@@ -3,12 +3,12 @@
 import { bool, func } from 'prop-types';
 import { MdHome, MdBookmark, MdChat, MdPeople } from 'react-icons/md';
 import cx from 'classnames';
-import SidebarHeaderIcon from './HambugerMenuSubComponents/SidebarHeader';
-import SidebarDivider from './HambugerMenuSubComponents/SidebarDivider';
-import SidebarItem from './HambugerMenuSubComponents/SidebarItem';
-import SidebarSubItem from './HambugerMenuSubComponents/SidebarSubItem';
-import SidebarLogout from './HambugerMenuSubComponents/SidebarLogout';
-import SidebarSearch from './HambugerMenuSubComponents/SidebarSearch';
+import SidebarHeaderIcon from './MobileMenuSubComponents/SidebarHeader';
+import SidebarDivider from './MobileMenuSubComponents/SidebarDivider';
+import SidebarItem from './MobileMenuSubComponents/SidebarItem';
+import SidebarSubItem from './MobileMenuSubComponents/SidebarSubItem';
+import SidebarLogout from './MobileMenuSubComponents/SidebarLogout';
+import SidebarSearch from './MobileMenuSubComponents/SidebarSearch';
 
 // ------------------ Layout Configuration ------------------
 
@@ -39,10 +39,10 @@ const LayoutEditor = ({ closeHandle }) => (
 
 // ------------------ Main Component -----------------
 /**
- * The HamburgerMenu is a hamburger menu
+ * The MobileMenu is a hamburger menu only visible on mobile devices
  * @type {React.FC<import('prop-types').InferProps<typeof HamburgerMenu.propTypes>>}
  */
-const HamburgerMenu = ({ open, setOpen }) => {
+const MobileMenu = ({ open, setOpen }) => {
   // ------------------ Handles -----------------
   const closeHandle = () => setOpen(false);
 
@@ -62,7 +62,7 @@ const HamburgerMenu = ({ open, setOpen }) => {
   );
 };
 // ------------------ Export ------------------
-export default HamburgerMenu;
+export default MobileMenu;
 
 // ------------------ PropTypes ------------------
 
@@ -70,7 +70,7 @@ LayoutEditor.propTypes = {
   closeHandle: func,
 };
 
-HamburgerMenu.propTypes = {
+MobileMenu.propTypes = {
   open: bool.isRequired,
   setOpen: func,
 };
