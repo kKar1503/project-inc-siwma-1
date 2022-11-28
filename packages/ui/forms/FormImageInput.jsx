@@ -16,8 +16,9 @@ import { useFormContext, useWatch } from 'react-hook-form';
  * @param {{ name: [string], format: [string]}} allowedExts Filetypes accepted by the input
  * @param {[string]} allowedExts.name Names of the file types accepted by the input (svg, png, jpg)
  * @param {[string]} allowedExts.format The input format that corresponds with the filetypes supplied (image/svg, image/png, image/jpg)
- * @param className Custom classes
- * @param style Custom styles
+ * @param {string} className Custom classes
+ * @param {{}} style Custom styles
+ * @param {{ className: string, style: {} }} imageProps Props for the image preview
  * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
  * @returns A file input that works with react form hook
  */
@@ -31,6 +32,7 @@ const FormImageInput = ({
   allowedExts,
   className,
   style,
+  imageProps,
 }) => {
   // -- React Hook Form -- //
   // Use form context and deconstruct required hooks from the form object
@@ -140,16 +142,21 @@ const FormImageInput = ({
       className={cx(
         'flex flex-1 justify-center max-w-full px-8 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none',
         { 'border-error': errors[name] },
-        { 'border-success': success }
+        { 'border-success': success },
+        className
       )}
       onDragOver={handleDragOver}
       onDrop={handleDropOver}
+      style={style}
     >
       {
         // If a valid image file is selected, render the image
         (selectedFile && (
-          <div className="rounded-full flex flex-1 justify-center items-center">
-            <div className="h-36 w-36 relative">
+          <div className="rounded-full flex flex-1 justify-center items-center py-6">
+            <div
+              className={cx('h-36 w-36 relative', imageProps ? imageProps.className : '')}
+              style={imageProps ? imageProps.style : {}}
+            >
               <Image
                 src={selectedFile.src}
                 alt="company logo"
@@ -221,6 +228,10 @@ const propTypes = {
   }).isRequired,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  imageProps: PropTypes.exact({
+    className: PropTypes.string,
+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  }),
 };
 
 FormImageInput.propTypes = propTypes;
