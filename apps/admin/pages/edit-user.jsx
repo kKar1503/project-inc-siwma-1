@@ -67,7 +67,7 @@ const EditUser = () => {
   const companies =
     isLoading || !getCompaniesQuery.data.data ? [] : parseCompanyData(getCompaniesQuery.data.data);
 
-  const comment =
+  const commentData =
     isLoading || !getCommentQuery.data.data ? {} : parseCommentData(getCommentQuery.data.data[0]);
 
   const profilePic =
@@ -88,8 +88,11 @@ const EditUser = () => {
   const [email, setEmail] = useState(user ? user.email : '');
   const [company, setCompany] = useState(user ? user.companyid : '');
   const [phone, setPhone] = useState(user ? user.phone : '');
+  const [comment, setComment] = useState(
+    commentData && !commentData === {} ? commentData.comments : 'No Comment'
+  );
 
-  const { mutate, isError } = useMutation({
+  const { mutate: editUser, isError: userError } = useMutation({
     mutationKey: ['updateUser'],
     mutationFn: async () =>
       supabase
@@ -102,8 +105,18 @@ const EditUser = () => {
         })
         .eq('id', user.id),
   });
+
+  const { mutate: editComment, isError: commentUpdatError } = useMutation({
+    mutationKey: ['updateComment'],
+    mutationFn: async () =>
+      supabase.from('users_comments').update({ comments: comment }).eq('userid', user.id),
+  });
+
   const onClickHandler = () => {
-    mutate();
+    editUser();
+    if (comment !== 'No Comment' || comment !== commentData.comments) {
+      editComment();
+    }
   };
 
   return (
@@ -163,10 +176,7 @@ const EditUser = () => {
                   </div>
                   <TogglePass />
                   <div className="flex flex-col gap-4">
-                    <ToggleEditArea
-                      value={comment ? comment.comments : 'Write here...'}
-                      label="Comments"
-                    />
+                    <ToggleEditArea value={comment} label="Comments" onSave={setComment} />
                   </div>
                 </div>
               </div>
