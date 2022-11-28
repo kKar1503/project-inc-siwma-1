@@ -20,7 +20,7 @@ const UsersFigure = () => {
   return (
     <AdminFigure
       title="Total Users"
-      value={userCount}
+      value={userCount.toString()}
       color="text-accent"
       icon={<FaUserCheck size={144} color="#34d399" />}
     />
