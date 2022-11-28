@@ -5,37 +5,36 @@ const CreateCategory = () => {
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
-    queryKey: ['categories'],
-    queryFn: async () => supabase.from('category').select(`id, name, description`),
+    queryKey: ['newCategory'],
+    queryFn: async () => supabase.from('category').select(`id, name`),
   });
 
   const addCategory = async (e) => {
     e.preventDefault();
 
-    // const newCatName = {name: e.target.categoryDescription.value}
+    const newCatName = { name: e.target.categoryName.value };
 
-    // const catNames = []
+    console.log(data.data);
+    const currentCatNames = [];
 
-    // do {
-    //   catNames.push(data.name)
-    // } while (catNames.length < data.length)
+    for (let i = 0; i < data.data.length; i++) {
+      currentCatNames.push(data.data[i].name);
+    }
 
-    // console.log(catNames)
+    console.log(currentCatNames);
 
-    // let i = 0
-
-    // while (catNames[i] !== newCatName.toString()) {
+    // while (currentCatNames.length !== i) {
     //   i++
-    //   alert('Duplicate category name detected!');
-    //   if (catNames[i] !== newCatName.toString() && catNames.length < i) {
-    //     alert('WOO YEAAA BABY!');
+    //   // alert('Duplicate category name detected!');
+    //   if (currentCatNames[i] !== newCatName.toString() && currentCatNames.length < i) {
+    //     i++
     //   }
     // }
 
-    await supabase.from('category').insert({
-      name: `${e.target.categoryName.value}`,
-      description: `${e.target.categoryDescription.value}`,
-    });
+    // await supabase.from('category').insert({
+    //   name: `${e.target.categoryName.value}`,
+    //   description: `${e.target.categoryDescription.value}`,
+    // });
 
     queryClient.invalidateQueries({ queryKey: ['categories'] });
   };
