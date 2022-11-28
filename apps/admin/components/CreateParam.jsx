@@ -1,6 +1,7 @@
 import { useQueries, useQueryClient, useQuery } from 'react-query';
 import { useState } from 'react';
 import { AiFillCloseCircle } from 'react-icons/ai';
+import { Alert } from '@inc/ui';
 import supabase from '../supabaseClient';
 
 const CreateParam = () => {
@@ -9,6 +10,8 @@ const CreateParam = () => {
   const [paramT, setParamtype] = useState('');
   const [dataT, setDataType] = useState('');
   const [tags, setTags] = useState([]);
+  const [displayAlert, setDisplayAlert] = useState(null);
+  const [error, setError] = useState(null);
 
   const { data: parameterType } = useQuery({
     queryKey: ['parameterType'],
@@ -37,7 +40,7 @@ const CreateParam = () => {
   const addChoiceParam = async (e) => {
     const tagsObj = [];
 
-    const { data, error } = await supabase
+    const { data, status } = await supabase
       .from('parameter')
       .insert({
         name: e.target.paramName.value,
@@ -55,12 +58,29 @@ const CreateParam = () => {
   };
 
   const addParam = async (e) => {
-    await supabase.from('parameter').insert({
+    e.preventDefault();
+
+    const { data, status } = await supabase.from('parameter').insert({
       name: e.target.paramName.value,
       display_name: e.target.displayName.value,
       type: e.target.paramType.value,
       datatype: e.target.dataType.value,
     });
+
+    if (status === 409) {
+      setDisplayAlert(true);
+      setError(true);
+      setTimeout(() => {
+        setDisplayAlert(false);
+        setError(false);
+      }, 4000);
+    } else {
+      setDisplayAlert(true);
+
+      setTimeout(() => {
+        setDisplayAlert(false);
+      }, 4000);
+    }
 
     queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
   };
@@ -90,6 +110,7 @@ const CreateParam = () => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Parameter Name"
+            required
           />
         </div>
         <div className="form-control">
@@ -101,6 +122,7 @@ const CreateParam = () => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Display Name"
+            required
           />
         </div>
         <div className="form-control">
@@ -110,6 +132,7 @@ const CreateParam = () => {
           <select
             className="select select-bordered font-normal text-gray-400"
             name="paramType"
+            required
             onChange={(e) => {
               setParamtype(e.target.value);
             }}
@@ -129,6 +152,7 @@ const CreateParam = () => {
           <select
             className="select select-bordered font-normal text-gray-400"
             name="dataType"
+            required
             onChange={(e) => {
               setDataType(e.target.value);
             }}
@@ -150,6 +174,7 @@ const CreateParam = () => {
               type="text"
               className="input-group input input-bordered"
               placeholder="Choice Options"
+              required
               onKeyDown={(e) => (e.key === 'Enter' ? addTags(e) : null)}
             />
             <ul className="flex gap-3 flex-wrap pt-2">
@@ -179,6 +204,12 @@ const CreateParam = () => {
           </button>
         </div>
       </form>
+      {displayAlert && error && (
+        <Alert level="error" message="Duplicate parameter name found" className="mt-4" />
+      )}
+      {displayAlert && error === false && (
+        <Alert level="success" message="Parameter successfully created" className="mt-4" />
+      )}
     </div>
   );
 };
