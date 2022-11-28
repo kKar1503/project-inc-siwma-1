@@ -17,7 +17,7 @@ const Activeads = () => {
         <p>Active advertisements</p>
       </div>
 
-      <BsMegaphone fontSize={80} style={{ color: '#2563EB' }} />
+      <BsMegaphone fontSize={80} className="text-blue-500" />
     </>
   );
 };
