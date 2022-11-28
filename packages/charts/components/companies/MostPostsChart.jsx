@@ -45,7 +45,10 @@ const MostPostsBarChart = ({ data }) => (
       x="company"
       y="posts"
       style={{
-        data: { fill: (row) => colors[row.index], ...(data.length === 1 && { width: 30 }) },
+        data: {
+          fill: (row) => colors[row.index],
+          ...(data.length === 1 ? { width: 30 } : undefined),
+        },
       }}
     />
     <VictoryAxis style={{ tickLabels: { fontSize: 8 } }} label="Company" />

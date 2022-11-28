@@ -15,7 +15,7 @@ const colors = ['#2AB985', '#21986C', '#34D399', '#A5EBD2', '#1A7755', '#0F4733'
 
 const MostCommonCategoryChart = ({ data }) => (
   <VictoryContainer width={400} height={290}>
-    <Title text="Most Common Category By Listing" />
+    <Title text="6 Most Common Categories By Listing" />
     <VictoryPie
       events={[
         {
