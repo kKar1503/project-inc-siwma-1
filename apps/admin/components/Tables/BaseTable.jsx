@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { useTable, useFilters, useGlobalFilter, useAsyncDebounce } from 'react-table';
+import { useTable, useFilters, useGlobalFilter } from 'react-table';
 
 import { HiDotsVertical } from 'react-icons/hi';
 import { ImCross, ImCheckmark } from 'react-icons/im';
 
+import SearchBar from '../SearchBar';
 // This is the base table component that every other table is built on.
 
 //! Note: tentatively, the table header uses inline styles due to a DaisyUI issue that sets the table header's left property to 0px. This may be a temporary fix until the issue is resolved.
@@ -74,7 +75,15 @@ const BaseTable = ({
     }),
     []
   );
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    state,
+    setGlobalFilter,
+  } = useTable(
     {
       columns,
       data,
@@ -82,6 +91,7 @@ const BaseTable = ({
     useFilters,
     useGlobalFilter
   );
+  const { globalFilter } = state;
   return (
     <div
       className={cx(
@@ -90,7 +100,18 @@ const BaseTable = ({
       )}
     >
       <div className="h-full flex flex-col gap-3 py-3">
-        <div className="px-6">{header}</div>
+        <div className="px-6">
+          <div className="flex flex-row justify-between items-center">
+            {header}
+            <div className="flex flex-row gap-4">
+              <SearchBar
+                placeholder="Search by e-mail"
+                filter={globalFilter}
+                setFilter={setGlobalFilter}
+              />
+            </div>
+          </div>
+        </div>
         <div className="w-full h-auto overflow-hidden border-b">
           <div className="w-full max-h-full overflow-auto">
             <table {...getTableProps()} className="table w-full">

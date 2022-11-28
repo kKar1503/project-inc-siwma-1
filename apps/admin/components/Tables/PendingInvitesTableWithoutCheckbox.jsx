@@ -12,14 +12,9 @@ const PendingInvitesTable = ({ data, columns, className }) => {
   return (
     <BaseTable
       header={
-        <div className="flex flex-row justify-between items-center">
-          <div className="flex flex-col pb-3">
-            <h1 className="font-bold text-xl">Pending Invites</h1>
-            <h1 className="pr-2">Showing 1 to 10 of 100 entries</h1>
-          </div>
-          <div className="flex flex-row gap-4">
-            <SearchBar placeholder="Search by e-mail" />
-          </div>
+        <div className="flex flex-col pb-3">
+          <h1 className="font-bold text-xl">Pending Invites</h1>
+          <h1 className="pr-2">Showing 1 to 10 of 100 entries</h1>
         </div>
       }
       headings={['Company', 'E-mail', 'Mobile Number']}

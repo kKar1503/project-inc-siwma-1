@@ -18,13 +18,13 @@ const RegisteredUsersTable = ({ data, columns, className }) => {
             <h1 className="pr-2">Showing 1 to 10 of 100 entries</h1>
           </div>
           <div className="flex flex-row gap-4">
-            <h1 className="mt-3">Show</h1>
+            {/* find a way to reimplement this later */}
+            {/* <h1 className="mt-3">Show</h1>
             <select className="select select-bordered w-25">
               <option>8 per page</option>
               <option>15 per page</option>
               <option>50 per page</option>
-            </select>
-            <SearchBar placeholder="Search by name" />
+            </select> */}
           </div>
         </div>
       }
