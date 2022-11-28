@@ -90,9 +90,6 @@ const BaseTable = ({
                         {column.render('Header')}
                       </th>
                     ))}
-                    <th className={cx('top-0 sticky rounded-none text-white', headingColor)}>
-                      Actions
-                    </th>
                   </tr>
                 ))}
               </thead>
@@ -130,11 +127,6 @@ const BaseTable = ({
                       {row.cells.map((cell) => (
                         <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                       ))}
-                      <td>
-                        <button type="button" className="flex items-center gap-2">
-                          <HiDotsVertical />
-                        </button>
-                      </td>
                     </tr>
                   );
                 })}
