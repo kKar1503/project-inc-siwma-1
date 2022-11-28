@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import PropType from 'prop-types';
 import { FiUpload } from 'react-icons/fi';
 import { useState } from 'react';
