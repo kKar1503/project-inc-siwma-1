@@ -110,6 +110,8 @@ const CreateCategory = () => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Category Name"
+            pattern="^[A-Za-z]+$"
+            title="Category name should only include letters"
             required
           />
         </div>
