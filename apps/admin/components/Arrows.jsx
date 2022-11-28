@@ -38,7 +38,7 @@ const Arrows = ({ id, optionData, paramId }) => {
       .filter('parameter', 'in', `(${options})`);
     queryClient.invalidateQueries({ queryKey: ['activeParameters'] });
     queryClient.invalidateQueries({ queryKey: ['categoryParameters'] });
-    paramId();
+    paramId(undefined);
   };
 
   const makeActive = async (e) => {
@@ -48,7 +48,7 @@ const Arrows = ({ id, optionData, paramId }) => {
 
     queryClient.invalidateQueries({ queryKey: ['activeParameters'] });
     queryClient.invalidateQueries({ queryKey: ['categoryParameters'] });
-    paramId();
+    paramId(undefined);
   };
 
   return (

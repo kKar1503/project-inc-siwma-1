@@ -18,6 +18,7 @@ const parseData = (data) => {
       parameter_type_name: e.parameter.parameter_type.name,
       datatype_id: e.parameter.datatype.id,
       datatype_name: e.parameter.datatype.name,
+      active: e.parameter.active ? `Active` : `Disabled`,
     }));
   }
   return [];
@@ -31,7 +32,7 @@ const ActiveParametersTable = ({ className, id, paramId, optionData }) => {
       supabase
         .from('categories_parameters')
         .select(
-          `category(name), parameter(id, name, display_name, parameter_type(id, name), datatype(id, name))`
+          `category(name), parameter(id, name, display_name, parameter_type(id, name), datatype(id, name), active)`
         )
         .eq('category(id)', `${id}`),
     enabled: !!id,
@@ -50,11 +51,11 @@ const ActiveParametersTable = ({ className, id, paramId, optionData }) => {
           </div>
         </div>
       }
-      headings={['Parameter Name', 'Data type']}
+      headings={['Parameter Name', 'Data type', 'Active']}
       headingColor="bg-warning"
       showCheckbox
       className={className}
-      columnKeys={['name', 'parameter_type_name']}
+      columnKeys={['name', 'parameter_type_name', 'active']}
       data={isLoading || id === undefined ? undefined : parseData(data?.data)}
       paramId={paramId}
       optionData={optionData}
