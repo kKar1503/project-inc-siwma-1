@@ -6,7 +6,7 @@ import TableButton from './TableButton';
 
 // This table shows a preview of Company Profiles and is built on the BaseTable component.
 
-const CompanyProfilesPreviewTable = ({ data }) => {
+const CompanyProfilesPreviewTable = ({ data, columns }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
@@ -31,7 +31,7 @@ const CompanyProfilesPreviewTable = ({ data }) => {
       headings={['Company', 'Website']}
       headingColor="bg-primary"
       showCheckbox
-      columnKeys={['name', 'website']}
+      columns={columns}
       data={data}
       footer={
         <div className="flex justify-end bg-none">
@@ -70,6 +70,13 @@ CompanyProfilesPreviewTable.propTypes = {
       id: PropTypes.number,
       name: PropTypes.string,
       website: PropTypes.string,
+    })
+  ),
+  columns: PropTypes.arrayOf(
+    PropTypes.shape({
+      Header: PropTypes.string,
+      accessor: PropTypes.string,
+      Cell: PropTypes.element,
     })
   ),
 };

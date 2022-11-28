@@ -6,7 +6,7 @@ import TableButton from './TableButton';
 
 // This table shows Registered Users and is built on the BaseTable component.
 
-const UserInvitesPreviewTable = ({ data }) => {
+const UserInvitesPreviewTable = ({ data, columns }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
@@ -31,7 +31,7 @@ const UserInvitesPreviewTable = ({ data }) => {
       headings={['Company', 'E-mail', 'Mobile Number']}
       headingColor="bg-accent"
       showCheckbox
-      columnKeys={['company', 'email', 'mobileNumber']}
+      columns={columns}
       data={data}
       footer={
         <div className="flex justify-end bg-none">
@@ -73,6 +73,13 @@ UserInvitesPreviewTable.propTypes = {
       email: PropTypes.string,
       company: PropTypes.string,
       mobileNumber: PropTypes.string,
+    })
+  ),
+  columns: PropTypes.arrayOf(
+    PropTypes.shape({
+      Header: PropTypes.string,
+      accessor: PropTypes.string,
+      Cell: PropTypes.element,
     })
   ),
 };
