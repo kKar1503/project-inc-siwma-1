@@ -13,7 +13,7 @@ const parseData = (data) => {
     return data.map((e) => ({
       id: e.parameter.id,
       name: e.parameter.name,
-      display_name: e.parameter.description,
+      display_name: e.parameter.display_name,
       parameter_type_id: e.parameter.parameter_type.id,
       parameter_type_name: e.parameter.parameter_type.name,
       datatype_id: e.parameter.datatype.id,
@@ -51,11 +51,11 @@ const ActiveParametersTable = ({ className, id }) => {
           </div>
         </div>
       }
-      headings={['Parameter Name', 'Data type', 'Active']}
+      headings={['Parameter Name', 'Display Name', 'Parameter Type', 'Data type', 'Active']}
       headingColor="bg-warning"
       showCheckbox
       className={className}
-      columnKeys={['name', 'parameter_type_name', 'active']}
+      columnKeys={['name', 'display_name', 'parameter_type_name', 'datatype_name', 'active']}
       data={isLoading || id === undefined ? undefined : parseData(data?.data)}
       table="Active"
       footer={
