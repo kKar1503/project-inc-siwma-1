@@ -1,10 +1,9 @@
-/* eslint-disable no-console */
 import PropType from 'prop-types';
 import { FiUpload } from 'react-icons/fi';
 import { useState } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
-const UploadCard = ({ id }) => {
+const UploadCard = ({ id, des }) => {
   const [image, setImage] = useState(null);
   const [imageURL, setImageURL] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -26,12 +25,12 @@ const UploadCard = ({ id }) => {
   const handleUpload = async (e) => {
     e.preventDefault();
     console.log(image);
-    // let uploadedURL = '';
 
     if (image) {
+      console.log(image.type);
       const { data, error } = await supabase.storage
         .from('advertisement')
-        .upload(`${Date.now()}_${image.name}`, image);
+        .upload(`${image.name}`, image);
 
       if (error) {
         console.log(error);
@@ -44,8 +43,8 @@ const UploadCard = ({ id }) => {
 
     const { data, error } = await supabase.from('advertisements').upsert({
       company_id: id,
-      img_file_name: image.name,
-      ad_space_id: 1,
+      image: image.name,
+      description: des,
     });
 
     if (error) {
@@ -70,7 +69,7 @@ const UploadCard = ({ id }) => {
         <input
           type="file"
           name="file_upload"
-          accept="image/jpeg image/png"
+          accept="image/*"
           className="hidden"
           disabled={id === '' || des === ''}
           onChange={(e) => checkFile(e)}
@@ -90,6 +89,7 @@ const UploadCard = ({ id }) => {
 };
 
 UploadCard.propTypes = {
-  id: PropType.string.isRequired,
+  id: PropType.number.isRequired,
+  des: PropType.string.isRequired,
 };
 export default UploadCard;
