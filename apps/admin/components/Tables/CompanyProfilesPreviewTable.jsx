@@ -25,7 +25,7 @@ function parseData(data) {
 
 // This table shows a preview of Company Profiles and is built on the BaseTable component.
 
-const CompanyProfilesPreviewTable = ({ data }) => {
+const CompanyProfilesPreviewTable = ({ data, columns }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const innerImage = (props) => (
     <div className="w-10 h-10 mr-4">
@@ -149,6 +149,13 @@ CompanyProfilesPreviewTable.propTypes = {
       id: PropTypes.number,
       name: PropTypes.string,
       website: PropTypes.string,
+    })
+  ),
+  columns: PropTypes.arrayOf(
+    PropTypes.shape({
+      Header: PropTypes.string,
+      accessor: PropTypes.string,
+      Cell: PropTypes.func,
     })
   ),
 };

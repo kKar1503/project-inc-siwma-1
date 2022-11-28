@@ -125,11 +125,7 @@ const RegisteredUsersTable = ({ className }) => {
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">Registered Users</h1>
-            <h1 className="pr-2">
-              Showing {selectedIndex * 10 + 1} to{' '}
-              {(selectedIndex + 1) * 10 > userCount ? userCount : (selectedIndex + 1) * 10} of{' '}
-              {userCount} entries
-            </h1>
+            <h1 className="pr-2">Showing 1 to 10 of 100 entries</h1>
           </div>
           <div className="flex flex-row gap-4">
             <SearchBar placeholder="Search by name" />
