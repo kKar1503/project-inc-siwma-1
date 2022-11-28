@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { Alert } from '@inc/ui';
 import { useState } from 'react';
 import BaseModal from './BaseModal';
-import CompanyRegisterFormContext from '../forms/CompanyRegisterFormContext';
+import { CompanyRegisterFormContext } from '../forms/companyRegister';
 
 /**
  * Company creation modal
