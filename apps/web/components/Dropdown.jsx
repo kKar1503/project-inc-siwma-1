@@ -11,13 +11,28 @@ const Dropdown = ({ items }) => (
   <select className="select w-full text-center" defaultValue="Category">
     <option disabled>Category</option>
     {items.map((item) => (
-      <option key={item}>{item}</option>
+      <optgroup key={item.id} label={item.category}>
+        {item.subcategory.map((subItem) => (
+          <option key={subItem.id}>{subItem.category}</option>
+        ))}
+      </optgroup>
     ))}
   </select>
 );
 
 Dropdown.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.string).isRequired,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      category: PropTypes.string,
+      subcategory: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          category: PropTypes.string,
+        })
+      ),
+    })
+  ),
 };
 
 export default Dropdown;
