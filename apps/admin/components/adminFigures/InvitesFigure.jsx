@@ -20,7 +20,7 @@ const InvitesFigure = () => {
   return (
     <AdminFigure
       title="Pending Invites"
-      value={inviteCount}
+      value={inviteCount.toString()}
       color="text-warning"
       icon={<FaRegEnvelope size={144} color="#facc15" />}
     />

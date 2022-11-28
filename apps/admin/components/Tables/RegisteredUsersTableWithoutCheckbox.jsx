@@ -26,7 +26,7 @@ const RegisteredUsersTable = ({ className }) => {
 
   const [usersQuery, userCountQuery] = useQueries([
     {
-      queryKey: ['getUsers', { from: selectedIndex * 10, to: (selectedIndex + 1) * 10 - 1 }],
+      queryKey: ['getUsers', selectedIndex * 10, (selectedIndex + 1) * 10 - 1],
       queryFn: async () =>
         supabase
           .from('users')
@@ -70,6 +70,7 @@ const RegisteredUsersTable = ({ className }) => {
       headings={['User', 'E-mail', 'Company', 'Mobile Number', 'Status']}
       headingColor="bg-success"
       className={className}
+      showCheckbox={false}
       columnKeys={['name', 'email', 'company', 'mobileNumber', 'enabled']}
       data={usersQuery.isLoading ? undefined : parseData(usersQuery.data?.data)}
       footer={

@@ -23,7 +23,7 @@ const PendingInvitesTable = ({ className }) => {
 
   const [inviteQuery, inviteCountQuery] = useQueries([
     {
-      queryKey: ['getInvites', { from: selectedIndex * 10, to: (selectedIndex + 1) * 10 - 1 }],
+      queryKey: ['getInvites', selectedIndex * 10, (selectedIndex + 1) * 10 - 1],
       queryFn: async () =>
         supabase
           .from('invite')
@@ -79,6 +79,7 @@ const PendingInvitesTable = ({ className }) => {
       headings={['Name', 'Company', 'E-mail']}
       headingColor="bg-warning"
       className={className}
+      showCheckbox={false}
       columnKeys={['name', 'company', 'email']}
       onChange={onChangeHandler}
       data={inviteQuery.isLoading ? undefined : parseData(inviteQuery?.data.data)}
