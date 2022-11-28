@@ -9,7 +9,6 @@ import supabase from '../../supabaseClient';
 // This table shows Available Parameters and is built on the BaseTable component.
 
 const parseId = (data) => {
-  console.log(data);
   if (data.length !== 0) {
     const array = [];
     data.forEach((e) => {
@@ -29,6 +28,7 @@ const parseData = (data) =>
     parameter_type_name: e.parameter_type.name,
     datatype_id: e.datatype.id,
     datatype_name: e.datatype.name,
+    active: e.active ? `Active` : `Disabled`,
   }));
 
 const AvailableParametersTable = ({ className, id, paramId, optionData }) => {
@@ -48,7 +48,7 @@ const AvailableParametersTable = ({ className, id, paramId, optionData }) => {
     queryFn: async () =>
       supabase
         .from('parameter')
-        .select(`id, name, display_name, parameter_type(id, name), datatype(id, name)`)
+        .select(`id, name, display_name, parameter_type(id, name), datatype(id, name), active`)
         .filter('id', 'not.in', `(${paramIds})`),
     // The query will not execute until the userId exists
     enabled: !!paramIds,

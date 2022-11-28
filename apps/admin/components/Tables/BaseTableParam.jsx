@@ -96,13 +96,16 @@ const BaseTableParam = ({
                               if (e.target.checked) {
                                 const newOptions = [...options, row.id];
                                 setOptions(newOptions);
+                                console.log(newOptions);
                                 paramId({ options: newOptions, table });
                               } else {
                                 const newOptions = options.filter((_, index) => index !== rowindex);
                                 setOptions(newOptions);
+
                                 if (newOptions.length !== 0) {
                                   paramId({ options: newOptions, table });
                                 } else {
+                                  setOptions([]);
                                   paramId(undefined);
                                 }
                               }
