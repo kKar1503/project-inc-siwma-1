@@ -14,12 +14,15 @@ const queryClient = new QueryClient();
 
 const CategoryPage = () => {
   const [paramIds, setParamIds] = useState(undefined);
+  const [options, setOptions] = useState([]);
 
-  const value = useMemo(() => ({ paramIds, setParamIds }), [paramIds]);
+  const value = useMemo(
+    () => ({ paramIds, setParamIds, options, setOptions }),
+    [paramIds, options]
+  );
   const router = useRouter();
   const { id } = router.query;
   console.log(paramIds);
-
   return (
     <QueryClientProvider client={queryClient}>
       <DataContext.Provider value={value}>
