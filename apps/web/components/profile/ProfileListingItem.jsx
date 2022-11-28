@@ -24,7 +24,7 @@ const ProductListingItem = ({
 
   const DeleteListing = async (listid) => {
     await supabase.from('listing').delete().eq('id', listid);
-    const { data: listingAPIData } = await supabase.rpc('get_listings', {
+    const { data: listingAPIData } = await supabase.rpc('get_listings_ordered', {
       item_offset: 0,
       item_limit: 100,
     });
@@ -33,7 +33,7 @@ const ProductListingItem = ({
 
   const ArchiveListing = async (listid) => {
     await supabase.rpc('archive_listing', { listingid: listid });
-    const { data: listingAPIData } = await supabase.rpc('get_listings', {
+    const { data: listingAPIData } = await supabase.rpc('get_listings_ordered', {
       item_offset: 0,
       item_limit: 100,
     });
@@ -42,7 +42,7 @@ const ProductListingItem = ({
 
   const UnarchiveListing = async (listid) => {
     await supabase.rpc('unarchive_listing', { listingid: listid });
-    const { data: listingAPIData } = await supabase.rpc('get_listings', {
+    const { data: listingAPIData } = await supabase.rpc('get_listings_ordered', {
       item_offset: 0,
       item_limit: 100,
     });
