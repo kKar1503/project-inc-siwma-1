@@ -101,6 +101,7 @@ const BaseTableParam = ({
                                 const newOptions = options.filter((option) => option !== row.id);
 
                                 setOptions(newOptions);
+
                                 if (newOptions.length !== 0) {
                                   setParamIds({ options: newOptions, table });
                                 } else {

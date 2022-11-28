@@ -9,7 +9,6 @@ import supabase from '../../supabaseClient';
 // This table shows Available Parameters and is built on the BaseTable component.
 
 const parseId = (data) => {
-  console.log(data);
   if (data.length !== 0) {
     const array = [];
     data.forEach((e) => {
