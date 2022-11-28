@@ -1,6 +1,8 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { useFormContext } from 'react-hook-form';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 /**
  * Wrapper component for a react hook form input
@@ -14,6 +16,7 @@ const FormInput = ({
   customValidation,
   required,
   success,
+  isLoading,
   className,
   style,
 }) => {
@@ -32,16 +35,21 @@ const FormInput = ({
     });
 
   return (
-    <input
-      type="text"
-      className={cx(className, 'input-group input input-bordered', {
-        'input-error': errors[name],
-        'input-success': success,
-      })}
-      style={style}
-      placeholder={placeholder || label}
-      {...hookInput(name, label, customValidation)}
-    />
+    // Render a skeleton if the component is in a loading state
+    isLoading ? (
+      <Skeleton className="h-12" />
+    ) : (
+      <input
+        type="text"
+        className={cx(className, 'input-group input input-bordered', {
+          'input-error': errors[name],
+          'input-success': success,
+        })}
+        style={style}
+        placeholder={placeholder || label}
+        {...hookInput(name, label, customValidation)}
+      />
+    )
   );
 };
 
@@ -54,6 +62,7 @@ const propTypes = {
   customValidation: PropTypes.object,
   required: PropTypes.bool,
   success: PropTypes.bool,
+  isLoading: PropTypes.bool,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
