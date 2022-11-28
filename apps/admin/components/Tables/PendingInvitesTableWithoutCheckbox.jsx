@@ -59,6 +59,23 @@ const PendingInvitesTable = ({ className }) => {
     }
   };
 
+  const pendingInvitesColumns = React.useMemo(
+    () => [
+      {
+        Header: 'EMAIL',
+        accessor: 'email',
+      },
+      {
+        Header: 'COMPANY',
+        accessor: 'company',
+      },
+      {
+        Header: 'MOBILE NUMBER',
+        accessor: 'mobileNumber',
+      },
+    ],
+    []
+  );
   return (
     <BaseTable
       header={
@@ -80,7 +97,7 @@ const PendingInvitesTable = ({ className }) => {
       headingColor="bg-warning"
       className={className}
       showCheckbox={false}
-      columnKeys={['name', 'company', 'email']}
+      columnKeys={pendingInvitesColumns}
       onChange={onChangeHandler}
       data={inviteQuery.isLoading ? undefined : parseData(inviteQuery?.data.data)}
       footer={

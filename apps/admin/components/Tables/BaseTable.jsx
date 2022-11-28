@@ -60,7 +60,7 @@ const BaseTable = ({
   isLoading,
   data,
   footer,
-  filterString,
+  searchPlaceholder,
   onChange,
 }) => {
   const filterTypes = React.useMemo(
@@ -105,7 +105,7 @@ const BaseTable = ({
             {header}
             <div className="flex flex-row gap-4">
               <SearchBar
-                placeholder="Search by e-mail"
+                placeholder={searchPlaceholder}
                 filter={globalFilter}
                 setFilter={setGlobalFilter}
               />
@@ -213,7 +213,7 @@ const propTypes = {
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.
   footer: PropTypes.element,
-  filterString: PropTypes.string,
+  searchPlaceholder: PropTypes.string,
   onChange: PropTypes.func,
 };
 

@@ -174,24 +174,6 @@ const Page = () => {
     ],
     []
   );
-  const pendingInvitesColumns = React.useMemo(
-    () => [
-      {
-        Header: 'EMAIL',
-        accessor: 'email',
-      },
-      {
-        Header: 'COMPANY',
-        accessor: 'company',
-      },
-      {
-        Header: 'MOBILE NUMBER',
-        accessor: 'mobileNumber',
-      },
-    ],
-    []
-  );
-
   const registeredCompaniesData = React.useMemo(
     () => [
       {
@@ -264,33 +246,17 @@ const Page = () => {
     <div className="bg-[#FAFAFA] w-full">
       <div className="flex flex-row m-5">
         {/* Fixed Height ensures the table doesn't take up the entire page, and allows scrolling. For best results, this should be at least h-96. */}
-        <RegisteredUsersTable
-          data={registeredUsersData}
-          columns={registeredUsersColumns}
-          className="h-96"
-        />
+        <RegisteredUsersTable data={registeredUsersData} className="h-96" />
       </div>
       <div className="flex flex-row m-5">
-        <RegisteredUsersTableWithoutCheckbox
-          data={registeredUsersData}
-          columns={registeredUsersColumns}
-          className="h-96"
-        />
+        <RegisteredUsersTableWithoutCheckbox data={registeredUsersData} className="h-96" />
       </div>
-      {/* <div className="flex flex-row w-full">
+      <div className="flex flex-row w-full">
         <div className="flex flex-row m-5">
-          <PendingInvitesTable
-            data={pendingInvitesData}
-            columns={pendingInvitesColumns}
-            className="h-96"
-          />
+          <PendingInvitesTable data={pendingInvitesData} className="h-96" />
         </div>
         <div className="flex flex-row m-5">
-          <RegisteredCompaniesTable
-            data={registeredCompaniesData}
-            columns={registeredCompaniesColumns}
-            className="h-96"
-          />
+          <RegisteredCompaniesTable data={registeredCompaniesData} className="h-96" />
         </div>
       </div>
       <div className="flex flex-row m-5">
@@ -299,7 +265,7 @@ const Page = () => {
           columns={registeredUsersColumns}
           className="h-96"
         />
-      </div> */}
+      </div>
     </div>
   );
 };
