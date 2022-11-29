@@ -38,11 +38,13 @@ const Advertisement = ({ adData }) => {
       <label htmlFor={`modal-${adData.id}`} className="modal cursor-pointer">
         <label className="modal-box relative" htmlFor="placeholder">
           <h3 className="text-lg font-bold text-center">{isLoading ? null : data.data[0].name}</h3>
-          <p className="text-sm">Counter: {count}</p>
           <p className="py-4">{adData.description}</p>
           <div className="modal-action">
             <label htmlFor="my-modal" className="btn">
               Show me!
+            </label>
+            <label htmlFor={`modal-${adData.id}`} className="btn">
+              Close
             </label>
           </div>
         </label>
