@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useQueries, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 import pic from '../../public/avatar.png';
-import supabase from '../../pages/api/supabase';
 import TablePagination from './TablePagination';
 
 const parseData = (data) =>
@@ -22,6 +22,8 @@ const parseData = (data) =>
 
 // This table shows Registered Users and is built on the BaseTable component.
 const RegisteredUsersTable = ({ className }) => {
+  const supabase = useSupabaseClient();
+
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const [usersQuery, userCountQuery] = useQueries([
