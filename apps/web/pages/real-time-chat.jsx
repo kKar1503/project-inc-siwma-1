@@ -51,7 +51,7 @@ const MyApp = ({ Component, pageProps }) => {
       <div>
         <Header />
       </div>
-      <div className="flex flex-row">
+      <div className="flex flex-row max-h-screen">
         <div className="min-[320px]:hidden sm:hidden md:flex lg:flex">
           <ChatList />
         </div>
@@ -95,10 +95,10 @@ const MyApp = ({ Component, pageProps }) => {
         </div>
         <div className="flex flex-col min-[320px]:w-[100%] sm:w-[100%] md:w-[100%] lg:w-[100%] min-[320px]:hidden md:flex">
           <ChatHeader />
-          <div className="border-2 border-slate-500/20 max-h-screen">
+          <div className="border-2 border-slate-500/20 overflow-y-scroll">
             <ChatBubbles msg={allMessages} />
           </div>
-          <div className="border-2 border-slate-500/20 pl-5 pr-5 pt-5">
+          <div className="border-2 border-slate-500/20 p-5 bottom-0">
             <InputText msg={allMessages} />
           </div>
         </div>
