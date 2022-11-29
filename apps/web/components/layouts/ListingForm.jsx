@@ -4,7 +4,20 @@ import RadioButton from '../RadioButton';
 import SellingForm from './SellingForm';
 import BuyingForm from './BuyingForm';
 
-const CreateListingInformation = ({ options, onChangeValue, typeHandler }) => (
+const CreateListingInformation = ({
+  onSubmit,
+  options,
+  onChangeValue,
+  typeHandler,
+  name,
+  setName,
+  price,
+  setPrice,
+  description,
+  setDescription,
+  negotiable,
+  setNegotiable,
+}) => (
   <>
     {typeHandler && (
       <div className="alert alert-warning shadow-lg">
@@ -26,13 +39,35 @@ const CreateListingInformation = ({ options, onChangeValue, typeHandler }) => (
         </div>
       </div>
     )}
-    <form className="p-5">
+    <form className="p-5" onSubmit={onSubmit}>
       {/* Selling/Buying Options */}
       <RadioButton options={options} onChangeValue={onChangeValue} />
 
       {/* Selling/Buying Form */}
-      {typeHandler && typeHandler === 2 && <SellingForm />}
-      {typeHandler && typeHandler === 1 && <BuyingForm />}
+      {typeHandler && typeHandler === 2 && (
+        <SellingForm
+          name={name}
+          setName={setName}
+          price={price}
+          setPrice={setPrice}
+          description={description}
+          setDescription={setDescription}
+          negotiable={negotiable}
+          setNegotiable={setNegotiable}
+        />
+      )}
+      {typeHandler && typeHandler === 1 && (
+        <BuyingForm
+          name={name}
+          setName={setName}
+          price={price}
+          setPrice={setPrice}
+          description={description}
+          setDescription={setDescription}
+          negotiable={negotiable}
+          setNegotiable={setNegotiable}
+        />
+      )}
 
       {/* List Now Submit Btn */}
       {typeHandler && (
@@ -53,6 +88,15 @@ CreateListingInformation.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
   onChangeValue: PropTypes.func.isRequired,
   typeHandler: PropTypes.number,
+  name: PropTypes.string.isRequired,
+  setName: PropTypes.func.isRequired,
+  price: PropTypes.string.isRequired,
+  setPrice: PropTypes.func.isRequired,
+  description: PropTypes.string.isRequired,
+  setDescription: PropTypes.func.isRequired,
+  negotiable: PropTypes.bool.isRequired,
+  setNegotiable: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default CreateListingInformation;
