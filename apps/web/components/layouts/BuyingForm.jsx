@@ -33,9 +33,6 @@ const BuyingForm = ({
       </label>
     </div>
 
-    {/* Quantity Label */}
-    {/* <Input text="Quantity" /> */}
-
     {/* Description Label */}
     <Input
       text="Description"
