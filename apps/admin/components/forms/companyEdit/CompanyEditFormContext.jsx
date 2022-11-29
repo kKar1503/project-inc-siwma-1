@@ -14,11 +14,11 @@ import CompanyEditForm from './CompanyEditForm';
 const parseQueryData = (data) => ({
   id: data.id,
   companyName: data.name,
-  companyLogo: data.image
-    ? {
-        src: `https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/${data.image}`,
-      }
-    : null,
+  companyLogo:
+    (data.image && {
+      src: `https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/${data.image}`,
+    }) ||
+    null,
   companyWebsite: data.website,
   companyBio: data.bio,
   companyComments:
