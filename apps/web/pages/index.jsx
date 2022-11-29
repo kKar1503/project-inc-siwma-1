@@ -9,10 +9,12 @@ import InfiniteScroll from '../components/InfiniteScroll';
 import Carousel from '../components/marketplace/carousel/Carousel';
 import CategoryListingItem from '../components/marketplace/CategoryListingItem';
 import ProductListingItem from '../components/marketplace/listing/ProductListingItem';
+import Advertisement from '../components/marketplace/Advertisement';
 
 const MarketplacePage = () => {
   const supabase = useSupabaseClient();
 
+  const [adsData, setAdsData] = useState([]);
   const [listingData, setListingData] = useState([]);
   const [categoriesData, setCategoriesData] = useState([]);
 
@@ -39,6 +41,43 @@ const MarketplacePage = () => {
     supabase.rpc('get_listings', { item_offset: 0, item_limit: 10 })
   );
 
+  const {
+    data: adsAPIData,
+    status: adsStatus,
+    isLoading: adsIsLoading,
+    error: adsError,
+  } = useQuery(['get_advertisements'], async () => supabase.rpc('get_advertisements'), {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  const {
+    data: infiniteScrollAPIData,
+    status: infiniteScrollStatus,
+    isLoading: infiniteScrollIsLoading,
+    error: infiniteScrollError,
+    refetch: infiniteScrollRefetch,
+  } = useQuery(['get_infinite_scroll_data', offset, limit], async () =>
+    supabase.rpc('get_listings', { item_offset: offset, item_limit: limit })
+  );
+
+  const {
+    data: totalInfiniteScrollAPIData,
+    status: totalInfiniteScrollStatus,
+    isLoading: totalInfiniteScrollIsLoading,
+    error: totalInfiniteScrollError,
+  } = useQuery(['get_total_infinite_scroll_data'], async () =>
+    supabase.from(Database.TABLES.LISTING.LISTING).select('id', { count: 'exact' })
+  );
+
+  useEffect(() => {
+    if (totalInfiniteScrollStatus === 'success') {
+      console.log('Total listing counts: ', totalInfiniteScrollAPIData.count);
+      setTotalDataCount(totalInfiniteScrollAPIData.count);
+    }
+  }, [totalInfiniteScrollStatus]);
+
   useEffect(() => {
     if (listingStatus === 'success') {
       console.log('Success listing', listingAPIData.data);
@@ -59,9 +98,20 @@ const MarketplacePage = () => {
     }
   }, [categoriesAPIStatus, categoriesAPIData]);
 
-  const handleInfiniteScrollLoadMore = () => {
-    setInfiniteScrollMockDataLoading(true);
-    console.log('Loading more items');
+  useEffect(() => {
+    if (adsStatus === 'success') {
+      console.log('Success ads', adsAPIData.data);
+      setAdsData(adsAPIData.data);
+    }
+  }, [adsStatus, adsAPIData]);
+
+  useEffect(() => {
+    if (infiniteScrollStatus === 'success') {
+      console.log(`Fetched more data from ${offset} to ${offset + limit}`);
+      const d = infiniteScrollAPIData.data.map((item) => ({
+        ...item,
+        img: `https://images.unsplash.com/photo-1667925459217-e7b7a9797409?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80`,
+      }));
 
     setTimeout(() => {
       setInfiniteScrollMockData((oldData) => [
@@ -82,26 +132,16 @@ const MarketplacePage = () => {
     <div>
       {/* Image banner */}
       <div className="mb-10">
-        {/* Image banner - Object cover covers the image (zoom crop) */}
-        <Carousel wrapperClassName="w-full">
-          <div className="w-full relative">
-            <Image
-              // src="https://images.unsplash.com/photo-1598638567141-696be94b464a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
-              fill
-              className="object-cover"
-              alt="Banner"
-            />
-          </div>
-
-          <div className="w-full h-[200px] relative">
-            <Image
-              // src="https://images.unsplash.com/photo-1598638567141-696be94b464a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
-              fill
-              className="object-cover"
-              alt="Banner"
-            />
-          </div>
-        </Carousel>
+        {adsData.length > 0 && (
+          /* Image banner - Object cover covers the image (zoom crop) */
+          <AnimatedCarousel wrapperClassName="w-full h-[300px]" animationDuration={5000}>
+            {adsData.map((ad) => (
+              <div key={ad.id} className="w-full relative">
+                <Advertisement adData={ad} />
+              </div>
+            ))}
+          </AnimatedCarousel>
+        )}
       </div>
 
       {/* Container just adds margin from left and right */}
@@ -113,7 +153,7 @@ const MarketplacePage = () => {
           {/* Title */}
           <h3 className="text-xl font-bold my-2">Categories</h3>
           {/* View all categories link */}
-          <Link href="/category">
+          <Link href="/categories">
             <p className="link">View all categories</p>
           </Link>
         </div>
@@ -122,12 +162,7 @@ const MarketplacePage = () => {
         <Carousel name="categories">
           {categoriesData &&
             categoriesData.map(({ id, name, image }) => (
-              <CategoryListingItem
-                key={id}
-                name={name}
-                img={null}
-                href={`/category/${name}?id=${id}`}
-              />
+              <CategoryListingItem key={id} name={name} img={null} href={`/categories/${name}`} />
             ))}
         </Carousel>
 
