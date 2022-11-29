@@ -1,9 +1,10 @@
 import { useQuery } from 'react-query';
 import { useState } from 'react';
 import { ClickDistribution } from '@inc/charts';
-import supabase from '../../supabase';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 const ClicksGraphs = () => {
+  const supabase = useSupabaseClient();
   let data1 = [];
 
   const fetchClicks = async () => supabase.rpc('get_clicks');
