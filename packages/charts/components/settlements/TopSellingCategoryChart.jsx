@@ -39,7 +39,7 @@ const TopSellingCategoryChart = ({ data }) => (
       y="posts"
       style={{ data: { fill: color } }}
     />
-    <VictoryAxis style={{ tickLabels: { fontSize: 8 } }} label="Category" />
+    <VictoryAxis style={{ tickLabels: { fontSize: 10 } }} label="Category" />
   </VictoryChart>
 );
 

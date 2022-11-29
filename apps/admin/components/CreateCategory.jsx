@@ -61,15 +61,6 @@ const CreateCategory = () => {
       })
       .select('id');
 
-    const randomUUID = crypto.randomBytes(32).toString('hex');
-    const newUUID = changeUUID(randomUUID);
-
-    await supabase.storage.from('category-image-bucket').upload(newUUID, image);
-    const { error: message } = await supabase
-      .from('category')
-      .update({ image: newUUID })
-      .eq('id', data[0].id);
-
     if (status === 409) {
       setDisplayAlert(true);
       setError(true);
@@ -78,6 +69,14 @@ const CreateCategory = () => {
         setError(false);
       }, 4000);
     } else {
+      const randomUUID = crypto.randomBytes(32).toString('hex');
+      const newUUID = changeUUID(randomUUID);
+
+      await supabase.storage.from('category-image-bucket').upload(newUUID, image);
+      const { error: message } = await supabase
+        .from('category')
+        .update({ image: newUUID })
+        .eq('id', data[0].id);
       setDisplayAlert(true);
       setErrorMessage('');
       setImage(null);

@@ -62,18 +62,12 @@ const EditCat = ({ id }) => {
 
   const editCategory = async (e) => {
     e.preventDefault();
-    let newUUID = data?.data[0].image;
-    if (image !== null) {
-      const randomUUID = crypto.randomBytes(32).toString('hex');
-      newUUID = changeUUID(randomUUID);
-      await supabase.storage.from('category-image-bucket').upload(newUUID, image);
-    }
+
     const { status } = await supabase
       .from('category')
       .update({
         name: `${name}`,
         description: `${description}`,
-        image: `${newUUID}`,
       })
       .eq('id', `${id}`);
 
@@ -85,6 +79,18 @@ const EditCat = ({ id }) => {
         setError(false);
       }, 4000);
     } else {
+      let newUUID = data?.data[0].image;
+      if (image !== null) {
+        const randomUUID = crypto.randomBytes(32).toString('hex');
+        newUUID = changeUUID(randomUUID);
+        await supabase.storage.from('category-image-bucket').upload(newUUID, image);
+      }
+      await supabase
+        .from('category')
+        .update({
+          image: `${newUUID}`,
+        })
+        .eq('id', `${id}`);
       setDisplayAlert(true);
       setErrorMessage('');
       setImage(null);
