@@ -4,4 +4,8 @@
 
 :root {
   --rounded-btn: 0.5rem;
+
+  /* global variables for text limiter - hinjourn */
+  --max-lines: 6;
+  --line-height: 1.5;
 }
