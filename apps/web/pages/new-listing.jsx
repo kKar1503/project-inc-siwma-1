@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import Image from 'next/image';
 import { NextResponse } from 'next/server';
 import React from 'react';
