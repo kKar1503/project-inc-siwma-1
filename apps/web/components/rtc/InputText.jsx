@@ -59,7 +59,7 @@ const InputTextArea = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="flex space-x-2 h-20">
+      <div className="flex space-x-2 h-20 items-center">
         <div className="pt-4">
           <button type="select">
             <BsEmojiSmile size={20} />
