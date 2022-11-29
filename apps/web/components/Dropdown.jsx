@@ -8,7 +8,11 @@ import PropTypes from 'prop-types';
  * @constructor - Dropdown
  */
 const Dropdown = ({ items, onChangeValue }) => (
-  <select onChange={onChangeValue} className="select w-full text-center" defaultValue="Category">
+  <select
+    onChange={onChangeValue}
+    className="select w-full text-center focus:outline-none"
+    defaultValue="Category"
+  >
     <option disabled>Category</option>
     {items.map((item) =>
       item.subcategory ? (
