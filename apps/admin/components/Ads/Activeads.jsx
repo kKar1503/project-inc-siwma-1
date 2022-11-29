@@ -1,9 +1,10 @@
 import { useQuery } from 'react-query';
 import { BsMegaphone } from 'react-icons/bs';
 import { exact } from 'prop-types';
-import supabase from '../../supabase';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 const Activeads = () => {
+  const supabase = useSupabaseClient();
   const fetchAds = async () => supabase.from('advertisements').select('active').eq('active', true);
 
   const { data, isFetching } = useQuery('activeAd', fetchAds);

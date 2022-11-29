@@ -1,9 +1,10 @@
 import { useQuery } from 'react-query';
 import { useState } from 'react';
 import { NumberOfAdsChart } from '@inc/charts';
-import supabase from '../../supabase';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 const AvgGraphs = () => {
+  const supabase = useSupabaseClient();
   let data1 = [];
 
   const fetchMonthClicks = async () => supabase.rpc('get_months_clicks');
