@@ -1,23 +1,31 @@
 import PropTypes from 'prop-types';
 import { VictoryAxis, VictoryBar, VictoryChart } from 'victory';
-import Title from '../Title';
 import { BarLine, BarToolTip, focus, reset, unfocus } from '../BarHover';
+import Title from '../Title';
 
-const colors = ['#2563EB', '#497DEE', '#6D96F2', '#91B0F5'];
+const color = '#5CBBCC';
 
 // const mockData = [
-//   { company: 'A&G EQUIPMENT PTE.LTD.', posts: 32 },
-//   { company: 'ACE-WELD PTE.LTD.', posts: 25 },
-//   { company: 'FUJIN PTE.LTD.', posts: 26 },
-//   { company: 'HANWA SINGAPORE (PTE.)LTD.', posts: 23 },
-// ];
+//   { item: 'Item 1', amount: 360 },
+//   { item: 'Item 2', amount: 320 },
+//   { item: 'Item 3', amount: 260 },
+//   { item: 'Item 4', amount: 200 },
+//   { item: 'Item 5', amount: 190 },
+//   { item: 'Item 6', amount: 190 },
+// ].reverse();
 
-const MostPostsBarChart = ({ data }) => (
-  <VictoryChart domainPadding={50}>
-    <Title text="Top 4 Companies With The Most Posts" />
+const TopBuyingCategoryChart = ({ data }) => (
+  <VictoryChart
+    horizontal
+    padding={{ left: 100, bottom: 50, right: 30, top: 50 }}
+    domainPadding={40}
+  >
+    <Title text="Top 5 Buying Categories" />
     <VictoryAxis dependentAxis style={{ grid: { stroke: '#DADADA' } }} tickCount={7} />
-    <VictoryAxis dependentAxis label="Posts" tickCount={7} />
+    <VictoryAxis dependentAxis label="Posts" />
     <VictoryBar
+      data={data}
+      dataComponent={<BarLine />}
       labels={data.map(({ posts }) => posts)}
       labelComponent={<BarToolTip />}
       events={[
@@ -40,28 +48,21 @@ const MostPostsBarChart = ({ data }) => (
           },
         },
       ]}
-      data={data}
-      dataComponent={<BarLine />}
-      x="company"
+      x="category"
       y="posts"
-      style={{
-        data: {
-          fill: (row) => colors[row.index],
-          ...(data.length === 1 ? { width: 30 } : undefined),
-        },
-      }}
+      style={{ data: { fill: color } }}
     />
-    <VictoryAxis style={{ tickLabels: { fontSize: 8 } }} label="Company" />
+    <VictoryAxis style={{ tickLabels: { fontSize: 10 } }} />
   </VictoryChart>
 );
 
-MostPostsBarChart.propTypes = {
+TopBuyingCategoryChart.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      company: PropTypes.string,
+      category: PropTypes.string,
       posts: PropTypes.number,
     })
   ),
 };
 
-export default MostPostsBarChart;
+export default TopBuyingCategoryChart;
