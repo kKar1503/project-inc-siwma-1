@@ -1,87 +1,83 @@
-import { useState } from 'react';
-import Image from 'next/image';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { QueryClient, useQuery, useQueryClient } from 'react-query';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { getCompany } from '@inc/database';
 import AdminPageLayout from '../components/layouts/AdminPageLayout';
 import NavBar from '../components/NavBar';
-import ToggleEdit from '../components/FormControl/ToggleEdit';
-import ToggleEditArea from '../components/FormControl/ToggleEditArea';
+import { CompanyEditFormContext } from '../components/forms/companyEdit';
 
 const EditCompany = () => {
-  // SET ALL USER DATA HERE (PROBABLY USE THE API CALL TO GET USER DATA)
-  const website = 'John Doe';
-  const companyName = 'Company';
-  const bio = 'the most poggers company in all of existence';
-  const profilePic =
-    'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg';
+  // Retrieve company id from query param
+  const router = useRouter();
+  const { companyid } = router.query;
 
-  const comments = 'comments';
+  // -- Queries Supabase --//
+  // Initialise supabase client
+  const supabase = useSupabaseClient();
 
-  const [selectedFile, setSelectedFile] = useState(null);
+  // Initialise react-query
+  const queryClient = useQueryClient();
 
-  const changeHandler = (event) => {
-    setSelectedFile(event.target.files[0]);
-    console.log(selectedFile);
+  // Retrieve company data
+  const {
+    data: queryData,
+    isLoading,
+    isError,
+  } = useQuery({
+    // Fetches companies from supabase
+    queryKey: ['getCompany', { id: companyid }],
+    refetchInterval: 60000, // Refresh every minute
+    queryFn: async () =>
+      getCompany({
+        supabase,
+        companyid,
+        getAdminComment: true,
+      }),
+  });
+
+  // -- Prepare fetched data for rendering & processing -- //
+  // Redirect the user if no company was retrieved
+  if (!isLoading && queryData.data && queryData.data.length === 0) {
+    // No company was retrieved
+    // router.push('/companies');
+  }
+
+  // -- Functions -- //
+  const refreshQuery = () => {
+    // Invalidate table queries to cause a refetch
+    queryClient.invalidateQueries({ queryKey: ['getCompany', { id: companyid }] });
   };
+
+  // -- Event handlers  --//
+  useEffect(() => {
+    // Redirect the user back to the company management page if an invalid companyid was specified
+    if (!isLoading) {
+      // No company data retrieved
+      // router.push('/companies');
+    }
+  });
 
   return (
     <div className="flex flex-col w-full h-full gap-8 p-6 overflow-auto xl:max-h-screen">
       <NavBar />
 
-      <div className="flex flex-col grow h-fit shadow-xl rounded-2xl bg-base-100">
+      <div className="flex flex-col grow shadow-xl rounded-2xl bg-base-100">
+        {/* Body header */}
         <div className="flex flex-col p-8 border-b">
-          <h1 className="font-bold text-xl">Edit Company</h1>
+          <h1 className="font-bold text-xl">Edit {isLoading ? 'company' : queryData.data.name}</h1>
           {/* If you want, you can use the company's name to replace 'company' in the heading below as well */}
           <h1>Edit company details manually below</h1>
         </div>
-        <div className="flex flex-wrap gap-8 p-8">
-          <div className="flex flex-col flex-[3] flex-wrap">
-            <div className="flex flex-col justify-center items-center">
-              <div className="avatar aspect-square w-64 rounded-full bg-none items-center justify-center group">
-                <Image
-                  src={profilePic}
-                  alt="profile"
-                  width={200}
-                  height={200}
-                  className="rounded-full"
-                />
-                <input
-                  id="fileInput"
-                  type="file"
-                  onChange={changeHandler}
-                  className="hidden"
-                  accept=".png, .jpg, .jpeg"
-                />
-                <label
-                  htmlFor="fileInput"
-                  className="btn btn-ghost w-full h-full rounded-full items-center hidden justify-center group-hover:flex"
-                >
-                  <span>UPLOAD IMAGE</span>
-                </label>
-              </div>
-            </div>
-          </div>
 
-          <div className="flex-[9] flex-wrap">
-            <div className="flex flex-col w-full min-w-96 gap-12">
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-col md:flex-row gap-4">
-                  <ToggleEdit value={companyName} label="Company Name" />
-                  <ToggleEdit value={website} label="Website" />
-                </div>
-                <div className="flex flex-col md:flex-row gap-4">
-                  <ToggleEditArea value={bio} label="Company Bio" maxLength={255} />
-                </div>
-                <div className="flex flex-col gap-4">
-                  <ToggleEditArea value={comments} label="Comments" maxLength={255} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex px-8 pb-8 justify-end">
-          <a href="./companies" className="btn btn-primary">
-            Return To Companies
-          </a>
-        </div>
+        {/* Form */}
+        <CompanyEditFormContext
+          onSuccessChange={() => {
+            refreshQuery();
+          }}
+          queryData={queryData}
+          isLoading={isLoading}
+        />
       </div>
     </div>
   );

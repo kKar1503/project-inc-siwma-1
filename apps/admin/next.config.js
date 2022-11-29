@@ -4,6 +4,6 @@ module.exports = withTM({
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['spoxwyiorgijkrqidutq.supabase.co'],
+    domains: ['rvndpcxlgtqfvrxhahnm.supabase.co'],
   },
 });

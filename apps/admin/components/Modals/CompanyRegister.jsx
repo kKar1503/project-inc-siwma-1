@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { Alert } from '@inc/ui';
 import { useState } from 'react';
 import BaseModal from './BaseModal';
-import CompanyRegisterFormContext from '../forms/CompanyRegisterFormContext';
+import { CompanyRegisterFormContext } from '../forms/companyRegister';
 
 /**
  * Company creation modal
@@ -48,7 +48,7 @@ const CompanyRegister = ({ isOpen, onRequestClose, onSuccess }) => {
           <Alert
             level="success"
             message="Company created successfully"
-            className="text-white lg:w-1/3 absolute shadow-lg translate-x-1/2 right-[50%] mt-5"
+            className="text-white lg:w-1/3 !absolute shadow-lg translate-x-1/2 right-[50%] mt-5"
             onRequestClose={() => setSubmitSuccess(false)}
             dismissable
           />

@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { useRef } from 'react';
 import { hasFileExt, arrayToString } from '@inc/utils';
 import { useFormContext, useWatch } from 'react-hook-form';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 /**
  * Wrapper component for a react hook form file input
@@ -16,8 +18,10 @@ import { useFormContext, useWatch } from 'react-hook-form';
  * @param {{ name: [string], format: [string]}} allowedExts Filetypes accepted by the input
  * @param {[string]} allowedExts.name Names of the file types accepted by the input (svg, png, jpg)
  * @param {[string]} allowedExts.format The input format that corresponds with the filetypes supplied (image/svg, image/png, image/jpg)
- * @param className Custom classes
- * @param style Custom styles
+ * @param {boolean} isLoading Whether or not the component is in a loading state
+ * @param {string} className Custom classes
+ * @param {{}} style Custom styles
+ * @param {{ className: string, style: {} }} imageProps Props for the image preview
  * @type {React.FC<PropTypes.InferProps<typeof propTypes>>}
  * @returns A file input that works with react form hook
  */
@@ -29,8 +33,10 @@ const FormImageInput = ({
   required,
   success,
   allowedExts,
+  isLoading,
   className,
   style,
+  imageProps,
 }) => {
   // -- React Hook Form -- //
   // Use form context and deconstruct required hooks from the form object
@@ -66,7 +72,7 @@ const FormImageInput = ({
     // Check if a file was selected
     if (!file) {
       // No file was selected
-      setValue(name, null);
+      setValue(name, null, { shouldTouch: true });
       return;
     }
 
@@ -96,7 +102,7 @@ const FormImageInput = ({
     result.src = imageUrl;
 
     // Set the value of the file input
-    setValue(name, result);
+    setValue(name, result, { shouldTouch: true });
   };
 
   // -- Event handlers -- //
@@ -140,22 +146,32 @@ const FormImageInput = ({
       className={cx(
         'flex flex-1 justify-center max-w-full px-8 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none',
         { 'border-error': errors[name] },
-        { 'border-success': success }
+        { 'border-success': success },
+        className
       )}
       onDragOver={handleDragOver}
       onDrop={handleDropOver}
+      style={style}
     >
       {
         // If a valid image file is selected, render the image
-        (selectedFile && (
-          <div className="rounded-full flex flex-1 justify-center items-center">
-            <div className="h-36 w-36 relative">
-              <Image
-                src={selectedFile.src}
-                alt="company logo"
-                className="rounded-full object-cover"
-                fill
-              />
+        // If the component is in a loading state, render a spooky skeleton
+        ((selectedFile || isLoading) && (
+          <div className="rounded-full flex flex-1 justify-center items-center py-6">
+            <div
+              className={cx('h-36 w-36 relative', imageProps ? imageProps.className : '')}
+              style={imageProps ? imageProps.style : {}}
+            >
+              {isLoading ? (
+                <Skeleton className="!rounded-full h-full" />
+              ) : (
+                <Image
+                  src={selectedFile.src}
+                  alt="company logo"
+                  className="rounded-full object-cover"
+                  fill
+                />
+              )}
             </div>
           </div>
         )) || (
@@ -219,8 +235,13 @@ const propTypes = {
     name: PropTypes.arrayOf(PropTypes.string).isRequired,
     format: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
+  isLoading: PropTypes.bool,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  imageProps: PropTypes.exact({
+    className: PropTypes.string,
+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  }),
 };
 
 FormImageInput.propTypes = propTypes;

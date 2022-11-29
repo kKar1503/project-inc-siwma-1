@@ -1,6 +1,8 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { useFormContext } from 'react-hook-form';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 /**
  * Wrapper component for a react hook form textarea input
@@ -15,6 +17,7 @@ const FormTextArea = ({
   maxLength,
   required,
   success,
+  isLoading,
   className,
   style,
 }) => {
@@ -35,7 +38,9 @@ const FormTextArea = ({
       ...options,
     });
 
-  return (
+  return isLoading ? (
+    <Skeleton className="h-32" />
+  ) : (
     <textarea
       className={cx(className, 'textarea textarea-bordered h-32', {
         'textarea-error': errors[name],
@@ -58,6 +63,7 @@ const propTypes = {
   maxLength: PropTypes.number,
   required: PropTypes.bool,
   success: PropTypes.bool,
+  isLoading: PropTypes.bool,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
