@@ -8,11 +8,12 @@ const Breadcrumbs = ({ paths }) => (
       <li>
         <Link href="/">Home</Link>
       </li>
-      {paths.map((subpath) => (
-        <li key={subpath + 1}>
-          <Link href={`/listing/${subpath}`}>{subpath}</Link>
-        </li>
-      ))}
+      <li key={paths[0] + 1}>
+        <Link href={`/category/${paths[0]}`}>{paths[0]}</Link>
+      </li>
+      <li key={paths[1] + 1}>
+        <Link href={`/products/${paths[1]}`}>{paths[1]}</Link>
+      </li>
     </ul>
   </div>
 );

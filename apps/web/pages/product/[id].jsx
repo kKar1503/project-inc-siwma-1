@@ -24,7 +24,7 @@ const Listing = () => {
 
   const [listing, setListing] = React.useState(null);
   const [user, setUser] = React.useState(null);
-  const [carouselImages, setCarouselImages] = React.useState(['/images/placeholder.png']);
+  const [carouselImages, setCarouselImages] = React.useState([]);
 
   const {
     data: listingData,
@@ -33,8 +33,8 @@ const Listing = () => {
     isLoading: listingLoading,
     status: listingStatus,
   } = useQuery(
-    ['get_listing_by_name', query.id],
-    async () => client.rpc('get_listing_by_name', { listing_name: query.id }),
+    ['get_listing_by_id', query.id],
+    async () => client.rpc('get_listing_by_id', { listing_id: parseInt(query.id, 10) }),
     {
       enabled: isReady,
       refetchOnMount: false,
@@ -43,25 +43,43 @@ const Listing = () => {
     }
   );
 
-  // const {
-  //   data: listingImageData,
-  //   isError: listingImageError,
-  //   error: listingImageErrorData,
-  //   isLoading: listingImageLoading,
-  //   status: listingImageStatus,
-  // } = useQuery(['get_listing_images'], async () => client.rpc('get_listing_images'), {
-  //   enabled: isReady,
-  //   refetchOnMount: false,
-  //   refetchOnWindowFocus: false,
-  //   refetchOnReconnect: false,
-  // });
+  const {
+    data: listingImageData,
+    isError: listingImageError,
+    error: listingImageErrorData,
+    isLoading: listingImageLoading,
+    status: listingImageStatus,
+    refetch: listingImageRefetch,
+  } = useQuery(
+    ['get_listing_images'],
+    async () =>
+      client.storage
+        .from('listing-image-bucket')
+        .getPublicUrl('5292cf25-72e7-4f1c-b0e1-5a1e0c2009b4'),
+    {
+      enabled: isReady,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    }
+  );
 
   React.useEffect(() => {
     if (listingStatus === 'success') {
-      Log('Listing data', listingData.data[0]);
-      setListing(listingData.data[0]);
+      Log('Listing data', listingData.data);
+      setListing(listingData.data);
     }
   }, [listingData, listingStatus]);
+
+  React.useEffect(() => {
+    if (listingImageStatus === 'success') {
+      Log('Listing image data', listingImageData.data);
+
+      if (listingImageData.data) {
+        setCarouselImages((previousImages) => [...previousImages, listingImageData.data.publicUrl]);
+      }
+    }
+  }, [listingImageData, listingImageStatus]);
 
   return (
     <main>
@@ -76,30 +94,36 @@ const Listing = () => {
       {isReady && listing && !listingLoading && !listingError && listingStatus === 'success' && (
         <FlexContainer className="flex-col w-full">
           <div className="mx-20 space-y-4">
-            <Breadcrumbs paths={['Bars', listing.name]} />
+            <Breadcrumbs paths={[listing.category_name, listing.name]} />
             <Carousel>
-              {carouselImages.map((image) => (
-                <div key={image} className="carousel-item w-1/3">
-                  <Image
-                    src={image}
-                    alt={image.name}
-                    className="w-full border border-white rounded-2xl"
-                    fill
-                  />
-                </div>
-              ))}
+              <div className="w-[1900px] h-[300px]">
+                {carouselImages.map((image) => (
+                  <div key={image} className="w-full h-full relative">
+                    <Image
+                      src={image}
+                      alt={listing.name}
+                      className="object-cover border border-white rounded-2xl"
+                      fill
+                    />
+                  </div>
+                ))}
+              </div>
             </Carousel>
             <FlexContainer className="flex-row space-x-8">
               <div className="w-3/4 space-y-4">
                 <Title title={listing.name}>
-                  <span className="text-grey-400">Posted on: {listing.created_at}</span>
+                  <span className="text-grey-400">
+                    Posted on: {new Date(listing.created_at).getDay()}-
+                    {new Date(listing.created_at).getMonth()}-
+                    {new Date(listing.created_at).getFullYear()}
+                  </span>
                 </Title>
                 <Price price={listing.price} />
-                <FlexContainer className="flex-row justify-between">
-                  <Detail title="Name" detail="lmao" />
-                  <Detail title="Name" detail="lmao" />
-                  <Detail title="Name" detail="lmao" />
+                <FlexContainer className="flex-row space-x-24">
+                  <Detail title="Length" detail="100m" />
+                  <Detail title="Material" detail="Aluminum" />
                 </FlexContainer>
+                <div className="divider" />
                 <Title title="Description" />
                 <Description description={listing.description} />
               </div>

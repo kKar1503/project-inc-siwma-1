@@ -19,9 +19,10 @@ const Description = ({ description }) => {
 
   return (
     <>
+      {/* before:bg-gradient-to-b before:from-transparent before:to-[#ffffff] */}
       <p
         id="text-limit"
-        className='overflow-hidden relative max-h-text-limit leading-text-limit before:content-[""] before:absolute before:h-before-text-limit before:w-full before:bottom-0 before:pointer-events-none before:bg-gradient-to-b before:from-transparent before:to-[#ffffff]'
+        className='overflow-hidden relative max-h-text-limit leading-text-limit before:content-[""] before:absolute before:h-before-text-limit before:w-full before:bottom-0 before:pointer-events-none'
       >
         {description}
       </p>
