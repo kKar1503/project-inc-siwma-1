@@ -21,7 +21,10 @@ const parseQueryData = (data) => ({
     : null,
   companyWebsite: data.website,
   companyBio: data.bio,
-  companyComments: data.companies_comments ? data.companies_comments[0].comments : '',
+  companyComments:
+    data.companies_comments && data.companies_comments.length > 0
+      ? data.companies_comments[0].comments
+      : '',
 });
 
 const CompanyEditFormContext = ({ queryData, onSuccessChange, isLoading, className, style }) => {
