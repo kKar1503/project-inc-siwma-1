@@ -1,81 +1,37 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import FullStar from './FullStar';
+import HalfStar from './HalfStar';
+import RemainingStar from './RemainingStar';
 
-const FullStar = () => (
-  <>
-    <input
-      disabled
-      type="radio"
-      name="rating-10"
-      className="bg-orange-500 mask mask-star-2 mask-half-1"
-    />
-    <input
-      disabled
-      type="radio"
-      name="rating-10"
-      className="bg-orange-500 mask mask-star-2 mask-half-2"
-    />
-  </>
-);
-
-const HalfStar = () => (
-  <>
-    <input
-      disabled
-      type="radio"
-      name="rating-10"
-      className="bg-orange-500 mask mask-star-2 mask-half-1"
-    />
-
-    <input
-      disabled
-      type="radio"
-      name="rating-10"
-      className="bg-orange-500/40 mask mask-star-2 mask-half-2"
-    />
-  </>
-);
-
-const RemainingStar = () => (
-  <>
-    <input
-      disabled
-      type="radio"
-      name="rating-10"
-      className="bg-orange-500/40 mask mask-star-2 mask-half-1"
-    />
-
-    <input
-      disabled
-      type="radio"
-      name="rating-10"
-      className="bg-orange-500/40 mask mask-star-2 mask-half-2"
-    />
-  </>
-);
+/**
+ * Rating is a component that shows a rating on the screen.
+ * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
+ */
 
 const Rating = ({ rating }) => {
-  const [solid] = useState(Math.floor(rating));
-  const [half] = useState(rating % 1 <= 0.4 ? 0 : 1);
+  const solid = Math.floor(rating);
+  const half = rating % 1 <= 0.4 ? 0 : 1;
 
   return (
     <div className="flex items-center gap-2">
       {/* Stars: */}
+
+      {/* TODO: Need a unique-random key */}
       <div className="rating rating-sm rating-half">
-        {[...Array(solid)].map(() => (
-          <FullStar />
+        {[...Array(solid)].map((_, index) => (
+          <FullStar key={index} />
         ))}
 
-        {[...Array(half)].map(() => (
-          <HalfStar />
+        {[...Array(half)].map((_, index) => (
+          <HalfStar key={index} />
         ))}
 
-        {[...Array(5 - solid - half)].map(() => (
-          <RemainingStar />
+        {[...Array(Math.max(0, 5 - solid - half))].map((_, index) => (
+          <RemainingStar key={index} />
         ))}
       </div>
 
-      <span className="text-sm">({rating})</span>
+      {/* <span className="text-sm">({rating})</span> */}
     </div>
   );
 };
