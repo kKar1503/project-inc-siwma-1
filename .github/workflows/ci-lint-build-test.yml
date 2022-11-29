@@ -20,9 +20,31 @@ jobs:
         with:
           node-version: '16.x'
 
-      - run: npm i -g pnpm@${PNPM_VERSION}
+      - name: Installing PNPM
+        run: npm i -g pnpm@${PNPM_VERSION}
 
-      - run: pnpm install
+      - name: Installing dependencies
+        run: pnpm install
+
+      - name: Create .env.local for admin
+        uses: SpicyPizza/create-envfile@v1.3.0
+        with:
+          envkey_NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          envkey_NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          envkey_NEXT_PUBLIC_SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          directory: apps/admin/
+          file_name: .env.local
+          fail_on_empty: true
+
+      - name: Create .env.local for web
+        uses: SpicyPizza/create-envfile@v1.3.0
+        with:
+          envkey_NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          envkey_NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          envkey_NEXT_PUBLIC_SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          directory: apps/web/
+          file_name: .env.local
+          fail_on_empty: true
 
       - run: pnpm run build
 
