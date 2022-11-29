@@ -215,7 +215,7 @@ const RegisteredCompaniesTable = ({ className }) => {
             </button>
           </li>
           <li>
-            <Link href={{ pathname: '/edit-company', query: { companyid: 0 } }}>
+            <Link href={{ pathname: '/edit-company', query: { companyid: 3 } }}>
               <SlPencil className="h-5 w-5" />
               Edit
             </Link>
