@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { VictoryAxis, VictoryBar, VictoryChart } from 'victory';
 import Title from '../Title';
 import { BarLine, BarToolTip, focus, reset, unfocus } from '../BarHover';
+import { limit } from '../../utils/format';
 
 const colors = ['#2563EB', '#497DEE', '#6D96F2', '#91B0F5'];
 
@@ -51,7 +52,11 @@ const MostPostsBarChart = ({ data }) => (
         },
       }}
     />
-    <VictoryAxis style={{ tickLabels: { fontSize: 8 } }} label="Company" />
+    <VictoryAxis
+      style={{ tickLabels: { fontSize: 10 } }}
+      label="Company"
+      tickFormat={(name) => limit(name, 15)}
+    />
   </VictoryChart>
 );
 

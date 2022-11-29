@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { VictoryAxis, VictoryStack, VictoryBar, VictoryChart } from 'victory';
 import { BarLine, BarToolTip, focus, reset, unfocus } from '../BarHover';
 import Title from '../Title';
+import { limit } from '../../utils/format';
 
 // const dataset = [
 //   { company: 'A&G EQUIPMENT PTE.LTD.', buy: 17, sell: 16 },
@@ -89,7 +90,11 @@ const MostBuyAndSellChart = ({ data }) => (
       />
     </VictoryStack>
 
-    <VictoryAxis style={{ tickLabels: { fontSize: 8 } }} label="Company" />
+    <VictoryAxis
+      style={{ tickLabels: { fontSize: 10 } }}
+      label="Company"
+      tickFormat={(name) => limit(name, 15)}
+    />
   </VictoryChart>
 );
 
