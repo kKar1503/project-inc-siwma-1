@@ -31,6 +31,33 @@ function parseData(data) {
   }));
 }
 
+const CompanyActionMenu = ({ companyid }) => (
+  <TableMenu>
+    <li>
+      <button>
+        <MdOutlineRemoveRedEye className="h-5 w-5" />
+        View
+      </button>
+    </li>
+    <li>
+      <Link href={{ pathname: '/edit-company', query: { companyid } }}>
+        <SlPencil className="h-5 w-5" />
+        Edit
+      </Link>
+    </li>
+    <li>
+      <button>
+        <BsTrash className="h-5 w-5" />
+        Delete
+      </button>
+    </li>
+  </TableMenu>
+);
+
+CompanyActionMenu.propTypes = {
+  companyid: PropTypes.number.isRequired,
+};
+
 // This table shows Registered Companies and is built on the BaseTable component.
 const RegisteredCompaniesTable = ({ className }) => {
   // Set states
@@ -206,28 +233,7 @@ const RegisteredCompaniesTable = ({ className }) => {
       isLoading={isLoading}
       data={companies}
       onChange={onChangeHandler}
-      actionMenu={
-        <TableMenu>
-          <li>
-            <button>
-              <MdOutlineRemoveRedEye className="h-5 w-5" />
-              View
-            </button>
-          </li>
-          <li>
-            <Link href={{ pathname: '/edit-company', query: { companyid: 3 } }}>
-              <SlPencil className="h-5 w-5" />
-              Edit
-            </Link>
-          </li>
-          <li>
-            <button>
-              <BsTrash className="h-5 w-5" />
-              Delete
-            </button>
-          </li>
-        </TableMenu>
-      }
+      actionMenu={<CompanyActionMenu companyid={0} />}
       footer={
         <div className="flex justify-between bg-none">
           {/* Company suspension/reinstation */}
