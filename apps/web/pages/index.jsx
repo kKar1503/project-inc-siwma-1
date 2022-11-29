@@ -2,7 +2,7 @@ import { Database } from '@inc/database';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import Container from '../components/Container';
 import InfiniteScroll from '../components/InfiniteScroll';
@@ -10,10 +10,12 @@ import AnimatedCarousel from '../components/marketplace/carousel/AnimatedCarouse
 import Carousel from '../components/marketplace/carousel/Carousel';
 import CategoryListingItem from '../components/marketplace/CategoryListingItem';
 import ProductListingItem from '../components/marketplace/listing/ProductListingItem';
+import Advertisement from '../components/marketplace/Advertisement';
 
 const MarketplacePage = () => {
   const supabase = useSupabaseClient();
 
+  const [adsData, setAdsData] = useState([]);
   const [listingData, setListingData] = useState([]);
   const [categoriesData, setCategoriesData] = useState([]);
 
@@ -42,6 +44,17 @@ const MarketplacePage = () => {
   } = useQuery(['get_listings'], async () =>
     supabase.rpc('get_listings', { item_offset: offset, item_limit: limit })
   );
+
+  const {
+    data: adsAPIData,
+    status: adsStatus,
+    isLoading: adsIsLoading,
+    error: adsError,
+  } = useQuery(['get_advertisements'], async () => supabase.rpc('get_advertisements'), {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
 
   const {
     data: infiniteScrollAPIData,
@@ -91,6 +104,13 @@ const MarketplacePage = () => {
   }, [categoriesAPIStatus, categoriesAPIData]);
 
   useEffect(() => {
+    if (adsStatus === 'success') {
+      console.log('Success ads', adsAPIData.data);
+      setAdsData(adsAPIData.data);
+    }
+  }, [adsStatus, adsAPIData]);
+
+  useEffect(() => {
     if (infiniteScrollStatus === 'success') {
       console.log(`Fetched more data from ${offset} to ${offset + limit}`);
       const d = infiniteScrollAPIData.data.map((item) => ({
@@ -111,47 +131,16 @@ const MarketplacePage = () => {
     <div>
       {/* Image banner */}
       <div className="mb-10">
-        {/* Image banner - Object cover covers the image (zoom crop) */}
-        <AnimatedCarousel wrapperClassName="w-full h-[300px]" animationDuration={5000}>
-          <div className="w-full relative">
-            <Image
-              // src="https://images.unsplash.com/photo-1598638567141-696be94b464a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
-              fill
-              className="object-cover"
-              alt="Banner"
-            />
-          </div>
-
-          <div className="w-full relative">
-            <Image
-              src="https://images.unsplash.com/photo-1501166222995-ff31c7e93cef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1934&q=80
-              "
-              fill
-              className="object-cover"
-              alt="Banner"
-            />
-          </div>
-
-          <div className="w-full relative">
-            <Image
-              src="https://images.unsplash.com/photo-1594255897691-9d1edad1ecfc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80
-              "
-              fill
-              className="object-cover"
-              alt="Banner"
-            />
-          </div>
-
-          <div className="w-full relative">
-            <Image
-              src="https://images.unsplash.com/photo-1606337321936-02d1b1a4d5ef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80
-              "
-              fill
-              className="object-cover"
-              alt="Banner"
-            />
-          </div>
-        </AnimatedCarousel>
+        {adsData.length > 0 && (
+          /* Image banner - Object cover covers the image (zoom crop) */
+          <AnimatedCarousel wrapperClassName="w-full h-[300px]" animationDuration={5000}>
+            {adsData.map((ad) => (
+              <div key={ad.id} className="w-full relative">
+                <Advertisement adData={ad} />
+              </div>
+            ))}
+          </AnimatedCarousel>
+        )}
       </div>
 
       {/* Container just adds margin from left and right */}
@@ -162,7 +151,7 @@ const MarketplacePage = () => {
           {/* Title */}
           <h3 className="text-xl font-bold my-2">Categories</h3>
           {/* View all categories link */}
-          <Link href="/category">
+          <Link href="/categories">
             <p className="link">View all categories</p>
           </Link>
         </div>
@@ -171,12 +160,7 @@ const MarketplacePage = () => {
         <Carousel name="categories" carouselWrapperClassName="mb-10">
           {categoriesData &&
             categoriesData.map(({ id, name, image }) => (
-              <CategoryListingItem
-                key={id}
-                name={name}
-                img={null}
-                href={`/category/${name}?id=${id}`}
-              />
+              <CategoryListingItem key={id} name={name} img={null} href={`/categories/${name}`} />
             ))}
         </Carousel>
 
