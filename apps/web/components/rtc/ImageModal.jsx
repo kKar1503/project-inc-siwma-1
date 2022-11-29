@@ -24,12 +24,41 @@ const ImageModal = () => {
           .from('contents')
           .insert([{ image: uploadBucketData.path }]);
 
+        const imageModal = document.querySelector('#image-modal');
+
+        imageModal.style.display = 'none';
+
         if (insertError) {
           console.log(insertError);
         }
       }
     } catch (err) {
       alert(err);
+    }
+
+    // GET all content_id
+    const { data: contentId, error: selectErr } = await supabase
+      .from('contents')
+      .select('content_id');
+    if (selectErr) {
+      console.log('error', selectErr);
+    } else {
+      console.log('no error');
+    }
+
+    // INSERT content_id into 'messages' table
+    // TODO: Change the profile_uuid value to user.id
+    const { msg, error: insertMsgErr } = await supabase.from('messages').insert([
+      {
+        content: contentId[contentId.length - 1].content_id,
+        profile_uuid: 'c078a5eb-e75e-4259-8fdf-2dc196f06cbd',
+      },
+    ]);
+
+    if (insertMsgErr) {
+      console.log('error', insertMsgErr);
+    } else {
+      console.log('no error');
     }
   };
 

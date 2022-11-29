@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 const ChatDiv = ({ isCheckCallback, members }) => {
   const [isChecked, setIsChecked] = useState(false);
+  console.log(members);
 
   // const handleOnChange = () => {
   //   setIsChecked(!isChecked);

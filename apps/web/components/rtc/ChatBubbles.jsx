@@ -15,7 +15,7 @@ const ChatBubbles = (messages) => {
       data: { userData },
     } = await supabase.auth.getUser();
     console.log(userData);
-    setUser('de47e6c2-0591-44b1-9b2c-7359e9f2fc55');
+    setUser('c078a5eb-e75e-4259-8fdf-2dc196f06cbd');
   };
 
   const fetchUserAndMsg = async () => {
@@ -44,28 +44,88 @@ const ChatBubbles = (messages) => {
   return (
     <div>
       <div className="bg-slate-50 items-center">
-        {allMsg.map((msg) => (
-          <div
-            className={
-              msg.profile_uuid === user ? 'flex justify-end mx-5' : 'flex justify-start mx-5'
-            }
-            key={msg.contents.content_id}
-          >
-            <div
-              className={
-                msg.profile_uuid === user
-                  ? 'bg-info rounded-tl-3xl rounded-tr-3xl rounded-bl-3xl w-auto my-3 bottom-2'
-                  : 'bg-base-300 rounded-tl-3xl rounded-tr-3xl rounded-br-3xl w-auto my-3 bottom-2'
-              }
-            >
-              <div className="card-body py-4 px-6">
-                <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em]">
-                  {msg.contents.text}
-                </p>
+        {allMsg.map((msg) => {
+          if (msg.contents.text != null) {
+            return (
+              <div
+                className={
+                  msg.profile_uuid === user ? 'flex justify-end mx-5' : 'flex justify-start mx-5'
+                }
+                key={msg.contents.content_id}
+              >
+                <div
+                  className={
+                    msg.profile_uuid === user
+                      ? 'bg-info rounded-tl-3xl rounded-tr-3xl rounded-bl-3xl w-auto my-3 bottom-2'
+                      : 'bg-base-300 rounded-tl-3xl rounded-tr-3xl rounded-br-3xl w-auto my-3 bottom-2'
+                  }
+                >
+                  <div className="card-body py-4 px-6">
+                    <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em]">
+                      {msg.contents.text}
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
+            );
+          }
+
+          if (msg.contents.offer != null) {
+            return (
+              <div
+                className={
+                  msg.profile_uuid === user ? 'flex justify-end mx-5' : 'flex justify-start mx-5'
+                }
+                key={msg.contents.content_id}
+              >
+                <div
+                  className={
+                    msg.profile_uuid === user
+                      ? 'bg-info rounded-2xl w-auto my-3 bottom-2'
+                      : 'bg-base-300 rounded-2xl w-auto my-3 bottom-2'
+                  }
+                >
+                  <div className="card-body py-4 px-6">
+                    <p className="font-bold">Made an Offer</p>
+                    <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em]">
+                      SGD {msg.contents.offer}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          if (msg.contents.image != null) {
+            return (
+              <div
+                className={
+                  msg.profile_uuid === user ? 'flex justify-end mx-5' : 'flex justify-start mx-5'
+                }
+                key={msg.contents.content_id}
+              >
+                <div
+                  className={
+                    msg.profile_uuid === user
+                      ? 'bg-info rounded-tl-3xl rounded-tr-3xl rounded-bl-3xl w-auto my-3 bottom-2'
+                      : 'bg-base-300  rounded-tl-3xl rounded-tr-3xl rounded-br-3xl w-auto my-3 bottom-2'
+                  }
+                >
+                  <div className="card-body py-4 px-6">
+                    <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em]">
+                      <img
+                        src={`https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/chat-bucket/${msg.contents.image}`}
+                        alt=""
+                      />
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          return '';
+        })}
       </div>
 
       <div ref={bottomRef} />
