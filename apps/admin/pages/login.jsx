@@ -33,7 +33,7 @@ const LoginFormWrap = () => {
     },
     {
       onSuccess: () => {
-        router.push(router.query.redirect ?? '/');
+        router.push(router.query.redirect ?? '/overview');
       },
     }
   );
