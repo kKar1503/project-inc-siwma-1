@@ -64,9 +64,9 @@ const CompanyEditFormContext = ({ queryData, onSuccessChange, isLoading, classNa
   const onSubmit = async (data) => {
     // Deconstruct values from data
     const { companyName, companyWebsite, companyBio, companyComments, companyLogo } = data;
+    console.log({ data });
 
-    // -- Create company in Supabase -- //
-    // Edit company record
+    // -- Create company in Supabase -- /ord
     await supabase
       .from('companies')
       .update({
