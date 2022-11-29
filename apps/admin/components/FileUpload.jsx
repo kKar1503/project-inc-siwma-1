@@ -109,6 +109,7 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError
 
       setCompanyTableData(companyData);
       setUserTableData(userData);
+      setError(false); // Reset error state in case there was an error previously
     };
     reader.readAsBinaryString(event.target.files[0]);
   };
