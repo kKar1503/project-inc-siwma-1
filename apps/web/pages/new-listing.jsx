@@ -51,6 +51,12 @@ const NewListing = ({ session }) => {
   const [selectedImages, setSelectedImages] = React.useState([]);
   const [blobSelectedImages, setBlobSelectedImages] = React.useState([]);
 
+  // Form states
+  const [name, setName] = React.useState('');
+  const [price, setPrice] = React.useState('');
+  const [description, setDescription] = React.useState('');
+  const [negotiable, setNegotiable] = React.useState(false);
+
   const {
     data: categoriesData,
     isLoading: categoriesLoading,
@@ -90,16 +96,22 @@ const NewListing = ({ session }) => {
     setSelectedImages((prevImages) => prevImages.filter((img) => img !== image));
   };
 
-  const insertNewListingHandler = async () => {
+  const insertNewListingHandler = async (e) => {
+    e.preventDefault();
+    console.log(name);
+    console.log(price);
+    console.log(description);
+    console.log(negotiable);
+
     const { data } = await client
       .from('listing')
       .insert({
-        name: '',
-        description: '',
-        price: 0,
+        name,
+        description,
+        price,
         unit_price: false || true,
-        negotiable: true || false,
-        category: category.id,
+        negotiable,
+        category: '1',
         type,
         owner: 'c078a5eb-e75e-4259-8fdf-2dc196f06cbd', // THIS IS ELON MUSK
       })
@@ -114,7 +126,7 @@ const NewListing = ({ session }) => {
 
     await client.from('listing').insert(uuidArray);
 
-    NextResponse.redirect(`/listing/${data[0].id}`);
+    // NextResponse.redirect(`/listing/${data[0].id}`);
   };
 
   React.useEffect(() => {
@@ -198,9 +210,18 @@ const NewListing = ({ session }) => {
         <div className="flex flex-col w-3/5">
           <CardBackground>
             <ListingForm
+              name={name}
+              setName={setName}
+              price={price}
+              setPrice={setPrice}
+              description={description}
+              setDescription={setDescription}
+              negotiable={negotiable}
+              setNegotiable={setNegotiable}
               options={['Buying', 'Selling']}
               onChangeValue={handleTypeChange}
               typeHandler={type}
+              onSubmit={insertNewListingHandler}
             />
           </CardBackground>
         </div>
