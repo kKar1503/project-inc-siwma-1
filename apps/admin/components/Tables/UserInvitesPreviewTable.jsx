@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import BaseTable from './BaseTable';
+import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 

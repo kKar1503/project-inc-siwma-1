@@ -12,7 +12,7 @@ const Page = () => {
     {
       id: 1,
       profilePicture:
-        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+        'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg',
       name: 'John Doe',
       email: 'john@doe.com',
       company: 'Company',
@@ -21,7 +21,7 @@ const Page = () => {
     {
       id: 2,
       profilePicture:
-        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+        'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg',
       name: 'Veryvery Long Name',
       email: 'veryverylongname@veryverylongdomain.com',
       company: 'Very Very Long Company Name',
@@ -30,7 +30,7 @@ const Page = () => {
     {
       id: 3,
       profilePicture:
-        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+        'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg',
       name: 'John Doe',
       email: 'john@doe.com',
       company: 'Company',
@@ -39,7 +39,7 @@ const Page = () => {
     {
       id: 4,
       profilePicture:
-        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+        'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg',
       name: 'John Doe',
       email: 'john@doe.com',
       company: 'Company',
@@ -48,7 +48,7 @@ const Page = () => {
     {
       id: 5,
       profilePicture:
-        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+        'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg',
       name: 'John Doe',
       email: 'john@doe.com',
       company: 'Company',
@@ -75,7 +75,7 @@ const Page = () => {
     {
       id: 1,
       profilePicture:
-        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+        'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg',
       company: 'Company',
       website: 'www.company.com',
       bio: 'Company Bio',
@@ -83,7 +83,7 @@ const Page = () => {
     {
       id: 2,
       profilePicture:
-        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+        'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg',
       company: 'Very Very Long Company Name',
       website: 'veryverylongname@veryverylongdomain.com',
       bio: 'Very Very Long Company Bio',
@@ -94,7 +94,7 @@ const Page = () => {
     {
       id: 1,
       profilePicture:
-        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+        'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg',
       name: 'John Doe',
       email: 'hello@hello.com',
       company: 'Company',
@@ -103,7 +103,7 @@ const Page = () => {
     {
       id: 2,
       profilePicture:
-        'https://spoxwyiorgijkrqidutq.supabase.co/storage/v1/object/public/companyprofilepictures/example.jpg',
+        'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg',
       name: 'John Doe',
       email: 'hello@hello.com',
       company: 'Company',

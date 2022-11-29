@@ -1,13 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useQueries, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
-import BaseTable from './BaseTable';
+import cx from 'classnames';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
+import TablePagination from './TablePagination';
+
+const parseData = (data) =>
+  data.map((e) => ({
+    id: e.id,
+    name: e.name,
+    company: e.companies.name,
+    email: e.email,
+  }));
 
 // This table shows Pending Invites and is built on the BaseTable component.
-
-const PendingInvitesTable = ({ data, className }) => {
+const PendingInvitesTable = ({ className }) => {
+  const supabase = useSupabaseClient();
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedInvites, setSelectedInvites] = useState([]);
+
+  const [inviteQuery, inviteCountQuery] = useQueries([
+    {
+      queryKey: ['getInvites', selectedIndex * 10, (selectedIndex + 1) * 10 - 1],
+      queryFn: async () =>
+        supabase
+          .from('invite')
+          .select(`id, name, companies:company(name), email`)
+          .range(selectedIndex * 10, (selectedIndex + 1) * 10 - 1),
+      keepPreviousData: true,
+      refetchInterval: 300000,
+    },
+    {
+      queryKey: ['getInviteCount'],
+      queryFn: async () => supabase.from('invite').select('*', { count: 'exact', head: true }),
+      keepPreviousData: true,
+      refetchInterval: 300000,
+    },
+  ]);
+
+  const queries = [inviteQuery, inviteCountQuery];
+
+  const isLoading = queries.some((query) => query.isLoading);
+
+  const inviteCount = inviteCountQuery.isLoading ? 0 : inviteCountQuery.data.count;
+
+  const onChangeHandler = (targetInvite, selected) => {
+    if (!selected && selectedInvites.find((invite) => invite.id === targetInvite.id)) {
+      const result = [...selectedInvites].filter((invite) => invite.id !== targetInvite.id);
+      setSelectedInvites(result);
+    }
+
+    if (selected && !selectedInvites.find((invite) => invite.id === targetInvite.id)) {
+      const result = [...selectedInvites];
+      result.push(targetInvite);
+      setSelectedInvites(result);
+    }
+  };
 
   return (
     <BaseTable
@@ -15,45 +66,38 @@ const PendingInvitesTable = ({ data, className }) => {
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">Pending Invites</h1>
-            <h1 className="pr-2">Showing 1 to 10 of 100 entries</h1>
+            <h1 className="pr-2">
+              Showing {selectedIndex * 10 + 1} to{' '}
+              {(selectedIndex + 1) * 10 > inviteCount ? inviteCount : (selectedIndex + 1) * 10} of{' '}
+              {inviteCount} entries
+            </h1>
           </div>
           <div className="flex flex-row gap-4">
             <SearchBar placeholder="Search by e-mail" />
           </div>
         </div>
       }
-      headings={['Company', 'E-mail', 'Mobile Number']}
+      headings={['Name', 'Company', 'E-mail']}
       headingColor="bg-warning"
-      showCheckbox={false}
       className={className}
-      columnKeys={['company', 'email', 'mobileNumber']}
-      data={data}
+      showCheckbox={false}
+      columnKeys={['name', 'company', 'email']}
+      onChange={onChangeHandler}
+      data={inviteQuery.isLoading ? undefined : parseData(inviteQuery?.data.data)}
       footer={
-        <div className="flex justify-between bg-none">
-          <button className="btn btn-warning text-white">REVOKE SELECTED</button>
-          <div className="flex justify-end bg-none">
-            <TableButton
-              index={0}
+        <div className="flex justify-end bg-none">
+          {
+            // Table pagination buttons
+            <TablePagination
+              rows={inviteCount}
+              rowsPerPage={10}
               selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
+              onChange={setSelectedIndex}
+              className="bg-warning"
               selectedColor="bg-warning"
-              className="rounded-l-lg hover:bg-warning"
+              isLoading={isLoading}
             />
-            <TableButton
-              index={1}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-warning"
-              className="hover:bg-warning"
-            />
-            <TableButton
-              index={2}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-warning"
-              className="rounded-r-lg hover:bg-warning"
-            />
-          </div>
+          }
         </div>
       }
     />
@@ -61,15 +105,6 @@ const PendingInvitesTable = ({ data, className }) => {
 };
 
 PendingInvitesTable.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      email: PropTypes.string,
-      company: PropTypes.string,
-      mobileNumber: PropTypes.string,
-    })
-  ),
   className: PropTypes.string,
 };
 
