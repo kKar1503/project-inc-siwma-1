@@ -1,0 +1,8 @@
+.search-history {
+  position: absolute;
+  transform: translateY(3rem);
+}
+
+.search-input:focus {
+  outline: 0;
+}
