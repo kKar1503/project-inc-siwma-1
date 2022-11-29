@@ -6,7 +6,7 @@ import SIWMALogo from './public/siwma-logo.png';
 import SIWMALogoFull from './public/siwma-logo-full.png';
 
 const Header = () => (
-  <div className="navbar bg-base-100 bg-gray-200">
+  <div className="navbar bg-base-100">
     <div className="navbar-start">
       <div className="dropdown">
         <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -60,7 +60,10 @@ const Header = () => (
         </ul>
       </div>
       <Link className="btn btn-ghost" href="http://localhost:3000">
-        <Image src={SIWMALogo} className="h-full w-full object-cover lg:hidden" />
+        <Image
+          src={SIWMALogo}
+          className="min-[320px]:h-[30px] h-full min-[320px]:w-[270px] w-full object-cover lg:hidden"
+        />
         <Image src={SIWMALogoFull} className="h-full w-full object-cover hidden lg:flex" />
       </Link>
       <ul className="menu menu-horizontal p-0 hidden lg:flex">
@@ -95,7 +98,7 @@ const Header = () => (
       <div className="dropdown dropdown-end">
         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
           <div className="w-10 rounded-full">
-            <Image src="https://placeimg.com/80/80/people" alt="Person" />
+            <Image src="/../public/sample-profile-image.jpg" alt="Person" width={20} height={20} />
           </div>
         </label>
         <ul
