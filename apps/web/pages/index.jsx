@@ -1,6 +1,8 @@
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 import Container from '../components/Container';
+import Advertisement from '../components/marketplace/Advertisement';
 import AnimatedCarousel from '../components/marketplace/carousel/AnimatedCarousel';
 import MarketplaceCategorySection from '../components/marketplace/sections/MarketplaceCategorySection';
 import MarketplaceExploreMoreItemsSection from '../components/marketplace/sections/MarketplaceExploreMoreItemsSection';
@@ -13,6 +15,7 @@ const MarketplacePage = () => {
 
   // const [offset, setOffset] = useState(0);
   // const [limit, setLimit] = useState(60);
+  const [adsData, setAdsData] = useState([]);
 
   const { listingData, listingStatus, listingIsLoading, listingError } = useListingsData(0, 60);
 
@@ -40,6 +43,22 @@ const MarketplacePage = () => {
   //         img: `https://images.unsplash.com/photo-1667925459217-e7b7a9797409?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80`,
   //       };
   //     });
+  const {
+    data: adsAPIData,
+    status: adsStatus,
+    isLoading: adsIsLoading,
+    error: adsError,
+  } = useQuery(['get_advertisements'], async () => supabase.rpc('get_advertisements'), {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  //       return {
+  //         ...item,
+  //         img: `https://images.unsplash.com/photo-1667925459217-e7b7a9797409?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80`,
+  //       };
+  //     });
 
   //     setInfiniteScrollData([...infiniteScrollData, ...d]);
   //   }
@@ -51,60 +70,27 @@ const MarketplacePage = () => {
   //       .from('listing-image-bucket')
   //       .getPublicUrl('5292cf25-72e7-4f1c-b0e1-5a1e0c2009b4');
 
-  //     console.log(res);
-  //   })();
-  // }, []);
-
-  // const handleInfiniteScrollLoadMore = async () => {
-  //   setOffset(offset + limit);
-  //   await infiniteScrollRefetch();
-  // };
+  useEffect(() => {
+    if (adsStatus === 'success') {
+      console.log('Success ads', adsAPIData.data);
+      setAdsData(adsAPIData.data);
+    }
+  }, [adsStatus, adsAPIData]);
 
   return (
     <div>
       {/* Image banner */}
       <div className="mb-10">
-        {/* Image banner - Object cover covers the image (zoom crop) */}
-        <AnimatedCarousel wrapperClassName="w-full h-[300px]" animationDuration={5000}>
-          <div className="w-full relative">
-            <Image
-              // src="https://images.unsplash.com/photo-1598638567141-696be94b464a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
-              fill
-              className="object-cover"
-              alt="Banner"
-            />
-          </div>
-
-          <div className="w-full relative">
-            <Image
-              src="https://images.unsplash.com/photo-1501166222995-ff31c7e93cef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1934&q=80
-              "
-              fill
-              className="object-cover"
-              alt="Banner"
-            />
-          </div>
-
-          <div className="w-full relative">
-            <Image
-              src="https://images.unsplash.com/photo-1594255897691-9d1edad1ecfc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80
-              "
-              fill
-              className="object-cover"
-              alt="Banner"
-            />
-          </div>
-
-          <div className="w-full relative">
-            <Image
-              src="https://images.unsplash.com/photo-1606337321936-02d1b1a4d5ef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80
-              "
-              fill
-              className="object-cover"
-              alt="Banner"
-            />
-          </div>
-        </AnimatedCarousel>
+        {adsData.length > 0 && (
+          /* Image banner - Object cover covers the image (zoom crop) */
+          <AnimatedCarousel wrapperClassName="w-full h-[300px]" animationDuration={5000}>
+            {adsData.map((ad) => (
+              <div key={ad.id} className="w-full relative">
+                <Advertisement adData={ad} />
+              </div>
+            ))}
+          </AnimatedCarousel>
+        )}
       </div>
 
       {/* Container just adds margin from left and right */}
