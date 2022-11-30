@@ -45,7 +45,7 @@ export const adminSidebar = [
 const Sidebar = ({ children, sidebarList, selected }) => (
   <div className="drawer drawer-mobile">
     <input id="sidebar-drawer" type="checkbox" className="drawer-toggle" />
-    <div className="drawer-content flex flex-col items-center justify-center">{children}</div>
+    <div className="drawer-content flex flex-col">{children}</div>
     <div className="drawer-side lg:rounded-2xl shadow-xl">
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label htmlFor="sidebar-drawer" className="drawer-overlay" />
