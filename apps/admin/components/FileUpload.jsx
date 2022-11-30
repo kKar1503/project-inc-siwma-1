@@ -80,6 +80,7 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError
         if (duplicateEmails.has(email)) {
           // TODO: Replace with custom alert component
           alert(`Duplicate email found: ${email}`);
+          setSelectedFile(null);
           setError(true);
         } else {
           duplicateEmails.add(email);
@@ -87,6 +88,7 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError
         if (duplicateMobileNumbers.has(mobileNumber)) {
           // TODO: Replace with custom alert component
           alert(`Duplicate mobile number found: ${mobileNumber}`);
+          setSelectedFile(null);
           setError(true);
         } else {
           duplicateMobileNumbers.add(mobileNumber);
