@@ -1,4 +1,5 @@
 import { FormImageInput, FormInputGroup, FormTextArea, FormTextInput } from '@inc/ui';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 
 const CompanyEditForm = ({ onSubmit, submitSuccess, isLoading, onDeleteImage }) => (
@@ -45,16 +46,17 @@ const CompanyEditForm = ({ onSubmit, submitSuccess, isLoading, onDeleteImage }) 
                 name="companyWebsite"
                 isLoading={isLoading}
                 success={submitSuccess}
-                customValidation={{
-                  // Regexp for validating urls taken from https://regexr.com/39nr7
-                  pattern: {
-                    value:
-                      /[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi,
-                    message: 'Company website must be a valid URL',
-                  },
-                }}
               >
-                <FormTextInput />
+                <FormTextInput
+                  customValidation={{
+                    // Regexp for validating urls taken from https://regexr.com/39nr7
+                    pattern: {
+                      value:
+                        /[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi,
+                      message: 'Company website must be a valid URL',
+                    },
+                  }}
+                />
               </FormInputGroup>
             </div>
             <FormInputGroup
@@ -80,9 +82,9 @@ const CompanyEditForm = ({ onSubmit, submitSuccess, isLoading, onDeleteImage }) 
     <div className="flex justify-between">
       <div className="flex">
         <div className="flex px-8 pb-8">
-          <a href="./companies" className="btn btn-primary">
+          <Link href="./companies" className="btn btn-primary">
             Return To Companies
-          </a>
+          </Link>
         </div>
         <div className="gap-8 px-8">
           <button

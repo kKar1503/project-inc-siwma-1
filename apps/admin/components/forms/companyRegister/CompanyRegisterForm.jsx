@@ -19,7 +19,6 @@ const CompanyRegisterForm = ({ onSubmit, submitSuccess }) => (
           {/* Company website input field */}
           <FormInputGroup label="Company website" name="companyWebsite" success={submitSuccess}>
             <FormTextInput
-              maxLength={999}
               customValidation={{
                 // Regexp for validating urls taken from https://regexr.com/39nr7
                 pattern: {
