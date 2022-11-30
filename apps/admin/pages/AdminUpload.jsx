@@ -25,7 +25,7 @@ const AdminUpload = () => {
   };
 
   return (
-    <div className="w-full p-8 gap-8 overflow-auto xl:max-h-screen">
+    <div className="flex flex-col w-full h-full p-8 gap-8 overflow-auto xl:max-h-screen">
       <NavBar />
       <div className="text-xl breadcrumbs text-black ml-10 mt-24 mb-14">
         <ul>
@@ -97,6 +97,8 @@ const AdminUpload = () => {
   );
 };
 
-AdminUpload.getLayout = (page) => <AdminPageLayout pageName="AdminUpload">{page}</AdminPageLayout>;
+AdminUpload.getLayout = (page) => (
+  <AdminPageLayout pageName="Advertisement">{page}</AdminPageLayout>
+);
 
 export default AdminUpload;

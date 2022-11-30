@@ -8,9 +8,9 @@ import NavBar from '../components/NavBar';
 import AdminPageLayout from '../components/layouts/AdminPageLayout';
 
 const AdvertisementDashboard = () => (
-  <div className="w-full p-8 gap-8 overflow-auto xl:max-h-screen">
+  <div className="flex flex-col w-full h-full gap-8 p-8 overflow-auto xl:max-h-screen">
     <NavBar />
-    <div className="grid lg:grid-cols-3 lg:grid-rows-4 gap-8 p-8 bg-base-200">
+    <div className="grid lg:grid-cols-3 lg:grid-rows-4 gap-8">
       <div className="flex lg:col-span-2 lg:row-span-1 gap-8">
         <div className="card shadow-xl w-1/2 bg-base-100 rounded-xl">
           <div className="card-body flex-row justify-between">
