@@ -1,5 +1,5 @@
 const BuyBadge = () => (
-  <div className="badge badge-md badge-success text-white rounded-lg shadow-md">Buy</div>
+  <div className="badge badge-md badge-success rounded-lg text-white">Buy</div>
 );
 
 export default BuyBadge;
