@@ -13,11 +13,7 @@ export async function middleware(req) {
 
   if (
     pathname === '/login' || // Exclude the login route
-    pathname === '/register' || // Exclude register route
-    pathname.startsWith('/_next') || // exclude Next.js internals
-    pathname.startsWith('/api') || //  exclude all API routes
-    pathname.startsWith('/static') || // exclude static files
-    pathname.includes('.') // exclude all files in the public folder
+    pathname === '/register' // Exclude register route
   ) {
     // Forward request to the page
     return res;
