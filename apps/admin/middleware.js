@@ -35,15 +35,15 @@ export async function middleware(req) {
   if (session) {
     // User is authenticated, check if the user is an admin
     const { data, error } = await supabase.rpc('is_sysadmin', {
-      user_id: session.user.id,
+      userid: session.user.id,
     });
 
     if (error) throw error;
 
-    console.log({ data });
-
-    // Authentication successful, forward request to protected route.
-    return res;
+    if (data) {
+      // The user is an admin, forward request to protected route.
+      return res;
+    }
   }
 
   // Auth condition not met, redirect to home page.
