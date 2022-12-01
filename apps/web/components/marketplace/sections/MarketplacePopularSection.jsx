@@ -1,0 +1,47 @@
+import useListingsData from '../../../hooks/useListingsData';
+import Carousel from '../carousel/Carousel';
+import ProductListingItem from '../listing/ProductListingItem';
+
+const MarketplacePopularSection = () => {
+  const { listingData, listingStatus, listingIsLoading, listingError } = useListingsData(0, 60);
+
+  return (
+    listingData &&
+    listingData.length > 0 && (
+      <section className="mb-10">
+        {/* Title */}
+        <h3 className="text-xl font-bold my-2">Popular</h3>
+
+        {/* Carousel of products */}
+        <Carousel name="popular-products" wrapperClassName="my-3">
+          {listingData.map(
+            ({
+              name,
+              imageUrl,
+              id,
+              listing_type: type,
+              price,
+              negotiable,
+              unit_price: unitPrice,
+            }) => (
+              <ProductListingItem
+                className="w-[200px] md:w-[250px] hover:shadow-lg"
+                type={type}
+                negotiable={negotiable}
+                key={id}
+                price={price}
+                img={imageUrl}
+                name={name}
+                rating={4.5}
+                unit_price={unitPrice}
+                href={`/products/${id}`}
+              />
+            )
+          )}
+        </Carousel>
+      </section>
+    )
+  );
+};
+
+export default MarketplacePopularSection;
