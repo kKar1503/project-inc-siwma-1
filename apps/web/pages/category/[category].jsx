@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import CategoryCard from '../../components/category/CategoryCard';
 import CategoryBanner from '../../components/category/CategoryBanner';
+import CategoryListings from '../../components/category/CategoryListings';
 
 // supabase.rpc('get_category_listing', { catid: router.query.id })
 // supabase.from('listing').select('*').eq('category', catId);
@@ -29,9 +29,7 @@ const Category = () => {
         <p className="font-bold text-2xl">{category} listings</p>
         {/* dynamically generate each category when queried */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:grid-cols-2 mb-10">
-          {categoryData?.data?.map((item) => (
-            <CategoryCard name={item.name} img={item.image} key={item.name} />
-          ))}
+          <CategoryListings CatId={router.query.id} />
         </div>
         <p className="font-bold text-2xl mb-5">Popular Brands</p>
         {/* inserted from marketplace */}
