@@ -14,11 +14,11 @@ const CategoryListings = (routerid) => {
   );
 
   return (
-    <div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 grow">
       {categoryData?.data?.map(
         ({ name, imageUrl, id, listing_type: type, price, negotiable, unit_price: unitPrice }) => (
           <ProductListingItem
-            className="w-[200px] md:w-[250px] hover:shadow-lg"
+            className="w-128 hover:shadow-lg"
             type={type}
             negotiable={negotiable}
             key={id}
