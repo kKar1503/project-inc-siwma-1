@@ -29,21 +29,6 @@ const Category = () => {
             key={item.name}
           />
         ))}
-
-        {/* image temporarily grabbed from metalsupermarkets.com */}
-        {/* hardcoded values left in to see image */}
-        <CategoryCard
-          name="Alloy Steel"
-          img="https://www.metalsupermarkets.com/wp-content/uploads/2022/09/mild-steel-round-tube-DOM-150x150.webp"
-        />
-        <CategoryCard
-          name="Aluminium"
-          img="https://www.metalsupermarkets.com/wp-content/uploads/2021/03/Mild-Steel-Angle-Metal-Supermarkets-150x150.png"
-        />
-        <CategoryCard
-          name="Brass"
-          img="https://www.metalsupermarkets.com/wp-content/uploads/2021/10/Mild-Steel-Bar-Grating-Metal-Supermarkets-150x150.png"
-        />
       </div>
     </div>
   );
