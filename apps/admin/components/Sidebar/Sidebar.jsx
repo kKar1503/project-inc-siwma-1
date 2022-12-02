@@ -11,7 +11,10 @@ export const adminSidebar = [
     'Home Page': '/',
   },
   {
-    'Data Analytics': '/',
+    'Data Analytics': '/Analytics',
+  },
+  {
+    Advertisement: '/AdvertisementDashboard',
   },
   {
     'User Management': [
@@ -29,6 +32,10 @@ export const adminSidebar = [
       },
     ],
   },
+  {
+    Category: '/category_management',
+  },
+  // add { Category: '/category_management' }, thanks
 ];
 
 /**

@@ -178,7 +178,7 @@ const AnimatedCarousel = ({
     <div className="flex items-center relative">
       {/* Carousel buttons */}
       {/* Carousel buttons are position absolutely */}
-      <div className="carousel-buttons flex w-full justify-between absolute h-full">
+      <div className="carousel-buttons hidden md:flex w-full justify-between absolute h-full">
         {!firstItemVisible ? (
           <button
             onClick={scrollLeft}

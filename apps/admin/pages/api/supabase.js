@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 // Configure supabase client options
 const options = {
   db: {
-    schema: 'ums',
+    schema: 'public',
   },
   auth: {
     autoRefreshToken: true,

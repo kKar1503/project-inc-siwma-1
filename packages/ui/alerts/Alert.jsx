@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { IoCloseSharp } from 'react-icons/io5';
 import AlertIcon from './AlertIcon';
 
 const propTypes = {
   level: PropTypes.oneOf(['info', 'success', 'warning', 'error']).isRequired,
   message: PropTypes.string.isRequired,
+  dismissable: PropTypes.bool,
+  onRequestClose: PropTypes.func,
   className: PropTypes.string,
 };
 
@@ -46,11 +49,19 @@ export function resolveClassnameForLevel(level) {
  *
  * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
-const Alert = ({ level, message, className }) => (
-  <div className={cx(className, 'alert', resolveClassnameForLevel(level))}>
+const Alert = ({ level, message, dismissable, onRequestClose, className }) => (
+  <div className={cx(className, 'alert rounded-full relative', resolveClassnameForLevel(level))}>
     <div className="flex flex-row gap-4">
       <AlertIcon level={level} />
       <p>{message}</p>
+      {dismissable && (
+        <button
+          onClick={onRequestClose}
+          className="text-lg absolute right-0 top-0 m-4 hover:cursor-pointer"
+        >
+          <IoCloseSharp />
+        </button>
+      )}
     </div>
   </div>
 );

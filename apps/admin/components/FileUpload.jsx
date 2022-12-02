@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
@@ -5,7 +6,7 @@ import { FiUpload } from 'react-icons/fi';
 import { BsFileEarmarkSpreadsheet } from 'react-icons/bs';
 import * as XLSX from 'xlsx';
 
-const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
+const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError }) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const changeHandler = async (event) => {
@@ -26,7 +27,17 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
        */
 
       const bstr = evt.target.result;
-      const wb = XLSX.read(bstr, { type: 'binary' });
+
+      let wb = {}; // Declare an empty object to avoid nesting within the try block
+      try {
+        wb = XLSX.read(bstr, { type: 'binary' });
+      } catch (e) {
+        alert('File is corrupt!');
+        setSelectedFile(null);
+        setError(true);
+        return;
+      }
+
       // Get first worksheet
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
@@ -69,12 +80,14 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
         if (duplicateEmails.has(email)) {
           // TODO: Replace with custom alert component
           alert(`Duplicate email found: ${email}`);
+          setError(true);
         } else {
           duplicateEmails.add(email);
         }
         if (duplicateMobileNumbers.has(mobileNumber)) {
           // TODO: Replace with custom alert component
           alert(`Duplicate mobile number found: ${mobileNumber}`);
+          setError(true);
         } else {
           duplicateMobileNumbers.add(mobileNumber);
         }
@@ -88,6 +101,7 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData }) => {
       }));
       userData = userData.map((user, index) => ({
         id: index,
+        name: user[4],
         company: user[0],
         email: user[1],
         mobileNumber: user[2],
@@ -141,6 +155,7 @@ FileUpload.propTypes = {
   className: PropTypes.string,
   setUserTableData: PropTypes.func,
   setCompanyTableData: PropTypes.func,
+  setError: PropTypes.func,
 };
 
 export default FileUpload;

@@ -130,7 +130,7 @@ const Carousel = ({
     <div className="flex items-center relative">
       {/* Carousel buttons */}
       {/* Carousel buttons are position absolutely */}
-      <div className="carousel-buttons flex w-full justify-between px-1 absolute">
+      <div className="hidden md:flex carousel-buttons w-full justify-between px-1 absolute">
         {!firstItemVisible ? (
           <IconRoundButton
             icon={<IoChevronBack size={16} />}
