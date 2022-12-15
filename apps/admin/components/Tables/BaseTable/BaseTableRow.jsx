@@ -148,7 +148,7 @@ const BaseTableRow = React.forwardRef(
                   })}
                   ref={actionMenuRef}
                 >
-                  {React.cloneElement(actionMenu, { companyid: data.id })}
+                  {React.cloneElement(actionMenu, { companyid: data.id, status: data.active })}
                 </div>
               </div>
             </td>
