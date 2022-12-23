@@ -1,14 +1,14 @@
 /* eslint-disable indent */
 import Image from 'next/image';
 import { NextResponse } from 'next/server';
-import React from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import crypto from 'crypto';
 import { useQuery } from 'react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Log from '@inc/utils/logger';
-import CardBackground from '../components/CardBackground';
 
+import CardBackground from '../components/CardBackground';
 import CategoricalForm from '../components/layouts/CategoricalForm';
 import ListingForm from '../components/layouts/ListingForm';
 
@@ -44,27 +44,26 @@ const sampleData = [
 ];
 
 const NewListing = ({ session }) => {
-  const client = useSupabaseClient();
+  const supabaseClient = useSupabaseClient();
 
-  const [type, setType] = React.useState(null);
-  const [category, setCategory] = React.useState(null);
-  const [allCategories, setAllCategories] = React.useState([]);
-  const [selectedImages, setSelectedImages] = React.useState([]);
-  const [blobSelectedImages, setBlobSelectedImages] = React.useState([]);
+  const [type, setType] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [allCategories, setAllCategories] = useState([]);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [blobSelectedImages, setBlobSelectedImages] = useState([]);
 
   // Form states
-  const [name, setName] = React.useState('');
-  const [price, setPrice] = React.useState('');
-  const [description, setDescription] = React.useState('');
-  const [negotiable, setNegotiable] = React.useState(false);
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState('');
+  const [negotiable, setNegotiable] = useState(false);
 
   const {
     data: categoriesData,
     isLoading: categoriesLoading,
     isError: categoriesError,
     status: categoriesStatus,
-  } = useQuery('get_all_categories', async () => client.rpc('get_all_categories'), {
-    refetchOnMount: false,
+  } = useQuery('get_all_categories', () => supabaseClient.rpc('get_all_categories'), {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
@@ -93,18 +92,18 @@ const NewListing = ({ session }) => {
     event.target.value = '';
   };
 
-  const imageDeleteHandler = (image) => {
+  const handleImageDelete = (image) => {
     setSelectedImages((prevImages) => prevImages.filter((img) => img !== image));
   };
 
-  const insertNewListingHandler = async (e) => {
+  const handleNewListing = async (e) => {
     e.preventDefault();
     console.log(name);
     console.log(price);
     console.log(description);
     console.log(negotiable);
 
-    const { data } = await client
+    const { data } = await supabaseClient
       .from('listing')
       .insert({
         name,
@@ -121,16 +120,16 @@ const NewListing = ({ session }) => {
     const uuidArray = [];
     blobSelectedImages.forEach(async (image, index) => {
       const randomUUID = crypto.randomUUID();
-      await client.storage.from('listing-image-bucket').upload(randomUUID, image);
+      await supabaseClient.storage.from('listing-image-bucket').upload(randomUUID, image);
       uuidArray[index] = { listing: data[0].id, image: randomUUID };
     });
 
-    await client.from('listing').insert(uuidArray);
+    await supabaseClient.from('listing').insert(uuidArray);
 
     // NextResponse.redirect(`/listing/${data[0].id}`);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (categoriesStatus === 'success') {
       Log('green', categoriesData.data);
       setAllCategories(categoriesData.data);
@@ -199,7 +198,7 @@ const NewListing = ({ session }) => {
                       height={500}
                       className="object-contain"
                     />
-                    <button className="relative" onClick={() => imageDeleteHandler(image)}>
+                    <button className="relative" onClick={() => handleImageDelete(image)}>
                       Remove image
                     </button>
                   </div>
@@ -222,7 +221,7 @@ const NewListing = ({ session }) => {
               options={['Buying', 'Selling']}
               onChangeValue={handleTypeChange}
               typeHandler={type}
-              onSubmit={insertNewListingHandler}
+              onSubmit={handleNewListing}
             />
           </CardBackground>
         </div>
