@@ -30,6 +30,11 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+# Cypress outputs
+**/.cypress/**
+**/videos/**
+**/screenshots/**
+
 # turbo
 .turbo
 
