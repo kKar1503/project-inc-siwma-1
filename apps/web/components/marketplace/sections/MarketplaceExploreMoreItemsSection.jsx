@@ -87,7 +87,7 @@ const MarketplaceExploreMoreItemsSection = () => {
                 name={name}
                 rating={4.5}
                 unit_price={unitPrice}
-                href={`/products/${id}`}
+                href={`/product/${id}`}
               />
             )
           )}
