@@ -13,7 +13,7 @@ const CategoryListingItem = ({ img, name, href }) => {
   const [imgSrc, setImgSrc] = useState(img);
 
   return (
-    <Link href={href}>
+    <Link data-cy="category" href={href}>
       <div className="card relative rounded-md">
         <div className="aspect-square object-cover h-[160px]">
           {/* Actual image */}

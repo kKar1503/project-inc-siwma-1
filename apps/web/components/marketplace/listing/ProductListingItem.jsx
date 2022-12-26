@@ -25,7 +25,7 @@ const ProductListingItem = ({
     <div className={`card rounded-xl shadow-md border ${className} transition-all ease-out`}>
       <div className="z-30 absolute right-0 p-2" />
 
-      <Link href={href}>
+      <Link data-cy={`product-${href}`} href={href}>
         <div className="aspect-square w-full h-fit relative ">
           {/* ! The reason why the image below is 150px in height is because smaller images will be zoomed in to fit the height (this is so images > 150px will zoom and crop) */}
 

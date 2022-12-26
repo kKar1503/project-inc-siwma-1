@@ -127,12 +127,13 @@ const Carousel = ({
     // Carousel container
     // flex because we want the carousel buttons to be centered vertically
     // Relative positioning so that the carousel buttons can be positioned absolutely
-    <div className="flex items-center relative">
+    <div data-cy="carousel" className="flex items-center relative">
       {/* Carousel buttons */}
       {/* Carousel buttons are position absolutely */}
       <div className="hidden md:flex carousel-buttons w-full justify-between px-1 absolute">
         {!firstItemVisible ? (
           <IconRoundButton
+            data-cy="carousel-previous-button"
             icon={<IoChevronBack size={16} />}
             onClick={scrollLeft}
             className="z-30"
@@ -164,7 +165,11 @@ const Carousel = ({
         {Children.map(children, (child, index) => {
           if (index === 0) {
             return (
-              <div className={`carousel-item ${wrapperClassName}`} ref={firstItemRef}>
+              <div
+                data-cy={`carousel-item-${index}`}
+                className={`carousel-item ${wrapperClassName}`}
+                ref={firstItemRef}
+              >
                 {child}
               </div>
             );
@@ -172,13 +177,21 @@ const Carousel = ({
 
           if (index === Children.count(children) - 1) {
             return (
-              <div className={`carousel-item ${wrapperClassName}`} ref={lastItemRef}>
+              <div
+                data-cy={`carousel-item-${index}`}
+                className={`carousel-item ${wrapperClassName}`}
+                ref={lastItemRef}
+              >
                 {child}
               </div>
             );
           }
 
-          return <div className={`carousel-item ${wrapperClassName}`}>{child}</div>;
+          return (
+            <div data-cy={`carousel-item-${index}`} className={`carousel-item ${wrapperClassName}`}>
+              {child}
+            </div>
+          );
         })}
       </div>
     </div>
