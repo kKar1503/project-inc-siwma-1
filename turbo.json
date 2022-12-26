@@ -1,6 +1,12 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
+    "cypress:open": {
+      "outputs": ["videos/**", "screenshots/**"]
+    },
+    "cypress:run": {
+      "outputs": ["videos/**", "screenshots/**"]
+    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**"]
