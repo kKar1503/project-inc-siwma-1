@@ -66,6 +66,9 @@ const NewListing = ({ session }) => {
   } = useQuery('get_all_categories', () => supabaseClient.rpc('get_all_categories'), {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    onSuccess: (data) => {
+      setCategory(data.data);
+    },
   });
 
   const handleTypeChange = (event) => {
@@ -129,17 +132,10 @@ const NewListing = ({ session }) => {
     // NextResponse.redirect(`/listing/${data[0].id}`);
   };
 
-  useEffect(() => {
-    if (categoriesStatus === 'success') {
-      Log('green', categoriesData.data);
-      setAllCategories(categoriesData.data);
-    }
-  }, [session, categoriesStatus, categoriesData]);
-
   return (
     <main>
-      <div className="flex justify-around mt-8 mx-32">
-        <div className="flex space-y-6 flex-col w-2/6">
+      <div className="flex flex-col lg:flex-row justify-around mt-8 mx-32 space-y-6 lg:space-y-0">
+        <div className="flex space-y-6 flex-col w-full lg:w-2/6">
           {!categoriesLoading &&
             !categoriesError &&
             categoriesStatus === 'success' &&
@@ -207,7 +203,7 @@ const NewListing = ({ session }) => {
             )}
           </CardBackground>
         </div>
-        <div className="flex flex-col w-3/5">
+        <div className="flex flex-col w-full lg:w-3/5">
           <CardBackground>
             <ListingForm
               name={name}
