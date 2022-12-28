@@ -75,11 +75,6 @@ const InputTextArea = () => {
                 Upload File
               </a>
             </li>
-            <li>
-              <a href="#offer-modal" className="btn btn-ghost">
-                Make an offer
-              </a>
-            </li>
           </ul>
         </div>
         <input
