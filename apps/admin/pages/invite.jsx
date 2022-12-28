@@ -34,7 +34,7 @@ const InvitesPage = () => {
         const tokenHash = await crypto.subtle.digest(
           'SHA-256',
           new TextEncoder().encode(
-            user.name + user.email + Date.now() + Math.random().toString(16).substr(2, 8)
+            user.name + user.email + Date.now() + Math.random().toString(16).slice(2, 10)
           )
         );
         // Convert the hash to a hex string

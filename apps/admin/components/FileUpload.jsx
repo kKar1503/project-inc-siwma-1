@@ -14,6 +14,7 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError
       // 64000000 bytes = 64 MB
       // TODO: Replace with custom alert component
       alert('File is too big!');
+      setError(true);
       return;
     }
 
