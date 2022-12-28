@@ -1,3 +1,5 @@
+// TODO: try to find a way to remove the eslint disable indent rule
+// REASON: the indent rule is disabled because of the way the code is formatted
 /* eslint-disable indent */
 import Image from 'next/image';
 import { NextResponse } from 'next/server';
@@ -132,9 +134,14 @@ const NewListing = ({ session }) => {
     // NextResponse.redirect(`/listing/${data[0].id}`);
   };
 
+  // TODO: remove useEffect after testing
+  useEffect(() => {
+    Log('selectedImages', blobSelectedImages);
+  }, [blobSelectedImages]);
+
   return (
     <main>
-      <div className="flex flex-col lg:flex-row justify-around mt-8 mx-32 space-y-6 lg:space-y-0">
+      <div className="flex flex-col lg:flex-row justify-around mt-8 mx-6 lg:mx-32 space-y-6 lg:space-y-0">
         <div className="flex space-y-6 flex-col w-full lg:w-2/6">
           {!categoriesLoading &&
             !categoriesError &&
@@ -182,13 +189,13 @@ const NewListing = ({ session }) => {
 
             {selectedImages && (
               <div className="flex flex-row justify-between w-full">
-                {selectedImages.map((image) => (
+                {selectedImages.map((image, index) => (
                   <div
                     key={image}
                     className="flex flex-col justify-center items-center relative border-2 border-secondary w-1/3"
                   >
                     <Image
-                      alt={image.name}
+                      alt={blobSelectedImages[index].name}
                       src={image}
                       width={500}
                       height={500}
