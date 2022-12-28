@@ -42,8 +42,8 @@ const ChatBubbles = (messages) => {
   }, [messages, allMsg]);
 
   return (
-    <div>
-      <div className="bg-slate-50 items-center">
+    <div className="overflow-y-scroll" style={{ maxHeight: '73vh' }}>
+      <div className="bg-blue-50 items-center">
         {allMsg.map((msg) => {
           if (msg.contents.text != null) {
             return (

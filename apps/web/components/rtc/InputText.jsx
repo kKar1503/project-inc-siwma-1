@@ -15,12 +15,9 @@ const InputTextArea = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(messages);
-
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    console.log(user);
 
     // INSERT a row to content table from column 'text'
     const { data, error: insertErr } = await supabase.from('contents').insert([{ text: messages }]);
@@ -60,24 +57,9 @@ const InputTextArea = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex space-x-2 h-20 items-center">
-        <div className="pt-4">
-          <button type="select">
-            <BsEmojiSmile size={20} />
-          </button>
-        </div>
-        <input
-          value={messages}
-          type="text"
-          placeholder="Type here"
-          className="input input-bordered rounded-3xl w-full"
-          onChange={(e) => {
-            setMessages(e.target.value);
-          }}
-        />
-
-        <div className="dropdown dropdown-top dropdown-end mx-4">
-          <label tabIndex={0} className="btn btn-active btn-ghost">
-            <AiOutlinePaperClip size={24} />
+        <div className="dropdown dropdown-top dropdown-end">
+          <label tabIndex={0} className="btn btn-ghost">
+            <AiOutlinePaperClip size={24} className="text-gray-400" />
           </label>
           <ul
             tabIndex={0}
@@ -100,8 +82,17 @@ const InputTextArea = () => {
             </li>
           </ul>
         </div>
-        <button className="btn btn-active btn-ghost">
-          <AiOutlineSend size={24} />
+        <input
+          value={messages}
+          type="text"
+          placeholder="Start typing your message..."
+          className="input rounded-3xl w-full bg-transparent"
+          onChange={(e) => {
+            setMessages(e.target.value);
+          }}
+        />
+        <button className="btn btn-ghost">
+          <AiOutlineSend size={24} className="text-gray-400" />
         </button>
       </div>
     </form>

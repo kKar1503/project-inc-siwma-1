@@ -1,23 +1,24 @@
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-props-no-spreading */
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import { BiSearch } from 'react-icons/bi';
 
-import PropTypes from 'prop-types';
 import '@inc/styles/globals.css';
-import Header from '@inc/ui/Header';
-import ChatList from '../components/rtc/ChatList';
-import ChatHeader from '../components/rtc/ChatHeader';
-import ChatBubbles from '../components/rtc/ChatBubbles';
+import IndividualChats from '../components/rtc/IndividualChats';
 import InputText from '../components/rtc/InputText';
+import ChatBubbles from '../components/rtc/ChatBubbles';
 import ImageModal from '../components/rtc/ImageModal';
 import FileModal from '../components/rtc/FileModal';
 import OfferModal from '../components/rtc/OfferModal';
+import UserProfileCard from '../components/rtc/UserProfileCard';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const MyApp = ({ Component, pageProps }) => {
+const RealTimeChat = () => {
   const [allMessages, setAllMessages] = useState([]);
   const fetchMessages = async () => {
     const { data: content, error } = await supabase.from('contents').select('*');
@@ -45,62 +46,117 @@ const MyApp = ({ Component, pageProps }) => {
       )
       .subscribe();
   }, []);
-
   return (
-    <div data-theme="">
-      <div>
-        <Header />
-      </div>
-      <div className="flex flex-row max-h-screen">
-        <div className="min-[320px]:hidden sm:hidden md:flex lg:flex">
-          <ChatList />
-        </div>
-        <div className="drawer md:hidden lg:hidden">
-          <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-          <div className="drawer-content">
-            <label htmlFor="my-drawer" className="btn btn-ghost drawer-button">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+    <div className="grid grid-cols-4 gap-4 h-screen">
+      <div className="col-span-3 bg-blue-50 rounded-3xl h-screen">
+        <div className="flex items-center justify-between px-6 py-4">
+          <div>
+            <h2 className="font-bold text-2xl">Conversations</h2>
+            <p className="font-bold text-gray-300">24 ACTIVE CHATS DETECTED</p>
+          </div>
+          <div className="flex items-center">
+            <div className="dropdown mx-2">
+              <label tabIndex={0} className="btn m-1">
+                CHAT FILTER
+              </label>
+              <ul
+                tabIndex={0}
+                className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h8m-8 6h16"
+                <li>
+                  <a href="localhost">Filter 1</a>
+                </li>
+                <li>
+                  <a href="localhost">Filter 2</a>
+                </li>
+              </ul>
+            </div>
+            <div className="form-control">
+              <div className="input-group">
+                <input
+                  type="text"
+                  placeholder="Chat History"
+                  className="input input-bordered"
+                  style={{
+                    borderTopLeftRadius: 'var(--rounded-btn, 0.5rem) !important;',
+                    borderBottomLeftRadius: 'var(--rounded-btn, 0.5rem) !important;',
+                  }}
                 />
-              </svg>
-            </label>
-            <div className="flex flex-col min-[320px]:w-[100%] sm:w-[100%] md:w-[100%] lg:w-[100%]">
-              <ChatHeader />
-              <div className="border-2 border-slate-500/20 max-h-screen">
-                <ChatBubbles />
-              </div>
-              <div className="border-2 border-slate-500/20 pl-5 pr-5 pt-5">
-                <InputText />
+                <button
+                  className="btn btn-square"
+                  style={{
+                    borderTopRightRadius: 'var(--rounded-btn, 0.5rem) !important;',
+                    borderBottomRightRadius: 'var(--rounded-btn, 0.5rem) !important;',
+                  }}
+                >
+                  <BiSearch className="text-2xl" />
+                </button>
               </div>
             </div>
           </div>
-          <div className="drawer-side">
-            <label htmlFor="my-drawer" className="drawer-overlay">
-              Chat List
-            </label>
-            <ul className="menu p-4 w-80 bg-base-100 text-base-content">
-              <ChatList />
-            </ul>
+        </div>
+        <div className="grid grid-cols-3">
+          <div
+            className="bg-slate-200 py-3 px-1 rounded-r-3xl overflow-y-scroll"
+            style={{ maxHeight: '85vh' }}
+          >
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+            <IndividualChats />
+          </div>
+          <div className="col-span-2 relative" style={{ maxHeight: '85vh' }}>
+            <div>
+              <ChatBubbles msg={allMessages} />
+            </div>
+            <div className="absolute bottom-0 w-full px-4">
+              <hr style={{ border: '1px solid #A0A0A0' }} />
+              <InputText msg={allMessages} />
+            </div>
           </div>
         </div>
-        <div className="flex flex-col min-[320px]:w-[100%] sm:w-[100%] md:w-[100%] lg:w-[100%] min-[320px]:hidden md:flex">
-          <ChatHeader />
-          <div className="border-2 border-slate-500/20 overflow-y-scroll">
-            <ChatBubbles msg={allMessages} />
+      </div>
+      <div className="p-4 relative">
+        <div className="flex justify-between items-center">
+          <div>
+            <p className="uppercase text-xs font-bold text-blue-500">order 29380</p>
+            <h6 className="uppercase text-2xl font-bold">
+              $5940.<span className="text-gray-200">95</span>
+            </h6>
           </div>
-          <div className="border-2 border-slate-500/20 p-5 bottom-0">
-            <InputText msg={allMessages} />
+          <div className="bg-blue-500 rounded-lg py-2 px-2">
+            <p className="text-white text-lg font-bold">In Progress</p>
           </div>
+        </div>
+        <h6 className="mt-6 font-bold text-xl">Details</h6>
+        <div className="tabs tabs-boxed flex justify-evenly mt-2">
+          <a className="tab" href="localhost:1111">
+            Seller
+          </a>
+          <a className="tab tab-active" href="localhost:1111">
+            Item
+          </a>
+        </div>
+        <div className="mt-4">
+          <UserProfileCard />
+        </div>
+        <div className="flex justify-between items-center gap-1 mt-4 absolute bottom-4 w-11/12">
+          <button className="btn btn-info bg-opacity-30">MAKE OFFER</button>
+          <button className="btn btn-error bg-opacity-30">REPORT USER</button>
         </div>
       </div>
       <ImageModal />
@@ -110,9 +166,4 @@ const MyApp = ({ Component, pageProps }) => {
   );
 };
 
-MyApp.propTypes = {
-  pageProps: PropTypes.shape({}),
-  Component: PropTypes.elementType,
-};
-
-export default MyApp;
+export default RealTimeChat;
