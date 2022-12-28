@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 
 const UserProfileCard = () => (
-  <div className="card bg-base-100 shadow-2xl">
+  <div className="card rounded-lg bg-base-100 shadow-2xl">
     <div className="card-body">
       <h2 className="card-title">georgeyinxu</h2>
       <hr />

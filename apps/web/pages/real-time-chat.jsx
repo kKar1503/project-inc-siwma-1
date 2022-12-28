@@ -13,6 +13,7 @@ import ImageModal from '../components/rtc/ImageModal';
 import FileModal from '../components/rtc/FileModal';
 import OfferModal from '../components/rtc/OfferModal';
 import UserProfileCard from '../components/rtc/UserProfileCard';
+import ProductCard from '../components/rtc/ProductCard';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -144,15 +145,16 @@ const RealTimeChat = () => {
         </div>
         <h6 className="mt-6 font-bold text-xl">Details</h6>
         <div className="tabs tabs-boxed flex justify-evenly mt-2">
-          <a className="tab" href="localhost:1111">
+          <a className="tab tab-active" href="localhost:1111">
             Seller
           </a>
-          <a className="tab tab-active" href="localhost:1111">
+          <a className="tab" href="localhost:1111">
             Item
           </a>
         </div>
         <div className="mt-4">
           <UserProfileCard />
+          {/* <ProductCard /> */}
         </div>
         <div className="flex justify-between items-center gap-1 mt-4 absolute bottom-4 w-11/12">
           <button className="btn btn-info bg-opacity-30">MAKE OFFER</button>

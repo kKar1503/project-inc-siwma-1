@@ -56,12 +56,12 @@ const ChatBubbles = (messages) => {
                 <div
                   className={
                     msg.profile_uuid === user
-                      ? 'bg-info rounded-tl-3xl rounded-tr-3xl rounded-bl-3xl w-auto my-3 bottom-2'
+                      ? 'bg-blue-200 rounded-tl-3xl rounded-tr-3xl rounded-bl-3xl w-auto my-3 bottom-2'
                       : 'bg-base-300 rounded-tl-3xl rounded-tr-3xl rounded-br-3xl w-auto my-3 bottom-2'
                   }
                 >
                   <div className="card-body py-4 px-6">
-                    <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em]">
+                    <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em] text-blue-700">
                       {msg.contents.text}
                     </p>
                   </div>
@@ -81,12 +81,12 @@ const ChatBubbles = (messages) => {
                 <div
                   className={
                     msg.profile_uuid === user
-                      ? 'bg-info rounded-2xl w-auto my-3 bottom-2'
+                      ? 'bg-blue-200 rounded-l-2xl rounded-t-2xl w-auto my-3 bottom-2'
                       : 'bg-base-300 rounded-2xl w-auto my-3 bottom-2'
                   }
                 >
                   <div className="card-body py-4 px-6">
-                    <p className="font-bold">Made an Offer</p>
+                    <p className="font-bold text-blue-700">Made an Offer</p>
                     <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em]">
                       SGD {msg.contents.offer}
                     </p>
@@ -107,7 +107,7 @@ const ChatBubbles = (messages) => {
                 <div
                   className={
                     msg.profile_uuid === user
-                      ? 'bg-info rounded-tl-3xl rounded-tr-3xl rounded-bl-3xl w-auto my-3 bottom-2'
+                      ? 'bg-blue-200 rounded-tl-3xl rounded-tr-3xl rounded-bl-3xl w-auto my-3 bottom-2'
                       : 'bg-base-300  rounded-tl-3xl rounded-tr-3xl rounded-br-3xl w-auto my-3 bottom-2'
                   }
                 >
