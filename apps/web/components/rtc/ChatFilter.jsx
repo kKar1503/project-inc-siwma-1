@@ -1,27 +1,26 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 import { BiSearch } from 'react-icons/bi';
+import PropTypes from 'prop-types';
 
-const ChatFilter = () => (
+const ChatFilter = ({ options, setSelectedFilter, retrieveFilteredData, selectedFilter }) => (
   <div className="flex items-center">
-    <div className="dropdown mx-2">
-      <label tabIndex={0} className="btn m-1">
-        CHAT FILTER
-      </label>
-      <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-        <li>
-          <a href="localhost">All Chats</a>
-        </li>
-        <li>
-          <a href="localhost">Selling</a>
-        </li>
-        <li>
-          <a href="localhost">Buying</a>
-        </li>
-        <li>
-          <a href="localhost">Archives</a>
-        </li>
-      </ul>
+    <div className="dropdown">
+      <select
+        className="btn m-1 rounded-box "
+        value={selectedFilter}
+        onChange={(e) => setSelectedFilter(e.target.value)}
+        onClick={retrieveFilteredData}
+      >
+        {options.map((value) => (
+          <option value={value} key={value}>
+            {value}
+          </option>
+        ))}
+      </select>
     </div>
     <div className="form-control">
       <div className="input-group">
@@ -47,5 +46,12 @@ const ChatFilter = () => (
     </div>
   </div>
 );
+
+ChatFilter.propTypes = {
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setSelectedFilter: PropTypes.func.isRequired,
+  retrieveFilteredData: PropTypes.func.isRequired,
+  selectedFilter: PropTypes.string.isRequired,
+};
 
 export default ChatFilter;

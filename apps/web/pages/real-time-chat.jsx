@@ -16,8 +16,72 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+const roomsData = [
+  {
+    id: 1,
+    name: 'Adeeb',
+    lastMessage: '',
+    type: 'Buying',
+    ischeck: false,
+  },
+  {
+    id: 2,
+    name: 'Javier',
+    lastMessage: '',
+    type: 'Selling',
+    ischeck: false,
+  },
+  {
+    id: 3,
+    name: 'George',
+    lastMessage: '',
+    type: 'Selling',
+    ischeck: false,
+  },
+  {
+    id: 4,
+    name: 'Shelby',
+    lastMessage: '',
+    type: 'Buying',
+    ischeck: false,
+  },
+  {
+    id: 5,
+    name: 'Louis',
+    lastMessage: '',
+    type: 'Selling',
+    ischeck: false,
+  },
+  {
+    id: 6,
+    name: 'Charmaine',
+    lastMessage: '',
+    type: 'Buying',
+    ischeck: false,
+  },
+];
+
+const options = ['All Chats', 'Selling', 'Buying', 'Archived'];
+
 const RealTimeChat = () => {
   const [allMessages, setAllMessages] = useState([]);
+  const [filteredData, setFilteredData] = useState(roomsData);
+  const [selectedFilter, setSelectedFilter] = useState(options[0]);
+  const [selectedRoom, setSelectedRoom] = useState();
+
+  const filterChatList = (filter) => filter.type === selectedFilter;
+
+  const retrieveFilteredData = () => {
+    console.log(roomsData);
+    console.log(selectedFilter);
+    if (selectedFilter === 'All Chats') {
+      setFilteredData(roomsData);
+    } else {
+      setFilteredData(roomsData.filter(filterChatList));
+    }
+    console.log(filteredData);
+  };
+
   const fetchMessages = async () => {
     const { data: content, error } = await supabase.from('contents').select('*');
 
@@ -52,10 +116,15 @@ const RealTimeChat = () => {
             <h2 className="font-bold text-2xl">Conversations</h2>
             <p className="font-bold text-gray-300">24 ACTIVE CHATS DETECTED</p>
           </div>
-          <ChatFilter />
+          <ChatFilter
+            options={options}
+            setSelectedFilter={setSelectedFilter}
+            retrieveFilteredData={retrieveFilteredData}
+            selectedFilter={selectedFilter}
+          />
         </div>
         <div className="grid grid-cols-3">
-          <ChatSidebar />
+          <ChatSidebar roomsData={filteredData} />
           <div className="col-span-2 relative" style={{ maxHeight: '85vh' }}>
             <div>
               <ChatBubbles msg={allMessages} />
