@@ -10,6 +10,7 @@ import FileModal from '../components/rtc/FileModal';
 import OfferModal from '../components/rtc/OfferModal';
 import ChatSidebar from '../components/rtc/ChatSidebar';
 import ItemDetails from '../components/rtc/ItemDetails';
+import ChatFilter from '../components/rtc/ChatFilter';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -51,6 +52,7 @@ const RealTimeChat = () => {
             <h2 className="font-bold text-2xl">Conversations</h2>
             <p className="font-bold text-gray-300">24 ACTIVE CHATS DETECTED</p>
           </div>
+          <ChatFilter />
         </div>
         <div className="grid grid-cols-3">
           <ChatSidebar />
