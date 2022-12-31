@@ -47,6 +47,7 @@ const AdminUpload = () => {
           <h1 className="ml-4 leading-loose font-bold text-xl mt-6">Company to tag</h1>
           <div>
             <input
+              id="search"
               className="w-3/4 h-10 px-4 ml-4 mt-4 text-base placeholder-gray-500 border rounded-lg focus:shadow-outline"
               type="text"
               placeholder="Search"
@@ -85,11 +86,13 @@ const AdminUpload = () => {
                   Description
                 </label>
                 <textarea
+                  id="description"
                   type="text"
                   name="description"
                   // placeholder="Description"
                   value={description}
                   disabled={selected === 0}
+                  required
                   className="w-11/12 h-20 mx-4 mb-10 text-base placeholder-gray-500 break-normal border rounded-lg focus:shadow-outline"
                   onChange={(e) => setDescription(e.target.value)}
                 />
@@ -107,7 +110,7 @@ const AdminUpload = () => {
                   onChange={(e) => setLink(e.target.value)}
                 />
                 <div className="mx-36 mt-3">
-                  <button className="btn btn-outline btn-primary" type="submit">
+                  <button className="btn btn-outline btn-primary" type="submit" id="save">
                     save
                   </button>
                 </div>
