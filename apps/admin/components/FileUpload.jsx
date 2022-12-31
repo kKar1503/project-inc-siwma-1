@@ -44,8 +44,6 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError
       const ws = wb.Sheets[wsname];
       // Parse data into objects
       let userData = XLSX.utils.sheet_to_json(ws, { header: 1 });
-      // Remove header row
-      userData.shift();
 
       // Create userData and companyData arrays
       let companyData = [];
