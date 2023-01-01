@@ -68,8 +68,18 @@ const RealTimeChat = () => {
   const [filteredData, setFilteredData] = useState(roomsData);
   const [selectedFilter, setSelectedFilter] = useState(options[0]);
   const [selectedRoom, setSelectedRoom] = useState();
+  const [notifs, setAllNotifs] = useState('');
+  const [user, setUser] = useState('');
 
   const filterChatList = (filter) => filter.type === selectedFilter;
+  // Function to get logged in user
+  const getUser = async () => {
+    const {
+      data: { userData },
+    } = await supabase.auth.getUser();
+    console.log(userData);
+    setUser('0c54e181-79e4-41e0-b6c4-ab3c8e422996');
+  };
 
   const retrieveFilteredData = () => {
     console.log(roomsData);
@@ -93,6 +103,28 @@ const RealTimeChat = () => {
     }
   };
 
+  // Function to fetch last message and to check if message was sent by current user
+  // if not, system triggers an alert (acts as notif for now)
+
+  // TO DO: Change the alert to react hot toast
+  const fetchLastMsg = async (id) => {
+    const { data, error } = await supabase.from('messages').select().eq('content', id);
+
+    if (error) {
+      console.log('error', error);
+    } else {
+      console.log(data);
+      const userid = data[0].profile_uuid;
+
+      if (notifs !== '' && userid !== user) {
+        if (notifs.text != null) {
+          alert(notifs.text);
+          setAllNotifs('');
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     fetchMessages();
 
@@ -104,6 +136,7 @@ const RealTimeChat = () => {
         (payload) => {
           console.log('Change received!', payload);
           setAllMessages((current) => [...current, payload.new]);
+          setAllNotifs(payload.new);
         }
       )
       .subscribe();
