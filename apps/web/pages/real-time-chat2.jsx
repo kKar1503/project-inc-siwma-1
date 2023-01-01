@@ -4,8 +4,8 @@ import { createClient } from '@supabase/supabase-js';
 import toast, { Toaster } from 'react-hot-toast';
 
 import '@inc/styles/globals.css';
-import InputText from '../components/rtc/InputText';
-import ChatBubbles from '../components/rtc/ChatBubbles';
+import InputText from '../components/rtc/InputText2';
+import ChatBubbles from '../components/rtc/ChatBubbles2';
 import ImageModal from '../components/rtc/ImageModal';
 import FileModal from '../components/rtc/FileModal';
 import OfferModal from '../components/rtc/OfferModal';
@@ -79,7 +79,7 @@ const RealTimeChat = () => {
       data: { userData },
     } = await supabase.auth.getUser();
     console.log(userData);
-    setUser('c078a5eb-e75e-4259-8fdf-2dc196f06cbd');
+    setUser('0c54e181-79e4-41e0-b6c4-ab3c8e422996');
   };
 
   const retrieveFilteredData = () => {
