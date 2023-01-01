@@ -104,6 +104,7 @@ const UploadCard = ({ id, des, link, state }) => {
                 {errorMessage !== '' && <p className={colourMessage}>{errorMessage}</p>}
               </span>
               <input
+                id="file_upload"
                 type="file"
                 name="file_upload"
                 accept="image/*"
@@ -117,6 +118,7 @@ const UploadCard = ({ id, des, link, state }) => {
                 className="btn btn-ghost rounded-md w-full h-6 my-8 normal-case text-base btn btn-outline btn-primary"
                 disabled={errorMessage === '' || errorMessage === 'Only image file is allowed'}
                 type="submit"
+                id="submitpic"
               >
                 Create
               </button>
