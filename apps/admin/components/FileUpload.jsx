@@ -49,7 +49,13 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError
 
       // Create userData and companyData arrays
       let companyData = [];
-      userData.forEach((row) => {
+
+      // Identify duplicate emails and mobile numbers
+      const duplicateEmails = new Set();
+      const duplicateMobileNumbers = new Set();
+
+      for (let i = 0; i < userData.length; i++) {
+        const row = userData[i];
         // Check if company already exists in companyData
         const index = companyData.findIndex((company) => company[0] === row[0]);
 
@@ -63,21 +69,27 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError
             email: row[3],
           };
         }
-      });
 
-      // Remove incomplete rows
-      userData = userData.filter(
-        (element) =>
-          element[0] !== '' && element[1] !== '' && element[2] !== '' && element[3] !== ''
-      );
+        // Check if user is missing information. row[3] is the company email, which is optional
+        if (
+          row[0] === undefined ||
+          row[0].trim() === '' ||
+          row[1] === undefined ||
+          row[1].trim() === '' ||
+          row[2] === undefined ||
+          row[2].trim() === '' ||
+          row[4] === undefined ||
+          row[4].trim() === ''
+        ) {
+          // TODO: Replace with custom alert component
+          alert(`User is missing information.`);
+          setSelectedFile(null);
+          setError(true);
+          return;
+        }
 
-      // Identify duplicate emails and mobile numbers
-      const duplicateEmails = new Set();
-      const duplicateMobileNumbers = new Set();
-
-      userData.forEach((element) => {
-        const email = element[1];
-        const mobileNumber = element[2];
+        const email = row[1];
+        const mobileNumber = row[2];
         if (duplicateEmails.has(email)) {
           // TODO: Replace with custom alert component
           alert(`Duplicate email found: ${email}`);
@@ -94,7 +106,7 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError
         } else {
           duplicateMobileNumbers.add(mobileNumber);
         }
-      });
+      }
 
       // Add ids and convert to objects
       companyData = companyData.map((company, index) => ({
