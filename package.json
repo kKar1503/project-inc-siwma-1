@@ -25,7 +25,6 @@
     "daisyui": "^2.42.1",
     "eslint-config-custom": "workspace:0.0.0",
     "husky": "^8.0.2",
-    "lint-staged": "^13.0.4",
     "next": "13.0.0",
     "postcss": "^8.4.19",
     "prettier": "latest",
@@ -37,18 +36,6 @@
     "node": ">=14.0.0"
   },
   "packageManager": "pnpm@7.12.2",
-  "lint-staged": {
-    "{apps,packages}/!(eslint-config-custom)/**/*.{js,jsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "{apps,packages}/**/*.{scss,css,html,md}": [
-      "prettier --write"
-    ],
-    "package.json": [
-      "prettier --write"
-    ]
-  },
   "dependencies": {
     "react-icons": "^4.6.0"
   }
