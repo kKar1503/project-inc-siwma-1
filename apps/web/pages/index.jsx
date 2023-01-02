@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import Container from '../components/Container';
 import InfiniteScroll from '../components/InfiniteScroll';
+import AnimatedCarousel from '../components/marketplace/carousel/AnimatedCarousel';
 import Carousel from '../components/marketplace/carousel/Carousel';
 import CategoryListingItem from '../components/marketplace/CategoryListingItem';
 import ProductListingItem from '../components/marketplace/listing/ProductListingItem';
@@ -18,10 +19,13 @@ const MarketplacePage = () => {
   const [listingData, setListingData] = useState([]);
   const [categoriesData, setCategoriesData] = useState([]);
 
-  const [infiniteScrollMockData, setInfiniteScrollMockData] = useState([]);
+  const [infiniteScrollData, setInfiniteScrollData] = useState([]);
   const [infiniteScrollMockDataLoading, setInfiniteScrollMockDataLoading] = useState(false);
 
-  const infiniteScrollRef = useRef(null);
+  const [totalDataCount, setTotalDataCount] = useState(0);
+
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(10);
 
   const {
     data: categoriesAPIData,
@@ -38,7 +42,7 @@ const MarketplacePage = () => {
     isLoading: listingIsLoading,
     error: listingError,
   } = useQuery(['get_listings'], async () =>
-    supabase.rpc('get_listings', { item_offset: 0, item_limit: 10 })
+    supabase.rpc('get_listings', { item_offset: offset, item_limit: limit })
   );
 
   const {
@@ -81,14 +85,15 @@ const MarketplacePage = () => {
   useEffect(() => {
     if (listingStatus === 'success') {
       console.log('Success listing', listingAPIData.data);
-      setListingData(listingAPIData.data);
-      setInfiniteScrollMockData([
-        ...listingAPIData.data,
-        ...listingAPIData.data,
-        ...listingAPIData.data,
-        ...listingAPIData.data,
-        ...listingAPIData.data,
-      ]);
+      // Insert random image from unsplash
+      const d = listingAPIData.data.map((item) => ({
+        ...item,
+        img: `https://images.unsplash.com/photo-1667925459217-e7b7a9797409?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80`,
+      }));
+
+      console.log(d);
+
+      setListingData(d);
     }
   }, [listingStatus, listingAPIData]);
 
@@ -113,19 +118,13 @@ const MarketplacePage = () => {
         img: `https://images.unsplash.com/photo-1667925459217-e7b7a9797409?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80`,
       }));
 
-    setTimeout(() => {
-      setInfiniteScrollMockData((oldData) => [
-        ...oldData,
-        ...listingAPIData.data,
-        ...listingAPIData.data,
-        ...listingAPIData.data,
-        ...listingAPIData.data,
-        ...listingAPIData.data,
-      ]);
+      setInfiniteScrollData([...infiniteScrollData, ...d]);
+    }
+  }, [infiniteScrollStatus, infiniteScrollAPIData]);
 
-      setInfiniteScrollMockDataLoading(false);
-      console.log('Done loading more!');
-    }, 1000);
+  const handleInfiniteScrollLoadMore = async () => {
+    setOffset(offset + limit);
+    await infiniteScrollRefetch();
   };
 
   return (
@@ -146,8 +145,7 @@ const MarketplacePage = () => {
 
       {/* Container just adds margin from left and right */}
       <Container>
-        {/* Carousel */}
-        <h1 className="text-3xl font-bold">Marketplace</h1>
+        {/* <h1 className="text-3xl font-bold">Marketplace</h1> */}
 
         <div className="flex flex-wrap justify-between items-center">
           {/* Title */}
@@ -159,7 +157,7 @@ const MarketplacePage = () => {
         </div>
 
         {/* Carousel of categories */}
-        <Carousel name="categories">
+        <Carousel name="categories" carouselWrapperClassName="mb-10">
           {categoriesData &&
             categoriesData.map(({ id, name, image }) => (
               <CategoryListingItem key={id} name={name} img={null} href={`/categories/${name}`} />
@@ -167,71 +165,77 @@ const MarketplacePage = () => {
         </Carousel>
 
         {listingData && listingData.length > 0 && (
-          <>
+          <section className="mb-10">
             {/* Title */}
             <h3 className="text-xl font-bold my-2">Popular</h3>
 
             {/* Carousel of products */}
-            <Carousel name="popular-products" wrapperClassName="my-3 w-[150px]">
-              {listingData.map(({ name, description, id, price, type }) => (
+            <Carousel name="popular-products" wrapperClassName="my-3">
+              {listingData.map(({ name, img, description, id, price, type }) => (
                 <ProductListingItem
+                  className="w-[200px] hover:shadow-lg"
                   type={type}
                   key={id}
-                  img={null}
+                  img={img}
                   name={name}
-                  rating={Math.floor(Math.random() * 5) + 1}
+                  rating={4.5}
                   href={`/products/${id}`}
                 />
               ))}
             </Carousel>
-          </>
+          </section>
         )}
 
         {listingData && listingData.length > 0 && (
-          <>
+          <section className="mb-10">
             {/* Title */}
             <h3 className="text-xl font-bold my-2">Recommended</h3>
 
             {/* Carousel of products */}
-            <Carousel name="recommended-products" wrapperClassName="my-3 w-[150px]">
-              {listingData.map(({ name, description, id, price, type }) => (
+            <Carousel name="recommended-products" wrapperClassName="my-3">
+              {listingData.map(({ name, img, description, id, price, type }) => (
                 <ProductListingItem
+                  className="w-[200px] hover:shadow-lg"
                   type={type}
                   key={id}
-                  img={null}
+                  img={img}
                   name={name}
-                  rating={Math.floor(Math.random() * 5) + 1}
+                  rating={3.4}
                   href={`/products/${id}`}
                 />
               ))}
             </Carousel>
-          </>
+          </section>
         )}
 
-        {infiniteScrollMockData && infiniteScrollMockData.length > 0 && (
+        {infiniteScrollData && infiniteScrollData.length > 0 && (
           <>
             {/* Title */}
-            <h3 className="text-xl font-bold my-2">New Items</h3>
+            <h3 className="text-xl font-bold my-5">Explore more items</h3>
 
-            <div ref={infiniteScrollRef}>
-              <InfiniteScroll
-                className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6"
-                onLoadMore={handleInfiniteScrollLoadMore}
-                loading={infiniteScrollMockDataLoading}
-                reachedMaxItems={infiniteScrollMockData.length > 100}
-              >
-                {infiniteScrollMockData.map(({ name, description, id, price, type }) => (
-                  <ProductListingItem
-                    type={type}
-                    key={id}
-                    img={null}
-                    name={name}
-                    rating={Math.floor(Math.random() * 5) + 1}
-                    href={`/products/${id}`}
-                  />
-                ))}
-              </InfiniteScroll>
-            </div>
+            {/* DEBUG PURPOSES ONLY! */}
+            {/* <p className="bg-red-500">
+              {infiniteScrollData.length} / {totalDataCount}
+            </p> */}
+
+            <InfiniteScroll
+              className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5 auto-rows-fr"
+              onLoadMore={handleInfiniteScrollLoadMore}
+              loading={infiniteScrollStatus === 'loading'}
+              reachedMaxItems={offset + limit >= totalDataCount}
+            >
+              {infiniteScrollData.map(({ name, img, description, id, price, type }) => (
+                <ProductListingItem
+                  className="w-full hover:shadow-lg h-full"
+                  type={type}
+                  key={id}
+                  img={img}
+                  name={name}
+                  rating={3.3}
+                  href={`/products/${id}`}
+                />
+              ))}
+            </InfiniteScroll>
           </>
         )}
       </Container>
