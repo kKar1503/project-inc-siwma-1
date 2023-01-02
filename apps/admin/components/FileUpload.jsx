@@ -95,17 +95,18 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError
           alert(`Duplicate email found: ${email}`);
           setSelectedFile(null);
           setError(true);
-        } else {
-          duplicateEmails.add(email);
+          return;
         }
+        duplicateEmails.add(email);
+
         if (duplicateMobileNumbers.has(mobileNumber)) {
           // TODO: Replace with custom alert component
           alert(`Duplicate mobile number found: ${mobileNumber}`);
           setSelectedFile(null);
           setError(true);
-        } else {
-          duplicateMobileNumbers.add(mobileNumber);
+          return;
         }
+        duplicateMobileNumbers.add(mobileNumber);
       }
 
       // Add ids and convert to objects
