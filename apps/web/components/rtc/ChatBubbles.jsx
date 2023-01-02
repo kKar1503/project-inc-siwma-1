@@ -115,8 +115,33 @@ const ChatBubbles = (messages) => {
                     <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em]">
                       <img
                         src={`https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/chat-bucket/${msg.contents.image}`}
-                        alt=""
+                        alt={msg.contents.image}
                       />
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          if (msg.contents.file != null) {
+            return (
+              <div
+                className={
+                  msg.profile_uuid === user ? 'flex justify-end mx-5' : 'flex justify-start mx-5'
+                }
+                key={msg.contents.content_id}
+              >
+                <div
+                  className={
+                    msg.profile_uuid === user
+                      ? 'bg-blue-200 rounded-tl-3xl rounded-tr-3xl rounded-bl-3xl w-auto my-3 bottom-2'
+                      : 'bg-base-300  rounded-tl-3xl rounded-tr-3xl rounded-br-3xl w-auto my-3 bottom-2'
+                  }
+                >
+                  <div className="card-body py-4 px-6">
+                    <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em] text-blue-700">
+                      {msg.contents.file}
                     </p>
                   </div>
                 </div>

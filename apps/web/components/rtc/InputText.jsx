@@ -58,8 +58,8 @@ const InputTextArea = () => {
     <form onSubmit={handleSubmit}>
       <div className="flex space-x-2 h-20 items-center">
         <div className="dropdown dropdown-top dropdown-end">
-          <label tabIndex={0} className="btn btn-ghost">
-            <AiOutlinePaperClip size={24} className="text-gray-400" />
+          <label tabIndex={0} className="btn btn-ghost hover:bg-opacity-0">
+            <AiOutlinePaperClip size={24} className="text-gray-400 hover:text-blue-300" />
           </label>
           <ul
             tabIndex={0}
@@ -86,8 +86,8 @@ const InputTextArea = () => {
             setMessages(e.target.value);
           }}
         />
-        <button className="btn btn-ghost">
-          <AiOutlineSend size={24} className="text-gray-400" />
+        <button className="btn btn-ghost hover:bg-opacity-0">
+          <AiOutlineSend size={24} className="text-gray-400 hover:text-blue-300" />
         </button>
       </div>
     </form>
