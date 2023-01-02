@@ -46,7 +46,7 @@ const sampleData = [
 const NewListing = ({ session }) => {
   const client = useSupabaseClient();
 
-  const [type, setType] = React.useState(0);
+  const [type, setType] = React.useState(null);
   const [category, setCategory] = React.useState(null);
   const [allCategories, setAllCategories] = React.useState([]);
   const [selectedImages, setSelectedImages] = React.useState([]);
