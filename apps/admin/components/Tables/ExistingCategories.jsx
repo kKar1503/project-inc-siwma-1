@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import PropTypes from 'prop-types';
 import BaseTableCat from './BaseTableCat';
