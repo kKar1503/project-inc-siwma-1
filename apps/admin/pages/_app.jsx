@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import '@inc/styles/globals.css';
-import { SessionContextProvider, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { SessionContextProvider, } from '@supabase/auth-helpers-react';
+// import { SessionContextProvider, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useState } from 'react';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { QueryClientProvider, QueryClient } from 'react-query';
