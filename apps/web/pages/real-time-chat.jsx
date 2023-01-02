@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import toast, { Toaster } from 'react-hot-toast';
 
 import '@inc/styles/globals.css';
 import InputText from '../components/rtc/InputText';
@@ -68,8 +69,18 @@ const RealTimeChat = () => {
   const [filteredData, setFilteredData] = useState(roomsData);
   const [selectedFilter, setSelectedFilter] = useState(options[0]);
   const [selectedRoom, setSelectedRoom] = useState();
+  const [notifs, setAllNotifs] = useState('');
+  const [user, setUser] = useState('');
 
   const filterChatList = (filter) => filter.type === selectedFilter;
+  // Function to get logged in user
+  const getUser = async () => {
+    const {
+      data: { userData },
+    } = await supabase.auth.getUser();
+    console.log(userData);
+    setUser('c078a5eb-e75e-4259-8fdf-2dc196f06cbd');
+  };
 
   const retrieveFilteredData = () => {
     console.log(roomsData);
@@ -93,6 +104,58 @@ const RealTimeChat = () => {
     }
   };
 
+  // Function to fetch last message and to check if message was sent by current user
+  // if not, system triggers an alert (acts as notif for now)
+
+  // TO DO: Change the alert to react hot toast
+  const fetchLastMsg = async (id) => {
+    const { data, error } = await supabase.from('messages').select().eq('content', id);
+
+    if (error) {
+      console.log('error', error);
+    } else {
+      console.log(data);
+      const userid = data[0].profile_uuid;
+
+      if (notifs !== '' && userid !== user) {
+        if (notifs.text != null) {
+          toast.custom((t) => (
+            <div
+              className={`${
+                t.visible ? 'animate-enter' : 'animate-leave'
+              } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+            >
+              <div className="flex-1 w-0 p-4">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0 pt-0.5">
+                    <img
+                      className="h-10 w-10 rounded-full"
+                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixqx=6GHAjsWpt9&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
+                      alt=""
+                    />
+                  </div>
+                  <div className="ml-3 flex-1">
+                    <p className="text-sm font-medium text-gray-900">Emilia Gates</p>
+                    <p className="mt-1 text-sm text-gray-500">{notifs.text}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex border-l border-gray-200">
+                <button
+                  onClick={() => toast.dismiss(t.id)}
+                  className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          ));
+          setAllNotifs('');
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     fetchMessages();
 
@@ -104,12 +167,20 @@ const RealTimeChat = () => {
         (payload) => {
           console.log('Change received!', payload);
           setAllMessages((current) => [...current, payload.new]);
+          setAllNotifs(payload.new);
         }
       )
       .subscribe();
   }, []);
+
+  useEffect(() => {
+    getUser();
+    fetchLastMsg(notifs.content_id);
+  }, [notifs]);
+
   return (
     <div className="grid grid-cols-4 gap-4 h-screen">
+      <Toaster />
       <div className="col-span-3 bg-blue-50 rounded-3xl h-screen">
         <div className="flex items-center justify-between px-6 py-4">
           <div>
