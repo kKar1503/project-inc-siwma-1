@@ -79,6 +79,7 @@ const ActionCat = ({ data, row, catId }) => {
 };
 
 const propTypes = {
+  catId: PropTypes.string,
   row: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // We don't know what the data object will look like, so we can't specify it.
