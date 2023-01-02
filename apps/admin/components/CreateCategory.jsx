@@ -96,8 +96,6 @@ const CreateCategory = () => {
       <form
         onSubmit={async (e) => {
           await addCategory(e);
-          console.log(e.target.categoryName.value);
-          console.log(e.target.categoryDescription.value);
         }}
       >
         <div className="form-control">
