@@ -22,7 +22,12 @@ const Category = () => {
       </p>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:grid-cols-2 mb-10">
         {categoryData?.data.map((item) => (
-          <CategoryCard name={item.name} img={item.image} href={`/category/${item.name}`} />
+          <CategoryCard
+            name={item.name}
+            img={item.image}
+            href={`/category/${item.name}?id=${item.id}`}
+            key={item.name}
+          />
         ))}
 
         {/* image temporarily grabbed from metalsupermarkets.com */}
