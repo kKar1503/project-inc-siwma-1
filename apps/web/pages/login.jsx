@@ -1,3 +1,4 @@
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import dynamic from 'next/dynamic';
 import React from 'react';
 import { useMutation } from 'react-query';
@@ -56,7 +57,7 @@ const Page = () => (
       <h1 className="font-bold text-xl">Login</h1>
       <p>Please sign in to your account.</p>
     </div>
-    <SignInForm />
+    <LoginFormWrap />
   </div>
 );
 
