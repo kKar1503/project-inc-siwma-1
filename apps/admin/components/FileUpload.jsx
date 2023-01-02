@@ -1,5 +1,6 @@
 /* eslint-disable no-alert */
 import cx from 'classnames';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
@@ -8,6 +9,7 @@ import * as XLSX from 'xlsx';
 
 const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError }) => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const supabase = useSupabaseClient();
 
   const changeHandler = async (event) => {
     if (event.target.files[0].size > 64000000) {
@@ -21,7 +23,7 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError
     setSelectedFile(event.target.files[0]);
 
     const reader = new FileReader();
-    reader.onload = (evt) => {
+    reader.onload = async (evt) => {
       /*
       XLSX Workbooks are essentially just a zip containing XMLs called Worksheets.
       As we are only interested in the first Worksheet, we can just grab it directly and it is guaranteed to exist unless the XLSX itself is corrupt.
@@ -107,6 +109,40 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError
           return;
         }
         duplicateMobileNumbers.add(mobileNumber);
+      }
+
+      // Verify that there are no duplicate emails or mobile numbers in Supabase
+      const verifyDuplicateEmails = () =>
+        supabase
+          .from('users')
+          .select('*')
+          .in('email', [...duplicateEmails]);
+
+      const verifyDuplicateMobileNumbers = () =>
+        supabase
+          .from('users')
+          .select('*')
+          .in('phone', [...duplicateMobileNumbers]);
+
+      const [{ data: matchingEmail }, { data: matchingMobileNumber }] = await Promise.all([
+        verifyDuplicateEmails(),
+        verifyDuplicateMobileNumbers(),
+      ]);
+
+      if (matchingEmail.length > 0) {
+        // TODO: Replace with custom alert component
+        alert(`The user with email ${matchingEmail[0].email} already exists.`);
+        setSelectedFile(null);
+        setError(true);
+        return;
+      }
+
+      if (matchingMobileNumber.length > 0) {
+        // TODO: Replace with custom alert component
+        alert(`The user with email ${matchingEmail[0].email} already exists.`);
+        setSelectedFile(null);
+        setError(true);
+        return;
       }
 
       // Add ids and convert to objects
