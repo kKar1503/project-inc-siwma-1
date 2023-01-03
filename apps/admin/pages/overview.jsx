@@ -1,7 +1,6 @@
 import { FaUserCheck, FaRegEnvelope, FaRegBuilding } from 'react-icons/fa';
 
 import AdminPageLayout from '../components/layouts/AdminPageLayout';
-import SearchBar from '../components/SearchBar';
 import NavBar from '../components/NavBar';
 import RegisteredUsersTableWithoutCheckbox from '../components/Tables/RegisteredUsersTableWithoutCheckbox';
 import PendingInvitesTableWithoutCheckbox from '../components/Tables/PendingInvitesTableWithoutCheckbox';
