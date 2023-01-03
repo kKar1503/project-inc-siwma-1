@@ -6,53 +6,37 @@ import BaseTableParam from './BaseTableParam';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 
-// This table shows Available Parameters and is built on the BaseTable component.
+// This table shows Active Parameters and is built on the BaseTable component.
 
-const parseId = (data) => {
+const parseData = (data) => {
   if (data.length !== 0) {
-    const array = [];
-    data.forEach((e) => {
-      array.push(e.parameter.id);
-    });
-    return array.toString();
+    return data.map((e) => ({
+      id: e.parameter.id,
+      name: e.parameter.name,
+      display_name: e.parameter.display_name,
+      parameter_type_id: e.parameter.parameter_type.id,
+      parameter_type_name: e.parameter.parameter_type.name,
+      datatype_id: e.parameter.datatype.id,
+      datatype_name: e.parameter.datatype.name,
+      active: e.parameter.active ? `Active` : `Disabled`,
+    }));
   }
-  return '0';
+  return [];
 };
 
-const parseData = (data) =>
-  data.map((e) => ({
-    id: e.id,
-    name: e.name,
-    display_name: e.display_name,
-    parameter_type_id: e.parameter_type.id,
-    parameter_type_name: e.parameter_type.name,
-    datatype_id: e.datatype.id,
-    datatype_name: e.datatype.name,
-    active: e.active ? `Active` : `Disabled`,
-  }));
-
-const AvailableParametersTable = ({ className, id }) => {
+const ActiveParametersTable = ({ className, id }) => {
   const supabase = useSupabaseClient();
   const [selectedIndex, setSelectedIndex] = useState(0);
-
-  const { data: parameters, isLoading } = useQuery({
-    queryKey: ['categoryParameters', id],
-    queryFn: async () =>
-      supabase.from('categories_parameters').select(`parameter(id)`).eq('category(id)', `${id}`),
-    enabled: !!id,
-  });
-
-  const paramIds = isLoading || id === undefined ? undefined : parseId(parameters?.data);
-
-  const { data, status } = useQuery({
-    queryKey: ['availableParameters', paramIds],
+  const { data, isLoading } = useQuery({
+    queryKey: ['activeParameters', id],
     queryFn: async () =>
       supabase
-        .from('parameter')
-        .select(`id, name, display_name, parameter_type(id, name), datatype(id, name), active`)
-        .filter('id', 'not.in', `(${paramIds})`),
-    // The query will not execute until the userId exists
-    enabled: !!paramIds,
+        .from('categories_parameters')
+        .select(
+          `category(name), parameter(id, name, display_name, parameter_type(id, name), datatype(id, name), active)`
+        )
+        .eq('category(id)', `${id}`),
+    enabled: !!id,
   });
 
   return (
@@ -60,7 +44,7 @@ const AvailableParametersTable = ({ className, id }) => {
       header={
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
-            <h1 className="font-bold text-xl">Available Parameters</h1>
+            <h1 className="font-bold text-xl">Active Parameters</h1>
             <h1>Showing 1 to 10 of X entries</h1>
           </div>
           <div className="flex flex-row gap-4">
@@ -73,8 +57,8 @@ const AvailableParametersTable = ({ className, id }) => {
       showCheckbox
       className={className}
       columnKeys={['name', 'display_name', 'parameter_type_name', 'datatype_name', 'active']}
-      data={status !== 'success' ? undefined : parseData(data?.data)}
-      table="Available"
+      data={isLoading || id === undefined ? undefined : parseData(data?.data)}
+      table="Active"
       footer={
         <div className="flex justify-between bg-none">
           <div className="flex justify-end bg-none">
@@ -105,9 +89,9 @@ const AvailableParametersTable = ({ className, id }) => {
   );
 };
 
-AvailableParametersTable.propTypes = {
+ActiveParametersTable.propTypes = {
   className: PropTypes.string,
   id: PropTypes.string,
 };
 
-export default AvailableParametersTable;
+export default ActiveParametersTable;
