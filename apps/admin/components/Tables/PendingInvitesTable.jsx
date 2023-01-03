@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useQueries, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
-import supabase from '../../pages/api/supabase';
 
 const parseData = (data) =>
   data.map((e) => ({
@@ -17,6 +17,7 @@ const parseData = (data) =>
 
 // This table shows Pending Invites and is built on the BaseTable component.
 const PendingInvitesTable = ({ className }) => {
+  const supabase = useSupabaseClient();
   const queryClient = useQueryClient();
   const paginationValues = [10, 20, 30];
 
