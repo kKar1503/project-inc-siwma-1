@@ -2,10 +2,12 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { QueryClient } from 'react-query';
 import RegisteredCompaniesTable from '../components/Tables/RegisteredCompaniesTable';
-import pic from '../public/siwma-logo-sm.png';
 import AdminPageLayout from '../components/layouts/AdminPageLayout';
 import NavBar from '../components/NavBar';
 import CompanyRegister from '../components/Modals/CompanyRegister';
+
+// Initialise react-query
+const queryClient = new QueryClient();
 
 /**
  * The below is for rendering the Companies Management Page
@@ -76,9 +78,6 @@ const Page = () => {
               Bulk Register Companies
             </Link>
           </div>
-          <label htmlFor="company-register" className="btn w-full btn-outline btn-primary">
-            Register Company
-          </label>
         </div>
       </div>
       <div className="flex mb-4 gap-4 xl:overflow-hidden shadow-lg bg-base-100">
@@ -90,10 +89,6 @@ const Page = () => {
   );
 };
 
-Page.getLayout = (page) => (
-  <AdminPageLayout pageName="Companies" siblings={<Modals />}>
-    {page}
-  </AdminPageLayout>
-);
+Page.getLayout = (page) => <AdminPageLayout pageName="Companies">{page}</AdminPageLayout>;
 
 export default Page;
