@@ -111,7 +111,7 @@ const CreateCategory = () => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Category Name"
-            pattern="^\S.*[a-zA-Z\s]*$"
+            pattern="^\S.*[a-zA-Z\s]*.^\S$"
             title="Category name should only include letters"
             required
           />
@@ -125,6 +125,7 @@ const CreateCategory = () => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Category Description"
+            pattern="^\S.*[a-zA-Z\s]*.^\S$"
             required
           />
         </div>

@@ -117,7 +117,7 @@ const CreateParam = () => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Parameter Name"
-            pattern="^\S.*[a-zA-Z\s]*$"
+            pattern="^\S.*[a-zA-Z\s]*.^\S$"
             title="Parameter name should only include letters"
             required
           />
@@ -131,7 +131,7 @@ const CreateParam = () => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Display Name"
-            pattern="^\S.*[a-zA-Z\s]*$"
+            pattern="^\S.*[a-zA-Z\s]*.^\S$"
             title="Display name should only include letters"
             required
           />
