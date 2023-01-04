@@ -1,7 +1,7 @@
 // ------------------ Imports ------------------
 
-import { bool, func } from 'prop-types';
-import { MdHome, MdBookmark, MdChat, MdPeople } from 'react-icons/md';
+import PropTypes, {bool, func} from 'prop-types';
+import {MdBookmark, MdChat, MdHome} from 'react-icons/md';
 import cx from 'classnames';
 import SidebarHeaderIcon from './MobileMenuSubComponents/SidebarHeader';
 import SidebarDivider from './MobileMenuSubComponents/SidebarDivider';
@@ -14,48 +14,53 @@ import SidebarSearch from './MobileMenuSubComponents/SidebarSearch';
 
 /**
  * This component is a central location to customize the HamburgerMenu
- * @type {React.FC<import('prop-types').InferProps<typeof LayoutEditor.propTypes>>}
+ * @type {function({closeHandle : function, categoryData: object})}
  */
-const LayoutEditor = ({ closeHandle }) => (
+const LayoutEditor = ({closeHandle, categoryData}) => (
   <>
-    <SidebarHeaderIcon closeHandle={closeHandle} />
+    <SidebarHeaderIcon closeHandle={closeHandle}/>
 
-    <SidebarDivider />
+    <SidebarDivider/>
 
-    <SidebarSearch />
-    <SidebarItem name="Home" redirectLink="/test#home" customIcon={<MdHome />} />
-    <SidebarItem name="Bookmark" redirectLink="/test#bookmark" customIcon={<MdBookmark />} />
-    <SidebarItem name="Chat" redirectLink="/test#chat" customIcon={<MdChat />}>
-      <SidebarSubItem name="Social" redirectLink="/test#chat_socials" customIcon={<MdPeople />} />
-      <SidebarSubItem name="Personal" redirectLink="/test#chat_personal" />
-      <SidebarSubItem name="Friends" redirectLink="/test#chat_friends" />
+    <SidebarSearch/>
+    <SidebarItem name="Home" redirectLink="/test#home" customIcon={<MdHome/>}/>
+    <SidebarItem name="Bookmark" redirectLink="/test#bookmark" customIcon={<MdBookmark/>}/>
+    <SidebarItem name="Categories" customIcon={<MdChat/>}>
+      {categoryData?.data.map(({name, id}) => (
+        <SidebarSubItem
+          name={name}
+          redirectLink={`/category/${name}?id=${id}`}
+          key={name}
+        />
+      ))}
     </SidebarItem>
 
-    <SidebarDivider />
+    <SidebarDivider/>
 
-    <SidebarLogout />
+    <SidebarLogout/>
   </>
 );
 
 // ------------------ Main Component -----------------
 /**
  * The MobileMenu is a hamburger menu only visible on mobile devices
- * @type {React.FC<import('prop-types').InferProps<typeof HamburgerMenu.propTypes>>}
+ * @type {function({open: bool,className: string, setOpen: function,categoryData: object})}  })}
  */
-const MobileMenu = ({ open, setOpen }) => {
+const MobileMenu = ({open, className, setOpen, categoryData}) => {
   // ------------------ Handles -----------------
   const closeHandle = () => setOpen(false);
 
   // ------------------ Return -----------------
   return (
-    <div className={cx('drawer-side block', { hidden: !open })}>
+    <div className={cx(`drawer-side block h1${  className}`, {hidden: !open})}>
       <main>
-        <span className="absolute text-white text-4xl top-5 left-4 cursor-pointer">
-          <i className="bi bi-filter-left px-2 bg-gray-900 rounded-md" />
+        <span className="text-white text-4xl top-5 left-4 cursor-pointer">
+          <i className="bi bi-filter-left px-2 bg-gray-900 rounded-md"/>
         </span>
         {/* todo background color here */}
-        <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-auto overflow-y-auto text-center bg-base-content">
-          <LayoutEditor closeHandle={closeHandle} />
+        <div
+          className=" fixed top-0 bottom-0 lg:left-0 p-2 w-auto text-center bg-base-content">
+          <LayoutEditor closeHandle={closeHandle} categoryData={categoryData}/>
         </div>
       </main>
     </div>
@@ -68,9 +73,22 @@ export default MobileMenu;
 
 LayoutEditor.propTypes = {
   closeHandle: func,
+  categoryData: PropTypes.shape({
+    data: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.number,
+    })),
+  }),
 };
 
 MobileMenu.propTypes = {
   open: bool.isRequired,
+  className: PropTypes.string,
   setOpen: func,
+  categoryData: PropTypes.shape({
+    data: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.number,
+    })),
+  }),
 };
