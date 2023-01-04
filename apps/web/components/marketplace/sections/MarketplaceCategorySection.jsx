@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import useCategoriesData from '../../../hooks/useCategoriesData';
+import CategoryListingItemSkeleton from '../../skeleton/CategoryListingItemSkeleton';
 import Carousel from '../carousel/Carousel';
 import CategoryListingItem from '../CategoryListingItem';
 
@@ -20,9 +21,20 @@ const MarketplaceCategorySection = () => {
         </Link>
       </div>
 
-      <Carousel name="categories" itemsToMoveBy={3}>
-        {categoriesData &&
-          categoriesData.map(({ id, name, imageUrl }) => (
+      {categoriesAPIError && (
+        <div className="text-red-500">There was an error loading the categories.</div>
+      )}
+
+      {categoriesAPILoading && (
+        <Carousel showButtons={false} name="categories" itemsToMoveBy={3}>
+          {categoriesAPILoading &&
+            [...Array(10)].map((_, i) => <CategoryListingItemSkeleton key={i} />)}
+        </Carousel>
+      )}
+
+      {categoriesData && categoriesData.length > 0 && (
+        <Carousel name="categories" itemsToMoveBy={3}>
+          {categoriesData.map(({ id, name, imageUrl }) => (
             <CategoryListingItem
               key={id}
               name={name}
@@ -30,7 +42,8 @@ const MarketplaceCategorySection = () => {
               href={`/category/${name}?id=${id}`}
             />
           ))}
-      </Carousel>
+        </Carousel>
+      )}
     </div>
   );
 };
