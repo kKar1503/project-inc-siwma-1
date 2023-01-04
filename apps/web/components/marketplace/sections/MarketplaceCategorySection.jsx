@@ -8,7 +8,7 @@ const MarketplaceCategorySection = () => {
     useCategoriesData();
 
   return (
-    <>
+    <div className="mb-10">
       <div className="flex flex-wrap justify-between items-center">
         {/* Title */}
         <h3 className="text-xl font-bold my-2">Categories</h3>
@@ -20,7 +20,7 @@ const MarketplaceCategorySection = () => {
         </Link>
       </div>
 
-      <Carousel name="categories" carouselWrapperClassName="mb-10">
+      <Carousel name="categories" itemsToMoveBy={3}>
         {categoriesData &&
           categoriesData.map(({ id, name, imageUrl }) => (
             <CategoryListingItem
@@ -31,7 +31,7 @@ const MarketplaceCategorySection = () => {
             />
           ))}
       </Carousel>
-    </>
+    </div>
   );
 };
 

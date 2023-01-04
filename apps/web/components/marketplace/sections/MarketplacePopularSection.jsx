@@ -13,7 +13,7 @@ const MarketplacePopularSection = () => {
         <h3 className="text-xl font-bold my-2">Popular</h3>
 
         {/* Carousel of products */}
-        <Carousel name="popular-products" wrapperClassName="my-3">
+        <Carousel name="popular-products" wrapperClassName="my-3" itemsToMoveBy={3}>
           {listingData.map(
             ({
               name,
@@ -25,7 +25,7 @@ const MarketplacePopularSection = () => {
               unit_price: unitPrice,
             }) => (
               <ProductListingItem
-                className="w-[200px] md:w-[250px] hover:shadow-lg"
+                className="w-[200px] hover:shadow-lg"
                 type={type}
                 negotiable={negotiable}
                 key={id}
