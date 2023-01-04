@@ -12,24 +12,28 @@ const CreateCategory = () => {
   const [displayAlert, setDisplayAlert] = useState(null);
   const [error, setError] = useState(null);
   const [image, setImage] = useState(null);
-  const [colourMessage, setColourMessage] = useState('text-center text-green-500 pt-4');
+  const [colourMessage, setColourMessage] = useState('text-center text-green-500 pt-1');
   const [errorMessage, setErrorMessage] = useState('');
 
+
   const checkFile = async (e) => {
-    if (e.target.files[0].type === 'image/png' || e.target.files[0].type === 'image/jpeg') {
+    if (e.target.files[0] === undefined) {
+      e.target.files = null;
+    } else if (e.target.files[0].type === 'image/png' || e.target.files[0].type === 'image/jpeg') {
       setImage(e.target.files[0]);
-      setErrorMessage('Please click "Create file"');
-      setColourMessage('text-center text-green-500 pt-4');
+      setErrorMessage('Please click "Create"');
+      setColourMessage('text-center text-green-500 pt-1');
     } else {
       e.target.files = null;
       setErrorMessage('Only image file is allowed');
-      setColourMessage('text-center text-red-500 pt-4');
+      setColourMessage('text-center text-red-500 pt-1');
       setTimeout(() => {
         setErrorMessage('');
-        setColourMessage('text-center text-green-500 pt-4');
+        setColourMessage('text-center text-green-500 pt-1');
       }, 4000);
     }
   };
+
   // const { data, isLoading } = useQuery({
   //   queryKey: ['newCategory'],
   //   queryFn: async () => supabase.from('category').select(`id, name`),
