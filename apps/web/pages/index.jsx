@@ -77,7 +77,7 @@ const MarketplacePage = () => {
   return (
     <div>
       {/* Image banner */}
-      <div className="mb-10">
+      <div className="my-10">
         {adsData.length > 0 && (
           /* Image banner - Object cover covers the image (zoom crop) */
           <AnimatedCarousel wrapperClassName="w-full h-[300px]" animationDuration={5000}>
