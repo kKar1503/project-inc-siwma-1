@@ -51,14 +51,16 @@ const AnimatedCarousel = ({
   }, [children]);
 
   const scrollRight = () => {
-    setActiveIndex((prev) => prev + 1);
-    // const widthToMoveBy = firstItemRef.current.getBoundingClientRect().width;
-    // if (mainCarouselRef.current) {
-    //   mainCarouselRef.current.scrollBy({
-    //     left: widthToMoveBy * activeIndex,
-    //     behavior: 'smooth',
-    //   });
-    // }
+    setActiveIndex((prev) => {
+      // If the previous index is more than the number of items, set it to 0
+      const newValue = prev + 1;
+      if (newValue > numberOfItems - 1) {
+        return 0;
+      }
+
+      // Else, return the previous index + 1
+      return newValue;
+    });
   };
 
   const moveToSlide = (index) => {
@@ -72,14 +74,16 @@ const AnimatedCarousel = ({
   };
 
   const scrollLeft = () => {
-    setActiveIndex((prev) => prev - 1);
-    // const widthToMoveBy = firstItemRef.current.getBoundingClientRect().width;
-    // if (mainCarouselRef.current) {
-    //   mainCarouselRef.current.scrollBy({
-    //     left: -widthToMoveBy * activeIndex,
-    //     behavior: 'smooth',
-    //   });
-    // }
+    setActiveIndex((prev) => {
+      // If the previous index is less than 0, set it to the number of items - 1
+      const newValue = prev - 1;
+      if (newValue < 0) {
+        return numberOfItems - 1;
+      }
+
+      // Else, return the previous index - 1
+      return newValue;
+    });
   };
 
   // usEffect to increase active index every animationDuration ms
@@ -159,7 +163,7 @@ const AnimatedCarousel = ({
           }
         });
       },
-      { threshold: 0.8, rootMargin: '100% 0% 100% 0%' }
+      { threshold: 0.1, rootMargin: '100% 0% 100% 0%' }
     );
 
     if (lastItemRef.current) {
@@ -175,32 +179,24 @@ const AnimatedCarousel = ({
   }, [lastItemRef, children, onReachedEnd]);
 
   return (
-    <div className="flex items-center relative">
+    <div className="flex items-center relative rounded-xl">
       {/* Carousel buttons */}
       {/* Carousel buttons are position absolutely */}
       <div className="carousel-buttons flex w-full justify-between absolute h-full">
-        {!firstItemVisible ? (
-          <button
-            onClick={scrollLeft}
-            className="z-30 bg-gradient-to-r from-black/50  to-transparent px-5 text-white"
-          >
-            <IoChevronBack size={25} />
-          </button>
-        ) : (
-          <div />
-        )}
+        <button
+          onClick={scrollLeft}
+          className="z-30 bg-gradient-to-r from-black/50  to-transparent px-5 text-white rounded-xl"
+        >
+          <IoChevronBack size={25} />
+        </button>
 
         {/* Next button */}
-        {!lastItemVisible ? (
-          <button
-            onClick={scrollRight}
-            className="z-30 bg-gradient-to-r to-black/50  from-transparent px-5 text-white"
-          >
-            <IoChevronForward size={25} />
-          </button>
-        ) : (
-          <div />
-        )}
+        <button
+          onClick={scrollRight}
+          className="z-30 bg-gradient-to-r to-black/50  from-transparent px-5 text-white rounded-xl"
+        >
+          <IoChevronForward size={25} />
+        </button>
       </div>
 
       {/* <div className="left-0 w-[20px] h-full bg-gradient-to-r from-white to-transparent absolute z-20" />
@@ -208,7 +204,7 @@ const AnimatedCarousel = ({
 
       {/* Carousel items itself */}
       <div
-        className={`w-full carousel carousel-center space-x-3 rounded-box ${carouselWrapperClassName}`}
+        className={`w-full carousel carousel-center space-x-3 rounded-xl ${carouselWrapperClassName}`}
         ref={mainCarouselRef}
       >
         {Children.map(children, (child, index) => {
