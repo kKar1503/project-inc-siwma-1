@@ -130,26 +130,23 @@ const Carousel = ({
     <div className="flex items-center relative">
       {/* Carousel buttons */}
       {/* Carousel buttons are position absolutely */}
-      <div className="carousel-buttons flex w-full justify-between px-1 absolute">
-        {!firstItemVisible ? (
+
+      <div className="hidden md:block">
+        {!firstItemVisible && (
           <IconRoundButton
-            icon={<IoChevronBack size={16} />}
+            icon={<IoChevronBack size={20} />}
             onClick={scrollLeft}
-            className="z-30"
+            className="z-30 absolute -left-8 top-1/2"
           />
-        ) : (
-          <div />
         )}
 
         {/* Next button */}
-        {!lastItemVisible ? (
+        {!lastItemVisible && (
           <IconRoundButton
-            icon={<IoChevronForward size={16} />}
+            icon={<IoChevronForward size={20} />}
             onClick={scrollRight}
-            className="z-30"
+            className="z-30 absolute -right-8 top-1/2"
           />
-        ) : (
-          <div />
         )}
       </div>
 
