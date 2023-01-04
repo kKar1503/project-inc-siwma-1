@@ -14,11 +14,19 @@ const useListingsData = (offset = 0, limit = 10, tag = '') => {
     isLoading: listingIsLoading,
     error: listingError,
     refetch: listingRefetch,
-  } = useQuery(['get_listings', offset, limit], async () =>
-    supabase.rpc('get_listings', { item_offset: offset, item_limit: limit })
-  );
+  } = useQuery(['get_listings', offset, limit], async () => {
+    const res = await supabase.rpc('get_listings', { item_offset: offset, item_limit: limit });
+
+    if (res.error) {
+      throw new Error('Problem fetching listings data from the database.');
+    }
+
+    return res;
+  });
 
   async function getImageData(listings) {
+    if (!listings) return null;
+
     const listingDataWithImages = listings.map(async (item) => {
       // Let imageLink be null first, we will set a value if there is an image
       let imageLink = null;

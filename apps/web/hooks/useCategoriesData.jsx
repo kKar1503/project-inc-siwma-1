@@ -12,9 +12,18 @@ const useCategoriesData = () => {
     isLoading: categoriesAPILoading,
     error: categoriesAPIError,
     status: categoriesAPIStatus,
-  } = useQuery(['categories'], () =>
-    supabase.from(Database.TABLES.CATEGORY.CATEGORY).select('*').eq('active', true)
-  );
+  } = useQuery(['categories'], async () => {
+    const res = await supabase
+      .from(Database.TABLES.CATEGORY.CATEGORY)
+      .select('*')
+      .eq('active', true);
+
+    if (res.error) {
+      throw new Error('Problem fetching categories data from the database.');
+    }
+
+    return res;
+  });
 
   // ! Category useEffect
   useEffect(() => {
