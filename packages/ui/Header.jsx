@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import SIWMALogo from './public/siwma-logo.png';
 import SIWMALogoFull from './public/siwma-logo-full.png';
+import {MobileMenu} from './index';
 
 const Header = () => (
   <div className="navbar bg-base-100">
@@ -25,51 +26,40 @@ const Header = () => (
             />
           </svg>
         </label>
-        <ul
-          tabIndex={0}
-          className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-        >
-          <li>
-            <Link href="http://localhost:3000">Item 1</Link>
-          </li>
-          <li tabIndex={0}>
-            <Link className="justify-between" href="http://localhost:3000">
-              Parent
-              <svg
-                className="fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" />
-              </svg>
-            </Link>
-            <ul className="p-2">
-              <li>
-                <Link href="http://localhost:3000">Submenu 1</Link>
-              </li>
-              <li>
-                <Link href="http://localhost:3000">Submenu 2</Link>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <Link href="http://localhost:3000">Item 3</Link>
-          </li>
-        </ul>
+        {/* <button onClick={() => setOpen(!open)} className="btn btn-ghost lg:hidden"> */}
+        {/*  <svg */}
+        {/*    xmlns="http://www.w3.org/2000/svg" */}
+        {/*    className="h-5 w-5" */}
+        {/*    fill="none" */}
+        {/*    viewBox="0 0 24 24" */}
+        {/*    stroke="currentColor" */}
+        {/*  > */}
+        {/*    <path */}
+        {/*      strokeLinecap="round" */}
+        {/*      strokeLinejoin="round" */}
+        {/*      strokeWidth="2" */}
+        {/*      d="M4 6h16M4 12h8m-8 6h16" */}
+        {/*    /> */}
+        {/*  </svg> */}
+        {/* </button> */}
+        <MobileMenu tabIndex={0}
+          className="menu menu-compact dropdown-content p-2 h-screen shadow bg-base-100 rounded-box w-52"
+          // open={open} setOpen={setOpen}
+          open setOpen={() =>{}}
+          categoryData={{data: []}}/>
+
       </div>
       <Link className="btn btn-ghost" href="http://localhost:3000">
         <Image
           src={SIWMALogo}
           className="min-[320px]:h-[30px] h-full min-[320px]:w-[270px] w-full object-cover lg:hidden"
         />
-        <Image src={SIWMALogoFull} className="h-full w-full object-cover hidden lg:flex" />
+        <Image src={SIWMALogoFull} className="h-full w-full object-cover hidden lg:flex"/>
       </Link>
       <ul className="menu menu-horizontal p-0 hidden lg:flex">
         <li tabIndex={0}>
           <Link href="http://localhost:3000">
-            Categories
+              Categories
             <svg
               className="fill-current"
               xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +67,7 @@ const Header = () => (
               height="20"
               viewBox="0 0 24 24"
             >
-              <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+              <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/>
             </svg>
           </Link>
           <ul className="p-2">
@@ -98,7 +88,7 @@ const Header = () => (
       <div className="dropdown dropdown-end">
         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
           <div className="w-10 rounded-full">
-            <Image src="/../public/sample-profile-image.jpg" alt="Person" width={20} height={20} />
+            <Image src="/../public/sample-profile-image.jpg" alt="Person" width={20} height={20}/>
           </div>
         </label>
         <ul
@@ -107,7 +97,7 @@ const Header = () => (
         >
           <li>
             <Link className="justify-between" href="http://localhost:3000">
-              Profile
+                Profile
             </Link>
           </li>
           <li>
