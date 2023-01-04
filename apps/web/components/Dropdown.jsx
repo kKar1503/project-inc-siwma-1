@@ -10,20 +10,12 @@ import PropTypes from 'prop-types';
 const Dropdown = ({ items, onChangeValue }) => (
   <select
     onChange={onChangeValue}
-    className="select w-full text-center focus:outline-none"
+    className="select w-full max-w-xs"
     defaultValue="Category"
   >
     <option disabled>Category</option>
     {items.map((item) =>
-      item.subcategory ? (
-        <optgroup key={item.id} label={item.category}>
-          {item.subcategory.map((subItem) => (
-            <option key={subItem.id}>{subItem.category}</option>
-          ))}
-        </optgroup>
-      ) : (
-        <option key={item.id}>{item.category}</option>
-      )
+      <option key={item.id}>{item.name}</option>
     )}
   </select>
 );
