@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { Children, useEffect, useRef, useState } from 'react';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
@@ -27,6 +28,7 @@ import IconRoundButton from './IconRoundButton';
 
 const Carousel = ({
   children,
+  showButtons = true,
   carouselWrapperClassName = '',
   wrapperClassName = '',
   itemsToMoveBy = 1,
@@ -131,7 +133,11 @@ const Carousel = ({
       {/* Carousel buttons */}
       {/* Carousel buttons are position absolutely */}
 
-      <div className="hidden md:block">
+      <div
+        className={`hidden md:block ${classNames({
+          'md:hidden': !showButtons,
+        })}`}
+      >
         {!firstItemVisible && (
           <IconRoundButton
             icon={<IoChevronBack size={20} />}
@@ -193,6 +199,7 @@ const Carousel = ({
 Carousel.propTypes = {
   children: PropTypes.node,
   carouselWrapperClassName: PropTypes.string,
+  showButtons: PropTypes.bool,
   wrapperClassName: PropTypes.string,
   itemsToMoveBy: PropTypes.number,
   onReachedEnd: PropTypes.func,
