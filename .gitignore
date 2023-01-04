@@ -32,3 +32,8 @@ yarn-error.log*
 
 # turbo
 .turbo
+
+# Cypress outputs
+**/.cypress
+**/cypress/videos
+**/cypress/screenshots
