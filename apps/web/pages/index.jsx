@@ -78,18 +78,16 @@ const MarketplacePage = () => {
     <div>
       {/* Image banner */}
       <div className="mb-10">
-        <Container>
-          {adsData.length > 0 && (
-            /* Image banner - Object cover covers the image (zoom crop) */
-            <AnimatedCarousel wrapperClassName="w-full h-[300px]" animationDuration={5000}>
-              {adsData.map((ad) => (
-                <div key={ad.id} className="w-full relative">
-                  <Advertisement adData={ad} />
-                </div>
-              ))}
-            </AnimatedCarousel>
-          )}
-        </Container>
+        {adsData.length > 0 && (
+          /* Image banner - Object cover covers the image (zoom crop) */
+          <AnimatedCarousel wrapperClassName="w-full h-[300px]" animationDuration={5000}>
+            {adsData.map((ad) => (
+              <div key={ad.id} className="w-full relative">
+                <Advertisement adData={ad} />
+              </div>
+            ))}
+          </AnimatedCarousel>
+        )}
       </div>
 
       {/* Container just adds margin from left and right */}
@@ -102,5 +100,7 @@ const MarketplacePage = () => {
     </div>
   );
 };
+
+MarketplacePage.getLayout = (page) => <Container>{page}</Container>;
 
 export default MarketplacePage;
