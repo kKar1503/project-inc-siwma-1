@@ -3,37 +3,34 @@
 import PropTypes, {bool, func} from 'prop-types';
 import {MdBookmark, MdChat, MdHome} from 'react-icons/md';
 import cx from 'classnames';
-import SidebarHeaderIcon from './MobileMenuSubComponents/SidebarHeader';
 import SidebarDivider from './MobileMenuSubComponents/SidebarDivider';
 import SidebarItem from './MobileMenuSubComponents/SidebarItem';
 import SidebarSubItem from './MobileMenuSubComponents/SidebarSubItem';
 import SidebarLogout from './MobileMenuSubComponents/SidebarLogout';
 import SidebarSearch from './MobileMenuSubComponents/SidebarSearch';
+import SidebarDropdown from './MobileMenuSubComponents/SidebarDropdown';
 
 // ------------------ Layout Configuration ------------------
 
 /**
  * This component is a central location to customize the HamburgerMenu
- * @type {function({closeHandle : function, categoryData: object})}
+ * @type {function({categoryData: object})}
  */
-const LayoutEditor = ({closeHandle, categoryData}) => (
+const LayoutEditor = ({categoryData}) => (
   <>
-    <SidebarHeaderIcon closeHandle={closeHandle}/>
-
-    <SidebarDivider/>
-
     <SidebarSearch/>
+    <SidebarDivider/>
     <SidebarItem name="Home" redirectLink="/test#home" customIcon={<MdHome/>}/>
     <SidebarItem name="Bookmark" redirectLink="/test#bookmark" customIcon={<MdBookmark/>}/>
-    <SidebarItem name="Categories" customIcon={<MdChat/>}>
-      {categoryData?.data.map(({name, id}) => (
+    <SidebarDropdown name="Categories" customIcon={<MdChat/>}>
+      {categoryData?.categoryData?.data.map(({name, id}) => (
         <SidebarSubItem
           name={name}
           redirectLink={`/category/${name}?id=${id}`}
           key={name}
         />
       ))}
-    </SidebarItem>
+    </SidebarDropdown>
 
     <SidebarDivider/>
 
@@ -52,7 +49,7 @@ const MobileMenu = ({open, className, setOpen, categoryData}) => {
 
   // ------------------ Return -----------------
   return (
-    <div className={cx(`drawer-side block h1${  className}`, {hidden: !open})}>
+    <div className={cx(`block h1${className}`, {hidden: !open})}>
       <main>
         <span className="text-white text-4xl top-5 left-4 cursor-pointer">
           <i className="bi bi-filter-left px-2 bg-gray-900 rounded-md"/>
@@ -72,12 +69,13 @@ export default MobileMenu;
 // ------------------ PropTypes ------------------
 
 LayoutEditor.propTypes = {
-  closeHandle: func,
   categoryData: PropTypes.shape({
-    data: PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string,
-      id: PropTypes.number,
-    })),
+    categoryData: PropTypes.shape({
+      data: PropTypes.arrayOf(PropTypes.shape({
+        name: PropTypes.string,
+        id: PropTypes.number,
+      })),
+    }),
   }),
 };
 
@@ -86,9 +84,11 @@ MobileMenu.propTypes = {
   className: PropTypes.string,
   setOpen: func,
   categoryData: PropTypes.shape({
-    data: PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string,
-      id: PropTypes.number,
-    })),
+    categoryData: PropTypes.shape({
+      data: PropTypes.arrayOf(PropTypes.shape({
+        name: PropTypes.string,
+        id: PropTypes.number,
+      })),
+    }),
   }),
 };
