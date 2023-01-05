@@ -45,7 +45,7 @@ const ChatBubbles = (messages) => {
     <div className="overflow-y-scroll" style={{ maxHeight: '73vh' }}>
       <div className="bg-blue-50 items-center">
         {allMsg.map((msg) => {
-          if (msg.contents.text != null) {
+          if (msg.contents.text != null && msg.contents.text !== '') {
             return (
               <div
                 className={
@@ -141,7 +141,8 @@ const ChatBubbles = (messages) => {
                 >
                   <div className="card-body py-4 px-6">
                     <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em] text-blue-700">
-                      {msg.contents.file}
+                      {/* TO DO : Add functionality to view file in chat */}
+                      {msg.contents.file.split('/')[1]}
                     </p>
                   </div>
                 </div>
