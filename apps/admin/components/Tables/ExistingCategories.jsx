@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQueries, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import cx from 'classnames';
@@ -25,17 +25,26 @@ const ExistingCategories = ({ className }) => {
   const queryClient = useQueryClient();
   const supabase = useSupabaseClient();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['categories'],
-    queryFn: async () =>
-      supabase
-        .from('category')
-        .select(`id, name, description, active`)
-        .range(selectedIndex * option, (selectedIndex + 1) * option - 1)
-        .order('name', { ascending: true }),
-  });
-
-  console.log(data);
+  const [categoryQuery, categoryCountQuery] = useQueries([
+    {
+      queryKey: [
+        'categories',
+        { from: selectedIndex * option, to: (selectedIndex + 1) * option - 1 },
+      ],
+      queryFn: async () =>
+        supabase
+          .from('category')
+          .select(`id, name, description, active`)
+          .range(selectedIndex * option, (selectedIndex + 1) * option - 1)
+          .order('name', { ascending: true }),
+    },
+    {
+      queryKey: ['getCategoryCount'],
+      queryFn: async () => supabase.from('category').select('*', { count: 'exact', head: true }),
+      keepPreviousData: true,
+      refetchInterval: 300000,
+    },
+  ]);
 
   const archiveCategory = async () => {
     await supabase
@@ -65,11 +74,11 @@ const ExistingCategories = ({ className }) => {
     queryClient.invalidateQueries({ queryKey: ['categories'] });
   };
 
-  const categoryLength = isLoading ? undefined : data?.data.length;
+  const categoryCount = categoryCountQuery.isLoading ? 0 : categoryCountQuery.data.count;
 
   const renderTableButtons = () => {
     const tableButtons = [];
-    if (isLoading) {
+    if (categoryQuery.isLoading) {
       return (
         <TableButton
           index={0}
@@ -81,7 +90,7 @@ const ExistingCategories = ({ className }) => {
         />
       );
     }
-    const count = categoryLength / option;
+    const count = categoryCount / option;
     for (let i = 0; i < count; i++) {
       tableButtons.push(
         <TableButton
@@ -140,10 +149,10 @@ const ExistingCategories = ({ className }) => {
             <h1 className="font-bold text-xl">Registered Users</h1>
             <h1 className="pr-2">
               Showing {selectedIndex * option + 1} to{' '}
-              {(selectedIndex + 1) * option > categoryLength
-                ? categoryLength
+              {(selectedIndex + 1) * option > categoryCount
+                ? categoryCount
                 : (selectedIndex + 1) * option}{' '}
-              of {categoryLength} entries
+              of {categoryCount} entries
             </h1>
           </div>
           <div className="flex flex-row gap-4">
@@ -151,7 +160,9 @@ const ExistingCategories = ({ className }) => {
             <select
               value={option}
               className="select select-bordered w-25"
-              onChange={(e) => setOption(e.target.value)}
+              onChange={(e) => {
+                setOption(e.target.value);
+              }}
             >
               {paginationValues.map((value) => (
                 <option value={value}>{value} per page</option>
@@ -167,27 +178,31 @@ const ExistingCategories = ({ className }) => {
       className={className}
       columnKeys={['name', 'description', 'active']}
       onChange={onChangeHandler}
-      data={isLoading ? undefined : parseData(data?.data)}
+      data={categoryQuery.isLoading ? undefined : parseData(categoryQuery.data?.data)}
       footer={
         <div className="flex justify-between bg-none">
           <div className="flex gap-4">
             <button
               className="btn btn-primary text-white"
               onClick={archiveCategory}
-              disabled={isLoading || checkInput('Active')}
+              disabled={categoryQuery.isLoading || checkInput('Active')}
             >
               DEACTIVATE SELECTED
             </button>
             <button
               className="btn btn-primary text-white"
               onClick={unarchiveCategory}
-              disabled={isLoading || checkInput('Disabled')}
+              disabled={categoryQuery.isLoading || checkInput('Disabled')}
             >
               ACTIVATE SELECTED
             </button>
             <button
               className="btn btn-primary text-white"
-              disabled={isLoading || selectedCategory.length > 1 || selectedCategory.length === 0}
+              disabled={
+                categoryQuery.isLoading ||
+                selectedCategory.length > 1 ||
+                selectedCategory.length === 0
+              }
             >
               <Link
                 href={`/category/${
