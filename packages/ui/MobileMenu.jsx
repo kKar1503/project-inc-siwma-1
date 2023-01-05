@@ -18,12 +18,13 @@ import SidebarDropdown from './MobileMenuSubComponents/SidebarDropdown';
  */
 const LayoutEditor = ({categoryData}) => (
   <>
+    {/* eslint-disable-next-line no-alert */}
     <SidebarSearch/>
     <SidebarDivider/>
     <SidebarItem name="Home" redirectLink="/test#home" customIcon={<MdHome/>}/>
     <SidebarItem name="Bookmark" redirectLink="/test#bookmark" customIcon={<MdBookmark/>}/>
     <SidebarDropdown name="Categories" customIcon={<MdChat/>}>
-      {categoryData?.categoryData?.data.map(({name, id}) => (
+      {categoryData?.map(({name, id}) => (
         <SidebarSubItem
           name={name}
           redirectLink={`/category/${name}?id=${id}`}
@@ -69,26 +70,18 @@ export default MobileMenu;
 // ------------------ PropTypes ------------------
 
 LayoutEditor.propTypes = {
-  categoryData: PropTypes.shape({
-    categoryData: PropTypes.shape({
-      data: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.string,
-        id: PropTypes.number,
-      })),
-    }),
-  }),
+  categoryData: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    id: PropTypes.number,
+  })),
 };
 
 MobileMenu.propTypes = {
   open: bool.isRequired,
   className: PropTypes.string,
   setOpen: func,
-  categoryData: PropTypes.shape({
-    categoryData: PropTypes.shape({
-      data: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.string,
-        id: PropTypes.number,
-      })),
-    }),
-  }),
+  categoryData: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    id: PropTypes.number,
+  })),
 };

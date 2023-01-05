@@ -1,14 +1,16 @@
 import '@inc/styles/globals.css';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import {SessionContextProvider, useSupabaseClient} from '@supabase/auth-helpers-react';
+import {QueryClient, QueryClientProvider, useQuery} from 'react-query';
+import {Header} from '@inc/ui';
 import AuthenticationGuard from '../components/auth/AuthenticationGuard';
 import AuthorizationGuard from '../components/auth/AuthorizationGuard';
 import AppUserProvider from '../components/auth/UserProvider';
 import Error404 from '../components/fallbacks/Error404';
+
 
 const queryClient = new QueryClient();
 
@@ -40,25 +42,30 @@ const DisallowNonAuthenticatedFallback = () => {
  */
 const MyApp = ({ Component, pageProps }) => {
   const [supabase] = useState(() => createBrowserSupabaseClient());
-  // Use the layout defined at the page level, if available
+
   const getLayout = Component.getLayout || ((page) => page);
   const { roles, aclAbilities, allowAuthenticated, allowNonAuthenticated } = Component;
+
 
   return (
     <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
       <QueryClientProvider client={queryClient}>
-        <AppUserProvider>
-          <AuthenticationGuard
-            disallowAuthenticatedFallback={<Error404 />}
-            disallowNonAuthenticatedFallback={<DisallowNonAuthenticatedFallback />}
-            allowAuthenticated={allowAuthenticated}
-            allowNonAuthenticated={allowNonAuthenticated}
-          >
-            <AuthorizationGuard roles={roles} fallback={<Error404 />} aclAbilities={aclAbilities}>
-              {getLayout(<Component {...pageProps} />)}
-            </AuthorizationGuard>
-          </AuthenticationGuard>
-        </AppUserProvider>
+        {getLayout(
+          <LayoutView>
+            <AppUserProvider>
+              <AuthenticationGuard
+                disallowAuthenticatedFallback={<Error404 />}
+                disallowNonAuthenticatedFallback={<DisallowNonAuthenticatedFallback />}
+                allowAuthenticated={allowAuthenticated}
+                allowNonAuthenticated={allowNonAuthenticated}
+              >
+                <AuthorizationGuard roles={roles} fallback={<Error404 />} aclAbilities={aclAbilities}>
+                  {getLayout(<Component {...pageProps} />)}
+                </AuthorizationGuard>
+              </AuthenticationGuard>
+            </AppUserProvider>
+          </LayoutView>,
+        )}
       </QueryClientProvider>
     </SessionContextProvider>
   );
@@ -67,3 +74,26 @@ const MyApp = ({ Component, pageProps }) => {
 MyApp.propTypes = propTypes;
 
 export default MyApp;
+
+const LayoutView = ({children}) => {
+  const supabase = useSupabaseClient();
+  const {
+    data : categoryData,
+    // status: categoryStatus,
+    // isLoading: categoryIsLoading,
+  } = useQuery(['get_category'], () => supabase.from('category').select('*'));
+
+
+  const {data = undefined} = categoryData || {};
+  // window.alert(JSON.stringify(categoryData))
+  return (
+    <>
+      <Header categoryData={data}/>
+      {children}
+    </>
+  );
+}
+
+LayoutView.propTypes = {
+  children: PropTypes.node,
+}
