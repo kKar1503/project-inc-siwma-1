@@ -42,8 +42,8 @@ const ChatBubbles = (messages) => {
   }, [messages, allMsg]);
 
   return (
-    <div>
-      <div className="bg-slate-50 items-center">
+    <div className="overflow-y-scroll" style={{ maxHeight: '73vh' }}>
+      <div className="bg-blue-50 items-center">
         {allMsg.map((msg) => {
           if (msg.contents.text != null) {
             return (
@@ -56,12 +56,12 @@ const ChatBubbles = (messages) => {
                 <div
                   className={
                     msg.profile_uuid === user
-                      ? 'bg-info rounded-tl-3xl rounded-tr-3xl rounded-bl-3xl w-auto my-3 bottom-2'
+                      ? 'bg-blue-200 rounded-tl-3xl rounded-tr-3xl rounded-bl-3xl w-auto my-3 bottom-2'
                       : 'bg-base-300 rounded-tl-3xl rounded-tr-3xl rounded-br-3xl w-auto my-3 bottom-2'
                   }
                 >
                   <div className="card-body py-4 px-6">
-                    <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em]">
+                    <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em] text-blue-700">
                       {msg.contents.text}
                     </p>
                   </div>
@@ -81,12 +81,12 @@ const ChatBubbles = (messages) => {
                 <div
                   className={
                     msg.profile_uuid === user
-                      ? 'bg-info rounded-2xl w-auto my-3 bottom-2'
+                      ? 'bg-blue-200 rounded-l-2xl rounded-t-2xl w-auto my-3 bottom-2'
                       : 'bg-base-300 rounded-2xl w-auto my-3 bottom-2'
                   }
                 >
                   <div className="card-body py-4 px-6">
-                    <p className="font-bold">Made an Offer</p>
+                    <p className="font-bold text-blue-700">Made an Offer</p>
                     <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em]">
                       SGD {msg.contents.offer}
                     </p>
@@ -107,7 +107,7 @@ const ChatBubbles = (messages) => {
                 <div
                   className={
                     msg.profile_uuid === user
-                      ? 'bg-info rounded-tl-3xl rounded-tr-3xl rounded-bl-3xl w-auto my-3 bottom-2'
+                      ? 'bg-blue-200 rounded-tl-3xl rounded-tr-3xl rounded-bl-3xl w-auto my-3 bottom-2'
                       : 'bg-base-300  rounded-tl-3xl rounded-tr-3xl rounded-br-3xl w-auto my-3 bottom-2'
                   }
                 >
@@ -115,8 +115,33 @@ const ChatBubbles = (messages) => {
                     <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em]">
                       <img
                         src={`https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/chat-bucket/${msg.contents.image}`}
-                        alt=""
+                        alt={msg.contents.image}
                       />
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          if (msg.contents.file != null) {
+            return (
+              <div
+                className={
+                  msg.profile_uuid === user ? 'flex justify-end mx-5' : 'flex justify-start mx-5'
+                }
+                key={msg.contents.content_id}
+              >
+                <div
+                  className={
+                    msg.profile_uuid === user
+                      ? 'bg-blue-200 rounded-tl-3xl rounded-tr-3xl rounded-bl-3xl w-auto my-3 bottom-2'
+                      : 'bg-base-300  rounded-tl-3xl rounded-tr-3xl rounded-br-3xl w-auto my-3 bottom-2'
+                  }
+                >
+                  <div className="card-body py-4 px-6">
+                    <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em] text-blue-700">
+                      {msg.contents.file}
                     </p>
                   </div>
                 </div>

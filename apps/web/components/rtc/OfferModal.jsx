@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useState } from 'react';
 
@@ -78,7 +79,7 @@ const OfferModal = () => {
                   <button className="btn p-4" onClick={handleOffer}>
                     Make Offer
                   </button>
-                  <a href="localhost:3000/real-time-chat" className="btn">
+                  <a href="#" className="btn">
                     Close
                   </a>
                 </div>
