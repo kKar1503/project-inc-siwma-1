@@ -51,6 +51,7 @@ const RegisteredUsersTable = ({ className }) => {
       refetchInterval: 300000,
     },
   ]);
+  console.log(usersQuery);
 
   const userCount = userCountQuery.isLoading ? 0 : userCountQuery.data.count;
 

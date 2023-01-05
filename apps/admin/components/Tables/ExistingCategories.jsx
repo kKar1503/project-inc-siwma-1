@@ -1,12 +1,12 @@
-import { useQuery } from 'react-query';
-import { useState } from 'react';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import React, { useState } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
-import BaseTableCat from './BaseTableCat';
+import Link from 'next/link';
+import cx from 'classnames';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { BaseTableCat } from './BaseTableCat';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
-
-// This table shows Categories and is built on the BaseTable component.
 
 const parseData = (data) =>
   data.map((e) => ({
@@ -17,8 +17,12 @@ const parseData = (data) =>
   }));
 
 const ExistingCategories = ({ className }) => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const paginationValues = [5, 10, 20, 30];
 
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedCategory, setSelectedCategories] = useState([]);
+  const [option, setOption] = useState(paginationValues[0]);
+  const queryClient = useQueryClient();
   const supabase = useSupabaseClient();
 
   const { data, isLoading } = useQuery({
@@ -27,66 +31,175 @@ const ExistingCategories = ({ className }) => {
       supabase
         .from('category')
         .select(`id, name, description, active`)
+        .range(selectedIndex * option, (selectedIndex + 1) * option - 1)
         .order('name', { ascending: true }),
   });
 
-  // Can use next time?
-  // const useCategories = () => {
-  //   useQuery({
-  //     queryKey: ['categories'],
-  //     queryFn: async () =>
-  //       supabase
-  //         .from('category')
-  //         .select(`id, name, description, active`)
-  //         .order('name', { ascending: true }),
-  //   });
-  // };
+  console.log(data);
 
-  // const { data, isLoading } = useCategories();
+  const archiveCategory = async () => {
+    await supabase
+      .from('category')
+      .update({
+        active: false,
+      })
+      .eq(
+        'id',
+        selectedCategory.map((e) => e.id)
+      );
+    setSelectedCategories(selectedCategory.map((e) => ({ ...e, active: 'Disabled' })));
+    queryClient.invalidateQueries({ queryKey: ['categories'] });
+  };
+
+  const unarchiveCategory = async () => {
+    await supabase
+      .from('category')
+      .update({
+        active: true,
+      })
+      .eq(
+        'id',
+        selectedCategory.map((e) => e.id)
+      );
+    setSelectedCategories(selectedCategory.map((e) => ({ ...e, active: 'Active' })));
+    queryClient.invalidateQueries({ queryKey: ['categories'] });
+  };
+
+  const categoryLength = isLoading ? undefined : data?.data.length;
+
+  const renderTableButtons = () => {
+    const tableButtons = [];
+    if (isLoading) {
+      return (
+        <TableButton
+          index={0}
+          selectedIndex={selectedIndex}
+          setSelectedIndex={setSelectedIndex}
+          selectedColor="bg-warning"
+          className="rounded-lg hover:bg-warning"
+          disabled
+        />
+      );
+    }
+    const count = categoryLength / option;
+    for (let i = 0; i < count; i++) {
+      tableButtons.push(
+        <TableButton
+          index={i}
+          selectedIndex={selectedIndex}
+          setSelectedIndex={setSelectedIndex}
+          selectedColor="bg-warning"
+          className={cx('hover:bg-warning', {
+            'rounded-l-lg': i === 0,
+            'rounded-r-lg': i >= count - 1,
+          })}
+        />
+      );
+    }
+    return tableButtons;
+  };
+
+  const onChangeHandler = (targetUser, selected) => {
+    if (!selected && selectedCategory.find((user) => user.id === targetUser.id)) {
+      const result = [...selectedCategory].filter((user) => user.id !== targetUser.id);
+      setSelectedCategories(result);
+    }
+
+    if (selected && !selectedCategory.find((user) => user.id === targetUser.id)) {
+      const result = [...selectedCategory];
+      result.push(targetUser);
+      setSelectedCategories(result);
+    }
+  };
+
+  const checkInput = (type) => {
+    if (type === 'Active') {
+      return selectedCategory.every(
+        (e) =>
+          e.active === 'Disabled' ||
+          (!selectedCategory.every((category) => category.active === 'Disabled') &&
+            !selectedCategory.every((category) => category.active === 'Active'))
+      );
+    }
+    if (type === 'Disabled') {
+      return selectedCategory.every(
+        (e) =>
+          e.active === 'Active' ||
+          (!selectedCategory.every((category) => category.active === 'Disabled') &&
+            !selectedCategory.every((category) => category.active === 'Active'))
+      );
+    }
+    return false;
+  };
 
   return (
     <BaseTableCat
       header={
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
-            <h1 className="font-bold text-xl">Existing Categories</h1>
-            <h1>Showing 1 to 10 of X entries</h1>
+            <h1 className="font-bold text-xl">Registered Users</h1>
+            <h1 className="pr-2">
+              Showing {selectedIndex * option + 1} to{' '}
+              {(selectedIndex + 1) * option > categoryLength
+                ? categoryLength
+                : (selectedIndex + 1) * option}{' '}
+              of {categoryLength} entries
+            </h1>
           </div>
           <div className="flex flex-row gap-4">
-            <SearchBar placeholder="Search..." />
+            <h1 className="mt-3">Show</h1>
+            <select
+              value={option}
+              className="select select-bordered w-25"
+              onChange={(e) => setOption(e.target.value)}
+            >
+              {paginationValues.map((value) => (
+                <option value={value}>{value} per page</option>
+              ))}
+            </select>
+            <SearchBar placeholder="Search by name" />
           </div>
         </div>
       }
       headings={['Category Name', 'Category Description', 'Status']}
-      headingColor="bg-warning"
+      headingColor="bg-success"
       showCheckbox
       className={className}
       columnKeys={['name', 'description', 'active']}
+      onChange={onChangeHandler}
       data={isLoading ? undefined : parseData(data?.data)}
       footer={
         <div className="flex justify-between bg-none">
-          <div className="flex justify-end bg-none">
-            <TableButton
-              index={0}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-warning"
-              styles="rounded-l-lg"
-            />
-            <TableButton
-              index={1}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-warning"
-            />
-            <TableButton
-              index={2}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-warning"
-              styles="rounded-r-lg"
-            />
+          <div className="flex gap-4">
+            <button
+              className="btn btn-primary text-white"
+              onClick={archiveCategory}
+              disabled={isLoading || checkInput('Active')}
+            >
+              DEACTIVATE SELECTED
+            </button>
+            <button
+              className="btn btn-primary text-white"
+              onClick={unarchiveCategory}
+              disabled={isLoading || checkInput('Disabled')}
+            >
+              ACTIVATE SELECTED
+            </button>
+            <button
+              className="btn btn-primary text-white"
+              disabled={isLoading || selectedCategory.length > 1 || selectedCategory.length === 0}
+            >
+              <Link
+                href={`/category/${
+                  selectedCategory.length === 0 ? undefined : selectedCategory[0].id
+                }`}
+              >
+                Edit
+              </Link>
+            </button>
           </div>
+
+          <div className="flex justify-end bg-none">{renderTableButtons()}</div>
         </div>
       }
     />

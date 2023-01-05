@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import ActionCat from '../ActionCat';
+import ActionCat from '../../ActionCat';
 
 // This is the base table component that every other table is built on.
 
