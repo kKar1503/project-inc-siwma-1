@@ -131,6 +131,7 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0
       react-hook-form: ^7.39.3
+      react-hot-toast: ^2.4.0
       react-icons: ^4.6.0
       react-loading-skeleton: ^3.1.0
       react-modal: ^3.16.1
@@ -152,12 +153,13 @@ importers:
       classnames: 2.3.2
       emoji-mart: 5.4.0
       luxon: 3.2.0
-      next: 13.0.0_7xlrwlvvs7cv2obrs6a5y6oxxq
+      next: 13.0.0_biqbaboplfbrettd7655fr4n2y
       next-transpile-modules: 9.1.0
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-hook-form: 7.41.3_react@18.2.0
+      react-hot-toast: 2.4.0_biqbaboplfbrettd7655fr4n2y
       react-icons: 4.7.1_react@18.2.0
       react-loading-skeleton: 3.1.0_react@18.2.0
       react-modal: 3.16.1_biqbaboplfbrettd7655fr4n2y
@@ -3863,6 +3865,12 @@ packages:
     resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
     dev: false
 
+  /goober/2.1.11:
+    resolution: {integrity: sha512-5SS2lmxbhqH0u9ABEWq7WPU69a4i2pYcHeCxqaNq6Cw3mnrF0ghWNM4tEGid4dKy8XNIAUbuThuozDHHKJVh3A==}
+    peerDependencies:
+      csstype: ^3.0.10
+    dev: false
+
   /goober/2.1.11_csstype@3.1.1:
     resolution: {integrity: sha512-5SS2lmxbhqH0u9ABEWq7WPU69a4i2pYcHeCxqaNq6Cw3mnrF0ghWNM4tEGid4dKy8XNIAUbuThuozDHHKJVh3A==}
     peerDependencies:
@@ -5226,7 +5234,6 @@ packages:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
-    dev: true
 
   /node-fetch/2.6.7:
     resolution: {integrity: sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==}
@@ -5693,6 +5700,20 @@ packages:
       react: ^16.8.0 || ^17 || ^18
     dependencies:
       react: 18.2.0
+    dev: false
+
+  /react-hot-toast/2.4.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-qnnVbXropKuwUpriVVosgo8QrB+IaPJCpL8oBI6Ov84uvHZ5QQcTp2qg6ku2wNfgJl6rlQXJIQU5q+5lmPOutA==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      goober: 2.1.11
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    transitivePeerDependencies:
+      - csstype
     dev: false
 
   /react-hot-toast/2.4.0_owo25xnefcwdq3zjgtohz6dbju:
@@ -6256,7 +6277,6 @@ packages:
     dependencies:
       client-only: 0.0.1
       react: 18.2.0
-    dev: true
 
   /supports-color/5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==}
