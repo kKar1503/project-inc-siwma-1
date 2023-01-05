@@ -2,6 +2,11 @@ import React from 'react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 
+/**
+ * A component that displays the current path as a breadcrumb
+ *
+ * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
+ */
 const Breadcrumbs = ({ paths }) => (
   <div className="text-lg breadcrumbs">
     <ul>
@@ -17,8 +22,10 @@ const Breadcrumbs = ({ paths }) => (
   </div>
 );
 
-Breadcrumbs.propTypes = {
+const propTypes = {
   paths: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
+
+Breadcrumbs.propTypes = propTypes;
 
 export default Breadcrumbs;

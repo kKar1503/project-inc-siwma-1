@@ -1,8 +1,14 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * A component that displays a description with a button to expand or collapse
+ * the description
+ *
+ * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
+ */
 const Description = ({ description }) => {
-  const [maxHeight, setMaxHeight] = React.useState('');
+  const [maxHeight, setMaxHeight] = useState('');
 
   const checkOnClick = () => {
     if (document.getElementById('text-limit-button').checked === true) {
@@ -13,7 +19,7 @@ const Description = ({ description }) => {
     document.getElementById('text-limit').style.maxHeight = maxHeight;
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMaxHeight(document.getElementById('text-limit').style.maxHeight);
   }, []);
 
@@ -35,8 +41,10 @@ const Description = ({ description }) => {
   );
 };
 
-Description.propTypes = {
+const propTypes = {
   description: PropTypes.string.isRequired,
 };
+
+Description.propTypes = propTypes;
 
 export default Description;

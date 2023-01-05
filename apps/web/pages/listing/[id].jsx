@@ -33,8 +33,8 @@ const Listing = () => {
     isLoading: listingLoading,
     status: listingStatus,
   } = useQuery(
-    ['get_listing_by_name', query.id],
-    async () => client.rpc('get_listing_by_name', { listing_name: query.id }),
+    ['get_listing_by_id', query.id],
+    async () => client.rpc('get_listing_by_id', { listing_id: query.id }),
     {
       enabled: isReady,
       refetchOnMount: false,
@@ -61,6 +61,7 @@ const Listing = () => {
       Log('Listing data', listingData.data[0]);
       setListing(listingData.data[0]);
     }
+    Log('Listing status', listingData);
   }, [listingData, listingStatus]);
 
   return (
