@@ -138,7 +138,7 @@ const Carousel = ({
           'md:hidden': !showButtons,
         })}`}
       >
-        {!firstItemVisible && (
+        {(Children.count > 1 || !firstItemVisible) && (
           <IconRoundButton
             icon={<IoChevronBack size={20} />}
             onClick={scrollLeft}
@@ -147,7 +147,7 @@ const Carousel = ({
         )}
 
         {/* Next button */}
-        {!lastItemVisible && (
+        {(Children.count > 1 || !lastItemVisible) && (
           <IconRoundButton
             icon={<IoChevronForward size={20} />}
             onClick={scrollRight}
