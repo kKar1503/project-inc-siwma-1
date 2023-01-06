@@ -13,10 +13,12 @@ const Description = ({ description }) => {
   const checkOnClick = () => {
     if (document.getElementById('text-limit-button').checked === true) {
       document.getElementById('text-limit').style.maxHeight = 'none';
+      document.getElementById('text-limit').classList.remove('before:from-transparent');
       return;
     }
 
     document.getElementById('text-limit').style.maxHeight = maxHeight;
+    document.getElementById('text-limit').classList.add('before:from-transparent');
   };
 
   useEffect(() => {
