@@ -52,7 +52,17 @@ const ProfileListing = () => {
           reachedMaxItems={infiniteScrollMockData.length > 100}
         >
           {infiniteScrollMockData.map(
-            ({ name, description, id, price, type, open, visibility }) => (
+            ({
+              name,
+              description,
+              id,
+              price,
+              type,
+              open,
+              negotiable,
+              unit_price: unitPrice,
+              visibility,
+            }) => (
               <ProfileListingItem
                 type={type}
                 key={id}
@@ -62,6 +72,9 @@ const ProfileListing = () => {
                 id={id}
                 visibility={visibility}
                 open={open}
+                price={price}
+                unit_price={unitPrice}
+                negotiable={negotiable}
                 setInfiniteScrollMockData={setInfiniteScrollMockData}
               />
             )

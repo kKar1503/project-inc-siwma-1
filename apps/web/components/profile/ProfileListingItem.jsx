@@ -3,6 +3,7 @@ import { Enum } from '@inc/database';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { HiDotsVertical } from 'react-icons/hi';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
@@ -20,10 +21,15 @@ const ProductListingItem = ({
   id,
   visibility,
   open,
+  price,
+  unit_price: isUnitPrice,
+  negotiable,
   setInfiniteScrollMockData,
 }) => {
   const supabase = useSupabaseClient();
   const router = useRouter();
+  // still null on ProfileListing.jsx
+  const [imgSrc, setImgSrc] = useState(img);
 
   const EditListing = (listid) => {
     // eslint-disable-next-line no-alert
@@ -62,7 +68,7 @@ const ProductListingItem = ({
   };
 
   return (
-    <div className="card shadow-md">
+    <div className="card shadow-md h-full">
       <div className="flex w-full justify-end dropdown z-10">
         <HiDotsVertical tabIndex={0} size={23} />
         <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
@@ -89,19 +95,31 @@ const ProductListingItem = ({
           </li>
         </ul>
       </div>
+
       <Link href={href}>
-        <div className="aspect-square object-cover h-[150px]">
+        <div className="aspect-square w-full h-fit relative ">
           {/* ! The reason why the image below is 150px in height is because smaller images will be zoomed in to fit the height (this is so images > 150px will zoom and crop) */}
-          {img && <Image fill src={img} alt={name} className="object-cover" />}
+
+          {img ? (
+            <Image
+              src={imgSrc}
+              fill
+              alt={name}
+              className="object-cover absolute rounded-xl p-1"
+              onError={() => setImgSrc('https://via.placeholder.com/150')}
+            />
+          ) : (
+            <Image
+              src="https://via.placeholder.com/150"
+              fill
+              alt={name}
+              className="object-cover absolute rounded-xl p-1"
+            />
+          )}
         </div>
 
         {/* Listing content */}
-        <div className="p-2 pb-4 w-5/6">
-          {/* <div className="w-full">
-            <SellBadge />
-            <SoldBadge />
-          </div> */}
-
+        <div className="px-2 pt-2 pb-8">
           {(type === Enum.LISTING_TYPE.BUY && <BuyBadge />) ||
             (type === Enum.LISTING_TYPE.SELL && <SellBadge />)}
 
@@ -110,7 +128,16 @@ const ProductListingItem = ({
 
           {visibility === false && <ArchiveBadge />}
 
-          <p className="font-bold truncate w-full">{name}</p>
+          <div className="content my-1">
+            <p className="truncate">{name}</p>
+
+            <p className="my-2 font-bold">
+              S${price}
+              {isUnitPrice && <span className="text-sm font-normal">/unit</span>}
+            </p>
+
+            {negotiable && <p className="text-sm">Negotiable</p>}
+          </div>
         </div>
       </Link>
     </div>
@@ -125,6 +152,9 @@ ProductListingItem.propTypes = {
   href: PropTypes.string,
   visibility: PropTypes.bool,
   open: PropTypes.bool,
+  price: PropTypes.number,
+  unit_price: PropTypes.bool,
+  negotiable: PropTypes.bool,
   setInfiniteScrollMockData: PropTypes.func,
 };
 
