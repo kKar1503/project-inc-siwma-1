@@ -10,7 +10,7 @@ const Arrows = ({ id }) => {
   const supabase = useSupabaseClient();
   const { paramIds, setParamIds, options, setOptions } = useContext(DataContext);
 
-    // Can use next time?
+  // Can use next time?
   // const useMakeAvailable = async (e) => {
   //   e.preventDefault();
   //   const options = [];
