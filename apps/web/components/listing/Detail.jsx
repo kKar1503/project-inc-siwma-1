@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 
 const Detail = ({ title, detail }) => (
-  <h3 className="text-xl">
-    <span className="font-bold">{title}</span>: {detail}
-  </h3>
+  <p>
+    <span className="text-sm block text-gray-400">{title}</span>
+
+    <span className="block">{detail}</span>
+  </p>
 );
 
 Detail.propTypes = {
