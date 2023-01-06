@@ -6,6 +6,21 @@ import ProductListingItem from '../listing/ProductListingItem';
 const MarketplacePopularSection = () => {
   const { listingData, listingStatus, listingIsLoading, listingError } = useListingsData(0, 60);
 
+  if (listingIsLoading) {
+    return (
+      <section className="mb-10">
+        {/* Title */}
+        <h3 className="text-xl font-bold my-2">Popular</h3>
+
+        <Carousel name="popular-products-loading" showButtons={false} wrapperClassName="my-3">
+          {[...Array(10)].map((_, i) => (
+            <ProductListingItemSkeleton className="w-[200px] hover:shadow-lg" key={i} />
+          ))}
+        </Carousel>
+      </section>
+    );
+  }
+
   return (
     <section className="mb-10">
       {/* Title */}
@@ -14,16 +29,9 @@ const MarketplacePopularSection = () => {
       {listingError && <div className="text-red-500">There was an error loading the listings.</div>}
 
       {/* Carousel of products */}
-      <Carousel name="popular-products" wrapperClassName="my-3" itemsToMoveBy={3}>
-        {/* Skeleton */}
-        {listingIsLoading &&
-          [...Array(10)].map((_, i) => (
-            <ProductListingItemSkeleton className="w-[200px] hover:shadow-lg" key={i} />
-          ))}
-
-        {listingData &&
-          listingData.length > 0 &&
-          listingData.map(
+      {listingData && listingData.length > 0 && (
+        <Carousel name="popular-products" wrapperClassName="my-3" itemsToMoveBy={3}>
+          {listingData.map(
             ({
               name,
               imageUrl,
@@ -47,7 +55,8 @@ const MarketplacePopularSection = () => {
               />
             )
           )}
-      </Carousel>
+        </Carousel>
+      )}
     </section>
   );
 };

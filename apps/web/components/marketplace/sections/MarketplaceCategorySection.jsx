@@ -8,6 +8,20 @@ const MarketplaceCategorySection = () => {
   const { categoriesData, categoriesAPILoading, categoriesAPIError, categoriesAPIStatus } =
     useCategoriesData();
 
+  if (categoriesAPILoading) {
+    return (
+      <div className="mb-10">
+        <h3 className="text-xl font-bold my-2">Categories</h3>
+
+        <Carousel showButtons={false} name="categories" itemsToMoveBy={3}>
+          {[...Array(10)].map((_, i) => (
+            <CategoryListingItemSkeleton key={i} />
+          ))}
+        </Carousel>
+      </div>
+    );
+  }
+
   return (
     <div className="mb-10">
       <div className="flex flex-wrap justify-between items-center">
@@ -23,13 +37,6 @@ const MarketplaceCategorySection = () => {
 
       {categoriesAPIError && (
         <div className="text-red-500">There was an error loading the categories.</div>
-      )}
-
-      {categoriesAPILoading && (
-        <Carousel showButtons={false} name="categories" itemsToMoveBy={3}>
-          {categoriesAPILoading &&
-            [...Array(10)].map((_, i) => <CategoryListingItemSkeleton key={i} />)}
-        </Carousel>
       )}
 
       {categoriesData && categoriesData.length > 0 && (

@@ -6,6 +6,21 @@ import ProductListingItem from '../listing/ProductListingItem';
 const MarketplaceRecommendedSection = () => {
   const { listingData, listingStatus, listingIsLoading, listingError } = useListingsData(0, 60);
 
+  if (listingIsLoading) {
+    return (
+      <section className="mb-10">
+        {/* Title */}
+        <h3 className="text-xl font-bold my-2">Recommended</h3>
+
+        <Carousel name="popular-recommended-loading" showButtons={false} wrapperClassName="my-3">
+          {[...Array(10)].map((_, i) => (
+            <ProductListingItemSkeleton className="w-[200px] hover:shadow-lg" key={i} />
+          ))}
+        </Carousel>
+      </section>
+    );
+  }
+
   return (
     <section className="mb-10">
       {/* Title */}
@@ -14,15 +29,9 @@ const MarketplaceRecommendedSection = () => {
       {listingError && <div className="text-red-500">There was an error loading the listings.</div>}
 
       {/* Carousel of products */}
-      <Carousel name="popular-recommended" wrapperClassName="my-3" itemsToMoveBy={3}>
-        {listingIsLoading &&
-          [...Array(10)].map((_, i) => (
-            <ProductListingItemSkeleton className="w-[200px] hover:shadow-lg" key={i} />
-          ))}
-
-        {listingData &&
-          listingData.length > 0 &&
-          listingData.map(
+      {listingData && listingData.length > 0 && (
+        <Carousel name="popular-recommended" wrapperClassName="my-3" itemsToMoveBy={3}>
+          {listingData.map(
             ({
               name,
               imageUrl,
@@ -46,7 +55,8 @@ const MarketplaceRecommendedSection = () => {
               />
             )
           )}
-      </Carousel>
+        </Carousel>
+      )}
     </section>
   );
 };
