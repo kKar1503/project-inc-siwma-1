@@ -16,9 +16,8 @@ const Category = () => {
       </div>
       <div className="h-2/3">
         <p className="font-bold text-2xl">{category} listings</p>
-
-        {/* dynamically generate each category when queried */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:grid-cols-2 mb-10">
+        <div className="mb-10">
+          {/* dynamically generate each category when queried */}
           <CategoryListings CatId={router.query.id} />
         </div>
         <p className="font-bold text-2xl mb-5">Popular Brands</p>
