@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 const FlexContainer = ({ children, className }) => (
-  <div className={`flex ${className}`}>{children}</div>
+  <div className={`flex flex-wrap ${className}`}>{children}</div>
 );
 
 FlexContainer.propTypes = {
