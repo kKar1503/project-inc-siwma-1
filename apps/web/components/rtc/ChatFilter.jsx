@@ -10,7 +10,7 @@ const ChatFilter = ({ options, setSelectedFilter, retrieveFilteredData, selected
   <div className="flex items-center">
     <div className="dropdown">
       <select
-        className="btn px-2 mx-4"
+        className="btn bg-blue-300 text-white hover:bg-transparent hover:text-blue-300 border-none px-2 mx-4 appearance-none"
         value={selectedFilter}
         onChange={(e) => setSelectedFilter(e.target.value)}
         onClick={retrieveFilteredData}
