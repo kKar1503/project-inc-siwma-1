@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import { Children, useCallback, useEffect, useRef, useState } from 'react';
+import { Children, useEffect, useRef, useState } from 'react';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
 // Carousel adapted from Daisy UI's official documentation with functionality that is dynamic and can be used with any number of items.
@@ -42,14 +42,15 @@ const AnimatedCarousel = ({
   const [firstItemVisible, setFirstItemVisible] = useState(false);
   const [lastItemVisible, setLastItemVisible] = useState(false);
 
-  const [numberOfItems, setNumberOfItems] = useState(Children.count(children));
+  const numberOfItems = useState(Children.count(children));
+
   const [activeIndex, setActiveIndex] = useState(0);
 
   const intervalRef = useRef(null);
 
-  useCallback(() => {
-    setNumberOfItems(Children.count(children));
-  }, [children]);
+  // useCallback(() => {
+  //   setNumberOfItems(Children.count(children));
+  // }, [children]);
 
   const scrollRight = () => {
     // Read more here as to why we use modulo operators
@@ -78,7 +79,7 @@ const AnimatedCarousel = ({
     }, animationDuration);
 
     return () => clearInterval(intervalRef.current);
-  }, [animationDuration, numberOfItems, children, scrollRight]);
+  }, [animationDuration, numberOfItems, children]);
 
   // Every time the user is on a new slide, clearInterval and re-run the useEffect above
   useEffect(() => {
@@ -91,7 +92,7 @@ const AnimatedCarousel = ({
     }, animationDuration);
 
     return () => clearInterval(intervalRef.current);
-  }, [activeIndex, animationDuration, numberOfItems, children, scrollRight]);
+  }, [activeIndex, animationDuration, numberOfItems, children]);
 
   useEffect(() => {
     let firstItem;

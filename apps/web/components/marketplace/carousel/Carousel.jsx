@@ -36,6 +36,8 @@ const Carousel = ({
 }) => {
   const mainCarouselRef = useRef(null);
 
+  const numberOfItems = useState(Children.count(children));
+
   // These ref are the first and last item in the carousel
   const firstItemRef = useRef(null);
   const lastItemRef = useRef(null);
@@ -138,7 +140,7 @@ const Carousel = ({
           'md:hidden': !showButtons,
         })}
       >
-        {(Children.count > 1 || !firstItemVisible) && (
+        {(numberOfItems > 1 || !firstItemVisible) && (
           <IconRoundButton
             icon={<IoChevronBack size={20} />}
             onClick={scrollLeft}
@@ -147,7 +149,7 @@ const Carousel = ({
         )}
 
         {/* Next button */}
-        {(Children.count > 1 || !lastItemVisible) && (
+        {(numberOfItems > 1 || !lastItemVisible) && (
           <IconRoundButton
             icon={<IoChevronForward size={20} />}
             onClick={scrollRight}
@@ -180,7 +182,7 @@ const Carousel = ({
             );
           }
 
-          if (index === Children.count(children) - 1) {
+          if (index === numberOfItems - 1) {
             return (
               <div
                 className={cx('carousel-item', {
