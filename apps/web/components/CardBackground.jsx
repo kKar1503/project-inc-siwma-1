@@ -1,8 +1,13 @@
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 const CardBackground = ({ className, children }) => (
-  <div className={`card bg-neutral-content shadow-xl ${className}`}>
+  <div
+    className={cx('card bg-neutral-content shadow-xl', {
+      [className]: className,
+    })}
+  >
     <div className="card-body">{children}</div>
   </div>
 );

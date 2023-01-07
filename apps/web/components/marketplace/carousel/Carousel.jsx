@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { Children, useEffect, useRef, useState } from 'react';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
@@ -134,9 +134,9 @@ const Carousel = ({
       {/* Carousel buttons are position absolutely */}
 
       <div
-        className={`hidden md:block ${classNames({
+        className={cx('hidden md:block', {
           'md:hidden': !showButtons,
-        })}`}
+        })}
       >
         {(Children.count > 1 || !firstItemVisible) && (
           <IconRoundButton
@@ -161,13 +161,20 @@ const Carousel = ({
 
       {/* Carousel items itself */}
       <div
-        className={`w-full carousel carousel-center space-x-3 rounded-box ${carouselWrapperClassName}`}
+        className={cx('w-full carousel carousel-center space-x-3 rounded-box', {
+          [carouselWrapperClassName]: carouselWrapperClassName,
+        })}
         ref={mainCarouselRef}
       >
         {Children.map(children, (child, index) => {
           if (index === 0) {
             return (
-              <div className={`carousel-item ${wrapperClassName}`} ref={firstItemRef}>
+              <div
+                className={cx('carousel-item', {
+                  [wrapperClassName]: wrapperClassName,
+                })}
+                ref={firstItemRef}
+              >
                 {child}
               </div>
             );
@@ -175,13 +182,26 @@ const Carousel = ({
 
           if (index === Children.count(children) - 1) {
             return (
-              <div className={`carousel-item ${wrapperClassName}`} ref={lastItemRef}>
+              <div
+                className={cx('carousel-item', {
+                  [wrapperClassName]: wrapperClassName,
+                })}
+                ref={lastItemRef}
+              >
                 {child}
               </div>
             );
           }
 
-          return <div className={`carousel-item ${wrapperClassName}`}>{child}</div>;
+          return (
+            <div
+              className={cx('carousel-item', {
+                [wrapperClassName]: wrapperClassName,
+              })}
+            >
+              {child}
+            </div>
+          );
         })}
       </div>
     </div>

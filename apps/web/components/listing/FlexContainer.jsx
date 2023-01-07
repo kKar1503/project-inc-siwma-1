@@ -1,7 +1,14 @@
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 
 const FlexContainer = ({ children, className }) => (
-  <div className={`flex flex-wrap ${className}`}>{children}</div>
+  <div
+    className={cx('flex flex-wrap', {
+      [className]: className,
+    })}
+  >
+    {children}
+  </div>
 );
 
 FlexContainer.propTypes = {

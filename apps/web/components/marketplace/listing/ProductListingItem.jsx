@@ -1,5 +1,6 @@
 // Import prop types
 import { Enum } from '@inc/database';
+import cx from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
@@ -22,7 +23,11 @@ const ProductListingItem = ({
   const [imgSrc, setImgSrc] = useState(img);
 
   return (
-    <div className={`card rounded-xl shadow-md border ${className} transition-all ease-out`}>
+    <div
+      className={cx('card rounded-xl shadow-md border transition-all ease-out', {
+        [className]: className,
+      })}
+    >
       <div className="z-30 absolute right-0 p-2" />
 
       <Link data-cy={`product-${href}`} href={href}>
