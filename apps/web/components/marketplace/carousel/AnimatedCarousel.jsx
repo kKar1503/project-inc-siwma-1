@@ -1,3 +1,4 @@
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { Children, useCallback, useEffect, useRef, useState } from 'react';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
@@ -51,16 +52,9 @@ const AnimatedCarousel = ({
   }, [children]);
 
   const scrollRight = () => {
-    setActiveIndex((prev) => {
-      // If the previous index is more than the number of items, set it to 0
-      const newValue = prev + 1;
-      if (newValue > numberOfItems - 1) {
-        return 0;
-      }
-
-      // Else, return the previous index + 1
-      return newValue;
-    });
+    // Read more here as to why we use modulo operators
+    // https://dev.to/ranewallin/this-simple-math-hack-lets-you-create-an-image-carousel-without-any-if-statements-5chj
+    setActiveIndex((prev) => (prev + 1) % numberOfItems);
   };
 
   const moveToSlide = (index) => {
@@ -74,48 +68,30 @@ const AnimatedCarousel = ({
   };
 
   const scrollLeft = () => {
-    setActiveIndex((prev) => {
-      // If the previous index is less than 0, set it to the number of items - 1
-      const newValue = prev - 1;
-      if (newValue < 0) {
-        return numberOfItems - 1;
-      }
-
-      // Else, return the previous index - 1
-      return newValue;
-    });
+    setActiveIndex((prev) => (prev - 1 + numberOfItems) % numberOfItems);
   };
 
   // usEffect to increase active index every animationDuration ms
   useEffect(() => {
     intervalRef.current = setInterval(() => {
-      setActiveIndex((prev) => {
-        if (prev === numberOfItems - 1) {
-          return 0;
-        }
-
-        return prev + 1;
-      });
+      scrollRight();
     }, animationDuration);
 
     return () => clearInterval(intervalRef.current);
-  }, [animationDuration, numberOfItems, children]);
+  }, [animationDuration, numberOfItems, children, scrollRight]);
 
+  // Every time the user is on a new slide, clearInterval and re-run the useEffect above
   useEffect(() => {
     moveToSlide(activeIndex);
 
     clearInterval(intervalRef.current);
 
     intervalRef.current = setInterval(() => {
-      setActiveIndex((prev) => {
-        if (prev === numberOfItems - 1) {
-          return 0;
-        }
-
-        return prev + 1;
-      });
+      scrollRight();
     }, animationDuration);
-  }, [activeIndex, animationDuration, numberOfItems, children]);
+
+    return () => clearInterval(intervalRef.current);
+  }, [activeIndex, animationDuration, numberOfItems, children, scrollRight]);
 
   useEffect(() => {
     let firstItem;
@@ -204,7 +180,9 @@ const AnimatedCarousel = ({
 
       {/* Carousel items itself */}
       <div
-        className={`w-full carousel carousel-center space-x-3 rounded-xl ${carouselWrapperClassName}`}
+        className={cx('w-full carousel carousel-center space-x-3 rounded-xl', {
+          [carouselWrapperClassName]: carouselWrapperClassName,
+        })}
         ref={mainCarouselRef}
       >
         {Children.map(children, (child, index) => {
