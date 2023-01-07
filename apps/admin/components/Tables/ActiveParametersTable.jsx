@@ -25,11 +25,17 @@ const parseData = (data) => {
 };
 
 const ExistingCategories = ({ className, id }) => {
-  const { paramIds, setParamIds, options, setOptions } = useContext(DataContext);
+  const {
+    paramIds,
+    setParamIds,
+    options,
+    setOptions,
+    selectedActiveParam,
+    setSelectedActiveParam,
+  } = useContext(DataContext);
   const paginationValues = [5, 10, 20, 30];
 
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [selectedAvailParam, setSelectedAvailParam] = useState([]);
   const [option, setOption] = useState(paginationValues[0]);
   const queryClient = useQueryClient();
   const supabase = useSupabaseClient();
@@ -66,32 +72,28 @@ const ExistingCategories = ({ className, id }) => {
     },
   ]);
 
-  const archiveCategory = async () => {
+  const archiveParam = async () => {
+    const ids = [];
+    selectedActiveParam.map((e) => ids.push(e.id));
     await supabase
-      .from('category')
+      .from('parameter')
       .update({
         active: false,
       })
-      .eq(
-        'id',
-        selectedAvailParam.map((e) => e.id)
-      );
-    setSelectedAvailParam(selectedAvailParam.map((e) => ({ ...e, active: 'Disabled' })));
-    queryClient.invalidateQueries({ queryKey: ['categories'] });
-  };
-
-  const unarchiveCategory = async () => {
+      .in('id', ids);
     await supabase
-      .from('category')
-      .update({
-        active: true,
-      })
-      .eq(
-        'id',
-        selectedAvailParam.map((e) => e.id)
-      );
-    setSelectedAvailParam(selectedAvailParam.map((e) => ({ ...e, active: 'Active' })));
-    queryClient.invalidateQueries({ queryKey: ['categories'] });
+      .from('categories_parameters')
+      .delete()
+      .eq('category', id)
+      .filter('parameter', 'in', `(${ids.toString()})`);
+    setSelectedActiveParam([]);
+    queryClient.invalidateQueries({ queryKey: ['categoryParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['activeParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['getActiveParamCount'] });
+    queryClient.invalidateQueries({ queryKey: ['getAvaliableParamCount'] });
+    setParamIds(undefined);
+    setOptions([]);
   };
 
   const availParamCount =
@@ -132,22 +134,21 @@ const ExistingCategories = ({ className, id }) => {
   };
 
   const onChangeHandler = (targetUser, selected) => {
-    if (!selected && selectedAvailParam.find((user) => user.id === targetUser.id)) {
-      const result = [...selectedAvailParam].filter((user) => user.id !== targetUser.id);
-      setSelectedAvailParam(result);
+    if (!selected && selectedActiveParam.find((user) => user.id === targetUser.id)) {
+      const result = [...selectedActiveParam].filter((user) => user.id !== targetUser.id);
+      setSelectedActiveParam(result);
     }
 
-    if (selected && !selectedAvailParam.find((user) => user.id === targetUser.id)) {
-      const result = [...selectedAvailParam];
+    if (selected && !selectedActiveParam.find((user) => user.id === targetUser.id)) {
+      const result = [...selectedActiveParam];
       result.push(targetUser);
-      setSelectedAvailParam(result);
+      setSelectedActiveParam(result);
     }
+    console.log(selectedActiveParam);
     if (selected) {
       const newOptions = [...options, targetUser.id];
       setOptions(newOptions);
       setParamIds({ options: newOptions, table: 'Active' });
-      console.log(options);
-      console.log(paramIds);
     } else {
       const newOptions = options.filter((ops) => ops !== targetUser.id);
       setOptions(newOptions);
@@ -162,21 +163,14 @@ const ExistingCategories = ({ className, id }) => {
 
   const checkInput = (type) => {
     if (type === 'Active') {
-      return selectedAvailParam.every(
+      return selectedActiveParam.every(
         (e) =>
           e.active === 'Disabled' ||
-          (!selectedAvailParam.every((category) => category.active === 'Disabled') &&
-            !selectedAvailParam.every((category) => category.active === 'Active'))
+          (!selectedActiveParam.every((category) => category.active === 'Disabled') &&
+            !selectedActiveParam.every((category) => category.active === 'Active'))
       );
     }
-    if (type === 'Disabled') {
-      return selectedAvailParam.every(
-        (e) =>
-          e.active === 'Active' ||
-          (!selectedAvailParam.every((category) => category.active === 'Disabled') &&
-            !selectedAvailParam.every((category) => category.active === 'Active'))
-      );
-    }
+
     return false;
   };
 
@@ -228,20 +222,12 @@ const ExistingCategories = ({ className, id }) => {
           <div className="flex gap-4">
             <button
               className="btn btn-primary text-white"
-              onClick={archiveCategory}
+              onClick={archiveParam}
               disabled={paramQuery.isLoading || checkInput('Active')}
             >
               DEACTIVATE SELECTED
             </button>
-            <button
-              className="btn btn-primary text-white"
-              onClick={unarchiveCategory}
-              disabled={paramQuery.isLoading || checkInput('Disabled')}
-            >
-              ACTIVATE SELECTED
-            </button>
           </div>
-
           <div className="flex justify-end bg-none">{renderTableButtons()}</div>
         </div>
       }

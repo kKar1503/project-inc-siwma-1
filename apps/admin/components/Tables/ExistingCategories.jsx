@@ -49,29 +49,27 @@ const ExistingCategories = ({ className }) => {
   ]);
 
   const archiveCategory = async () => {
+    const ids = [];
+    selectedCategory.map((e) => ids.push(e.id));
     await supabase
       .from('category')
       .update({
         active: false,
       })
-      .eq(
-        'id',
-        selectedCategory.map((e) => e.id)
-      );
+      .in('id', ids);
     setSelectedCategories(selectedCategory.map((e) => ({ ...e, active: 'Disabled' })));
     queryClient.invalidateQueries({ queryKey: ['categories'] });
   };
 
   const unarchiveCategory = async () => {
+    const ids = [];
+    selectedCategory.map((e) => ids.push(e.id));
     await supabase
       .from('category')
       .update({
         active: true,
       })
-      .eq(
-        'id',
-        selectedCategory.map((e) => e.id)
-      );
+      .in('id', ids);
     setSelectedCategories(selectedCategory.map((e) => ({ ...e, active: 'Active' })));
     queryClient.invalidateQueries({ queryKey: ['categories'] });
   };
@@ -114,7 +112,6 @@ const ExistingCategories = ({ className }) => {
   };
 
   const onChangeHandler = (targetUser, selected) => {
-    console.log(selectedCategory);
     if (!selected && selectedCategory.find((user) => user.id === targetUser.id)) {
       const result = [...selectedCategory].filter((user) => user.id !== targetUser.id);
       setSelectedCategories(result);
@@ -125,6 +122,7 @@ const ExistingCategories = ({ className }) => {
       result.push(targetUser);
       setSelectedCategories(result);
     }
+    console.log(selectedCategory);
   };
 
   const checkInput = (type) => {

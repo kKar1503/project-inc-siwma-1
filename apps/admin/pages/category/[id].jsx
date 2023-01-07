@@ -15,10 +15,21 @@ const queryClient = new QueryClient();
 const CategoryPage = () => {
   const [paramIds, setParamIds] = useState(undefined);
   const [options, setOptions] = useState([]);
+  const [selectedAvailParam, setSelectedAvailParam] = useState([]);
+  const [selectedActiveParam, setSelectedActiveParam] = useState([]);
 
   const value = useMemo(
-    () => ({ paramIds, setParamIds, options, setOptions }),
-    [paramIds, options]
+    () => ({
+      paramIds,
+      setParamIds,
+      options,
+      setOptions,
+      selectedAvailParam,
+      setSelectedAvailParam,
+      selectedActiveParam,
+      setSelectedActiveParam,
+    }),
+    [paramIds, options, selectedAvailParam, selectedActiveParam]
   );
   const router = useRouter();
   const { id } = router.query;

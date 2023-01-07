@@ -8,9 +8,10 @@ import DataContext from '../DataContext';
 const Arrows = ({ id }) => {
   const queryClient = useQueryClient();
   const supabase = useSupabaseClient();
-  const { paramIds, setParamIds, options, setOptions } = useContext(DataContext);
+  const { paramIds, setParamIds, setOptions, setSelectedAvailParam, setSelectedActiveParam } =
+    useContext(DataContext);
 
-    // Can use next time?
+  // Can use next time?
   // const useMakeAvailable = async (e) => {
   //   e.preventDefault();
   //   const options = [];
@@ -40,21 +41,28 @@ const Arrows = ({ id }) => {
       .delete()
       .eq('category', id)
       .filter('parameter', 'in', `(${option})`);
-    queryClient.invalidateQueries({ queryKey: ['activeParameters'] });
     queryClient.invalidateQueries({ queryKey: ['categoryParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['activeParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['getActiveParamCount'] });
+    queryClient.invalidateQueries({ queryKey: ['getAvaliableParamCount'] });
     setParamIds(undefined);
     setOptions([]);
+    setSelectedActiveParam([]);
   };
 
   const makeActive = async (e) => {
     const option = [];
     paramIds.options.map((item) => option.push({ category: id, parameter: item }));
     await supabase.from('categories_parameters').insert(option);
-
-    queryClient.invalidateQueries({ queryKey: ['activeParameters'] });
     queryClient.invalidateQueries({ queryKey: ['categoryParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['activeParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['getActiveParamCount'] });
+    queryClient.invalidateQueries({ queryKey: ['getAvaliableParamCount'] });
     setParamIds(undefined);
     setOptions([]);
+    setSelectedAvailParam([]);
   };
 
   return (

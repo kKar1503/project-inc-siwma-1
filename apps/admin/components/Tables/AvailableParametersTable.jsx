@@ -32,11 +32,12 @@ const parseData = (data) =>
   }));
 
 const ExistingCategories = ({ className, id }) => {
-  const { paramIds, setParamIds, options, setOptions } = useContext(DataContext);
+  const { paramIds, setParamIds, options, setOptions, selectedAvailParam, setSelectedAvailParam } =
+    useContext(DataContext);
   const paginationValues = [5, 10, 20, 30];
 
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [selectedAvailParam, setSelectedAvailParam] = useState([]);
+
   const [option, setOption] = useState(paginationValues[0]);
   const queryClient = useQueryClient();
   const supabase = useSupabaseClient();
@@ -82,32 +83,38 @@ const ExistingCategories = ({ className, id }) => {
     },
   ]);
 
-  const archiveCategory = async () => {
+  const archiveParam = async () => {
+    const ids = [];
+    selectedAvailParam.map((e) => ids.push(e.id));
     await supabase
-      .from('category')
+      .from('parameter')
       .update({
         active: false,
       })
-      .eq(
-        'id',
-        selectedAvailParam.map((e) => e.id)
-      );
+      .in('id', ids);
     setSelectedAvailParam(selectedAvailParam.map((e) => ({ ...e, active: 'Disabled' })));
-    queryClient.invalidateQueries({ queryKey: ['categories'] });
+    queryClient.invalidateQueries({ queryKey: ['categoryParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['activeParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['getActiveParamCount'] });
+    queryClient.invalidateQueries({ queryKey: ['getAvaliableParamCount'] });
   };
 
-  const unarchiveCategory = async () => {
+  const unarchiveParam = async () => {
+    const ids = [];
+    selectedAvailParam.map((e) => ids.push(e.id));
     await supabase
-      .from('category')
+      .from('parameter')
       .update({
         active: true,
       })
-      .eq(
-        'id',
-        selectedAvailParam.map((e) => e.id)
-      );
+      .in('id', ids);
     setSelectedAvailParam(selectedAvailParam.map((e) => ({ ...e, active: 'Active' })));
-    queryClient.invalidateQueries({ queryKey: ['categories'] });
+    queryClient.invalidateQueries({ queryKey: ['categoryParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['activeParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['getActiveParamCount'] });
+    queryClient.invalidateQueries({ queryKey: ['getAvaliableParamCount'] });
   };
 
   const availParamCount =
@@ -158,17 +165,16 @@ const ExistingCategories = ({ className, id }) => {
       result.push(targetUser);
       setSelectedAvailParam(result);
     }
+    console.log(selectedAvailParam);
     if (selected) {
       const newOptions = [...options, targetUser.id];
       setOptions(newOptions);
-      setParamIds({ options: newOptions, table: 'Avaliable' });
-      console.log(options);
-      console.log(paramIds);
+      setParamIds({ options: newOptions, table: 'Available' });
     } else {
       const newOptions = options.filter((ops) => ops !== targetUser.id);
       setOptions(newOptions);
       if (newOptions.length !== 0) {
-        setParamIds({ options: newOptions, table: 'Avaliable' });
+        setParamIds({ options: newOptions, table: 'Available' });
       } else {
         setOptions([]);
         setParamIds(undefined);
@@ -238,20 +244,20 @@ const ExistingCategories = ({ className, id }) => {
           ? undefined
           : parseData(paramQuery.data?.data)
       }
-      table="Avaliable"
+      table="Available"
       footer={
         <div className="flex justify-between bg-none">
           <div className="flex gap-4">
             <button
               className="btn btn-primary text-white"
-              onClick={archiveCategory}
+              onClick={archiveParam}
               disabled={paramQuery.isLoading || checkInput('Active')}
             >
               DEACTIVATE SELECTED
             </button>
             <button
               className="btn btn-primary text-white"
-              onClick={unarchiveCategory}
+              onClick={unarchiveParam}
               disabled={paramQuery.isLoading || checkInput('Disabled')}
             >
               ACTIVATE SELECTED

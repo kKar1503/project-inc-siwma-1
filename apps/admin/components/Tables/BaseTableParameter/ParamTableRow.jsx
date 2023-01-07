@@ -43,7 +43,7 @@ const BaseTableRow = React.forwardRef(
     // References
     const actionMenuRef = useRef();
     const { paramIds, setParamIds, options, setOptions } = useContext(DataContext);
-    console.log(table);
+
     // -- Hooks -- //
     useEffect(() => {
       // -- Determine where the offset the action menu should have, such that it does not exit the bounds of the table -- //
@@ -77,7 +77,7 @@ const BaseTableRow = React.forwardRef(
           <td>
             <label>
               <input
-                // disabled={paramIds !== undefined ? table !== paramIds.table : false}
+                // disabled={paramIds !== undefined ? paramIds.table !== table : false}
                 type="checkbox"
                 className="checkbox"
                 onChange={(e) => {
