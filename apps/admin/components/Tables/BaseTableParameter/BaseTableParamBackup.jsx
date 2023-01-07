@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import ActionParam from '../ActionParam';
-import DataContext from '../../DataContext';
+import ActionParam from '../../ActionParam';
+import DataContext from '../../../DataContext';
 
 // This is the base table component that every other table is built on.
 
@@ -98,9 +98,6 @@ const BaseTableParam = ({
                                 setParamIds({ options: newOptions, table });
                               } else {
                                 const newOptions = options.filter((option) => option !== row.id);
-
-                                setOptions(newOptions);
-
                                 setOptions(newOptions);
                                 if (newOptions.length !== 0) {
                                   setParamIds({ options: newOptions, table });

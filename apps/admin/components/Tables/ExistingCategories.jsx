@@ -37,6 +37,8 @@ const ExistingCategories = ({ className }) => {
           .select(`id, name, description, active`)
           .range(selectedIndex * option, (selectedIndex + 1) * option - 1)
           .order('name', { ascending: true }),
+      keepPreviousData: true,
+      refetchInterval: 300000,
     },
     {
       queryKey: ['getCategoryCount'],
@@ -74,7 +76,10 @@ const ExistingCategories = ({ className }) => {
     queryClient.invalidateQueries({ queryKey: ['categories'] });
   };
 
-  const categoryCount = categoryCountQuery.isLoading ? 0 : categoryCountQuery.data.count;
+  const categoryCount =
+    categoryCountQuery.isLoading || categoryCountQuery.data === undefined
+      ? 0
+      : categoryCountQuery.data.count;
 
   const renderTableButtons = () => {
     const tableButtons = [];
@@ -109,6 +114,7 @@ const ExistingCategories = ({ className }) => {
   };
 
   const onChangeHandler = (targetUser, selected) => {
+    console.log(selectedCategory);
     if (!selected && selectedCategory.find((user) => user.id === targetUser.id)) {
       const result = [...selectedCategory].filter((user) => user.id !== targetUser.id);
       setSelectedCategories(result);
@@ -146,7 +152,7 @@ const ExistingCategories = ({ className }) => {
       header={
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
-            <h1 className="font-bold text-xl">Registered Users</h1>
+            <h1 className="font-bold text-xl">Existing Categories</h1>
             <h1 className="pr-2">
               Showing {selectedIndex * option + 1} to{' '}
               {(selectedIndex + 1) * option > categoryCount
@@ -178,7 +184,11 @@ const ExistingCategories = ({ className }) => {
       className={className}
       columnKeys={['name', 'description', 'active']}
       onChange={onChangeHandler}
-      data={categoryQuery.isLoading ? undefined : parseData(categoryQuery.data?.data)}
+      data={
+        categoryQuery.isLoading || categoryQuery.data === undefined
+          ? undefined
+          : parseData(categoryQuery.data?.data)
+      }
       footer={
         <div className="flex justify-between bg-none">
           <div className="flex gap-4">
