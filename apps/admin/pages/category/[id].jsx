@@ -43,9 +43,9 @@ const CategoryPage = () => {
             <div className="card bg-base-100 shadow-lg w-full rounded-lg p-4">
               <EditCat id={id} />
             </div>
-            <div className="card bg-base-100 shadow-lg w-full rounded-lg p-4">
+            {/* <div className="card bg-base-100 shadow-lg w-full rounded-lg p-4">
               <CreateParam />
-            </div>
+            </div> */}
           </div>
           <div className="flex flex-row w-full gap-8 flex-1 justify-between xl:overflow-hidden items-center">
             <ActiveParametersTable id={id} />
