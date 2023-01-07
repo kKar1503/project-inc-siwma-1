@@ -71,13 +71,20 @@ const BaseTableRow = React.forwardRef(
       }
     }, []);
 
+    const checkparam = (tables) => {
+      if (paramIds.table !== tables) {
+        return true;
+      }
+      return false;
+    };
+
     return (
       <tr>
         {showCheckbox && (
           <td>
             <label>
               <input
-                // disabled={paramIds !== undefined ? paramIds.table !== table : false}
+                disabled={paramIds !== undefined ? checkparam(table) : false}
                 type="checkbox"
                 className="checkbox"
                 onChange={(e) => {

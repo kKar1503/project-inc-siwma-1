@@ -53,6 +53,7 @@ const BaseTable = ({
   selectedRows,
   isLoading,
   data,
+  table,
   footer,
   onChange,
   actionMenu,
@@ -102,6 +103,7 @@ const BaseTable = ({
                   data &&
                     data.map((row) => (
                       <BaseTableRow
+                        table={table}
                         key={row.id}
                         selected={selectedRows ? selectedRows.find((e) => e === data.id) : false}
                         columnKeys={columnKeys}
@@ -166,6 +168,7 @@ const propTypes = {
   footer: PropTypes.element,
   onChange: PropTypes.func,
   actionMenu: PropTypes.node,
+  table: PropTypes.string,
 };
 
 BaseTable.propTypes = propTypes;
