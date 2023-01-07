@@ -1,5 +1,5 @@
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { createClient } from '@supabase/supabase-js';
 import { DateTime } from 'luxon';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -14,13 +14,6 @@ import Carousel from '../../components/marketplace/carousel/Carousel';
 import BuyBadge from '../../components/marketplace/listing/BuyBadge';
 import SellBadge from '../../components/marketplace/listing/SellBadge';
 import sampleProductImage from '../../public/sample-product-image.jpg';
-
-// Load env variables
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-// Create supabase client
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 const getAllListingImages = async (listingId, supabaseClient) => {
   const { data, error } = await supabaseClient.rpc('get_all_images_for_listing_by_id', {
@@ -38,7 +31,12 @@ const getAllListingImages = async (listingId, supabaseClient) => {
   return Promise.all(imagesPromises);
 };
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps(context) {
+  const { params } = context;
+
+  // Create supabase client
+  const supabase = createServerSupabaseClient(context);
+
   let images = [];
 
   // Get the listing details
@@ -119,7 +117,7 @@ const ListingPage = ({ listing, images: carouselImages }) => {
           ))}
         </Carousel>
 
-        <div className="grid lg:grid-cols-10 my-5 gap-5">
+        <div className="lg:grid lg:grid-cols-10 my-5 gap-5 space-y-4">
           {/* Listing details */}
           <div className="space-y-4 col-span-7">
             {/* Listing title and badge */}
@@ -152,7 +150,7 @@ const ListingPage = ({ listing, images: carouselImages }) => {
 
           {/* Chat now details */}
           <div className="col-span-3">
-            <CardBackground className="text-center w-full lg:w-auto">
+            <CardBackground className="text-center w-full">
               <User profilePicture={sampleProductImage} username="xiaoming" />
               <button className="btn btn-sm btn-primary mt-4">Chat now</button>
             </CardBackground>
