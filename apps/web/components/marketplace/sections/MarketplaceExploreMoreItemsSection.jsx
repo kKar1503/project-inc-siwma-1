@@ -21,21 +21,26 @@ const MarketplaceExploreMoreItemsSection = () => {
     'explore_more_items'
   );
 
-  const {
-    data: totalInfiniteScrollAPIData,
-    status: totalInfiniteScrollStatus,
-    // isLoading: totalInfiniteScrollIsLoading,
-    // error: totalInfiniteScrollError,
-  } = useQuery(['get_total_infinite_scroll_data'], async () =>
-    supabase.from(Database.TABLES.LISTING.LISTING).select('id', { count: 'exact' })
+  useQuery(
+    ['get_total_infinite_scroll_data'],
+    async () => supabase.from(Database.TABLES.LISTING.LISTING).select('id', { count: 'exact' }),
+    {
+      onSuccess: async (apiData) => {
+        if (apiData.error) {
+          throw new Error('Problem fetching listings data from the database.');
+        }
+
+        setTotalDataCount(apiData.count || 0);
+      },
+    }
   );
 
-  useEffect(() => {
-    if (totalInfiniteScrollStatus === 'success') {
-      console.log('Total listing counts: ', totalInfiniteScrollAPIData.count);
-      setTotalDataCount(totalInfiniteScrollAPIData.count);
-    }
-  }, [totalInfiniteScrollStatus]);
+  // useEffect(() => {
+  //   if (totalInfiniteScrollStatus === 'success') {
+  //     console.log('Total listing counts: ', totalInfiniteScrollAPIData.count);
+  //     setTotalDataCount(totalInfiniteScrollAPIData.count);
+  //   }
+  // }, [totalInfiniteScrollStatus]);
 
   const handleInfiniteScrollLoadMore = async () => {
     console.log(`Loading more data... from ${offset} to ${offset + limit}`);
