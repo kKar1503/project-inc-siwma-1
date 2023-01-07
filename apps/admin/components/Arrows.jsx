@@ -77,7 +77,7 @@ const Arrows = ({ id }) => {
 
   const checkparam = () => {
     if (selectedAvailParam.length !== 0) {
-      if (selectedAvailParam[0].active === 'Disabled') {
+      if (selectedAvailParam.some((param) => param.active === 'Disabled')) {
         return true;
       }
     }
