@@ -52,31 +52,31 @@ const ExistingParameters = ({ className }) => {
     },
   ]);
 
-  const archiveParameter = async () => {
-    const ids = [];
-    selectedParameter.map((e) => ids.push(e.id));
-    await supabase
-      .from('parameter')
-      .update({
-        active: false,
-      })
-      .in('id', ids);
-    setSelectedParameters(selectedParameter.map((e) => ({ ...e, active: 'Disabled' })));
-    queryClient.invalidateQueries({ queryKey: ['parameters'] });
-  };
+  // const archiveParameter = async () => {
+  //   const ids = [];
+  //   selectedParameter.map((e) => ids.push(e.id));
+  //   await supabase
+  //     .from('parameter')
+  //     .update({
+  //       active: false,
+  //     })
+  //     .in('id', ids);
+  //   setSelectedParameters(selectedParameter.map((e) => ({ ...e, active: 'Disabled' })));
+  //   queryClient.invalidateQueries({ queryKey: ['parameters'] });
+  // };
 
-  const unarchiveParameter = async () => {
-    const ids = [];
-    selectedParameter.map((e) => ids.push(e.id));
-    await supabase
-      .from('parameter')
-      .update({
-        active: true,
-      })
-      .in('id', ids);
-    setSelectedParameters(selectedParameter.map((e) => ({ ...e, active: 'Active' })));
-    queryClient.invalidateQueries({ queryKey: ['parameters'] });
-  };
+  // const unarchiveParameter = async () => {
+  //   const ids = [];
+  //   selectedParameter.map((e) => ids.push(e.id));
+  //   await supabase
+  //     .from('parameter')
+  //     .update({
+  //       active: true,
+  //     })
+  //     .in('id', ids);
+  //   setSelectedParameters(selectedParameter.map((e) => ({ ...e, active: 'Active' })));
+  //   queryClient.invalidateQueries({ queryKey: ['parameters'] });
+  // };
 
   const parameterCount =
     parameterCountQuery.isLoading || parameterCountQuery.data === undefined
@@ -194,7 +194,7 @@ const ExistingParameters = ({ className }) => {
       footer={
         <div className="flex justify-between bg-none">
           <div className="flex gap-4">
-            <button
+            {/* <button
               className="btn btn-primary text-white"
               onClick={archiveParameter}
               disabled={parameterQuery.isLoading || checkInput('Active')}
@@ -207,7 +207,7 @@ const ExistingParameters = ({ className }) => {
               disabled={parameterQuery.isLoading || checkInput('Disabled')}
             >
               ACTIVATE SELECTED
-            </button>
+            </button> */}
             <button
               className="btn btn-primary text-white"
               disabled={
