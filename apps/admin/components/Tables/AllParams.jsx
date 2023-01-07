@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useQueries, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
@@ -8,84 +8,85 @@ import { BaseTableParam } from './BaseTableParam';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
 
-const parseData = (data) =>
-  data.map((e) => ({
-    id: e.id,
-    name: e.name,
-    display_name: e.display_name,
-    parameter_type_id: e.parameter_type.id,
-    parameter_type_name: e.parameter_type.name,
-    datatype_id: e.datatype.id,
-    datatype_name: e.datatype.name,
-    active: e.active ? `Active` : `Disabled`,
-  }));
+const parseData = (data) => {
+  if (data.length !== 0) {
+    return data.map((e) => ({
+      id: e.id,
+      name: e.name,
+      display_name: e.display_name,
+      parameter_type_id: e.parameter_type.id,
+      parameter_type_name: e.parameter_type.name,
+      datatype_id: e.datatype.id,
+      datatype_name: e.datatype.name,
+      active: e.active ? `Active` : `Disabled`,
+    }));
+  }
+  return [];
+};
 
-const ExistingParameters = ({ className }) => {
+const ExistingParameters = ({ className, id }) => {
   const paginationValues = [5, 10, 20, 30];
-
+  const [selectedActiveParam, setSelectedActiveParam] = useState([])
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [selectedParameter, setSelectedParameters] = useState([]);
   const [option, setOption] = useState(paginationValues[0]);
   const queryClient = useQueryClient();
   const supabase = useSupabaseClient();
 
-  const [parameterQuery, parameterCountQuery] = useQueries([
+  const [paramQuery, paramCountQuery] = useQueries([
     {
       queryKey: [
-        'parameters',
+        'existingParams',
         { from: selectedIndex * option, to: (selectedIndex + 1) * option - 1 },
       ],
       queryFn: async () =>
         supabase
           .from('parameter')
-          .select(`id, name, display_name, parameter_type(id, name), datatype(id, name)`)
-          .range(selectedIndex * option, (selectedIndex + 1) * option - 1)
-          .order('name', { ascending: true }),
+          .select(
+            `id, name, display_name, parameter_type(id, name), datatype(id, name), active`
+          )
+          .range(selectedIndex * option, (selectedIndex + 1) * option - 1),
       keepPreviousData: true,
       refetchInterval: 300000,
     },
     {
-      queryKey: ['getParameterCount'],
-      queryFn: async () => supabase.from('parameter').select('*', { count: 'exact', head: true }),
+      queryKey: ['getExistingParamCount'],
+      queryFn: async () =>
+        supabase
+          .from('parameter')
+          .select('*', { count: 'exact', head: true }),
       keepPreviousData: true,
       refetchInterval: 300000,
     },
   ]);
 
-  // const archiveParameter = async () => {
-  //   const ids = [];
-  //   selectedParameter.map((e) => ids.push(e.id));
-  //   await supabase
-  //     .from('parameter')
-  //     .update({
-  //       active: false,
-  //     })
-  //     .in('id', ids);
-  //   setSelectedParameters(selectedParameter.map((e) => ({ ...e, active: 'Disabled' })));
-  //   queryClient.invalidateQueries({ queryKey: ['parameters'] });
-  // };
+  const archiveParam = async () => {
+    const ids = [];
+    selectedActiveParam.map((e) => ids.push(e.id));
+    await supabase
+      .from('parameter')
+      .update({
+        active: false,
+      })
+      .in('id', ids);
+    await supabase
+      .from('categories_parameters')
+      .delete()
+      .eq('category', id)
+      .filter('parameter', 'in', `(${ids.toString()})`);
+    setSelectedActiveParam([]);
+    queryClient.invalidateQueries({ queryKey: ['categoryParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['existingParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['getExistingParamCount'] });
+  };
 
-  // const unarchiveParameter = async () => {
-  //   const ids = [];
-  //   selectedParameter.map((e) => ids.push(e.id));
-  //   await supabase
-  //     .from('parameter')
-  //     .update({
-  //       active: true,
-  //     })
-  //     .in('id', ids);
-  //   setSelectedParameters(selectedParameter.map((e) => ({ ...e, active: 'Active' })));
-  //   queryClient.invalidateQueries({ queryKey: ['parameters'] });
-  // };
-
-  const parameterCount =
-    parameterCountQuery.isLoading || parameterCountQuery.data === undefined
+  const existingParamCount =
+    paramCountQuery.isLoading || paramCountQuery.data === undefined
       ? 0
-      : parameterCountQuery.data.count;
+      : paramCountQuery.data.count;
 
   const renderTableButtons = () => {
     const tableButtons = [];
-    if (parameterQuery.isLoading) {
+    if (paramQuery.isLoading) {
       return (
         <TableButton
           index={0}
@@ -97,7 +98,7 @@ const ExistingParameters = ({ className }) => {
         />
       );
     }
-    const count = parameterCount / option;
+    const count = existingParamCount / option;
     for (let i = 0; i < count; i++) {
       tableButtons.push(
         <TableButton
@@ -116,36 +117,28 @@ const ExistingParameters = ({ className }) => {
   };
 
   const onChangeHandler = (targetUser, selected) => {
-    if (!selected && selectedParameter.find((user) => user.id === targetUser.id)) {
-      const result = [...selectedParameter].filter((user) => user.id !== targetUser.id);
-      setSelectedParameters(result);
+    if (!selected && selectedActiveParam.find((user) => user.id === targetUser.id)) {
+      const result = [...selectedActiveParam].filter((user) => user.id !== targetUser.id);
+      setSelectedActiveParam(result);
     }
 
-    if (selected && !selectedParameter.find((user) => user.id === targetUser.id)) {
-      const result = [...selectedParameter];
+    if (selected && !selectedActiveParam.find((user) => user.id === targetUser.id)) {
+      const result = [...selectedActiveParam];
       result.push(targetUser);
-      setSelectedParameters(result);
+      setSelectedActiveParam(result);
     }
-    console.log(selectedParameter);
   };
 
   const checkInput = (type) => {
     if (type === 'Active') {
-      return selectedParameter.every(
+      return selectedActiveParam.every(
         (e) =>
           e.active === 'Disabled' ||
-          (!selectedParameter.every((parameter) => parameter.active === 'Disabled') &&
-            !selectedParameter.every((parameter) => parameter.active === 'Active'))
+          (!selectedActiveParam.every((category) => category.active === 'Disabled') &&
+            !selectedActiveParam.every((category) => category.active === 'Active'))
       );
     }
-    if (type === 'Disabled') {
-      return selectedParameter.every(
-        (e) =>
-          e.active === 'Active' ||
-          (!selectedParameter.every((parameter) => parameter.active === 'Disabled') &&
-            !selectedParameter.every((parameter) => parameter.active === 'Active'))
-      );
-    }
+
     return false;
   };
 
@@ -154,13 +147,13 @@ const ExistingParameters = ({ className }) => {
       header={
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
-            <h1 className="font-bold text-xl">Existing Parameters</h1>
+            <h1 className="font-bold text-xl">Active parameters</h1>
             <h1 className="pr-2">
               Showing {selectedIndex * option + 1} to{' '}
-              {(selectedIndex + 1) * option > parameterCount
-                ? parameterCount
+              {(selectedIndex + 1) * option > existingParamCount
+                ? existingParamCount
                 : (selectedIndex + 1) * option}{' '}
-              of {parameterCount} entries
+              of {existingParamCount} entries
             </h1>
           </div>
           <div className="flex flex-row gap-4">
@@ -180,34 +173,21 @@ const ExistingParameters = ({ className }) => {
           </div>
         </div>
       }
-      headings={['Parameter Name', 'Display Name', 'Parameter Type', 'Data type']}
+      headings={['Parameter Name', 'Display Name', 'Parameter Type', 'Data type', 'Active']}
       headingColor="bg-success"
       showCheckbox
       className={className}
-      columnKeys={['name', 'description', 'active']}
+      columnKeys={['name', 'display_name', 'parameter_type_name', 'datatype_name', 'active']}
       onChange={onChangeHandler}
       data={
-        parameterQuery.isLoading || parameterQuery.data === undefined
+        paramQuery.isLoading || paramQuery.data === undefined
           ? undefined
-          : parseData(parameterQuery.data?.data)
+          : parseData(paramQuery.data?.data)
       }
+      table="Active"
       footer={
         <div className="flex justify-between bg-none">
           <div className="flex gap-4">
-            {/* <button
-              className="btn btn-primary text-white"
-              onClick={archiveParameter}
-              disabled={parameterQuery.isLoading || checkInput('Active')}
-            >
-              DEACTIVATE SELECTED
-            </button>
-            <button
-              className="btn btn-primary text-white"
-              onClick={unarchiveParameter}
-              disabled={parameterQuery.isLoading || checkInput('Disabled')}
-            >
-              ACTIVATE SELECTED
-            </button> */}
             <button
               className="btn btn-primary text-white"
               disabled={
@@ -225,7 +205,6 @@ const ExistingParameters = ({ className }) => {
               </Link>
             </button>
           </div>
-
           <div className="flex justify-end bg-none">{renderTableButtons()}</div>
         </div>
       }
@@ -235,6 +214,7 @@ const ExistingParameters = ({ className }) => {
 
 ExistingParameters.propTypes = {
   className: PropTypes.string,
+  id: PropTypes.string,
 };
 
 export default ExistingParameters;
