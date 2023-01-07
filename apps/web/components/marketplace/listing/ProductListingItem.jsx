@@ -58,7 +58,17 @@ const ProductListingItem = ({
           {type === Enum.LISTING_TYPE.SELL && <SellBadge />}
 
           <div className="content my-1">
-            <p className="">{name.length > 45 ? `${name.substring(0, 45)}...` : name}</p>
+            {/* The styles below are adapted from the @tailwindcss/line-clamp documentation (https://github.com/tailwindlabs/tailwindcss-line-clamp) */}
+            <p
+              style={{
+                overflow: 'hidden',
+                display: '-webkit-box',
+                '-webkit-box-orient': 'vertical',
+                '-webkit-line-clamp': 4,
+              }}
+            >
+              {name}
+            </p>
 
             <p className="my-2 font-bold">
               S${price}
