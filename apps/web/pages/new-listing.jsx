@@ -12,37 +12,6 @@ import CardBackground from '../components/CardBackground';
 import CategoricalForm from '../components/layouts/CategoricalForm';
 import ListingForm from '../components/layouts/ListingForm';
 
-const sampleData = [
-  {
-    id: 1,
-    category: 'Hollow Section',
-    subcategory: [
-      { id: 1, category: 'Hollow 1' },
-      { id: 2, category: 'Hollow 2' },
-    ],
-  },
-  {
-    id: 2,
-    category: 'Steel',
-    subcategory: [
-      { id: 1, category: 'Steel 1' },
-      { id: 2, category: 'Steel 2' },
-    ],
-  },
-  {
-    id: 3,
-    category: 'Cement',
-    subcategory: [
-      { id: 1, category: 'Cement 1' },
-      { id: 2, category: 'Cement 2' },
-    ],
-  },
-  {
-    id: 4,
-    category: 'Bricks',
-  },
-];
-
 const NewListing = ({ session }) => {
   const client = useSupabaseClient();
 
@@ -145,7 +114,7 @@ const NewListing = ({ session }) => {
             !categoriesError &&
             categoriesStatus === 'success' &&
             allCategories && (
-              <CategoricalForm items={sampleData} onChangeValue={handleCategoryChange} />
+              <CategoricalForm items={categoriesData.data} onChangeValue={handleCategoryChange} />
             )}
           <CardBackground>
             <div className="alert bg-primary shadow-lg">
