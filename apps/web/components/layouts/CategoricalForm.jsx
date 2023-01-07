@@ -6,7 +6,7 @@ import CardBackground from '../CardBackground';
 const CategoricalForm = ({ items, onChangeValue }) => (
   <CardBackground>
     <h1 className="font-bold text-3xl">Category</h1>
-    <Dropdown items={items} onChangeValue={onChangeValue} />
+    <Dropdown items={items} onChangeValue={onChangeValue} defaultValue='Category' />
   </CardBackground>
 );
 

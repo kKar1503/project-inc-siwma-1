@@ -7,15 +7,15 @@ import PropTypes from 'prop-types';
  * @returns {JSX.Element}
  * @constructor - Dropdown
  */
-const Dropdown = ({ items, onChangeValue }) => (
+const Dropdown = ({ items, onChangeValue, defaultValue }) => (
   <select
     onChange={onChangeValue}
     className="select w-full max-w-xs"
     defaultValue="Category"
   >
-    <option disabled>Category</option>
+    <option disabled>{defaultValue}</option>
     {items.map((item) =>
-      <option key={item.id}>{item.name}</option>
+      <option key={item.id} value={item.id}>{item.name}</option>
     )}
   </select>
 );
@@ -34,6 +34,7 @@ Dropdown.propTypes = {
     })
   ),
   onChangeValue: PropTypes.func.isRequired,
+  defaultValue: PropTypes.string,
 };
 
 export default Dropdown;
