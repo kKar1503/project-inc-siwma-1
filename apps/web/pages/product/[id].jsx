@@ -126,7 +126,7 @@ const ListingPage = ({ listing, images: carouselImages }) => {
               <Title title={listing.name} />
             </div>
 
-            <Price price={listing.price} />
+            <Price price={listing.price} unitPrice={listing.unit_price} />
 
             <div className="divider" />
 
@@ -134,6 +134,7 @@ const ListingPage = ({ listing, images: carouselImages }) => {
 
             {/* Date posted, category */}
             <div className="flex flex-wrap gap-5 my-4">
+              <Detail title="Negotiable?" detail={listing.negotiable ? 'Yes' : 'No'} />
               <Detail title="Length" detail="100m" />
               <Detail title="Material" detail="Aluminum" />
               {/* Date posted */}
