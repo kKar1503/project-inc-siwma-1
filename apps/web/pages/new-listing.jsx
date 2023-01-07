@@ -10,14 +10,16 @@ import Log from '@inc/utils/logger';
 import CardBackground from '../components/CardBackground';
 
 import CategoricalForm from '../components/layouts/CategoricalForm';
+import ParameterForm from '../components/layouts/ParameterForm';
 import ListingForm from '../components/layouts/ListingForm';
 
 const NewListing = ({ session }) => {
   const client = useSupabaseClient();
 
   const [type, setType] = React.useState(null);
-  const [category, setCategory] = React.useState(null);
+  const [categoryID, setCategoryID] = React.useState(null);
   const [allCategories, setAllCategories] = React.useState([]);
+  const [parameters, setParameters] = React.useState([]);
   const [selectedImages, setSelectedImages] = React.useState([]);
   const [blobSelectedImages, setBlobSelectedImages] = React.useState([]);
 
@@ -37,6 +39,28 @@ const NewListing = ({ session }) => {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
+  
+  const {
+    data: parametersData,
+    isLoading: parametersLoading,
+    isError: parametersError,
+    status: parametersStatus,
+  } = useQuery(['get_category_parameters', categoryID], async () => client.rpc('get_category_parameters', { _category_id: categoryID }), {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    onSuccess: (parameterAPIData) => {
+        setParameters(parameterAPIData.data);
+        console.log(parameterAPIData.data);
+  }
+  });
+
+  React.useEffect(() => {
+    if (categoriesStatus === 'success') {
+      Log('green', categoriesData.data);
+      setAllCategories(categoriesData.data);
+    }
+  }, [session, categoriesStatus, categoriesData]);
 
   const handleTypeChange = (event) => {
     if (event.target.value === 'Buying') {
@@ -48,7 +72,7 @@ const NewListing = ({ session }) => {
   };
 
   const handleCategoryChange = (event) => {
-    setCategory(event.target.value);
+    setCategoryID(event.target.value);
   };
 
   const onSelectFile = (event) => {
@@ -99,13 +123,6 @@ const NewListing = ({ session }) => {
     // NextResponse.redirect(`/listing/${data[0].id}`);
   };
 
-  React.useEffect(() => {
-    if (categoriesStatus === 'success') {
-      Log('green', categoriesData.data);
-      setAllCategories(categoriesData.data);
-    }
-  }, [session, categoriesStatus, categoriesData]);
-
   return (
     <main>
       <div className="flex justify-around mt-8 mx-32">
@@ -115,6 +132,13 @@ const NewListing = ({ session }) => {
             categoriesStatus === 'success' &&
             allCategories && (
               <CategoricalForm items={categoriesData.data} onChangeValue={handleCategoryChange} />
+            )}
+
+          {!parametersLoading &&
+            !parametersError &&
+            parametersStatus === 'success' &&
+            parameters.length !== 0 && (
+              <ParameterForm items={parametersData.data}/>
             )}
           <CardBackground>
             <div className="alert bg-primary shadow-lg">
