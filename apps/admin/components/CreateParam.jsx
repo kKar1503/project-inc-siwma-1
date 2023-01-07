@@ -30,6 +30,9 @@ const CreateParam = () => {
       setTags([...tags, e.target.value]);
       e.target.value = '';
     }
+    if (tags.length > 0) {
+      setParamtype('4');
+    }
   };
 
   const removeTags = (indexToRemove) => {
@@ -145,9 +148,13 @@ const CreateParam = () => {
             name="paramType"
             required
             onChange={(e) => {
-              setParamtype(e.target.value);
+              if (e.target.value === '3' && tags.length > 2 && tags.length !== 0) {
+                setParamtype('4');
+              } else {
+                setParamtype(e.target.value);
+              }
             }}
-            value={tags.length > 2 && tags.length !== 0 ? '4' : paramT}
+            value={paramT}
           >
             {parameterType?.data.map((e) => (
               <option key={e.id} value={e.id}>
@@ -191,6 +198,7 @@ const CreateParam = () => {
               {tags.map((tag, index) => (
                 <li className="btn btn-primary">
                   <button
+                    type="button"
                     onClick={(e) => {
                       removeTags(index);
                     }}
