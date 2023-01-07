@@ -154,7 +154,7 @@ const ExistingParameters = ({ className }) => {
       header={
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
-            <h1 className="font-bold text-xl">Existing Categories</h1>
+            <h1 className="font-bold text-xl">Existing Parameters</h1>
             <h1 className="pr-2">
               Showing {selectedIndex * option + 1} to{' '}
               {(selectedIndex + 1) * option > parameterCount
