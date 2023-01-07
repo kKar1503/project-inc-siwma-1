@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
+import { Alert } from '@inc/ui';
 import { useQuery } from 'react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import UploadCard from '../components/UploadCard';
@@ -11,6 +12,7 @@ const AdminUpload = () => {
   const [handleSubmit, sethandleSubmit] = useState(false);
   const [selected, setSelected] = useState(0);
   const [link, setLink] = useState('');
+  const [alert, setAlert] = useState(false);
   const [description, setDescription] = useState('');
   const supabase = useSupabaseClient();
 
@@ -73,9 +75,9 @@ const AdminUpload = () => {
             </ul>
           </div>
         </div>
-        <div className="card w-1/3  max-sm:w-full h-80 bg-base-100 shadow-xl mr-10 max-sm:mb-10">
-          <div className="max-w-xl">
-            <div className="flex justify-center m-4">
+        <div className="card w-1/3  max-sm:w-full h-80 bg-base-100 shadow-xl mr-10 items-center overflow-y-auto">
+          <div className="max-w-xl ">
+            <div className="justify-center m-4">
               <form
                 onSubmit={(event) => {
                   event.preventDefault();
@@ -109,17 +111,31 @@ const AdminUpload = () => {
                   className="w-11/12 h-10 mx-4 text-base placeholder-gray-500 break-normal border rounded-lg focus:shadow-outline"
                   onChange={(e) => setLink(e.target.value)}
                 />
-                <div className="mx-36 mt-3">
-                  <button className="btn btn-outline btn-primary" type="submit" id="save">
-                    save
+                <div className="flex items-center justify-center">
+                  <button
+                    className="btn btn-ghost rounded-md w-full h-6 my-2 normal-case text-xl btn btn-outline btn-primary"
+                    type="submit"
+                    id="save"
+                    disabled={selected === 0}
+                  >
+                    Save
                   </button>
                 </div>
               </form>
             </div>
           </div>
         </div>
-        <UploadCard id={selected} des={description} link={link} state={handleSubmit} />
+        <UploadCard
+          id={selected}
+          des={description}
+          link={link}
+          state={handleSubmit}
+          setAlert={setAlert}
+        />
       </div>
+      {alert && (
+        <Alert level="success" message="Advertisement successfully added" className="mt-4" />
+      )}
     </div>
   );
 };
