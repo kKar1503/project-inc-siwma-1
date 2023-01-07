@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { QueryClient } from 'react-query';
-import BaseTableCat from '../components/Tables/BaseTableCat/BaseTableCat';
+import ExistingCategories from '../components/Tables/ExistingCategories';
 import AdminPageLayout from '../components/layouts/AdminPageLayout';
 import NavBar from '../components/NavBar';
 import CategoryAdd from '../components/Modals/CategoryAdd';
@@ -23,7 +23,11 @@ const Page = () => {
   const closeModal = () => {
     setIsOpen(false);
   };
-
+  const refreshQuery = () => {
+    // Invalidate table queries to cause a refetch
+    queryClient.invalidateQueries({ queryKey: ['categories'] });
+    queryClient.invalidateQueries({ queryKey: ['getCategoryCount'] });
+  };
   return (
     <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
       {/* The company register modal will be teleported to the end of the DOM because it uses React Portals */}
@@ -56,7 +60,7 @@ const Page = () => {
       </div>
       <div className="flex mb-4 gap-4 xl:overflow-hidden shadow-lg bg-base-100">
         <div className="w-full h-full flex flex-row">
-          <BaseTableCat />
+          <ExistingCategories />
         </div>
       </div>
     </div>
