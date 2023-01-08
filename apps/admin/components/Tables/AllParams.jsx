@@ -191,14 +191,14 @@ const ExistingParameters = ({ className, id }) => {
             <button
               className="btn btn-primary text-white"
               disabled={
-                parameterQuery.isLoading ||
-                selectedParameter.length > 1 ||
-                selectedParameter.length === 0
+                paramQuery.isLoading ||
+                selectedActiveParam.length > 1 ||
+                selectedActiveParam.length === 0
               }
             >
               <Link
                 href={`/parameter/${
-                  selectedParameter.length === 0 ? undefined : selectedParameter[0].id
+                  selectedActiveParam.length === 0 ? undefined : selectedActiveParam[0].id
                 }`}
               >
                 Edit
