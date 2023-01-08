@@ -31,18 +31,20 @@ const PendingInvitesTable = ({ className }) => {
         supabase
           .from('invite')
           .select(`id, name, companies:company(name), email`)
-          .ilike('name', `%${searchInput}%`)
+          .or(`name.ilike.%${searchInput}%, email.ilike.%${searchInput}%)`)
+          // .ilike('name', `%${searchInput}%`)
           .range(selectedIndex * 10, (selectedIndex + 1) * 10 - 1),
       keepPreviousData: true,
       refetchInterval: 300000,
     },
     {
-      queryKey: ['getInviteCount', { matching: searchInput}],
+      queryKey: ['getInviteCount', { matching: searchInput }],
       queryFn: async () =>
         supabase
           .from('invite')
           .select('*', { count: 'exact', head: true })
-          .ilike('name', `%${searchInput}%`),
+          .or(`name.ilike.%${searchInput}%, email.ilike.%${searchInput}%)`),
+      // .ilike('name', `%${searchInput}%`)
       keepPreviousData: true,
       refetchInterval: 300000,
     },
@@ -84,7 +86,7 @@ const PendingInvitesTable = ({ className }) => {
           </div>
           <div className="flex flex-row gap-4">
             <SearchBar
-              placeholder="Search by e-mail"
+              placeholder="Search by e-mail or name"
               value={searchInput}
               setValue={setSearchInput}
             />
