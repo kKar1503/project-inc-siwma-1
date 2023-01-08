@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@casl/ability": "^6.3.3",
+    "@casl/react": "^3.1.0",
     "@inc/chat": "workspace:*",
     "@inc/database": "workspace:0.0.0",
     "@inc/notifications": "workspace:*",
