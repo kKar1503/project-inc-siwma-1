@@ -70,6 +70,6 @@ Page.getLayout = (page) => <SignInAndUpLayoutNoSSR>{page}</SignInAndUpLayoutNoSS
 Page.allowNonAuthenticated = true;
 Page.allowAuthenticated = true;
 // Page.roles = ['admin'];
-Page.aclAbilities = [['View', 'Users']];
+// Page.aclAbilities = [['View', 'Users']];
 
 export default Page;

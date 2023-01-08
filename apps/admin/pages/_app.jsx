@@ -1,15 +1,14 @@
-import PropTypes from 'prop-types';
 import '@inc/styles/globals.css';
-import { SessionContextProvider } from '@supabase/auth-helpers-react';
-import { useEffect, useState } from 'react';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { QueryClientProvider, QueryClient } from 'react-query';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
-import Error404 from '../components/fallbacks/Error404';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import AuthenticationGuard from '../components/auth/AuthenticationGuard';
 import AuthorizationGuard from '../components/auth/AuthorizationGuard';
-import AppUserContext from '../contexts/AppUserContext';
 import AppUserProvider from '../components/auth/UserProvider';
+import Error404 from '../components/fallbacks/Error404';
 
 const queryClient = new QueryClient();
 
@@ -28,10 +27,6 @@ const DisallowNonAuthenticatedFallback = () => {
   }, [router]);
   return <div>Not allowed</div>;
 };
-
-const DisallowAuthenticatedFallback = () => <div>Fallback</div>;
-
-const ForbiddenFallback = () => <div>Forbidden</div>;
 
 /**
  * TODO: NextJS 13 Future migrations with layouts.
