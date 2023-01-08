@@ -8,19 +8,18 @@
     "lint": "eslint *.js*"
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
-    "eslint-config-custom": "workspace:*",
-    "jest": "^29.3.1"
+    "eslint": "7.32.0",
+    "eslint-config-custom": "workspace:*"
   },
   "dependencies": {
     "@inc/styles": "workspace:*",
-    "@inc/utils": "workspace:^0.0.0",
-    "@supabase/supabase-js": "^2.1.0",
-    "luxon": "^3.0.4",
-    "prop-types": "^15.8.1",
-    "react": "^18.2.0",
-    "react-hot-toast": "^2.4.0",
-    "react-query": "^3.39.2",
-    "victory": "^36.6.8"
+    "@inc/utils": "workspace:0.0.0",
+    "@supabase/supabase-js": "2.1.0",
+    "luxon": "3.0.4",
+    "prop-types": "15.8.1",
+    "react": "18.2.0",
+    "react-hot-toast": "2.4.0",
+    "react-query": "3.39.2",
+    "victory": "36.6.8"
   }
 }
