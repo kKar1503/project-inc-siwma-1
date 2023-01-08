@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useQueries, useQueryClient } from 'react-query';
+import React, { useState } from 'react';
+import { useQueries } from 'react-query';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
-import TableButton from './TableButton';
 import TablePagination from './TablePagination';
 
 const parseData = (data) =>
@@ -21,21 +19,30 @@ const PendingInvitesTable = ({ className }) => {
   const supabase = useSupabaseClient();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedInvites, setSelectedInvites] = useState([]);
+  const [searchInput, setSearchInput] = useState('');
 
   const [inviteQuery, inviteCountQuery] = useQueries([
     {
-      queryKey: ['getInvites', selectedIndex * 10, (selectedIndex + 1) * 10 - 1],
+      queryKey: [
+        'getInvites',
+        { from: selectedIndex * 10, to: (selectedIndex + 1) * 9, matching: searchInput },
+      ],
       queryFn: async () =>
         supabase
           .from('invite')
           .select(`id, name, companies:company(name), email`)
+          .ilike('name', `%${searchInput}%`)
           .range(selectedIndex * 10, (selectedIndex + 1) * 10 - 1),
       keepPreviousData: true,
       refetchInterval: 300000,
     },
     {
-      queryKey: ['getInviteCount'],
-      queryFn: async () => supabase.from('invite').select('*', { count: 'exact', head: true }),
+      queryKey: ['getInviteCount', { matching: searchInput}],
+      queryFn: async () =>
+        supabase
+          .from('invite')
+          .select('*', { count: 'exact', head: true })
+          .ilike('name', `%${searchInput}%`),
       keepPreviousData: true,
       refetchInterval: 300000,
     },
@@ -45,7 +52,7 @@ const PendingInvitesTable = ({ className }) => {
 
   const isLoading = queries.some((query) => query.isLoading);
 
-  const inviteCount = inviteCountQuery.isLoading ? 0 : inviteCountQuery.data.count;
+  const inviteCount = isLoading ? 0 : inviteCountQuery.data.count;
 
   const onChangeHandler = (targetInvite, selected) => {
     if (!selected && selectedInvites.find((invite) => invite.id === targetInvite.id)) {
@@ -66,14 +73,21 @@ const PendingInvitesTable = ({ className }) => {
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">Pending Invites</h1>
-            <h1 className="pr-2">
-              Showing {selectedIndex * 10 + 1} to{' '}
-              {(selectedIndex + 1) * 10 > inviteCount ? inviteCount : (selectedIndex + 1) * 10} of{' '}
-              {inviteCount} entries
-            </h1>
+            {isLoading ? (
+              <h1 className="pr-2">Showing 0 to 0 of 0 entries</h1>
+            ) : (
+              <h1 className="pr-2">
+                Showing {Math.min(selectedIndex * 10 + 1, inviteCount)} to{' '}
+                {Math.min((selectedIndex + 1) * 10, inviteCount)} of {inviteCount} entries
+              </h1>
+            )}
           </div>
           <div className="flex flex-row gap-4">
-            <SearchBar placeholder="Search by e-mail" />
+            <SearchBar
+              placeholder="Search by e-mail"
+              value={searchInput}
+              setValue={setSearchInput}
+            />
           </div>
         </div>
       }
@@ -83,7 +97,7 @@ const PendingInvitesTable = ({ className }) => {
       showCheckbox={false}
       columnKeys={['name', 'company', 'email']}
       onChange={onChangeHandler}
-      data={inviteQuery.isLoading ? undefined : parseData(inviteQuery?.data.data)}
+      data={isLoading ? undefined : parseData(inviteQuery?.data.data)}
       footer={
         <div className="flex justify-end bg-none">
           {
