@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import {useState} from 'react';
 import CardBackground from '../CardBackground';
 
-const ImageForm = ({setBlobSelectedImages}) => {
-
+const ImageHook = () => {
   const [selectedImages, setSelectedImages] = useState([]);
-  const onSelectFile = (event) => {
-    setBlobSelectedImages(Array.from(event.target.files));
 
-    const images = Array.from(event.target.files).map((file) => URL.createObjectURL(file));
+  const onSelectFile = (event) => {
+    if (selectedImages.length + event.target.files.length >= 10) return; // todo return visual error message
+
+    const images = Array.from(event.target.files).map((file) => ({
+      link: URL.createObjectURL(file),
+      blob: file,
+    }));
     setSelectedImages((prevImages) => prevImages.concat(images));
 
     // chrome bug fix
@@ -17,9 +20,43 @@ const ImageForm = ({setBlobSelectedImages}) => {
     event.target.value = '';
   };
 
-  const imageDeleteHandler = (image) => {
-    setSelectedImages((prevImages) => prevImages.filter((img) => img !== image));
+  const imageDeleteHandler = (imageLink) => {
+    setSelectedImages((prevImages) => prevImages.filter((img) => img.link !== imageLink));
   };
+
+  return {
+    imageHook: {
+      selectedImages,
+      onSelectFile,
+      imageDeleteHandler,
+    },
+    selectedImages,
+  }
+}
+
+const ImageCard = ({link, name, onClick}) => (<div
+
+  className="flex flex-col justify-center items-center relative border-2 border-secondary w-1/3"
+>
+  <Image
+    alt={name}
+    src={link}
+    width={500}
+    height={500}
+    className="object-contain"
+  />
+  <button className="relative" onClick={() => onClick(link)}>
+    Remove image
+  </button>
+</div>)
+
+ImageCard.propTypes = {
+  name: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired
+};
+const ImageForm = ({useImageHook}) => {
+  const {selectedImages, onSelectFile, imageDeleteHandler} = useImageHook;
 
   return (<CardBackground>
     <div className="alert bg-primary shadow-lg">
@@ -38,6 +75,7 @@ const ImageForm = ({setBlobSelectedImages}) => {
           />
         </svg>
         <span className="text-white">Max 10 images</span>
+        <span className="text-white">{selectedImages.length}/10</span>
       </div>
     </div>
 
@@ -63,29 +101,22 @@ const ImageForm = ({setBlobSelectedImages}) => {
     {selectedImages && (
       <div className="flex flex-row justify-between w-full">
         {selectedImages.map((image) => (
-          <div
-            key={image}
-            className="flex flex-col justify-center items-center relative border-2 border-secondary w-1/3"
-          >
-            <Image
-              alt={image.name}
-              src={image}
-              width={500}
-              height={500}
-              className="object-contain"
-            />
-            <button className="relative" onClick={() => imageDeleteHandler(image)}>
-              Remove image
-            </button>
-          </div>
+          <ImageCard key={image.link} link={image.link} name={image.link.name}
+            onClick={imageDeleteHandler}/>
         ))}
       </div>
     )}
   </CardBackground>)
 }
 
+ImageForm.UseHook = ImageHook;
+
 ImageForm.propTypes = {
-  setBlobSelectedImages: PropTypes.func.isRequired,
+  useImageHook: PropTypes.shape({
+    selectedImages: PropTypes.arrayOf(PropTypes.string),
+    onSelectFile: PropTypes.func,
+    imageDeleteHandler: PropTypes.func,
+  }).isRequired,
 }
 
 export default ImageForm;

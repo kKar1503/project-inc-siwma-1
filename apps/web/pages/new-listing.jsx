@@ -13,17 +13,15 @@ import ImageForm from '../components/layouts/ImageForm';
 const NewListing = ({session}) => {
   const client = useSupabaseClient();
 
-  const [type, setType] = React.useState(null);
   const [categoryID, setCategoryID] = React.useState(null);
   const [allCategories, setAllCategories] = React.useState([]);
   const [parameters, setParameters] = React.useState([]);
-  const [blobSelectedImages, setBlobSelectedImages] = React.useState([]);
+
+  // used for image form
+  const {selectedImages, imageHook} = ImageForm.UseHook();
 
   // Form states
-  const [name, setName] = React.useState('');
-  const [price, setPrice] = React.useState('');
-  const [description, setDescription] = React.useState('');
-  const [negotiable, setNegotiable] = React.useState(false);
+  const {listingHook} = ListingForm.UseHook();
 
   const {
     data: categoriesData,
@@ -52,30 +50,19 @@ const NewListing = ({session}) => {
   });
 
   React.useEffect(() => {
-    if (categoriesStatus === 'success') {
-      Log('green', categoriesData.data);
-      setAllCategories(categoriesData.data);
-    }
+    if (categoriesStatus !== 'success') return;
+    Log('green', categoriesData.data);
+    setAllCategories(categoriesData.data);
   }, [session, categoriesStatus, categoriesData]);
-
-  const handleTypeChange = (event) => {
-    setType(event.target.value === 'Buying' ? 1 : 2);
-
-    if (event.target.value === 'Buying') {
-      setType(1);
-      return;
-    }
-
-    setType(2);
-  };
 
   const handleCategoryChange = (event) => {
     setCategoryID(event.target.value);
   };
 
 
-  const insertNewListingHandler = async (e) => {
+  const insertNewListingHandler = async (e,values) => {
     e.preventDefault();
+    const {name, price, description, negotiable, type} = values;
     console.log(name);
     console.log(price);
     console.log(description);
@@ -87,7 +74,7 @@ const NewListing = ({session}) => {
         name,
         description,
         price,
-        unit_price: false || true,
+        unit_price: false,
         negotiable,
         category: '1',
         type,
@@ -96,9 +83,9 @@ const NewListing = ({session}) => {
       .returns('id');
 
     const uuidArray = [];
-    blobSelectedImages.forEach(async (image, index) => {
+    selectedImages.forEach(async (image, index) => {
       const randomUUID = crypto.randomUUID();
-      await client.storage.from('listing-image-bucket').upload(randomUUID, image);
+      await client.storage.from('listing-image-bucket').upload(randomUUID, image.blob);
       uuidArray[index] = {listing: data[0].id, image: randomUUID};
     });
 
@@ -125,22 +112,12 @@ const NewListing = ({session}) => {
             parameters.length !== 0 && (
             <ParameterForm items={parametersData.data}/>
           )}
-          <ImageForm setBlobSelectedImages={setBlobSelectedImages}/>
+          <ImageForm useImageHook={imageHook}/>
         </div>
         <div className="flex flex-col w-3/5">
           <CardBackground>
             <ListingForm
-              name={name}
-              setName={setName}
-              price={price}
-              setPrice={setPrice}
-              description={description}
-              setDescription={setDescription}
-              negotiable={negotiable}
-              setNegotiable={setNegotiable}
-              options={['Buying', 'Selling']}
-              onChangeValue={handleTypeChange}
-              typeHandler={type}
+              listingHook={listingHook}
               onSubmit={insertNewListingHandler}
             />
           </CardBackground>
