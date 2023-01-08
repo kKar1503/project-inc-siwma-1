@@ -42,7 +42,7 @@ const AnimatedCarousel = ({
   const [firstItemVisible, setFirstItemVisible] = useState(false);
   const [lastItemVisible, setLastItemVisible] = useState(false);
 
-  const numberOfItems = useState(Children.count(children));
+  const numberOfItems = Children.count(children);
 
   const [activeIndex, setActiveIndex] = useState(0);
 

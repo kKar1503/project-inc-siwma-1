@@ -36,7 +36,7 @@ const Carousel = ({
 }) => {
   const mainCarouselRef = useRef(null);
 
-  const numberOfItems = useState(Children.count(children));
+  const numberOfItems = Children.count(children);
 
   // These ref are the first and last item in the carousel
   const firstItemRef = useRef(null);
