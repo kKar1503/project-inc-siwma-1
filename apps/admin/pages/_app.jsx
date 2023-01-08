@@ -47,7 +47,7 @@ const MyApp = ({ Component, pageProps }) => {
   const [supabase] = useState(() => createBrowserSupabaseClient());
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout || ((page) => page);
-  const { roles, allowAuthenticated, allowNonAuthenticated } = Component;
+  const { roles, aclAbilities, allowAuthenticated, allowNonAuthenticated } = Component;
 
   return (
     <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
@@ -59,7 +59,7 @@ const MyApp = ({ Component, pageProps }) => {
             allowAuthenticated={allowAuthenticated}
             allowNonAuthenticated={allowNonAuthenticated}
           >
-            <AuthorizationGuard roles={roles} fallback={<Error404 />}>
+            <AuthorizationGuard roles={roles} fallback={<Error404 />} aclAbilities={aclAbilities}>
               {getLayout(<Component {...pageProps} />)}
             </AuthorizationGuard>
           </AuthenticationGuard>

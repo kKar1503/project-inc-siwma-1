@@ -1,7 +1,7 @@
 import React, { createContext } from 'react';
 
 /**
- * @type {Context<{
+ * @type {React.Context<{
  *  isLoading: boolean;
  *  isAuthenticated: boolean;
  *  supabaseUser: import('@supabase/supabase-js').User | null;
