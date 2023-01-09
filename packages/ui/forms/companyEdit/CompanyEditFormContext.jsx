@@ -172,7 +172,7 @@ const CompanyEditFormContext = ({ company, onSuccessChange, isLoading, backButto
           backButton={backButton}
           disableAdmin={disableAdmin}
         />
-        <div className={cx('absolute my-12 transition lg:w-7/12 mx-auto', { hidden: !submitSuccess })}>
+        <div className={cx('absolute bottom-28 left-0 right-0 transition lg:w-7/12 mx-auto', { hidden: !submitSuccess })}>
           <Alert
             level="success"
             message="Changes saved successfully"
