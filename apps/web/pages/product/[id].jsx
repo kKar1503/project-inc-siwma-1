@@ -95,7 +95,7 @@ const ListingPage = ({ listing, images: carouselImages }) => (
     />
 
     <>
-      <Carousel wrapperClassName="w-full h-[300px] my-10">
+      <Carousel wrapperClassName="w-full h-[500px] my-10 shadow-lg border border-black/20">
         {[...carouselImages].map((image) => (
           <div key={image} className="w-full h-full flex justify-center bg-black/50 relative">
             <picture>
@@ -107,7 +107,7 @@ const ListingPage = ({ listing, images: carouselImages }) => (
             </picture>
 
             <picture className="z-10">
-              <img src={image} alt={listing.name} className="h-full" />
+              <img src={image} alt={listing.name} className="w-auto h-full" />
             </picture>
             {/* <div className="relative w-fit h-full">
                   <Image
@@ -135,9 +135,12 @@ const ListingPage = ({ listing, images: carouselImages }) => (
           <div className="divider" />
 
           <Title title="Description" />
+          <p>{listing.description}</p>
+
+          <div className="divider" />
 
           {/* Date posted, category */}
-          <div className="flex flex-wrap gap-5 my-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 my-4">
             <Detail title="Negotiable?" detail={listing.negotiable ? 'Yes' : 'No'} />
             <Detail title="Length" detail="100m" />
             <Detail title="Material" detail="Aluminum" />
@@ -146,17 +149,22 @@ const ListingPage = ({ listing, images: carouselImages }) => (
               title="Posted on"
               detail={DateTime.fromISO(listing.created_at).toFormat('dd MMM yyyy')}
             />
+            <Detail title="Posted By" detail={listing.fullname} />
             <Detail title="Category" detail={listing.category_name} />
+            <Detail title="Company" detail={listing.company_name} />
           </div>
 
-          <p>{listing.description}</p>
           {/* <Description description={listing.description} /> */}
         </div>
 
         {/* Chat now details */}
         <div className="col-span-3">
-          <CardBackground className="text-center w-full">
-            <User profilePicture={sampleProductImage} username="xiaoming" />
+          <CardBackground className="w-full">
+            <User
+              profilePicture={sampleProductImage}
+              username={listing.fullname}
+              company={listing.company_name}
+            />
             <button className="btn btn-sm btn-primary mt-4">Chat now</button>
           </CardBackground>
         </div>
