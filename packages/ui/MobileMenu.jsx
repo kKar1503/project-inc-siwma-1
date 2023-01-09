@@ -1,12 +1,11 @@
 // ------------------ Imports ------------------
 
 import PropTypes, {bool, func} from 'prop-types';
-import {MdBookmark, MdChat, MdHome} from 'react-icons/md';
+import {MdBookmark, MdChat, MdExitToApp, MdHome} from 'react-icons/md';
 import cx from 'classnames';
 import SidebarDivider from './MobileMenuSubComponents/SidebarDivider';
 import SidebarItem from './MobileMenuSubComponents/SidebarItem';
 import SidebarSubItem from './MobileMenuSubComponents/SidebarSubItem';
-import SidebarLogout from './MobileMenuSubComponents/SidebarLogout';
 import SidebarSearch from './MobileMenuSubComponents/SidebarSearch';
 import SidebarDropdown from './MobileMenuSubComponents/SidebarDropdown';
 
@@ -14,15 +13,14 @@ import SidebarDropdown from './MobileMenuSubComponents/SidebarDropdown';
 
 /**
  * This component is a central location to customize the HamburgerMenu
- * @type {function({categoryData: object})}
  */
-const LayoutEditor = ({categoryData}) => (
+const LayoutEditor = ({categoryData, isLoggedIn}) => (
   <>
     {/* eslint-disable-next-line no-alert */}
     <SidebarSearch/>
     <SidebarDivider/>
-    <SidebarItem name="Home" redirectLink="/test#home" customIcon={<MdHome/>}/>
-    <SidebarItem name="Bookmark" redirectLink="/test#bookmark" customIcon={<MdBookmark/>}/>
+    <SidebarItem name="Home" redirectLink="/"><MdHome/></SidebarItem>
+    <SidebarItem name="Bookmark" redirectLink="/test#bookmark"><MdBookmark/></SidebarItem>
     <SidebarDropdown name="Categories" customIcon={<MdChat/>}>
       {categoryData?.map(({name, id}) => (
         <SidebarSubItem
@@ -35,30 +33,30 @@ const LayoutEditor = ({categoryData}) => (
 
     <SidebarDivider/>
 
-    <SidebarLogout/>
+    {isLoggedIn ? <SidebarItem name="Logout" redirectLink="/logout"><MdExitToApp/></SidebarItem>
+      : <SidebarItem name="Login" redirectLink="/login"><MdExitToApp/></SidebarItem>}
   </>
 );
 
 // ------------------ Main Component -----------------
 /**
  * The MobileMenu is a hamburger menu only visible on mobile devices
- * @type {function({open: bool,className: string, setOpen: function,categoryData: object})}  })}
+ * @type {function({open: bool,className: string, setOpen: function, isLoggedIn: boolean, categoryData: {name : string,id : number}[]})}  })}
  */
-const MobileMenu = ({open, className, setOpen, categoryData}) => {
+const MobileMenu = ({open, className, setOpen, isLoggedIn, categoryData}) => {
   // ------------------ Handles -----------------
   const closeHandle = () => setOpen(false);
 
   // ------------------ Return -----------------
   return (
-    <div className={cx(`block h1${className}`, {hidden: !open})}>
+    <div
+      className={cx(`h1 z-40 absolute my-2 shadow bg-base-100 rounded-box`, {hidden: !open}, className)}>
       <main>
-        <span className="text-white text-4xl top-5 left-4 cursor-pointer">
-          <i className="bi bi-filter-left px-2 bg-gray-900 rounded-md"/>
-        </span>
         {/* todo background color here */}
         <div
-          className=" fixed top-0 bottom-0 lg:left-0 p-2 w-auto text-center bg-base-content">
-          <LayoutEditor closeHandle={closeHandle} categoryData={categoryData}/>
+          className="w-96  p-2 text-center bg-base-content">
+          <LayoutEditor closeHandle={closeHandle} isLoggedIn={isLoggedIn}
+                        categoryData={categoryData}/>
         </div>
       </main>
     </div>
@@ -74,12 +72,14 @@ LayoutEditor.propTypes = {
     name: PropTypes.string,
     id: PropTypes.number,
   })),
+  isLoggedIn: PropTypes.bool,
 };
 
 MobileMenu.propTypes = {
   open: bool.isRequired,
   className: PropTypes.string,
   setOpen: func,
+  isLoggedIn: bool,
   categoryData: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
     id: PropTypes.number,

@@ -38,7 +38,7 @@ const SidebarDropdown = ({ name, customIcon,  children }) => {
         </span>
       </div>
       <ul
-        className={cx('block text-left text-sm mt-2 w-4/5 mx-auto text-base-200 font-bold', {
+        className={cx('menu block text-left text-sm mt-2 w-4/5 mx-auto text-base-200 font-bold', {
           hidden: !open,
         })}
       >
