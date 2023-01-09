@@ -7,6 +7,32 @@ import AdminPageLayout from '../components/layouts/AdminPageLayout';
 import NavBar from '../components/NavBar';
 import { CompanyEditFormContext } from '../components/forms/companyEdit';
 
+/**
+ * Maps query data into a company object
+ * @param {{name: string, image: string, website: string, bio: string, comments: string}} data The data to parse
+ * @returns A object containing properties for a company
+ */
+const parseQueryData = (data) => {
+  // Parse the query data
+  const company = {
+    ...data,
+    image:
+      (data.image && {
+        src: `https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/${data.image}`,
+      }) ||
+      null,
+    comments:
+      data.companies_comments && data.companies_comments.length > 0
+        ? data.companies_comments[0].comments
+        : '',
+  };
+
+  // Delete the companies_comments key from the object
+  delete company.companies_comments;
+
+  return company;
+};
+
 const EditCompany = () => {
   // Retrieve company id from query param
   const router = useRouter();
@@ -43,6 +69,10 @@ const EditCompany = () => {
     // router.push('/companies');
   }
 
+  // Parse query data
+  const company =
+    isLoading || !queryData || !queryData.data ? false : parseQueryData(queryData.data[0]);
+
   // -- Functions -- //
   const refreshQuery = () => {
     // Invalidate table queries to cause a refetch
@@ -75,7 +105,7 @@ const EditCompany = () => {
           onSuccessChange={() => {
             refreshQuery();
           }}
-          queryData={queryData}
+          company={company}
           isLoading={isLoading}
         />
       </div>
