@@ -77,7 +77,6 @@ export async function getServerSideProps(context) {
 
 const ListingPage = ({ listing, images: carouselImages }) => (
   // const [user, setUser] = React.useState(null);
-
   <>
     {/* {listingError && <ErrorPage errorCode={500} errorMessage={`${listingErrorData.message}!`} />} */}
     {/* {!listing && <ErrorPage errorCode={404} errorMessage="Listing not found!" />} */}
@@ -85,7 +84,7 @@ const ListingPage = ({ listing, images: carouselImages }) => (
       paths={[
         {
           name: listing.category_name,
-          path: `/category/${listing.category_name}`,
+          path: `/category/${listing.category_name}?id=${listing.category}`,
         },
         {
           name: listing.name,
