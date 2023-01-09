@@ -43,29 +43,10 @@ const DisallowNonAuthenticatedFallback = () => {
 const MyApp = ({ Component, pageProps }) => {
   const [supabase] = useState(() => createBrowserSupabaseClient());
 
-  const getLayout = Component.getLayout || ((page) => page);
-  const { roles, aclAbilities, allowAuthenticated, allowNonAuthenticated } = Component;
-
-
   return (
     <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
       <QueryClientProvider client={queryClient}>
-        {getLayout(
-          <LayoutView>
-            <AppUserProvider>
-              <AuthenticationGuard
-                disallowAuthenticatedFallback={<Error404 />}
-                disallowNonAuthenticatedFallback={<DisallowNonAuthenticatedFallback />}
-                allowAuthenticated={allowAuthenticated}
-                allowNonAuthenticated={allowNonAuthenticated}
-              >
-                <AuthorizationGuard roles={roles} fallback={<Error404 />} aclAbilities={aclAbilities}>
-                  {getLayout(<Component {...pageProps} />)}
-                </AuthorizationGuard>
-              </AuthenticationGuard>
-            </AppUserProvider>
-          </LayoutView>,
-        )}
+        <LayoutView Component={Component} pageProps={pageProps}/>
       </QueryClientProvider>
     </SessionContextProvider>
   );
@@ -75,25 +56,41 @@ MyApp.propTypes = propTypes;
 
 export default MyApp;
 
-const LayoutView = ({children}) => {
+const LayoutView = ({Component, pageProps}) => {
   const supabase = useSupabaseClient();
   const {
-    data : categoryData,
+    data: categoryData,
     // status: categoryStatus,
     // isLoading: categoryIsLoading,
   } = useQuery(['get_category'], () => supabase.from('category').select('*'));
 
-
+  const getLayout = Component.getLayout || ((page) => page);
+  const { roles, aclAbilities, allowAuthenticated, allowNonAuthenticated } = Component;
   const {data = undefined} = categoryData || {};
   // window.alert(JSON.stringify(categoryData))
   return (
     <>
-      <Header categoryData={data}/>
-      {children}
+      {(Component && Component.ignoreHeader) || <Header categoryData={data}/>}
+      <LayoutView>
+        <AppUserProvider>
+          <AuthenticationGuard
+            disallowAuthenticatedFallback={<Error404 />}
+            disallowNonAuthenticatedFallback={<DisallowNonAuthenticatedFallback />}
+            allowAuthenticated={allowAuthenticated}
+            allowNonAuthenticated={allowNonAuthenticated}
+          >
+            <AuthorizationGuard roles={roles} fallback={<Error404 />} aclAbilities={aclAbilities}>
+              {getLayout(<Component {...pageProps} />)}
+            </AuthorizationGuard>
+          </AuthenticationGuard>
+        </AppUserProvider>
+      </LayoutView>
     </>
   );
 }
 
 LayoutView.propTypes = {
-  children: PropTypes.node,
+  // eslint-disable-next-line react/forbid-prop-types
+  pageProps: PropTypes.any,
+  Component: PropTypes.elementType,
 }

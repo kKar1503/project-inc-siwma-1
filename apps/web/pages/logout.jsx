@@ -55,5 +55,7 @@ const SignInAndUpLayoutNoSSR = dynamic(() => Promise.resolve(SignInAndUpLayout),
 });
 
 Page.getLayout = (page) => <SignInAndUpLayoutNoSSR>{page}</SignInAndUpLayoutNoSSR>;
+Page.ignoreHeader = true;
+
 
 export default Page;
