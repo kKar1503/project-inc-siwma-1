@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
-import TableButton from './TableButton';
 
 // This table shows a preview of Company Profiles and is built on the BaseTable component.
 
@@ -14,11 +13,10 @@ const CompanyProfilesPreviewTable = ({ data }) => {
   useMemo(() => {
     setDisplayData(data.filter((row) => {
       const lowerCaseTerm = searchTerm.toLowerCase();
-      return row.name.toLowerCase().includes(lowerCaseTerm);
+      return row.name.toLowerCase().includes(lowerCaseTerm) || 
+      (row.website !== undefined && row.website.toLowerCase().includes(lowerCaseTerm));
     }))
   }, [data, searchTerm]);
-
-  const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
     <BaseTable
