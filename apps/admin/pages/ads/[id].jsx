@@ -42,6 +42,6 @@ const CategoryPage = () => {
 /**
  * Use the layout for Admin Pages
  */
-CategoryPage.getLayout = (page) => <AdminPageLayout pageName="Category">{page}</AdminPageLayout>;
+CategoryPage.getLayout = (page) => <AdminPageLayout pageName="Advertisement">{page}</AdminPageLayout>;
 
 export default CategoryPage;
