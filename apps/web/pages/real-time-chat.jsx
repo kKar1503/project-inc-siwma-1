@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
+// eslint-disable-next-line import/no-unresolved
 import toast, { Toaster } from 'react-hot-toast';
 import Autocomplete from 'react-autocomplete';
 
@@ -72,6 +73,7 @@ const RealTimeChat = () => {
   const [selectedRoom, setSelectedRoom] = useState('');
   const [notifs, setAllNotifs] = useState('');
   const [user, setUser] = useState('');
+  const [sidebarVisible, setSidebarVisible] = useState(false);
 
   const filterChatList = (filter) => filter.type === selectedFilter;
   // Function to get logged in user
@@ -180,14 +182,119 @@ const RealTimeChat = () => {
   }, [notifs]);
 
   return (
-    <div className="grid grid-cols-4 gap-4 h-screen">
-      <Toaster />
-      <div className="col-span-3 bg-blue-50 rounded-3xl h-screen">
-        <div className="flex items-center justify-between px-6 py-4">
-          <div>
-            <h2 className="font-bold text-2xl">Conversations</h2>
-            <p className="font-bold text-gray-300">24 ACTIVE CHATS DETECTED</p>
+    <div className="drawer">
+      <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
+      <div className="grid grid-cols-10 gap-4 h-screen drawer-content">
+        <Toaster />
+        <div className="col-span-10 md:col-span-7 bg-blue-50 rounded-3xl h-screen drawer-content">
+          <div className="md:flex border-b-4 items-center md:px-6 md:py-4">
+            <div className="hidden lg:block">
+              <h2 className="font-bold text-xl">Conversations</h2>
+              <p className="font-bold text-sm text-gray-300">24 ACTIVE CHATS DETECTED</p>
+            </div>
+            <div className="flex md:hidden">
+              <div className="pb-2">
+                <div className="flex flex-row">
+                  <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 6h16M4 12h16M4 18h16"
+                      />
+                    </svg>
+                  </label>
+                  <div className="flex items-center px-4">
+                    <h2 className="font-semibold text-lg">georgeyinxu</h2>
+                    <div className="px-2">
+                      <a href="localhost:1111">
+                        <img
+                          className="w-5"
+                          src="https://cdn2.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-whatsapp-circle-512.png"
+                          alt=""
+                        />
+                      </a>
+                    </div>
+                    <a href="localhost:1111">
+                      <img
+                        className="w-5"
+                        src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/telegram-512.png"
+                        alt=""
+                      />
+                    </a>
+                  </div>
+                </div>
+                <div className="pl-16 flex flex-row">
+                  <div className="avatar">
+                    <div className="w-12 rounded-xl">
+                      <img src="https://placeimg.com/192/192/people" alt="" />
+                    </div>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="uppercase text-sm pl-4 font-bold text-blue-500">item name</p>
+                    <h6 className="uppercase pl-4 font-bold text-sm">
+                      $5940.<span className="text-gray-200">95</span>
+                    </h6>
+                  </div>
+                  <div className="pl-7 items-center">
+                    <div className="bg-blue-500 rounded-lg px-2 py-1">
+                      <p className="text-white font-bold text-base whitespace-nowrap">
+                        In Progress
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="pl-16 pt-2">
+                  <a href="#offer-modal" className="pr-4 whitespace-nowrap">
+                    <button className="btn p-3 btn-info bg-opacity-30 text-xs">MAKE OFFER</button>
+                  </a>
+                  <button className="btn p-3 btn-error bg-opacity-30 text-xs">REPORT USER</button>
+                </div>
+              </div>
+            </div>
+            <div className="hidden md:flex">
+              <ChatFilter
+                options={options}
+                setSelectedFilter={setSelectedFilter}
+                retrieveFilteredData={retrieveFilteredData}
+                selectedFilter={selectedFilter}
+              />
+            </div>
           </div>
+          <div className="grid grid-cols-2 md:grid-cols-3">
+            <div className="min-[320px]:hidden md-[820px]:block">
+              <ChatSidebar roomsData={filteredData} />
+            </div>
+            <div className="col-span-2 relative" style={{ maxHeight: '85vh' }}>
+              <div>
+                <ChatBubbles msg={allMessages} />
+              </div>
+              <div className="absolute bottom-[-80px] md:bottom-0 w-full px-4">
+                <hr style={{ border: '1px solid #A0A0A0' }} />
+                <InputText msg={allMessages} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="p-2 md:p-4 relative h-screen col-span-4 md:col-span-3 min-[320px]:hidden md:block">
+          <ItemDetails />
+        </div>
+        <ImageModal />
+        <FileModal />
+        <OfferModal />
+      </div>
+      <div className="drawer-side">
+        <label htmlFor="my-drawer-3" className="drawer-overlay">
+          {' '}
+        </label>
+        <ul className="menu p-0 w-80 bg-base-100 :flex md:hidden">
           <ChatFilter
             options={options}
             setSelectedFilter={setSelectedFilter}
@@ -196,26 +303,9 @@ const RealTimeChat = () => {
             roomsData={roomsData}
             selectedRoom={setSelectedRoom} // Add this line
           />
-        </div>
-        <div className="grid grid-cols-3">
           <ChatSidebar roomsData={filteredData} />
-          <div className="col-span-2 relative" style={{ maxHeight: '85vh' }}>
-            <div>
-              <ChatBubbles msg={allMessages} />
-            </div>
-            <div className="absolute bottom-0 w-full px-4">
-              <hr style={{ border: '1px solid #A0A0A0' }} />
-              <InputText msg={allMessages} />
-            </div>
-          </div>
-        </div>
+        </ul>
       </div>
-      <div className="p-4 relative">
-        <ItemDetails />
-      </div>
-      <ImageModal />
-      <FileModal />
-      <OfferModal />
     </div>
   );
 };

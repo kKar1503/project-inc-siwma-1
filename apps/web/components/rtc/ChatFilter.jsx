@@ -5,6 +5,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 import { BiSearch } from 'react-icons/bi';
 import PropTypes from 'prop-types';
+// eslint-disable-next-line import/no-unresolved
 import Autocomplete from 'react-autocomplete';
 import { useState, useEffect } from 'react';
 
@@ -19,8 +20,8 @@ const ChatFilter = ({
   const [inputValue, setValue] = useState('');
   // const [selectedRoom, setSelectedRoom] = useState(''); // define selectedRoom in state
   return (
-    <div className="flex items-center">
-      <div className="dropdown">
+    <div className="flex pt-2 md:pt-0 pb-2 md:pb-0 items-start md:items-center flex-col md:flex-row">
+      <div className="dropdown pb-2 md:pb-0">
         <select
           className="btn bg-blue-300 text-white hover:bg-transparent hover:text-blue-300 border-none px-2 mx-4 appearance-none"
           value={selectedFilter}
@@ -35,7 +36,7 @@ const ChatFilter = ({
           ))}
         </select>
       </div>
-      <div className="form-control">
+      <div className="form-control pl-4 md:pl-0">
         <div className="input-group">
           <Autocomplete
             inputProps={{

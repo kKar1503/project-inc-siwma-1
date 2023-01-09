@@ -4,7 +4,7 @@
 const UserProfileCard = () => (
   <div className="card rounded-lg bg-base-100 shadow-2xl">
     <div className="card-body">
-      <h2 className="card-title">georgeyinxu</h2>
+      <h2 className="card-title text-base md:text-base lg:text-lg">georgeyinxu</h2> 
       <hr />
       <h6 className="uppercase text-xs font-bold">about seller</h6>
       <p className="text-sm">bio</p>
