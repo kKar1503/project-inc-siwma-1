@@ -3,7 +3,7 @@ import Link from 'next/link';
 import PropTypes from 'prop-types';
 
 const User = ({ profilePicture, username }) => (
-  <div className="flex flex-row items-center space-x-2">
+  <div className="flex flex-row items-center space-x-2 flex-wrap">
     <Image
       className="rounded-full object-cover object-center h-10 w-10"
       src={profilePicture}
