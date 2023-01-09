@@ -16,12 +16,72 @@ const NewListing = ({session}) => {
   const [categoryID, setCategoryID] = React.useState(null);
   const [allCategories, setAllCategories] = React.useState([]);
   const [parameters, setParameters] = React.useState([]);
+  const [parameterTypes, setParameterTypes] = React.useState([]);
+  const [parameterChoices, setParameterChoices] = React.useState([]);
+
+  const [formTypeData, setFormTypeData] = React.useState([]);
+  // const [formChoiceData, setFormChoiceData] = React.useState([]);
 
   // used for image form
   const {selectedImages, imageHook} = ImageForm.UseHook();
 
   // Form states
   const {listingHook} = ListingForm.UseHook();
+
+  // const identifyParameterType = async (parameterData, parameterType) => {
+  //   const formTypes = [];
+
+  //   // match paramter types to individual parameters via the key id 
+  //   for (let i = 0; i < parameterData.length; i++) {
+  //     for (let j = 0; j < parameterType.length; j++) {
+  //       if (parameterData[i].type === parameterType[j].id) {
+  //         formTypes.push({ id: parameterType[j].id, name: parameterData[i].display_name, type: parameterType[j].name});
+  //       }
+  //     }
+  //   }
+
+  //   setFormTypeData(formTypes);
+  // };
+
+  const identifyParameterType = async (parameterData, parameterType, parameterChoice) => {
+    const formTypes = [];
+    let formData = {};
+
+    // match paramter types to individual parameters via the key id 
+    for (let i = 0; i < parameterData.length; i++) {
+      for (let j = 0; j < parameterType.length; j++) {
+        if (parameterData[i].type === parameterType[j].id) {
+          formData = { id: parameterData[i].parameter, name: parameterData[i].display_name, type: parameterType[j].name, choice: null};
+
+          for (let k = 0; k < parameterChoice.length; k++) {
+            if (parameterData[i].parameter === parameterChoice[k].parameter) {
+              formData.choice = parameterChoice[k].choice;
+            }
+          }
+
+          formTypes.push(formData);
+        }
+      }
+    }
+
+    setFormTypeData(formTypes);
+    console.log(formTypes);
+  };
+  
+  // const identifyParameterChoice = async (parameterData, parameterChoice) => {
+  //   const formChoices = [];
+
+  //   // match paramter types to individual parameters via the key id 
+  //   for (let i = 0; i < parameterData.length; i++) {
+  //     for (let j = 0; j < parameterChoice.length; j++) {
+  //       if (parameterData[i].id === parameterChoice[j].parameter) {
+  //         formChoices.push({ id: parameterData[i].id, name: parameterData[i].display_name, choice: parameterChoice[j].choice});
+  //       }
+  //     }
+  //   }
+
+  //   setFormChoiceData(formChoices);
+  // }
 
   const {
     data: categoriesData,
@@ -34,7 +94,31 @@ const NewListing = ({session}) => {
     refetchOnReconnect: false,
     onSuccess: (categoryAPIData) => {
       Log('green', categoryAPIData.data);
-      setParameters(categoryAPIData.data);
+      setAllCategories(categoryAPIData.data);
+    }
+  });
+
+  const {
+    data: parameterTypesData,
+  } = useQuery('get_parameter_types', async () => client.rpc('get_parameter_types'), {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    onSuccess: (parameterTypesAPIData) => {
+      Log('green', parameterTypesAPIData.data);
+      setParameterTypes(parameterTypesAPIData.data);
+    }
+  });
+
+  const {
+    data: parameterChoicesData,
+  } = useQuery('get_parameter_choices', async () => client.rpc('get_parameter_choices'), {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    onSuccess: (parameterChoicesAPIData) => {
+      Log('green', parameterChoicesAPIData.data);
+      setParameterChoices(parameterChoicesAPIData.data);
     }
   });
 
@@ -53,10 +137,20 @@ const NewListing = ({session}) => {
     }
   });
 
+  React.useEffect(() => {
+    console.log(formTypeData);
+    // console.log(formChoiceData);
+  }, [formTypeData]);
+
+  React.useEffect(() => {
+    if (parameterTypesData && parametersData && parametersData.data && parameterTypesData.data && parameterChoicesData && parameterChoicesData.data) {
+      identifyParameterType(parametersData.data, parameterTypesData.data, parameterChoicesData.data);
+    };
+  }, [parameters, parameterTypes, parameterChoices]);
+
   const handleCategoryChange = (event) => {
     setCategoryID(event.target.value);
   };
-
 
   const insertNewListingHandler = async (e,values) => {
     e.preventDefault();
@@ -107,8 +201,8 @@ const NewListing = ({session}) => {
           {!parametersLoading &&
             !parametersError &&
             parametersStatus === 'success' &&
-            parameters.length !== 0 && (
-            <ParameterForm parameters={parametersData.data}/>
+            parameters.length !== 0 && formTypeData !== null && (
+            <ParameterForm formTypes={formTypeData}/>
           )}
 
           <ImageForm useImageHook={imageHook}/>

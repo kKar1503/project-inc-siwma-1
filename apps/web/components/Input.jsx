@@ -37,7 +37,7 @@ const Input = ({ text, type, value, onChange }) => (
 Input.propTypes = {
   text: PropTypes.string.isRequired,
   type: PropTypes.string,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
 };
 

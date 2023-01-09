@@ -7,34 +7,37 @@ import PropTypes from 'prop-types';
  * @returns {JSX.Element}
  * @constructor - Dropdown
  */
-const Dropdown = ({ items, onChangeValue, defaultValue }) => (
+const Dropdown = ({ items, onChangeValue, defaultValue, itemType }) => (
   <select
     onChange={onChangeValue}
     className="select w-full max-w-xs"
     defaultValue="Category"
   >
-    <option disabled>{defaultValue}</option>
-    {items.map((item) =>
-      <option key={item.id} value={item.id}>{item.name}</option>
+
+    <option key="0" disabled>{defaultValue}</option>
+    {itemType === 'Object' ? items.map((item, index) =>
+      <option key={index} value={item.id}>{item.name}</option>
+    ) : items.map((item, index) => 
+      <option key={index} value={item}>{item}</option>
     )}
   </select>
 );
 
 Dropdown.propTypes = {
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      category: PropTypes.string,
-      subcategory: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.number,
-          category: PropTypes.string,
-        })
-      ),
-    })
-  ),
+  items: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+      })
+    ),
+    PropTypes.arrayOf(
+      PropTypes.string
+    )
+  ]),
   onChangeValue: PropTypes.func.isRequired,
   defaultValue: PropTypes.string,
+  itemType: PropTypes.string,
 };
 
 export default Dropdown;

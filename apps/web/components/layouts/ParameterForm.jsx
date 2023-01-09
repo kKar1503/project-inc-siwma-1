@@ -1,88 +1,88 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Log from '@inc/utils/logger';
-import {useQuery} from 'react-query';
-import {useSupabaseClient} from '@supabase/auth-helpers-react';
 import CardBackground from '../CardBackground';
 
+import Dropdown from '../Dropdown';
+import RadioButton from '../RadioButton';
+import Input from '../Input';
+
 // check parameter_types/parameter_choices
-const ParameterForm  = ({ parameters }) => {
-  const client = useSupabaseClient();
-
-  const [parameterTypes, setParameterTypes] = React.useState([]);
-  const [parameterChoices, setParameterChoices] = React.useState([]);
-  const [formData, setFormData] = React.useState([]);
-
-  const identifyParameterType = async (data) => {
-    const formTypes = [];
-
-    for (let i = 0; i < parameters.length; i++) {
-      for (let j = 0; j < data.length; j++) {
-        if (parameters[i].type === data[j].id) {
-          formTypes.push({ name: parameters[i].display_name, type: data[j].name});
-        }
-      }
-    }
-
-    setFormData(formTypes);
-  };
-
-  const identifyParamterChoice = () => {
-
-  }
+// formTypes: { id, name, type}
+const ParameterForm  = ({ formTypes }) => {
+  const [values, setValues] = React.useState(
+    {}
+  )
   
-  // const urMother = (data) => {
-  //   for(let i = 0; i < data.length; i++) {
-  //     if ()
-  //   }
-  //   return (
+  const getValue = (name) => values[name]
 
-  //   );
-  // }
+  const updateValues = (value, name) => {
+    setValues((v) => ({
+      ...v,
+      [name]: value,
+    }))
+  }
 
-  useQuery('get_parameter_types', async () => client.rpc('get_parameter_types'), {
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    onSuccess: (parameterTypesAPIData) => {
-      Log('green', parameterTypesAPIData.data);
-      setParameterTypes(parameterTypesAPIData.data);
-    }
-  });
+  React.useEffect(() => {
+    setValues(formTypes.reduce((acc, item) => {
+      acc[item.name] = ''
+      return acc
+    }, {}));
 
-  // useQuery('get_parameter_choices', async () => client.rpc('get_parameter_choices'), {
-  //   refetchOnMount: false,
-  //   refetchOnWindowFocus: false,
-  //   refetchOnReconnect: false,
-  //   onSuccess: (parameterChoicesAPIData) => {
-  //     Log('green', parameterChoicesAPIData.data);
-  //     setParameterChoices(parameterChoicesAPIData.data);
-  //   }
-  // });
+  }, [formTypes]);
 
+  // --- Form Types ---
+  // Measurement = Text Input (Weight = g / Dimension = mm)
+  // Two Choices = Radio Button
+  // Many Choices = Dropdown
+  // Open Ended = Text Input
+  // --- Form Choices ---
+  // Long, Medium, Short
+  // Long, Medium
+  // Long, Short
   return (
     <CardBackground>
       <h1 className="font-bold text-3xl">Parameters</h1>
-      {parameters.map((item) => (
-        <h2 key={item.name} className="font-bold text-xl">{item.name}</h2>
-      ))}
+      {/* {formSorter(formTypes)} */}
+      {formTypes.map((item) => {
+        switch (item.type) {
+          case 'MEASUREMENT (WEIGHT)':
+            return (
+              <Input key={item.name} text={`${item.name} /g`} value={getValue(item.name)} onChange = {(e) => {updateValues(e.target.value, item.name)}} />
+            );
+          case 'MEASUREMENT (DIMENSION)':
+            return (
+              <Input key={item.name} text={`${item.name} /mm`} value={getValue(item.name)} onChange = {(e) => {updateValues(e.target.value, item.name)}} />
+            );
+          case 'TWO CHOICES':
+            return (
+              <RadioButton options={item.choice} onChangeValue = {(e) => {updateValues(e.target.value, item.name)}} />
+            );
+          case 'MANY CHOICES':
+            return (
+              <Dropdown items={item.choice} onChangeValue = {(e) => {updateValues(e.target.value, item.name)}} defaultValue={`${item.name}`} />
+            );
+          case 'OPEN ENDED':
+            return (
+              <Input key={item.name} type='textarea' text={`${item.name}`} value={getValue(item.name)} onChange = {(e) => {updateValues(e.target.value, item.name)}} />
+            );
+          default:
+            return null;
+        }
+      })}
     </CardBackground>
   );
 };    
 
 ParameterForm.propTypes = {
-  parameters: PropTypes.arrayOf(
+  formTypes: PropTypes.arrayOf(
     PropTypes.shape({
-      category: PropTypes.number,
-      parameter: PropTypes.number,
+      id: PropTypes.number,
       name: PropTypes.string,
-      display_name: PropTypes.string,
-      type: PropTypes.number,
-      datatype: PropTypes.number,
-      active: PropTypes.bool,
-      required: PropTypes.bool,
-      updated_at: PropTypes.string,
-      created_at: PropTypes.string,
+      type: PropTypes.string,
+      choice: PropTypes.arrayOf(
+        PropTypes.string
+      )
     })
   ),
 };
