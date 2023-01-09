@@ -43,6 +43,10 @@ const Tableads = () => {
                 >
                   <option value="true">active</option>
                   <option value="false">inactive</option>
+                  
+                </select>
+                <select className="btn btn-ghost btn-xs">
+                <option value="edit"><Link href={`/ads/${adsId}`}>Edit</Link></option>
                 </select>
               </th>
             </tr>
