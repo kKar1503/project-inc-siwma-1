@@ -1,10 +1,37 @@
 import Image from 'next/image';
 import PropTypes from 'prop-types';
+import {array, number, object, string} from 'yup';
 import {useState} from 'react';
 import CardBackground from '../CardBackground';
+import ErrorMessage from './ErrorMessage';
+
+const imageValidationSchema = object({
+  imageLength: number().required().min(1).max(10),
+  images: array().of(object({
+    link: string().required(),
+    blob: object().required(),
+  }))
+})
 
 const ImageHook = () => {
+
   const [selectedImages, setSelectedImages] = useState([]);
+
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  const validateImage = () => {
+    try {
+      const parsedImage = imageValidationSchema.validateSync({
+        imageLength: selectedImages.length,
+        selectedImages,
+      });
+      setErrorMsg(null);
+      return parsedImage;
+    } catch (error) {
+      setErrorMsg(error.message);
+      return null;
+    }
+  }
 
   const onSelectFile = (event) => {
     if (selectedImages.length + event.target.files.length >= 10) return; // todo return visual error message
@@ -29,26 +56,27 @@ const ImageHook = () => {
       selectedImages,
       onSelectFile,
       imageDeleteHandler,
+      errorMsg
     },
     selectedImages,
+    validateImage
   }
 }
 
-const ImageCard = ({link, name, onClick}) => (<div
-
-  className="flex flex-col justify-center items-center relative border-2 border-secondary w-1/3"
->
-  <Image
-    alt={name}
-    src={link}
-    width={500}
-    height={500}
-    className="object-contain"
-  />
-  <button className="relative" onClick={() => onClick(link)}>
-    Remove image
-  </button>
-</div>)
+const ImageCard = ({link, name, onClick}) => (
+  <div
+    className="flex flex-col justify-center items-center relative border-2 border-secondary w-1/3">
+    <Image
+      alt={name}
+      src={link}
+      width={500}
+      height={500}
+      className="object-contain"
+    />
+    <button className="relative" onClick={() => onClick(link)}>
+      Remove image
+    </button>
+  </div>)
 
 ImageCard.propTypes = {
   name: PropTypes.string.isRequired,
@@ -56,10 +84,11 @@ ImageCard.propTypes = {
   onClick: PropTypes.func.isRequired
 };
 const ImageForm = ({useImageHook}) => {
-  const {selectedImages, onSelectFile, imageDeleteHandler} = useImageHook;
+  const {selectedImages, onSelectFile, imageDeleteHandler, errorMsg} = useImageHook;
 
   return (<CardBackground>
     <div className="alert bg-primary shadow-lg">
+      <ErrorMessage errorMsg={errorMsg}/>
       <div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -116,6 +145,7 @@ ImageForm.propTypes = {
     selectedImages: PropTypes.arrayOf(PropTypes.string),
     onSelectFile: PropTypes.func,
     imageDeleteHandler: PropTypes.func,
+    errorMsg: PropTypes.string
   }).isRequired,
 }
 
