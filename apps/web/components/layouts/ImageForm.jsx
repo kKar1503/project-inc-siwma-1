@@ -84,8 +84,8 @@ const ImageForm = ({useImageHook}) => {
   const {selectedImages, onSelectFile, imageDeleteHandler, errorMsg} = useImageHook;
 
   return (<CardBackground>
+    <ErrorMessage errorMsg={errorMsg}/>
     <div className="alert bg-primary shadow-lg">
-      <ErrorMessage errorMsg={errorMsg}/>
       <div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
