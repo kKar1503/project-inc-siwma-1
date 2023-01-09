@@ -5,6 +5,7 @@ import cx from 'classnames';
 import { getAllCompanies, getCompanyCount } from '@inc/database';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Alert } from '@inc/ui';
+import AlertManager from '@inc/ui/alerts/AlertManager';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
 import TablePagination from './TablePagination';
@@ -34,8 +35,7 @@ const RegisteredCompaniesTable = ({ className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedCompanies, setselectedCompanies] = useState([]);
   const [searchInput, setSearchInput] = useState('');
-  const [showErrorAlert, setShowErrorAlert] = useState(false);
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [alerts, setAlerts] = useState([]);
 
   // -- Queries Supabase --//
   // Initialise supabase client
@@ -170,14 +170,41 @@ const RegisteredCompaniesTable = ({ className }) => {
     // Check if the company was successfully deleted
     if (error) {
       // An error occured while trying to delete the company, show an error alert
-      setShowErrorAlert(true);
+      const $alerts = [
+        ...alerts,
+        <Alert
+          level="error"
+          message="An error occurred while trying to delete the company. Please try again later."
+          dismissable
+        />,
+      ];
+
+      setAlerts($alerts);
+      console.log({ error });
+      return;
     }
 
     // The company was successfully deleted, invalidate old query to cause a refetch
     queryClient.invalidateQueries({ queryKey: ['getAllCompanies'] });
 
     // Show a success alert
-    setShowSuccessAlert(true);
+    const $alerts = [
+      ...alerts,
+      <Alert level="success" message="Company deleted successfully" dismissable />,
+    ];
+
+    setAlerts($alerts);
+  };
+
+  /**
+   * Closes an alert
+   * @param {number} id The id of the alert to close
+   */
+  const onCloseAlert = (id) => {
+    const $alerts = [...alerts];
+    $alerts.splice(id, 1);
+
+    setAlerts($alerts);
   };
 
   // -- Logic functions -- //
@@ -271,24 +298,7 @@ const RegisteredCompaniesTable = ({ className }) => {
           </div>
         }
       />
-      <div className="absolute bottom-0 right-0 p-6">
-        <div className="relative">
-          <Alert
-            level="error"
-            message="An error occurred while trying to delete the company. Please try again later."
-            onRequestClose={() => setShowErrorAlert(false)}
-            dismissable
-          />
-        </div>
-        <div className="relative">
-          <Alert
-            level="success"
-            message="Company deleted successfully"
-            onRequestClose={() => setShowSuccessAlert(false)}
-            dismissable
-          />
-        </div>
-      </div>
+      <AlertManager maxAlerts={3} alerts={alerts} onRequestClose={onCloseAlert} />
     </>
   );
 };

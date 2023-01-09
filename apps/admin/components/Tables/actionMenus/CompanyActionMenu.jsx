@@ -16,6 +16,9 @@ const CompanyActionMenu = ({ data, onDelete }) => {
   const supabase = useSupabaseClient();
 
   const onDeleteHandler = async () => {
+    // Attempt to delete any comments that the company might have
+    await supabase.from('compaies_comments').delete().eq('companyid', data.id);
+
     // Attempt to delete the company
     const { error } = await supabase.from('companies').delete().eq('id', data.id);
 
@@ -50,6 +53,7 @@ const CompanyActionMenu = ({ data, onDelete }) => {
 CompanyActionMenu.propTypes = {
   data: PropTypes.shape({
     id: PropTypes.number,
+    comments: PropTypes.string,
   }).isRequired,
   onDelete: PropTypes.func.isRequired,
 };
