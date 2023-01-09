@@ -10,6 +10,7 @@ import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
 import TablePagination from './TablePagination';
 import CompanyActionMenu from './actionMenus/CompanyActionMenu';
+import CompanyDelete from '../Modals/CompanyDelete';
 
 /**
  * Parses data retrieved from Supabase into a format accepted by the tables
@@ -36,6 +37,7 @@ const RegisteredCompaniesTable = ({ className }) => {
   const [selectedCompanies, setselectedCompanies] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [alerts, setAlerts] = useState([]);
+  const [deleteModalData, setDeleteModalData] = useState(null);
 
   // -- Queries Supabase --//
   // Initialise supabase client
@@ -164,9 +166,14 @@ const RegisteredCompaniesTable = ({ className }) => {
   /**
    * Handles for when a company is deleted
    * @param {{id: number, profilePicture: Object, company: string, website: string, bio: string, isSelected: boolean}} data Data pertaining to the company that has been deleted
-   * @param {{}} error An error (if any)
    */
-  const onDeleteHandler = (data, error) => {
+  const onDeleteHandler = async (data) => {
+    // Close the modal
+    setDeleteModalData(null);
+
+    // Attempt to delete the company
+    const { error } = await supabase.from('companies').delete().eq('id', data.id);
+
     // Check if the company was successfully deleted
     if (error) {
       // An error occured while trying to delete the company, show an error alert
@@ -180,7 +187,6 @@ const RegisteredCompaniesTable = ({ className }) => {
       ];
 
       setAlerts($alerts);
-      console.log({ error });
       return;
     }
 
@@ -222,6 +228,15 @@ const RegisteredCompaniesTable = ({ className }) => {
 
   return (
     <>
+      {/* Company deletion modal */}
+      <CompanyDelete
+        isOpen={Boolean(deleteModalData)}
+        company={deleteModalData}
+        onConfirm={onDeleteHandler}
+        onRequestClose={() => setDeleteModalData(null)}
+      />
+
+      {/* Main Content */}
       <BaseTable
         header={
           <div className="flex flex-row justify-between items-center">
@@ -256,7 +271,7 @@ const RegisteredCompaniesTable = ({ className }) => {
         isLoading={isLoading}
         data={companies}
         onChange={onChangeHandler}
-        actionMenu={<CompanyActionMenu data={{}} onDelete={onDeleteHandler} />}
+        actionMenu={<CompanyActionMenu data={{}} onDelete={setDeleteModalData} />}
         footer={
           <div className="flex justify-between bg-none">
             {/* Company suspension/reinstation */}
@@ -298,6 +313,8 @@ const RegisteredCompaniesTable = ({ className }) => {
           </div>
         }
       />
+
+      {/* Table Alerts */}
       <AlertManager maxAlerts={3} alerts={alerts} onRequestClose={onCloseAlert} />
     </>
   );

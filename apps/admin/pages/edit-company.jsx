@@ -64,9 +64,9 @@ const EditCompany = () => {
 
   // -- Prepare fetched data for rendering & processing -- //
   // Redirect the user if no company was retrieved
-  if (!isLoading && queryData.data && queryData.data.length === 0) {
+  if (!isLoading && (!queryData.data || queryData.data.length === 0)) {
     // No company was retrieved
-    // router.push('/companies');
+    router.push('/companies');
   }
 
   // Parse query data
