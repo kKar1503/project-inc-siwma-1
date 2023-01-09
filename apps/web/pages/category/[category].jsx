@@ -31,7 +31,12 @@ const Category = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:grid-cols-2 mb-10">
           {/* image temporarily grabbed from metalsupermarkets.com */}
           {categoryData?.data?.map((item) => (
-            <CategoryCard name={item.name} img={item.image} key={item.name} />
+            <CategoryCard
+              name={item.name}
+              img={item.image}
+              href={`/product/${item.id}`}
+              key={item.name}
+            />
           ))}
         </div>
         {/* <p className="font-bold text-2xl mb-5">Popular Brands</p> */}
