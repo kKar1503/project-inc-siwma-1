@@ -135,7 +135,7 @@ const ImageForm = ({useImageHook}) => {
   </CardBackground>)
 }
 
-ImageForm.UseHook = ImageHook;
+ImageForm.useHook = ImageHook;
 
 ImageForm.propTypes = {
   useImageHook: PropTypes.shape({

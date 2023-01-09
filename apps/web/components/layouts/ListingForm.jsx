@@ -130,7 +130,7 @@ const CreateListingInformation = ({
   );
 }
 
-CreateListingInformation.UseHook = ListingHook;
+CreateListingInformation.useHook = ListingHook;
 
 CreateListingInformation.propTypes = {
   listingHook: PropTypes.shape({
