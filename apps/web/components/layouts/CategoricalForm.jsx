@@ -1,14 +1,56 @@
-import React from 'react';
+import {useState} from 'react';
 import PropTypes from 'prop-types';
+import {number, object} from 'yup';
 import Dropdown from '../Dropdown';
 import CardBackground from '../CardBackground';
+import ErrorMessage from './ErrorMessage';
 
-const CategoricalForm = ({ items, onChangeValue }) => (
-  <CardBackground>
-    <h1 className="font-bold text-3xl">Category</h1>
-    <Dropdown items={items} onChangeValue={onChangeValue} defaultValue='Category' itemType='Object' />
-  </CardBackground>
-);
+const categoryValidationSchema = object({
+  categoryId: number().required('Please select a category required').positive('Please select a category required'),
+})
+
+
+const CategoryHook = () => {
+  const [categoryId, setCategoryID] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  const onChangeValue = (event) => {
+    setCategoryID(event.target.value);
+  };
+
+  const validateCategory = () => {
+    try {
+      const parsedCategory = categoryValidationSchema.validateSync({
+        categoryId
+      });
+      setErrorMsg(null);
+      return parsedCategory;
+    } catch (error) {
+      setErrorMsg(error.message);
+      return null;
+    }
+  }
+
+  return {
+    categoryHook: {
+      errorMsg,
+      onChangeValue,
+    },
+    categoryID: categoryId,
+    validateCategory
+  };
+}
+
+const CategoricalForm = ({items, categoryHook}) => {
+  const {errorMsg,onChangeValue} = categoryHook;
+  return (
+    <CardBackground>
+      <ErrorMessage errorMsg={errorMsg}/>
+      <h1 className="font-bold text-3xl">Category</h1>
+      <Dropdown items={items} onChangeValue={onChangeValue} defaultValue='Category'/>
+    </CardBackground>
+  );
+}
 
 CategoricalForm.propTypes = {
   items: PropTypes.arrayOf(
@@ -23,7 +65,12 @@ CategoricalForm.propTypes = {
       ),
     })
   ),
-  onChangeValue: PropTypes.func.isRequired,
+  categoryHook: PropTypes.shape({
+    onChangeValue: PropTypes.func.isRequired,
+    errorMsg: PropTypes.string,
+  }).isRequired,
 };
+
+CategoricalForm.useHook = CategoryHook;
 
 export default CategoricalForm;
