@@ -1,6 +1,6 @@
 import cx from 'classnames';
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const CardBackground = ({ className, children }) => (
   <div
@@ -14,10 +14,7 @@ const CardBackground = ({ className, children }) => (
 
 CardBackground.propTypes = {
   className: PropTypes.string,
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.element),
-    PropTypes.element.isRequired,
-  ]),
+  children: PropTypes.node.isRequired,
 };
 
 export default CardBackground;

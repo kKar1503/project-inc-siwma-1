@@ -38,5 +38,5 @@ yarn-error.log*
 
 # Cypress outputs
 **/.cypress
-**/cypress/videos 
+**/cypress/videos
 **/cypress/screenshots

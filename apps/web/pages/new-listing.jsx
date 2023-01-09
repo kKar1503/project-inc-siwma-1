@@ -32,6 +32,10 @@ const NewListing = ({session}) => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    onSuccess: (parameterAPIData) => {
+      Log('green', parameterAPIData.data);
+      setParameters(parameterAPIData.data);
+    }
   });
 
   const {
@@ -44,16 +48,10 @@ const NewListing = ({session}) => {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     onSuccess: (parameterAPIData) => {
+      Log('green', parameterAPIData.data);
       setParameters(parameterAPIData.data);
-      console.log(parameterAPIData.data);
     }
   });
-
-  React.useEffect(() => {
-    if (categoriesStatus !== 'success') return;
-    Log('green', categoriesData.data);
-    setAllCategories(categoriesData.data);
-  }, [session, categoriesStatus, categoriesData]);
 
   const handleCategoryChange = (event) => {
     setCategoryID(event.target.value);
