@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import CategoryCard from '../../components/category/CategoryCard';
+import ProductListingItem from '../../components/marketplace/listing/ProductListingItem';
 import CategoryBanner from '../../components/category/CategoryBanner';
 
 // supabase.rpc('get_category_listing', { catid: router.query.id })
@@ -30,14 +31,30 @@ const Category = () => {
         {/* dynamically generate each category when queried */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:grid-cols-2 mb-10">
           {/* image temporarily grabbed from metalsupermarkets.com */}
-          {categoryData?.data?.map((item) => (
-            <CategoryCard
-              name={item.name}
-              img={item.image}
-              href={`/product/${item.id}`}
-              key={item.name}
-            />
-          ))}
+          {categoryData?.data?.map(
+            ({
+              name,
+              imageUrl,
+              id,
+              listing_type: type,
+              price,
+              negotiable,
+              unit_price: unitPrice,
+            }) => (
+              <ProductListingItem
+                className="hover:shadow-lg"
+                type={type}
+                negotiable={negotiable}
+                key={id}
+                price={price}
+                img={imageUrl}
+                name={name}
+                rating={4.5}
+                unit_price={unitPrice}
+                href={`/product/${id}`}
+              />
+            )
+          )}
         </div>
         {/* <p className="font-bold text-2xl mb-5">Popular Brands</p> */}
         {/* inserted from marketplace */}
