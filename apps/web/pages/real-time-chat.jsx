@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import toast, { Toaster } from 'react-hot-toast';
+import Autocomplete from 'react-autocomplete';
 
 import '@inc/styles/globals.css';
 import InputText from '../components/rtc/InputText';
@@ -68,7 +69,7 @@ const RealTimeChat = () => {
   const [allMessages, setAllMessages] = useState([]);
   const [filteredData, setFilteredData] = useState(roomsData);
   const [selectedFilter, setSelectedFilter] = useState(options[0]);
-  const [selectedRoom, setSelectedRoom] = useState();
+  const [selectedRoom, setSelectedRoom] = useState('');
   const [notifs, setAllNotifs] = useState('');
   const [user, setUser] = useState('');
 
@@ -192,6 +193,8 @@ const RealTimeChat = () => {
             setSelectedFilter={setSelectedFilter}
             retrieveFilteredData={retrieveFilteredData}
             selectedFilter={selectedFilter}
+            roomsData={roomsData}
+            selectedRoom={setSelectedRoom} // Add this line
           />
         </div>
         <div className="grid grid-cols-3">
