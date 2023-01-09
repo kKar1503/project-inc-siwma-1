@@ -21,7 +21,6 @@ const ListingHook = () => {
   const [description, setDescription] = React.useState('');
   const [negotiable, setNegotiable] = React.useState(false);
   const [type, setType] = React.useState('');
-
   const [errorMsg, setErrorMsg] = React.useState(null);
 
   const validateListing = () => {

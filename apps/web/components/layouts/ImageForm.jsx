@@ -14,9 +14,7 @@ const imageValidationSchema = object({
 })
 
 const ImageHook = () => {
-
   const [selectedImages, setSelectedImages] = useState([]);
-
   const [errorMsg, setErrorMsg] = useState(null);
 
   const validateImage = () => {
@@ -58,7 +56,6 @@ const ImageHook = () => {
       imageDeleteHandler,
       errorMsg
     },
-    selectedImages,
     validateImage
   }
 }
