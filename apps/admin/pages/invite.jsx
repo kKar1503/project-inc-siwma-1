@@ -34,7 +34,7 @@ const InvitesPage = () => {
         const tokenHash = await crypto.subtle.digest(
           'SHA-256',
           new TextEncoder().encode(
-            user.name + user.email + Date.now() + Math.random().toString(16).substr(2, 8)
+            user.name + user.email + Date.now() + Math.random().toString(16).slice(2, 10)
           )
         );
         // Convert the hash to a hex string
@@ -43,7 +43,7 @@ const InvitesPage = () => {
           .join('');
 
         // Find company id from supabase
-        const res = await supabase.from('companies').select('id').eq('name', user.company).limit(1);
+        let res = await supabase.from('companies').select('id').eq('name', user.company).limit(1);
         if (res.error) {
           // TODO: Replace with custom alert component
           alert(res.error);
@@ -52,7 +52,7 @@ const InvitesPage = () => {
 
         const { id } = res.data[0];
 
-        const { data, err } = await supabase
+        res = await supabase
           .from('invite')
           .insert({
             name: user.name,
@@ -63,9 +63,9 @@ const InvitesPage = () => {
           })
           .single();
 
-        if (err) {
+        if (res.err) {
           // TODO: Replace with custom alert component
-          alert(err);
+          alert(res.err);
         }
       })
     );
