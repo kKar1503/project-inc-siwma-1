@@ -50,21 +50,12 @@ export function resolveClassnameForLevel(level) {
  * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
 const Alert = ({ level, message, dismissable, onRequestClose, className }) => (
-  <div
-    className={cx(
-      className,
-      'alert rounded-full relative min-w-full',
-      resolveClassnameForLevel(level)
-    )}
-  >
-    <div className="flex flex-row gap-4">
+  <div className={cx(className, 'alert rounded-full relative', resolveClassnameForLevel(level))}>
+    <div className="flex flex-row gap-4 flex-1">
       <AlertIcon level={level} />
       <p>{message}</p>
       {dismissable && (
-        <button
-          onClick={onRequestClose}
-          className="text-lg absolute right-0 top-0 m-4 hover:cursor-pointer"
-        >
+        <button onClick={onRequestClose} className="text-lg ml-auto hover:cursor-pointer">
           <IoCloseSharp />
         </button>
       )}
