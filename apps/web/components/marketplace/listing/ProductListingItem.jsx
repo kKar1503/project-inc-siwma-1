@@ -1,10 +1,12 @@
 // Import prop types
 import { Enum } from '@inc/database';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import cx from 'classnames';
+import { DateTime } from 'luxon';
 import Image from 'next/image';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Rating from '../rating/Rating';
 import BuyBadge from './BuyBadge';
 import SellBadge from './SellBadge';
@@ -17,10 +19,28 @@ const ProductListingItem = ({
   href,
   price,
   negotiable,
+  ownerId,
+  ownerFullName,
+  createdAt,
+  companyName,
   unit_price: isUnitPrice,
   className = '',
 }) => {
   const [imgSrc, setImgSrc] = useState(img);
+
+  const supabase = useSupabaseClient();
+
+  const [profilePictureUrl, setProfilePictureUrl] = useState(null);
+
+  const getUserProfilePictureURL = async (userId) => {
+    const res = await supabase.storage.from('user-image-bucket').getPublicUrl('default-user.png');
+
+    setProfilePictureUrl(res.data.publicUrl);
+  };
+
+  useEffect(() => {
+    getUserProfilePictureURL('abc');
+  }, []);
 
   return (
     <div
@@ -28,7 +48,30 @@ const ProductListingItem = ({
         [className]: className,
       })}
     >
-      <div className="z-30 absolute right-0 p-2" />
+      {/* User details */}
+      <div className="p-2 flex gap-2 items-center">
+        <div>
+          {profilePictureUrl && (
+            <Image
+              src={profilePictureUrl}
+              width={30}
+              height={30}
+              className="rounded-full"
+              alt={`${ownerFullName}'s Profile Picture`}
+            />
+          )}
+        </div>
+
+        <div className="flex-1">
+          <Link href="/">
+            <p className="text-sm hover:underline font-semibold">{ownerFullName}</p>
+          </Link>
+
+          <Link href="/">
+            <p className="text-xs hover:underline text-gray-500">{companyName}</p>
+          </Link>
+        </div>
+      </div>
 
       <Link data-cy={`product-${href}`} href={href}>
         <div className="aspect-square w-full h-fit relative ">
@@ -71,12 +114,16 @@ const ProductListingItem = ({
             </p>
 
             <p className="my-2 font-bold">
-              S${price}
+              {new Intl.NumberFormat('en-SG', { style: 'currency', currency: 'SGD' }).format(price)}
               {isUnitPrice && <span className="text-sm font-normal">/unit</span>}
             </p>
 
             {negotiable && <p className="text-sm">Negotiable</p>}
           </div>
+
+          <p className="text-xs text-gray-500 my-2">
+            {DateTime.fromISO(createdAt).toRelative({ locale: 'en-SG' })}
+          </p>
 
           <div className="absolute bottom-1 my-2">
             <Rating rating={rating} />
@@ -97,6 +144,10 @@ ProductListingItem.propTypes = {
   price: PropTypes.number,
   negotiable: PropTypes.bool,
   unit_price: PropTypes.bool,
+  ownerId: PropTypes.string,
+  ownerFullName: PropTypes.string,
+  companyName: PropTypes.string,
+  createdAt: PropTypes.string,
 };
 
 export default ProductListingItem;
