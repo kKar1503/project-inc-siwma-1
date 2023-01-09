@@ -1,32 +1,24 @@
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
+import Link from 'next/link';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import { useQuery } from 'react-query';
 
 const Advertisement = ({ adData }) => {
+  const user = useUser();
   const supabase = useSupabaseClient();
 
-  const { data, status, isLoading, error } = useQuery({
-    queryKey: ['getCompany'],
-    queryFn: async () => supabase.from('companies').select('*').eq('id', `${adData.company_id}`),
-  });
-  // Count the number of clicks of the advertisement banners
-  // This is used to determine engagement rate
-  // Will be used in the future to determine the ranking of the advertisement in the dashboards
-  const [count, setCount] = useState(0);
-
-  const handleCount = () => {
-    setCount(count + 1);
-    // console.log(count);
+  const handleClick = () => {
+    // ALERT: currently there is no sign in, so to test the click insert, please put this uuid under the _user_uuid field
+    // 'c078a5eb-e75e-4259-8fdf-2dc196f06cbd'
+    supabase.rpc('insert_click', { _advertisement_id: adData.id, _user_uuid: user.id });
   };
 
   return (
     <>
-      <div onClick={handleCount} onKeyPress={handleCount} role="button" tabIndex={0} className="">
+      <div onClick={handleClick} onKeyDown={handleClick} role="button" tabIndex={0} className="">
         <label htmlFor={`modal-${adData.id}`} className="image">
           <Image
-            src="https://images.unsplash.com/photo-1598638567141-696be94b464a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+            src={adData.image_public_url}
             fill
             htmlFor={`modal-${adData.id}`}
             className="object-cover absolute"
@@ -37,12 +29,12 @@ const Advertisement = ({ adData }) => {
       <input type="checkbox" id={`modal-${adData.id}`} className="modal-toggle" />
       <label htmlFor={`modal-${adData.id}`} className="modal cursor-pointer">
         <label className="modal-box relative" htmlFor="placeholder">
-          <h3 className="text-lg font-bold text-center">{isLoading ? null : data.data[0].name}</h3>
+          <h3 className="text-lg font-bold text-center">{adData.company_name}</h3>
           <p className="py-4">{adData.description}</p>
           <div className="modal-action">
-            <label htmlFor="my-modal" className="btn">
+            <Link href={adData.link} htmlFor="my-modal" className="btn">
               Show me!
-            </label>
+            </Link>
             <label htmlFor={`modal-${adData.id}`} className="btn">
               Close
             </label>
@@ -58,6 +50,9 @@ Advertisement.propTypes = {
     id: PropTypes.number,
     description: PropTypes.string,
     company_id: PropTypes.number,
+    company_name: PropTypes.string,
+    image_public_url: PropTypes.string,
+    link: PropTypes.string,
   }),
 };
 
