@@ -17,6 +17,7 @@ function parseUserData(data) {
     companyid: data.companyid,
     comment:
       data.users_comments && data.users_comments.length > 0 ? data.users_comments[0].comments : '',
+    image: data.image,
     profilePic:
       (data.image && {
         src: `https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/user-image-bucket/${data.image}`,
@@ -34,6 +35,7 @@ const EditUserFormWrap = ({
   style,
 }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitFailure, setSubmitFailure] = useState(false);
 
   const supabase = useSupabaseClient();
 
@@ -70,6 +72,8 @@ const EditUserFormWrap = ({
       profilePic,
     } = data;
 
+    console.log({ data });
+
     await supabase
       .from('users')
       .update({
@@ -97,7 +101,7 @@ const EditUserFormWrap = ({
           });
 
           if (!response.ok) {
-            // password error
+            setSubmitFailure(true);
           }
         }
       }
@@ -119,6 +123,19 @@ const EditUserFormWrap = ({
       ]);
     }
 
+    if (profilePic !== user.profilePic) {
+      if (profilePic && !user.profilePic) {
+        await supabase.storage.from('user-image-bucket').upload(profilePic.name, profilePic);
+        await supabase.from('users').update({ image: profilePic.name }).eq('id', user.id);
+      } else if (profilePic && profilePic.src !== user.profilePic.src) {
+        await supabase.storage.from('user-image-bucket').remove([user.image]);
+        await supabase.storage.from('user-image-bucket').upload(profilePic.name, profilePic);
+        await supabase.from('users').update({ image: profilePic.name }).eq('id', user.id);
+      } else if (!profilePic || (profilePic.src == null && user.profilePic == null)) {
+        await supabase.from('users').update({ image: null }).eq('id', user.id);
+      }
+    }
+
     setSubmitSuccess(true);
     onSuccessChange();
   };
@@ -129,7 +146,7 @@ const EditUserFormWrap = ({
     });
 
   const handleDeleteImage = () => {
-    setValue('companyLogo', null);
+    setValue('profilePic', null);
   };
 
   useEffect(() => {
@@ -139,7 +156,7 @@ const EditUserFormWrap = ({
         { keepValues: Object.keys(touchedFields).length > 0, keepTouched: submitSuccess }
       );
     }
-  }, [userQueryData]);
+  }, [userQueryData, companiesQueryData]);
 
   useEffect(() => {
     if (submitSuccess && isDirty && Object.keys(touchedFields).length > 0) {
@@ -158,12 +175,21 @@ const EditUserFormWrap = ({
           options={companies}
           sendEmail={sendEmail}
         />
-        <div className={cx('my-12 transition lg:w-7/12 mx-auto', { hidden: !false })}>
+        <div className={cx('my-12 transition lg:w-7/12 mx-auto', { hidden: !submitSuccess })}>
           <Alert
             level="success"
             message="User edited successfully"
             className="text-white shadow-lg"
             onRequestClose={() => setSubmitSuccess(false)}
+            dismissable
+          />
+        </div>
+        <div className={cx('my-12 transition lg:w-7/12 mx-auto', { hidden: !submitFailure })}>
+          <Alert
+            level="error"
+            message="Something went wrong"
+            className="text-white shadow-lg"
+            onRequestClose={() => setSubmitFailure(false)}
             dismissable
           />
         </div>

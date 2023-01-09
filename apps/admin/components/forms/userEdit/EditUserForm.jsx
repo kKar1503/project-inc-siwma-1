@@ -137,13 +137,29 @@ const EditUserForm = ({
         </div>
       </div>
     </div>
-    <div className="flex px-8 pb-8 justify-end">
-      <button type="submit" className="btn btn-success mr-8">
-        Save
-      </button>
-      <a href="./users" className="btn btn-primary">
-        Return To Users
-      </a>
+
+    <div className="flex justify-between">
+      <div className="flex">
+        <div className="flex px-8 pb-8">
+          <a href="./users" className="btn btn-primary">
+            Return To Users
+          </a>
+        </div>
+        <div className="gap-8 px-8">
+          <button
+            type="button"
+            className="btn btn-outline btn-error hover:text-base-100"
+            onClick={onDeleteImage}
+          >
+            Delete Image
+          </button>
+        </div>
+      </div>
+      <div className="flex px-8 pb-8">
+        <button type="submit" className="btn btn-success btn-outline hover:text-base-100">
+          Save
+        </button>
+      </div>
     </div>
   </form>
 );
