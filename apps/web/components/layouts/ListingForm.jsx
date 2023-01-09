@@ -8,7 +8,7 @@ import CardBackground from '../CardBackground';
 
 const listingValidationSchema = object({
   name: string().required('Title is required'),
-  price: number('Please enter a valid number').required('Price is required').positive('Price must be positive'),
+  price: number('Please enter a valid number').required('Price is required').min(0,'Price must 0 or more'),
   description: string(),
   negotiable: boolean().required('Negotiable is required'),
   // can only be 'Buying' or 'Selling'
