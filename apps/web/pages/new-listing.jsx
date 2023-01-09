@@ -13,7 +13,7 @@ import EnsureUserLoggedIn from '../hooks/ensureUserLoggedIn';
 
 const NewListing = ({session}) => {
   const client = useSupabaseClient();
-  EnsureUserLoggedIn();
+  // EnsureUserLoggedIn();
 
 
   const [categoryID, setCategoryID] = React.useState(null);
