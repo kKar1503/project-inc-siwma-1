@@ -32,7 +32,7 @@ const EditUserForm = ({
                 format: ['image/png', 'image/jpg', 'image/jpeg', 'image/svg'],
               }}
               imageProps={{
-                className: 'w-64 h-64',
+                className: 'h-[10vw] w-[10vw]',
               }}
             />
           </FormInputGroup>
@@ -46,10 +46,9 @@ const EditUserForm = ({
               <FormInputGroup
                 className="flex-1"
                 label="Companies"
-                name="company"
+                name="companyid"
                 isLoading={isLoading}
                 success={submitSuccess}
-                required
               >
                 <FormSelectInput options={options} />
               </FormInputGroup>
@@ -59,7 +58,6 @@ const EditUserForm = ({
                 name="fullname"
                 isLoading={isLoading}
                 success={submitSuccess}
-                required
               >
                 <FormTextInput />
               </FormInputGroup>
@@ -71,7 +69,6 @@ const EditUserForm = ({
                 name="email"
                 isLoading={isLoading}
                 success={submitSuccess}
-                required
               >
                 <FormTextInput />
               </FormInputGroup>
@@ -81,9 +78,18 @@ const EditUserForm = ({
                 name="phone"
                 isLoading={isLoading}
                 success={submitSuccess}
-                required
               >
                 <FormTextInput />
+              </FormInputGroup>
+            </div>
+            <div className="flex flex-col gap-4">
+              <FormInputGroup
+                label="Bio"
+                name="bio"
+                isLoading={isLoading}
+                success={submitSuccess}
+              >
+                <FormTextArea />
               </FormInputGroup>
             </div>
             <div className="flex flex-col">
@@ -99,7 +105,7 @@ const EditUserForm = ({
               <div className="flex flex-col md:flex-row gap-4">
                 <FormInputGroup
                   className="flex-1"
-                  name="password"
+                  name="newPassword"
                   noLabel
                   isLoading={isLoading}
                   success={submitSuccess}

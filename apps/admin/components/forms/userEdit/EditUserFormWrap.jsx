@@ -4,20 +4,22 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import cx from 'classnames';
 import { Alert } from '@inc/ui';
-import { createServiceSupabaseClient } from '@inc/utils';
 import EditUserForm from './EditUserForm';
 
 function parseUserData(data) {
   return {
     id: data.id,
     fullname: data.fullname,
+    bio: data.bio,
     email: data.email,
     phone: data.phone,
-    company: data.companies && data.companies.length > 0 ? data.companies[0].name : '',
-    profilePic:
-      'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg',
+    company: data.companies ? data.companies.name : '',
+    companyid: data.companyid,
     comment:
       data.users_comments && data.users_comments.length > 0 ? data.users_comments[0].comments : '',
+    profilePic: {
+      src: 'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/user-image-bucket/default-user.png',
+    },
   };
 }
 
@@ -32,13 +34,9 @@ const EditUserFormWrap = ({
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const supabase = useSupabaseClient();
-  const serviceSupabase = createServiceSupabaseClient();
 
   const formHook = useForm();
 
-  console.log(userQueryData);
-
-  // Parse query data
   const user =
     isLoading || !userQueryData || !userQueryData.data
       ? false
@@ -47,7 +45,6 @@ const EditUserFormWrap = ({
   const companies =
     isLoading || !companiesQueryData || !companiesQueryData.data ? [] : companiesQueryData.data;
 
-  // Deconstruct the individual hooks from the object
   const {
     handleSubmit,
     reset,
@@ -56,56 +53,70 @@ const EditUserFormWrap = ({
     formState: { isDirty, dirtyFields, touchedFields },
   } = formHook;
 
-  // Watch all input fields
   const watchAllFields = watch();
 
-  // -- Handler Functions -- //
   const onSubmit = async (data) => {
-    const { fullname, email, phone, company, password, confirmPassword, comment } = data;
+    const { fullname, email, phone, companyid, bio, newPassword, confirmPassword, comment } = data;
     console.log({ data });
 
-    await supabase
-      .from('users')
-      .update({
-        fullname,
-        email,
-        phone,
-        company,
-      })
-      .eq('id', user.id);
+    // await supabase
+    //   .from('users')
+    //   .update({
+    //     fullname,
+    //     email,
+    //     phone,
+    //     companyid,
+    //     bio,
+    //   })
+    //   .eq('id', user.id);
 
-    if (password !== null && password !== '') {
-      if (password === confirmPassword) {
-        const isAdmin = await supabase.rpc('is_sysadmin').execute();
+    if (newPassword !== null && newPassword !== '') {
+      if (newPassword === confirmPassword) {
+        const { data: logindata } = await supabase.auth.getUser();
+        const isAdmin = await supabase.rpc(`is_sysadmin`, { userid: logindata.user.id });
+        console.log(isAdmin);
         if (isAdmin) {
-          await serviceSupabase.auth.admin.updateUserById(user.id, { password });
+          // hello
+          const response = await fetch(`/api/auth/changePassword?userid=${user.id}`, {
+            method: 'POST',
+            body: JSON.stringify({
+              password: newPassword,
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          const body = await response.json();
+
+          if (!response.ok) {
+            throw new Error(body.error || 'Something went wrong.');
+          }
         }
       }
     }
 
-    if (user.comment) {
-      await supabase
-        .from('users_comments')
-        .update({
-          comments: comment,
-        })
-        .eq('userid', user.id);
-    } else {
-      // There isn't an existing comment for the company, create a new record
-      await supabase.from('users_comments').insert([
-        {
-          userid: user.id,
-          comments: comment,
-        },
-      ]);
-    }
+    // if (user.comment) {
+    //   await supabase
+    //     .from('users_comments')
+    //     .update({
+    //       comments: comment,
+    //     })
+    //     .eq('userid', user.id);
+    // } else {
+    //   await supabase.from('users_comments').insert([
+    //     {
+    //       userid: user.id,
+    //       comments: comment,
+    //     },
+    //   ]);
+    // }
     setSubmitSuccess(true);
     onSuccessChange();
   };
 
   const sendEmail = async () =>
     supabase.auth.resetPasswordForEmail(user.email, {
-      redirectTo: 'http://localhost:3001.com/forget-password',
+      redirectTo: 'http://localhost:3001/forget-password',
     });
 
   const handleDeleteImage = () => {
