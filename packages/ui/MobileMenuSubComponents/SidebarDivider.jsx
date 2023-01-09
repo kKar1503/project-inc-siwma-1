@@ -5,7 +5,7 @@
  * This can be used to visually separate items
  * @type {function()}
  */
-const SidebarDivider = () => <div className="my-4 bg-gray-600 h-px" />;
+const SidebarDivider = () => <div className="my-4 bg-gray-300 h-px" />;
 
 SidebarDivider.propTypes = {};
 

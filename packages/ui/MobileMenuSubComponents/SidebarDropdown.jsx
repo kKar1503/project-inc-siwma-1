@@ -26,10 +26,10 @@ const SidebarDropdown = ({ name, customIcon,  children }) => {
       <div
         onClick={toggle}
         role="presentation"
-        className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-primary-focus text-white"
+        className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-primary-focus hover:text-base-200 text-black"
       >
         {customIcon}
-        <span className="text-[15px] ml-4 text-base-200 font-bold">{name}</span>
+        <span className="text-[15px] ml-4 text-base-800 font-bold">{name}</span>
         <span
           role="presentation"
           className={cx('text-sm -rotate-0 ml-48', { 'rotate-90': open })}
@@ -38,7 +38,7 @@ const SidebarDropdown = ({ name, customIcon,  children }) => {
         </span>
       </div>
       <ul
-        className={cx('menu block text-left text-sm mt-2 w-4/5 mx-auto text-base-200 font-bold', {
+        className={cx('menu block text-left text-sm mt-2 w-4/5 mx-auto font-bold', {
           hidden: !open,
         })}
       >

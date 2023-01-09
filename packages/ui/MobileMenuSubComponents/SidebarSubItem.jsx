@@ -10,7 +10,7 @@ import Link from 'next/link';
 const SidebarSubItem = ({ name, customIcon, redirectLink }) =>
   // ------------------ Return -----------------
   (
-    <li className="cursor-pointer p-2 hover:bg-primary-focus rounded-md mt-1">
+    <li className="cursor-pointer p-2 hover:bg-primary-focus rounded-md mt-1 hover:text-base-200 text-black">
       <Link href={redirectLink}>{name} {customIcon}</Link>
     </li>
     // <div role="presentation" onClick={onClickHandle}>

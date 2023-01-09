@@ -6,7 +6,7 @@ import { MdSearch } from 'react-icons/md';
  * @type {function()}
  */
 const SidebarSearch = () => (
-  <div className="p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer bg-gray-700 text-white">
+  <div className="p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer bg-gray-700 text-black">
     <i className="bi bi-search text-sm" />
     <input
       type="text"

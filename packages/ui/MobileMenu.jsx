@@ -48,11 +48,11 @@ const MobileMenu = ({open, className, setOpen, isLoggedIn, categoryData}) => {
   // ------------------ Return -----------------
   return (
     <div
-      className={cx(`h1 z-40 absolute my-2 shadow bg-base-100 rounded-box`, {hidden: !open}, className)}>
+      className={cx(`h1 z-40 absolute my-4 shadow-xl bg-base-100 rounded-box border-2 `, {hidden: !open}, className)}>
       <main>
         {/* todo background color here */}
         <div
-          className="w-96  p-2 text-center bg-base-content">
+          className="w-96 p-2 text-center bg-base-100">
           <LayoutEditor closeHandle={closeHandle} isLoggedIn={isLoggedIn}
             categoryData={categoryData}/>
         </div>
