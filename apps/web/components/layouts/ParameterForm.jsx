@@ -6,26 +6,39 @@ import {useSupabaseClient} from '@supabase/auth-helpers-react';
 import CardBackground from '../CardBackground';
 
 // check parameter_types/parameter_choices
-const ParameterForm  = ({ items }) => {
+const ParameterForm  = ({ parameters }) => {
   const client = useSupabaseClient();
 
   const [parameterTypes, setParameterTypes] = React.useState([]);
   const [parameterChoices, setParameterChoices] = React.useState([]);
-  const [formTypes, setFormTypes] = React.useState([]);
+  const [formData, setFormData] = React.useState([]);
 
-  const identifyParameterType = () => {
-    for (let i = 0; i < items.length; i++) {
-      for (let j = 0; j < parameterTypes.length; j++) {
-        if (items[i].type === parameterTypes[j].id) {
-          formTypes.push({ name: items[i].display_name, type: parameterTypes[j].name});
+  const identifyParameterType = async (data) => {
+    const formTypes = [];
+
+    for (let i = 0; i < parameters.length; i++) {
+      for (let j = 0; j < data.length; j++) {
+        if (parameters[i].type === data[j].id) {
+          formTypes.push({ name: parameters[i].display_name, type: data[j].name});
         }
       }
     }
-  }
+
+    setFormData(formTypes);
+  };
 
   const identifyParamterChoice = () => {
 
   }
+  
+  // const urMother = (data) => {
+  //   for(let i = 0; i < data.length; i++) {
+  //     if ()
+  //   }
+  //   return (
+
+  //   );
+  // }
 
   useQuery('get_parameter_types', async () => client.rpc('get_parameter_types'), {
     refetchOnMount: false,
@@ -37,20 +50,20 @@ const ParameterForm  = ({ items }) => {
     }
   });
 
-  useQuery('get_parameter_choices', async () => client.rpc('get_parameter_choices'), {
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    onSuccess: (parameterChoicesAPIData) => {
-      Log('green', parameterChoicesAPIData.data);
-      setParameterChoices(parameterChoicesAPIData.data);
-    }
-  });
+  // useQuery('get_parameter_choices', async () => client.rpc('get_parameter_choices'), {
+  //   refetchOnMount: false,
+  //   refetchOnWindowFocus: false,
+  //   refetchOnReconnect: false,
+  //   onSuccess: (parameterChoicesAPIData) => {
+  //     Log('green', parameterChoicesAPIData.data);
+  //     setParameterChoices(parameterChoicesAPIData.data);
+  //   }
+  // });
 
   return (
     <CardBackground>
       <h1 className="font-bold text-3xl">Parameters</h1>
-      {items.map((item) => (
+      {parameters.map((item) => (
         <h2 key={item.name} className="font-bold text-xl">{item.name}</h2>
       ))}
     </CardBackground>
@@ -58,7 +71,7 @@ const ParameterForm  = ({ items }) => {
 };    
 
 ParameterForm.propTypes = {
-  items: PropTypes.arrayOf(
+  parameters: PropTypes.arrayOf(
     PropTypes.shape({
       category: PropTypes.number,
       parameter: PropTypes.number,

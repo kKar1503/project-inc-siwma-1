@@ -32,9 +32,9 @@ const NewListing = ({session}) => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    onSuccess: (parameterAPIData) => {
-      Log('green', parameterAPIData.data);
-      setParameters(parameterAPIData.data);
+    onSuccess: (categoryAPIData) => {
+      Log('green', categoryAPIData.data);
+      setParameters(categoryAPIData.data);
     }
   });
 
@@ -108,8 +108,9 @@ const NewListing = ({session}) => {
             !parametersError &&
             parametersStatus === 'success' &&
             parameters.length !== 0 && (
-            <ParameterForm items={parametersData.data}/>
+            <ParameterForm parameters={parametersData.data}/>
           )}
+
           <ImageForm useImageHook={imageHook}/>
         </div>
         <div className="flex flex-col w-3/5">
