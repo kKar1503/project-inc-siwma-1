@@ -1,5 +1,6 @@
+import cx from 'classnames';
 import PropTypes from 'prop-types';
-import { Children, useCallback, useEffect, useRef, useState } from 'react';
+import { Children, useEffect, useRef, useState } from 'react';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
 // Carousel adapted from Daisy UI's official documentation with functionality that is dynamic and can be used with any number of items.
@@ -41,24 +42,20 @@ const AnimatedCarousel = ({
   const [firstItemVisible, setFirstItemVisible] = useState(false);
   const [lastItemVisible, setLastItemVisible] = useState(false);
 
-  const [numberOfItems, setNumberOfItems] = useState(Children.count(children));
+  const numberOfItems = Children.count(children);
+
   const [activeIndex, setActiveIndex] = useState(0);
 
   const intervalRef = useRef(null);
 
-  useCallback(() => {
-    setNumberOfItems(Children.count(children));
-  }, [children]);
+  // useCallback(() => {
+  //   setNumberOfItems(Children.count(children));
+  // }, [children]);
 
   const scrollRight = () => {
-    setActiveIndex((prev) => prev + 1);
-    // const widthToMoveBy = firstItemRef.current.getBoundingClientRect().width;
-    // if (mainCarouselRef.current) {
-    //   mainCarouselRef.current.scrollBy({
-    //     left: widthToMoveBy * activeIndex,
-    //     behavior: 'smooth',
-    //   });
-    // }
+    // Read more here as to why we use modulo operators
+    // https://dev.to/ranewallin/this-simple-math-hack-lets-you-create-an-image-carousel-without-any-if-statements-5chj
+    setActiveIndex((prev) => (prev + 1) % numberOfItems);
   };
 
   const moveToSlide = (index) => {
@@ -72,45 +69,29 @@ const AnimatedCarousel = ({
   };
 
   const scrollLeft = () => {
-    setActiveIndex((prev) => prev - 1);
-    // const widthToMoveBy = firstItemRef.current.getBoundingClientRect().width;
-    // if (mainCarouselRef.current) {
-    //   mainCarouselRef.current.scrollBy({
-    //     left: -widthToMoveBy * activeIndex,
-    //     behavior: 'smooth',
-    //   });
-    // }
+    setActiveIndex((prev) => (prev - 1 + numberOfItems) % numberOfItems);
   };
 
   // usEffect to increase active index every animationDuration ms
   useEffect(() => {
     intervalRef.current = setInterval(() => {
-      setActiveIndex((prev) => {
-        if (prev === numberOfItems - 1) {
-          return 0;
-        }
-
-        return prev + 1;
-      });
+      scrollRight();
     }, animationDuration);
 
     return () => clearInterval(intervalRef.current);
   }, [animationDuration, numberOfItems, children]);
 
+  // Every time the user is on a new slide, clearInterval and re-run the useEffect above
   useEffect(() => {
     moveToSlide(activeIndex);
 
     clearInterval(intervalRef.current);
 
     intervalRef.current = setInterval(() => {
-      setActiveIndex((prev) => {
-        if (prev === numberOfItems - 1) {
-          return 0;
-        }
-
-        return prev + 1;
-      });
+      scrollRight();
     }, animationDuration);
+
+    return () => clearInterval(intervalRef.current);
   }, [activeIndex, animationDuration, numberOfItems, children]);
 
   useEffect(() => {
@@ -159,7 +140,7 @@ const AnimatedCarousel = ({
           }
         });
       },
-      { threshold: 0.8, rootMargin: '100% 0% 100% 0%' }
+      { threshold: 0.1, rootMargin: '100% 0% 100% 0%' }
     );
 
     if (lastItemRef.current) {
@@ -175,32 +156,24 @@ const AnimatedCarousel = ({
   }, [lastItemRef, children, onReachedEnd]);
 
   return (
-    <div className="flex items-center relative">
+    <div className="flex items-center relative rounded-xl">
       {/* Carousel buttons */}
       {/* Carousel buttons are position absolutely */}
       <div className="carousel-buttons flex w-full justify-between absolute h-full">
-        {!firstItemVisible ? (
-          <button
-            onClick={scrollLeft}
-            className="z-30 bg-gradient-to-r from-black/50  to-transparent px-5 text-white"
-          >
-            <IoChevronBack size={25} />
-          </button>
-        ) : (
-          <div />
-        )}
+        <button
+          onClick={scrollLeft}
+          className="z-30 bg-gradient-to-r from-black/50  to-transparent px-5 text-white rounded-xl"
+        >
+          <IoChevronBack size={25} />
+        </button>
 
         {/* Next button */}
-        {!lastItemVisible ? (
-          <button
-            onClick={scrollRight}
-            className="z-30 bg-gradient-to-r to-black/50  from-transparent px-5 text-white"
-          >
-            <IoChevronForward size={25} />
-          </button>
-        ) : (
-          <div />
-        )}
+        <button
+          onClick={scrollRight}
+          className="z-30 bg-gradient-to-r to-black/50  from-transparent px-5 text-white rounded-xl"
+        >
+          <IoChevronForward size={25} />
+        </button>
       </div>
 
       {/* <div className="left-0 w-[20px] h-full bg-gradient-to-r from-white to-transparent absolute z-20" />
@@ -208,7 +181,9 @@ const AnimatedCarousel = ({
 
       {/* Carousel items itself */}
       <div
-        className={`w-full carousel carousel-center space-x-3 rounded-box ${carouselWrapperClassName}`}
+        className={cx('w-full carousel carousel-center space-x-3 rounded-xl', {
+          [carouselWrapperClassName]: carouselWrapperClassName,
+        })}
         ref={mainCarouselRef}
       >
         {Children.map(children, (child, index) => {

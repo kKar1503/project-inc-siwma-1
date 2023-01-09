@@ -8,12 +8,11 @@
     "lint": "eslint *.js"
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
-    "eslint-config-custom": "workspace:*",
-    "jest": "^29.3.1"
+    "eslint": "7.32.0",
+    "eslint-config-custom": "workspace:*"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.1.0",
-    "chalk": "^5.1.2"
+    "@supabase/supabase-js": "2.1.0",
+    "chalk": "5.1.2"
   }
 }
