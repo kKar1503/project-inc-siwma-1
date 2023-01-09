@@ -67,7 +67,8 @@ const Header = ({categoryData, isLoggedIn}) => {
             >
               <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/>
             </svg>
-            <ul className="p-2 z-10">
+            <ul
+              className="p-2 z-10 menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 text-black">
               {categoryData?.map(({name, id}) => (
                 <CategoryItem
                   name={name}
@@ -88,21 +89,22 @@ const Header = ({categoryData, isLoggedIn}) => {
           </label>
           <ul
             tabIndex={0}
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 text-black"
           >
-            <li>
-              <Link className="justify-between" href="/profile"> Profile </Link>
-            </li>
-            <li>
-              <Link href="/settings">Settings</Link>
-            </li>
+            {/* <li> */}
+            {/*  <Link className="justify-between" href="/profile"> Profile </Link> */}
+            {/* </li> */}
+            {/* <li> */}
+            {/*  <Link href="/settings">Settings</Link> */}
+            {/* </li> */}
             {isLoggedIn
               ? (<li>
                 <Link href="/logout">Logout</Link>
               </li>)
-              : (<li>
-                <Link href="/login">Login</Link>
-              </li>)}
+              : (
+                <li>
+                  <Link href="/login">Login</Link>
+                </li>)}
           </ul>
         </div>
       </div>
