@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useQueries, useQueryClient } from 'react-query';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -24,24 +24,36 @@ const PendingInvitesTable = ({ className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedInvites, setSelectedInvites] = useState([]);
   const [option, setOption] = useState(paginationValues[0]);
+  const [searchInput, setSearchInput] = useState('');
 
   const [inviteQuery, inviteCountQuery] = useQueries([
     {
       queryKey: [
         'getInvites',
-        { from: selectedIndex * option, to: (selectedIndex + 1) * option - 1 },
+        {
+          from: selectedIndex * option,
+          to: (selectedIndex + 1) * option - 1,
+          matching: searchInput,
+        },
       ],
       queryFn: async () =>
         supabase
           .from('invite')
           .select(`id, name, companies:company(name), email`)
+          .or(`name.ilike.%${searchInput}%, email.ilike.%${searchInput}%)`)
+          // .ilike('name', `%${searchInput}%`)
           .range(selectedIndex * option, (selectedIndex + 1) * option - 1),
       keepPreviousData: true,
       refetchInterval: 300000,
     },
     {
-      queryKey: ['getInviteCount'],
-      queryFn: async () => supabase.from('invite').select('*', { count: 'exact', head: true }),
+      queryKey: ['getInviteCount', { matching: searchInput }],
+      queryFn: async () =>
+        supabase
+          .from('invite')
+          .select('*', { count: 'exact', head: true })
+          .or(`name.ilike.%${searchInput}%, email.ilike.%${searchInput}%)`),
+      // .ilike('name', `%${searchInput}%`)
       keepPreviousData: true,
       refetchInterval: 300000,
     },
@@ -49,9 +61,9 @@ const PendingInvitesTable = ({ className }) => {
 
   const inviteCount = inviteCountQuery.isLoading ? 0 : inviteCountQuery.data.count;
 
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, [option]);
+  const queries = [inviteQuery, inviteCountQuery];
+
+  const isLoading = queries.some((query) => query.isLoading);
 
   const revokeInvites = async () => {
     await supabase
@@ -79,7 +91,7 @@ const PendingInvitesTable = ({ className }) => {
 
   const renderTableButtons = () => {
     const tableButtons = [];
-    if (inviteQuery.isLoading) {
+    if (isLoading) {
       return (
         <TableButton
           index={0}
@@ -114,13 +126,14 @@ const PendingInvitesTable = ({ className }) => {
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">Pending Invites</h1>
-            <h1 className="pr-2">
-              Showing {selectedIndex * option + 1} to{' '}
-              {(selectedIndex + 1) * option > inviteCount
-                ? inviteCount
-                : (selectedIndex + 1) * option}{' '}
-              of {inviteCount} entries
-            </h1>
+            {isLoading ? (
+              <h1 className="pr-2">Showing 0 to 0 of 0 entries</h1>
+            ) : (
+              <h1 className="pr-2">
+                Showing {Math.min(selectedIndex * option + 1, inviteCount)} to{' '}
+                {Math.min((selectedIndex + 1) * option, inviteCount)} of {inviteCount} entries
+              </h1>
+            )}
           </div>
           <div className="flex flex-row gap-4">
             <h1 className="mt-3">Show</h1>
@@ -133,7 +146,11 @@ const PendingInvitesTable = ({ className }) => {
                 <option value={value}>{value} per page</option>
               ))}
             </select>
-            <SearchBar placeholder="Search by e-mail" />
+            <SearchBar
+              placeholder="Search by e-mail or name"
+              value={searchInput}
+              setValue={setSearchInput}
+            />
           </div>
         </div>
       }
@@ -143,13 +160,13 @@ const PendingInvitesTable = ({ className }) => {
       className={className}
       columnKeys={['name', 'company', 'email']}
       onChange={onChangeHandler}
-      data={inviteQuery.isLoading ? undefined : parseData(inviteQuery?.data.data)}
+      data={isLoading ? undefined : parseData(inviteQuery?.data.data)}
       footer={
         <div className="flex justify-between bg-none">
           <button
             className="btn btn-warning text-white"
             onClick={revokeInvites}
-            disabled={inviteQuery.isLoading || selectedInvites.length === 0}
+            disabled={isLoading || selectedInvites.length === 0}
           >
             REVOKE SELECTED
           </button>
