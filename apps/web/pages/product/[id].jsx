@@ -1,5 +1,9 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { DateTime } from 'luxon';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React from 'react';
 import CardBackground from '../../components/CardBackground';
@@ -75,41 +79,82 @@ export async function getServerSideProps(context) {
   };
 }
 
-const ListingPage = ({ listing, images: carouselImages }) => (
-  // const [user, setUser] = React.useState(null);
+const ListingPage = ({ listing, images: carouselImages }) => {
+  const user = useUser();
+  const router = useRouter();
+  const supabase = useSupabaseClient();
+  console.log(user);
 
-  <>
-    {/* {listingError && <ErrorPage errorCode={500} errorMessage={`${listingErrorData.message}!`} />} */}
-    {/* {!listing && <ErrorPage errorCode={404} errorMessage="Listing not found!" />} */}
-    <Breadcrumbs
-      paths={[
-        {
-          name: listing.category_name,
-          path: `/category/${listing.category_name}`,
-        },
-        {
-          name: listing.name,
-          path: `/product/${listing.id}`,
-        },
-      ]}
-    />
+  // This function handles creating a chat room and then redirecting to the chat page
+  const createRoom = async () => {
+    if (!user) {
+      console.error('Error, user not logged in');
+      return;
+    }
 
+    const obj = {
+      _listing_id: listing.id,
+      _buyer_id: user.id,
+      _seller_id: listing.owner,
+    };
+
+    const { data, error } = await supabase.rpc('insert_chatroom', obj);
+
+    if (error) {
+      console.error('Error creating chat');
+      return;
+    }
+
+    if (data.length === 0) {
+      console.error('Error, data received is none');
+      return;
+    }
+
+    const d = data[0];
+
+    if (Object.prototype.hasOwnProperty.call(d, 'id')) {
+      // d.id;
+      router.push(`/real-time-chat/${d.id}`);
+    }
+  };
+
+  return (
     <>
-      <Carousel wrapperClassName="w-full h-[500px] my-10 shadow-lg border border-black/20">
-        {[...carouselImages].map((image) => (
-          <div key={image} className="w-full h-full flex justify-center bg-black/50 relative">
-            <picture>
-              <img
-                src={image}
-                alt={listing.name}
-                className="w-full h-full object-fit blur-2xl absolute top-0 left-0"
-              />
-            </picture>
+      <Head>
+        <title>{listing.name}</title>
+      </Head>
 
-            <picture className="z-10">
-              <img src={image} alt={listing.name} className="w-auto h-full" />
-            </picture>
-            {/* <div className="relative w-fit h-full">
+      {/* {listingError && <ErrorPage errorCode={500} errorMessage={`${listingErrorData.message}!`} />} */}
+      {/* {!listing && <ErrorPage errorCode={404} errorMessage="Listing not found!" />} */}
+      <Breadcrumbs
+        paths={[
+          {
+            name: listing.category_name,
+            path: `/category/${listing.category_name}`,
+          },
+          {
+            name: listing.name,
+            path: `/product/${listing.id}`,
+          },
+        ]}
+      />
+
+      <>
+        <Carousel wrapperClassName="w-full h-[500px] my-10 shadow-lg border border-black/20">
+          {[...carouselImages].map((image) => (
+            <div key={image} className="w-full h-full flex justify-center bg-black/50 relative">
+              <picture>
+                <img
+                  src={image}
+                  alt={listing.name}
+                  className="w-full h-full object-fit blur-2xl absolute top-0 left-0"
+                />
+              </picture>
+
+              <picture className="z-10">
+                <img src={image} alt={listing.name} className="w-auto h-full" />
+              </picture>
+              {/* <div className="relative w-fit h-full">
                   <Image
                     src={image}
                     alt={listing.name}
@@ -117,61 +162,72 @@ const ListingPage = ({ listing, images: carouselImages }) => (
                     fill
                   />
                 </div> */}
+            </div>
+          ))}
+        </Carousel>
+
+        <div className="lg:grid lg:grid-cols-10 my-5 gap-5 space-y-4">
+          {/* Listing details */}
+          <div className="space-y-4 col-span-7">
+            {/* Listing title and badge */}
+            <div className="flex flex-wrap items-center gap-3">
+              {listing.listing_type_name === 'SELL' ? <SellBadge /> : <BuyBadge />}
+              <Title title={listing.name} />
+            </div>
+
+            <Price price={listing.price} unitPrice={listing.unit_price} />
+
+            <div className="divider" />
+
+            <Title title="Description" />
+            <p>{listing.description}</p>
+
+            <div className="divider" />
+
+            {/* Date posted, category */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 my-4">
+              <Detail title="Negotiable?" detail={listing.negotiable ? 'Yes' : 'No'} />
+              <Detail title="Length" detail="100m" />
+              <Detail title="Material" detail="Aluminum" />
+              {/* Date posted */}
+              <Detail
+                title="Posted on"
+                detail={DateTime.fromISO(listing.created_at).toFormat('dd MMM yyyy')}
+              />
+              <Detail title="Posted By" detail={listing.fullname} />
+              <Detail title="Category" detail={listing.category_name} />
+              <Detail title="Company" detail={listing.company_name} />
+            </div>
+
+            {/* <Description description={listing.description} /> */}
           </div>
-        ))}
-      </Carousel>
 
-      <div className="lg:grid lg:grid-cols-10 my-5 gap-5 space-y-4">
-        {/* Listing details */}
-        <div className="space-y-4 col-span-7">
-          {/* Listing title and badge */}
-          <div className="flex flex-wrap items-center gap-3">
-            {listing.listing_type_name === 'SELL' ? <SellBadge /> : <BuyBadge />}
-            <Title title={listing.name} />
+          {/* Chat now details */}
+          <div className="col-span-3">
+            <CardBackground className="w-full">
+              <User
+                profilePicture={sampleProductImage}
+                username={listing.fullname}
+                company={listing.company_name}
+              />
+
+              {user ? (
+                <button onClick={createRoom} className="btn btn-sm btn-primary mt-4">
+                  Chat now
+                </button>
+              ) : (
+                <Link href="/login" className="btn btn-sm btn-primary mt-4">
+                  Login To Chat
+                </Link>
+              )}
+            </CardBackground>
           </div>
-
-          <Price price={listing.price} unitPrice={listing.unit_price} />
-
-          <div className="divider" />
-
-          <Title title="Description" />
-          <p>{listing.description}</p>
-
-          <div className="divider" />
-
-          {/* Date posted, category */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 my-4">
-            <Detail title="Negotiable?" detail={listing.negotiable ? 'Yes' : 'No'} />
-            <Detail title="Length" detail="100m" />
-            <Detail title="Material" detail="Aluminum" />
-            {/* Date posted */}
-            <Detail
-              title="Posted on"
-              detail={DateTime.fromISO(listing.created_at).toFormat('dd MMM yyyy')}
-            />
-            <Detail title="Posted By" detail={listing.fullname} />
-            <Detail title="Category" detail={listing.category_name} />
-            <Detail title="Company" detail={listing.company_name} />
-          </div>
-
-          {/* <Description description={listing.description} /> */}
         </div>
-
-        {/* Chat now details */}
-        <div className="col-span-3">
-          <CardBackground className="w-full">
-            <User
-              profilePicture={sampleProductImage}
-              username={listing.fullname}
-              company={listing.company_name}
-            />
-            <button className="btn btn-sm btn-primary mt-4">Chat now</button>
-          </CardBackground>
-        </div>
-      </div>
+      </>
     </>
-  </>
-);
+  );
+};
+
 ListingPage.propTypes = {
   listing: PropTypes.objectOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool])
