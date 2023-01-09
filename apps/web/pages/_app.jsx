@@ -1,9 +1,9 @@
 import '@inc/styles/globals.css';
-import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import {SessionContextProvider, useSupabaseClient} from '@supabase/auth-helpers-react';
+import {SessionContextProvider, useSupabaseClient, useUser} from '@supabase/auth-helpers-react';
+import {createBrowserSupabaseClient} from '@supabase/auth-helpers-nextjs';
 import {QueryClient, QueryClientProvider, useQuery} from 'react-query';
 import {Header} from '@inc/ui';
 import AuthenticationGuard from '../components/auth/AuthenticationGuard';
@@ -57,6 +57,7 @@ MyApp.propTypes = propTypes;
 export default MyApp;
 
 const LayoutView = ({Component, pageProps}) => {
+  const user = useUser();
   const supabase = useSupabaseClient();
   const {
     data: categoryData,
@@ -70,7 +71,7 @@ const LayoutView = ({Component, pageProps}) => {
   // window.alert(JSON.stringify(categoryData))
   return (
     <>
-      {(Component && Component.ignoreHeader) || <Header categoryData={data}/>}
+      {(Component && Component.ignoreHeader) || <Header categoryData={data} isLoggedIn={user !== null}/>}
       <LayoutView>
         <AppUserProvider>
           <AuthenticationGuard

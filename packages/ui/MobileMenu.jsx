@@ -52,7 +52,7 @@ const MobileMenu = ({open, className, setOpen, isLoggedIn, categoryData}) => {
       <main>
         {/* todo background color here */}
         <div
-          className="w-96 p-2 text-center bg-base-100">
+          className="p-2 text-center bg-base-100">
           <LayoutEditor closeHandle={closeHandle} isLoggedIn={isLoggedIn}
             categoryData={categoryData}/>
         </div>
