@@ -21,11 +21,11 @@ const Category = () => {
   );
 
   return (
-    <div className="m-auto my-10 flex flex-col justify-center w-10/12 h-screen">
-      <div className="h-1/4">
+    <div className="m-auto my-10 flex flex-col justify-center w-10/12">
+      <div className="h-1/3 mb-10">
         <CategoryBanner img="https://images.unsplash.com/photo-1563642900777-eb44ab05eaf8" />
       </div>
-      <div>
+      <div className="h-2/3">
         <p className="font-bold text-2xl">{category} listings</p>
         {/* dynamically generate each category when queried */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:grid-cols-2 mb-10">
