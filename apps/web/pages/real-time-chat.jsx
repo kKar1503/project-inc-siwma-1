@@ -6,6 +6,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import Autocomplete from 'react-autocomplete';
 
 import '@inc/styles/globals.css';
+import { Header } from '@inc/ui';
 import InputText from '../components/rtc/InputText';
 import ChatBubbles from '../components/rtc/ChatBubbles';
 import ImageModal from '../components/rtc/ImageModal';
@@ -116,7 +117,7 @@ const RealTimeChat = () => {
 
     if (error) {
       console.log('error', error);
-    } else {
+    } else if (data.length != 0){
       console.log(data);
       const userid = data[0].profile_uuid;
 
@@ -187,6 +188,7 @@ const RealTimeChat = () => {
       <div className="grid grid-cols-10 gap-4 h-screen drawer-content">
         <Toaster />
         <div className="col-span-10 md:col-span-7 bg-blue-50 rounded-3xl h-screen drawer-content">
+              <Header/>
           <div className="md:flex border-b-4 items-center md:px-6 md:py-4">
             <div className="hidden lg:block">
               <h2 className="font-bold text-xl">Conversations</h2>
@@ -259,14 +261,14 @@ const RealTimeChat = () => {
                 </div>
               </div>
             </div>
-            <div className="hidden md:flex">
+            {/* <div className="hidden md:flex">
               <ChatFilter
                 options={options}
                 setSelectedFilter={setSelectedFilter}
                 retrieveFilteredData={retrieveFilteredData}
                 selectedFilter={selectedFilter}
               />
-            </div>
+            </div> */}
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3">
             <div className="min-[320px]:hidden md-[820px]:block">

@@ -4,9 +4,35 @@ import Image from 'next/image';
 import Link from 'next/link';
 import SIWMALogo from './public/siwma-logo.png';
 import SIWMALogoFull from './public/siwma-logo-full.png';
+import { useEffect, useState} from 'react';
+import { createClient } from '@supabase/supabase-js';
 
-const Header = () => (
-  <div className="navbar bg-base-100">
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+const Header = () => {
+    const [unreadMsg, setUnreadMsg] = useState([]);
+
+  // Fetches rows from 'messages' table with status of 'unread'
+  const fetchUnreadMsgs = async () => {
+    const { data: messages, error } = await supabase
+      .rpc('get_msg_with_name')
+      .select(`*`)
+
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(messages);
+      setUnreadMsg(messages)
+    }
+  }
+
+  useEffect(() => {
+    fetchUnreadMsgs()
+  },[]);
+  return(
+    <div className="navbar bg-base-100">
     <div className="navbar-start">
       <div className="dropdown">
         <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -118,7 +144,8 @@ const Header = () => (
           </li>
         </ul>
       </div>
-      <button className="btn btn-ghost btn-circle">
+      <div className='dropdown dropdown-end'>
+        <button className="btn btn-ghost btn-circle">
         <div className="indicator">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -134,9 +161,92 @@ const Header = () => (
               d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
             />
           </svg>
-          <span className="badge badge-xs badge-primary indicator-item rounded-full">8</span>
+          <span className="badge badge-xs badge-primary indicator-item rounded-full">{unreadMsg.length}</span>
         </div>
       </button>
+
+      <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-96">
+        <p className='ml-4 mb-2 text-3xl font-bold'>Notifications</p>
+        <li>
+          {unreadMsg.map((msg) => {
+            if (msg.text != null && msg.text !== '') {
+              return (
+                <div>
+                  <div className="avatar">
+                    <div className="w-12 rounded-3xl">
+                      <img src="https://placeimg.com/192/192/people" />
+                    </div>
+                  </div>
+                  <div className="ml-2">
+                    <p className="font-bold text-lg">{msg.name}</p>
+                    <p className="leading-4 text-s text-gray-400">
+                      {msg.text}
+                    </p>
+                  </div>
+                </div>
+              );
+            }
+
+            if (msg.offer != null) {
+              return (
+                <div>
+                  <div className="avatar">
+                    <div className="w-12 rounded-3xl">
+                      <img src="https://placeimg.com/192/192/people" />
+                    </div>
+                  </div>
+                  <div className="ml-2">
+                    <p className="font-bold text-lg">{msg.name}</p>
+                    {/* TO DO: Add product name */}
+                    <p className="leading-4 text-s text-gray-400">
+                      offered you SGD {msg.offer}
+                    </p>
+                  </div>
+                </div>
+              );
+            }
+
+            if (msg.image != null) {
+              return (
+                <div>
+                  <div className="avatar">
+                    <div className="w-12 rounded-3xl">
+                      <img src="https://placeimg.com/192/192/people" />
+                    </div>
+                  </div>
+                  <div className="ml-2">
+                    <p className="font-bold text-lg">{msg.name}</p>
+                    <p className="leading-4 text-s text-gray-400">
+                      Attached an image
+                    </p>
+                  </div>
+                </div>
+              );
+            }
+
+            if (msg.file != null) {
+              return (
+                <div>
+                  <div className="avatar">
+                    <div className="w-12 rounded-3xl">
+                      <img src="https://placeimg.com/192/192/people" />
+                    </div>
+                  </div>
+                  <div className="ml-2">
+                    <p className="font-bold text-lg">{msg.name}</p>
+                    <p className="leading-4 text-s text-gray-400">
+                      Attached a file
+                    </p>
+                  </div>
+                </div>
+              );
+            }
+          })}
+        </li>
+      </ul>
+
+      </div>
+
       <button className="btn btn-ghost btn-circle">
         <div className="indicator">
           <svg
@@ -158,6 +268,9 @@ const Header = () => (
       </button>
     </div>
   </div>
-);
 
+  )
+
+}
+  
 export default Header;

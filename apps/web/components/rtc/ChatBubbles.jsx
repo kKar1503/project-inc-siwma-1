@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import Link from 'next/link';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -45,7 +46,7 @@ const ChatBubbles = (messages) => {
     <div className="overflow-y-scroll" style={{ maxHeight: '73vh' }}>
       <div className="bg-blue-50 items-center">
         {allMsg.map((msg) => {
-          if (msg.contents.text != null) {
+          if (msg.contents.text != null && msg.contents.text != '') {
             return (
               <div
                 className={
@@ -140,9 +141,10 @@ const ChatBubbles = (messages) => {
                   }
                 >
                   <div className="card-body py-4 px-6">
-                    <p className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em] text-blue-700">
-                      {msg.contents.file}
-                    </p>
+                    <Link className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em] text-blue-700" 
+                      href={`https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/chat-bucket/${msg.contents.file}`}>
+                      {msg.contents.file.split('/')[1]}
+                    </Link>
                   </div>
                 </div>
               </div>

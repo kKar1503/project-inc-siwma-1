@@ -19,7 +19,8 @@ const InputTextArea = () => {
       data: { user },
     } = await supabase.auth.getUser();
 
-    // INSERT a row to content table from column 'text'
+    if(messages !== ''){
+          // INSERT a row to content table from column 'text'
     const { data, error: insertErr } = await supabase.from('contents').insert([{ text: messages }]);
     if (insertErr) {
       console.log('error', insertErr);
@@ -52,6 +53,10 @@ const InputTextArea = () => {
       console.log('no error');
       setMessages('');
     }
+
+    }
+
+
   };
 
   return (
