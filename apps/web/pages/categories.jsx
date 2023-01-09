@@ -1,14 +1,51 @@
 import { useQuery } from 'react-query';
+import { useState } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import CategoryCard from '../components/category/CategoryCard';
 
+const getCategoriesImage = async (categories, supabaseClient) => {
+  // Loop through data and add image from storage bucket
+  const d = categories.map(async (item) => {
+    let imageLink = null;
+
+    if (item.image) {
+      const imageRes = await supabaseClient.storage
+        .from('category-image-bucket')
+        .getPublicUrl(item.image);
+
+      imageLink = imageRes.data.publicUrl;
+    }
+
+    return {
+      ...item,
+      imageUrl: imageLink,
+    };
+  });
+
+  // Fulfill all promises and set the categories data to be the result
+
+  return Promise.all(d);
+};
+
 const Category = () => {
+  const [categoriesData, setCategoriesData] = useState([]);
   const supabase = useSupabaseClient();
   const {
     data: categoryData,
     // status: categoryStatus,
     // isLoading: categoryIsLoading,
-  } = useQuery(['get_category'], () => supabase.from('category').select('*'));
+  } = useQuery(['get_category'], async () => supabase.from('category').select('*'), {
+    onSuccess: async (data) => {
+      if (data.error) {
+        throw new Error('Problem fetching categories data from the database.');
+      }
+
+      const categoriesWithImages = await getCategoriesImage(data.data, supabase);
+
+      setCategoriesData(categoriesWithImages);
+      console.log(categoriesData);
+    },
+  });
   // useEffect(() => {
   //   if (categoryStatus === 'success') {
   //     console.log(categoryData);
@@ -21,10 +58,10 @@ const Category = () => {
         Choose from over 8,000 types of shapes and grades of metal!
       </p>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:grid-cols-2 mb-10">
-        {categoryData?.data.map((item) => (
+        {categoriesData.map((item) => (
           <CategoryCard
             name={item.name}
-            img={item.image}
+            img={item.imageUrl}
             href={`/category/${item.name}?id=${item.id}`}
             key={item.name}
           />
