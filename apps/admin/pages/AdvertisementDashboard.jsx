@@ -59,4 +59,9 @@ AdvertisementDashboard.getLayout = (page) => (
   <AdminPageLayout pageName="Advertisement">{page}</AdminPageLayout>
 );
 
+// -- Configure AuthGuard -- //
+AdvertisementDashboard.allowAuthenticated = true;
+AdvertisementDashboard.roles = ['admin'];
+// Page.aclAbilities = [['View', 'Users']];
+
 export default AdvertisementDashboard;
