@@ -44,33 +44,6 @@ const CompanyProfilesPreviewTable = ({ data }) => {
       showCheckbox
       columnKeys={['name', 'website']}
       data={displayData}
-      footer={
-        <div className="flex justify-end bg-none">
-          <div className="flex justify-end bg-none">
-            <TableButton
-              index={0}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-primary"
-              className="rounded-l-lg hover:bg-primary"
-            />
-            <TableButton
-              index={1}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-primary"
-              className="hover:bg-primary"
-            />
-            <TableButton
-              index={2}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-primary"
-              className="rounded-r-lg hover:bg-primary"
-            />
-          </div>
-        </div>
-      }
     />
   );
 };

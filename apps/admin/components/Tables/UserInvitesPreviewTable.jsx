@@ -44,33 +44,6 @@ const UserInvitesPreviewTable = ({ data }) => {
       showCheckbox
       columnKeys={['company', 'email', 'mobileNumber']}
       data={displayData}
-      footer={
-        <div className="flex justify-end bg-none">
-          <div className="flex justify-end bg-none">
-            <TableButton
-              index={0}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-success"
-              className="rounded-l-lg hover:bg-success"
-            />
-            <TableButton
-              index={1}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-success"
-              className="hover:bg-success"
-            />
-            <TableButton
-              index={2}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-success"
-              className="rounded-r-lg hover:bg-success"
-            />
-          </div>
-        </div>
-      }
     />
   );
 };
