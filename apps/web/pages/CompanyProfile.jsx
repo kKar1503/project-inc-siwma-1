@@ -1,13 +1,20 @@
-import { useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Image from 'next/image';
 import { getCompany, getCompanyListings } from '@inc/database';
-import AdminPageLayout from '../../components/layouts/AdminPageLayout';
-import NavBar from '../../components/NavBar';
+// import AdminPageLayout from '../../components/layouts/AdminPageLayout';
+// import NavBar from '../../components/NavBar';
+import InfiniteScroll from '../components/InfiniteScroll';
+import ProfileListingItem from '../components/profile/ProfileListingItem';
 
 const CompanyProfile = () => {
+  const [infiniteScrollMockData, setInfiniteScrollMockData] = useState([]);
+  const [infiniteScrollMockDataLoading, setInfiniteScrollMockDataLoading] = useState(false);
+  const [listingDataAPI, setListingDataAPI] = useState([]);
+
+  const infiniteScrollRef = useRef(null);
   // Retrieve company id from query param
   const router = useRouter();
   const { companyid } = router.query;
@@ -39,6 +46,7 @@ const CompanyProfile = () => {
   // retrieve listing data
   const {
     data: listingData,
+    status: listingStatus,
     isLoading2,
     isError2,
   } = useQuery({
@@ -52,31 +60,26 @@ const CompanyProfile = () => {
       }),
   });
 
-  // -- Prepare fetched data for rendering & processing -- //
-  // Redirect the user if no company was retrieved
-  if (!isLoading && queryData.data && queryData.data.length === 0) {
-    // No company was retrieved
-    // router.push('/companies');
-  }
-
-  // -- Functions -- //
-  const refreshQuery = () => {
-    // Invalidate table queries to cause a refetch
-    queryClient.invalidateQueries({ queryKey: ['getCompany', { id: companyid }] });
-  };
-
-  // -- Event handlers  --//
   useEffect(() => {
-    // Redirect the user back to the company management page if an invalid companyid was specified
-    if (!isLoading) {
-      // No company data retrieved
-      // router.push('/companies');
+    if (listingStatus === 'success') {
+      setListingDataAPI(listingData.data);
+      setInfiniteScrollMockData([...listingData.data]);
     }
-  });
+  }, [listingStatus, listingData]);
+
+  const handleInfiniteScrollLoadMore = () => {
+    setInfiniteScrollMockDataLoading(true);
+    console.log('Loading more items');
+    setTimeout(() => {
+      setInfiniteScrollMockData((oldData) => [...oldData, ...listingData.data]);
+      setInfiniteScrollMockDataLoading(false);
+      console.log('Done loading more!');
+    }, 1000);
+  };
 
   return (
     <div className="flex flex-col w-full h-full gap-8 p-6 overflow-auto xl:max-h-screen">
-      <NavBar />
+      {/* <NavBar /> */}
 
       <div className="flex flex-col grow shadow-xl rounded-2xl bg-base-100">
         <div className="flex flex-col p-8 border-b">
@@ -115,15 +118,38 @@ const CompanyProfile = () => {
               </div>
             </div>
           </div>
-          {isLoading2 ? (
+          {isLoading2 || listingData == null ? (
             'Loading company listings'
           ) : (
-            console.log(listingData)
-            // console.log(listingData.data[0].name)
-            // <div className="flex flex-col gap-2">
-            //   <h1 className="font-bold text-xl">{listingData[0]}</h1>
-            //   <h1 className="font-bold text-xl">{listingData[0]}</h1>
-            // </div>
+            <div className="flex flex-col gap-2">
+              <h3 className="text-xl font-bold my-2">Your Listings</h3>
+
+              <div ref={infiniteScrollRef}>
+                <InfiniteScroll
+                  className="grid gap-3 grid-cols-2 md:grid-cols-4 lg:grid-cols-6"
+                  onLoadMore={handleInfiniteScrollLoadMore}
+                  loading={infiniteScrollMockDataLoading}
+                  reachedMaxItems={infiniteScrollMockData.length > 100}
+                >
+                  {console.log(infiniteScrollMockData)}
+                  {infiniteScrollMockData.map(
+                    ({ name, description, id, price, type, open, visibility }) => (
+                      <ProfileListingItem
+                        type={type}
+                        key={id}
+                        img={null}
+                        name={name}
+                        href={`/products/${id}`}
+                        id={id}
+                        visibility={visibility}
+                        open={open}
+                        setInfiniteScrollMockData={setInfiniteScrollMockData}
+                      />
+                    )
+                  )}
+                </InfiniteScroll>
+              </div>
+            </div>
           )}
         </div>
       </div>
@@ -131,6 +157,6 @@ const CompanyProfile = () => {
   );
 };
 
-CompanyProfile.getLayout = (page) => <AdminPageLayout pageName="Companies">{page}</AdminPageLayout>;
+// CompanyProfile.getLayout = (page) => <AdminPageLayout pageName="Companies">{page}</AdminPageLayout>;
 
 export default CompanyProfile;
