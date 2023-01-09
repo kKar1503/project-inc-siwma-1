@@ -82,14 +82,9 @@ const CompanyProfile = () => {
       {/* <NavBar /> */}
 
       <div className="flex flex-col grow shadow-xl rounded-2xl bg-base-100">
-        <div className="flex flex-col p-8 border-b">
-          <h1 className="font-bold text-xl">
-            {isLoading ? 'Loading company name' : queryData.data[0].name}
-          </h1>
-        </div>
         {/* Display */}
         <div className="flex flex-row p-8">
-          <div className="flex flex-col p-8">
+          <div className="flex flex-col p-8 flex-1">
             {/* Display company details */}
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
@@ -101,8 +96,9 @@ const CompanyProfile = () => {
                     <Image
                       src={`https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/${queryData.data[0].image}`}
                       alt="Company logo"
-                      width={300}
-                      height={300}
+                      width={150}
+                      height={150}
+                      className="object-cover"
                     />
                   )}
                   {/* //company name subheader that takes up half the div */}
@@ -121,7 +117,7 @@ const CompanyProfile = () => {
           {isLoading2 || listingData == null ? (
             'Loading company listings'
           ) : (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col grow shadow-xl rounded-2xl bg-base-100 flex-2">
               <h3 className="text-xl font-bold my-2">Your Listings</h3>
 
               <div ref={infiniteScrollRef}>
@@ -129,9 +125,8 @@ const CompanyProfile = () => {
                   className="grid gap-3 grid-cols-2 md:grid-cols-4 lg:grid-cols-6"
                   onLoadMore={handleInfiniteScrollLoadMore}
                   loading={infiniteScrollMockDataLoading}
-                  reachedMaxItems={infiniteScrollMockData.length > 100}
+                  reachedMaxItems={infiniteScrollMockData.length >= listingData.data.length}
                 >
-                  {console.log(infiniteScrollMockData)}
                   {infiniteScrollMockData.map(
                     ({ name, description, id, price, type, open, visibility }) => (
                       <ProfileListingItem
