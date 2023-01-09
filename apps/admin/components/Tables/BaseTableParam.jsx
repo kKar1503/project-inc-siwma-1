@@ -16,7 +16,6 @@ import DataContext from '../../DataContext';
   - columnKeys (An array of strings that will be the keys of the data object)
   - data (An array of objects that you want to be the rows of the table)
   - footer (A div that you want to be the footer of the table)
-
   Data is expected to contain the keys you specify in columnKeys. For example, if you specify columnKeys = ['name', 'profilePicture', 'email', 'company', 'mobileNumber'], then data should look like this:
   id is a COMPULSORY key that is used to uniquely identify each row. Failure to provide it will result in bad things happening. You have been warned.
   [

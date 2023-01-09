@@ -6,11 +6,16 @@ module.exports = {
     './components/**/*.{js,jsx}',
   ],
   theme: {
-    extend: {},
-  },
-  variants: {
     extend: {
-      display: ['group-hover'],
+      maxHeight: {
+        'text-limit': 'calc(var(--max-lines) * 1em * var(--line-height))',
+      },
+      lineHeight: {
+        'text-limit': 'var(--line-height)',
+      },
+      height: {
+        'before-text-limit': 'calc(1em * var(--line-height))',
+      },
     },
   },
   plugins: [require('daisyui')],

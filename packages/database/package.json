@@ -7,12 +7,12 @@
     "lint": "eslint *.js*"
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
+    "eslint": "7.32.0",
     "eslint-config-custom": "workspace:*"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.1.0",
-    "react": "^18.2.0",
-    "react-hot-toast": "^2.4.0"
+    "@supabase/supabase-js": "2.1.0",
+    "react": "18.2.0",
+    "react-hot-toast": "2.4.0"
   }
 }

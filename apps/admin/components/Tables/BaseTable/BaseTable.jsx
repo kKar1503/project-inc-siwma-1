@@ -24,7 +24,6 @@ import BaseTableHeader from './BaseTableHeader';
   - footer (A div that you want to be the footer of the table)
   - onChange (Invoked when a row is selected/deselected)
   - actionMenu (The menu to be displayed should the action button be clicked on; Action button will only be rendered if this prop is specified)
-
   Data is expected to contain the keys you specify in columnKeys. For example, if you specify columnKeys = ['name', 'profilePicture', 'email', 'company', 'mobileNumber'], then data should look like this:
   id is a COMPULSORY key that is used to uniquely identify each row. Failure to provide it will result in bad things happening. You have been warned.
   [
