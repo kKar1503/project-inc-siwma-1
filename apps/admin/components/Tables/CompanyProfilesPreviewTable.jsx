@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
@@ -7,6 +7,17 @@ import TableButton from './TableButton';
 // This table shows a preview of Company Profiles and is built on the BaseTable component.
 
 const CompanyProfilesPreviewTable = ({ data }) => {
+  // For Search Support
+  const [displayData, setDisplayData] = useState(data); // Data to be displayed in the table
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useMemo(() => {
+    setDisplayData(data.filter((row) => {
+      const lowerCaseTerm = searchTerm.toLowerCase();
+      return row.name.toLowerCase().includes(lowerCaseTerm);
+    }))
+  }, [data, searchTerm]);
+
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
@@ -24,7 +35,7 @@ const CompanyProfilesPreviewTable = ({ data }) => {
               <option>15 per page</option>
               <option>50 per page</option>
             </select>
-            <SearchBar placeholder="Search by name" />
+            <SearchBar value={searchTerm} setValue={setSearchTerm} placeholder="Search by name" />
           </div>
         </div>
       }
@@ -32,7 +43,7 @@ const CompanyProfilesPreviewTable = ({ data }) => {
       headingColor="bg-primary"
       showCheckbox
       columnKeys={['name', 'website']}
-      data={data}
+      data={displayData}
       footer={
         <div className="flex justify-end bg-none">
           <div className="flex justify-end bg-none">

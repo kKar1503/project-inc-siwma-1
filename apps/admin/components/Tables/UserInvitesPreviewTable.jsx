@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
@@ -7,6 +7,17 @@ import TableButton from './TableButton';
 // This table shows Registered Users and is built on the BaseTable component.
 
 const UserInvitesPreviewTable = ({ data }) => {
+  // For Search Support
+  const [displayData, setDisplayData] = useState(data); // Data to be displayed in the table
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useMemo(() => {
+    setDisplayData(data.filter((row) => {
+      const lowerCaseTerm = searchTerm.toLowerCase();
+      return row.name.toLowerCase().includes(lowerCaseTerm);
+    }))
+  }, [data, searchTerm]);
+
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
@@ -24,7 +35,7 @@ const UserInvitesPreviewTable = ({ data }) => {
               <option>15 per page</option>
               <option>50 per page</option>
             </select>
-            <SearchBar placeholder="Search by e-mail" />
+            <SearchBar value={searchTerm} setValue={setSearchTerm} placeholder="Search by e-mail" />
           </div>
         </div>
       }
@@ -32,7 +43,7 @@ const UserInvitesPreviewTable = ({ data }) => {
       headingColor="bg-accent"
       showCheckbox
       columnKeys={['company', 'email', 'mobileNumber']}
-      data={data}
+      data={displayData}
       footer={
         <div className="flex justify-end bg-none">
           <div className="flex justify-end bg-none">
