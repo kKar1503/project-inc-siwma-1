@@ -2,10 +2,11 @@ import Link from 'next/link';
 import Activeads from '../components/Ads/Activeads';
 import Clicks from '../components/Ads/Clicks';
 import ClicksGraph from '../components/Ads/ClicksGraph';
-import Tableads from '../components/Ads/Tableads';
+// import Tableads from '../components/Tables/Tableads';
 import AvgGraphs from '../components/Ads/AvgChart';
 import NavBar from '../components/NavBar';
 import AdminPageLayout from '../components/layouts/AdminPageLayout';
+import AdvertisementTable from '../components/Tables/AdvertisementTable';
 
 const AdvertisementDashboard = () => (
   <div className="flex flex-col w-full h-full gap-8 p-8 overflow-auto xl:max-h-screen">
@@ -39,15 +40,8 @@ const AdvertisementDashboard = () => (
       </div>
       <div className="card shadow-xl bg-base-100 rounded-xl lg:col-span-2 lg:row-span-3">
         <div className="card-body justify-between">
-          <div className="flex justify-between m-6">
-            <div className="card-title">Advertisement</div>
-            <Link href="/AdminUpload" className="btn btn-outline btn-primary w-32 ">
-              Add advertisement
-            </Link>
-          </div>
-
           <div className="overflow-x-auto" />
-          <Tableads />
+          <AdvertisementTable />
           <div />
         </div>
       </div>
