@@ -3,7 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import cx from 'classnames';
-import { Alert } from '@inc/ui';
+import Alert from '../../alerts/Alert';
 import CompanyEditForm from './CompanyEditForm';
 
 /**
@@ -20,9 +20,10 @@ const obtainDefaultValues = (data) => ({
   companyComments: data.comments,
 });
 
-const CompanyEditFormContext = ({ company, onSuccessChange, isLoading, className, style }) => {
+const CompanyEditFormContext = ({ company, onSuccessChange, isLoading, backButton, disableAdmin, className, style }) => {
   // -- States --//
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [isErrored, setIsErrored] = useState(false);
 
   // -- Initialise libraries -- //
   // Initialise supabase client
@@ -36,6 +37,8 @@ const CompanyEditFormContext = ({ company, onSuccessChange, isLoading, className
     handleSubmit,
     reset,
     setValue,
+    setError,
+    clearErrors,
     formState: { isDirty, dirtyFields },
   } = formHook;
 
@@ -48,8 +51,11 @@ const CompanyEditFormContext = ({ company, onSuccessChange, isLoading, className
     // Deconstruct values from data
     const { companyName, companyWebsite, companyBio, companyComments, companyLogo } = data;
 
+    // Initialise an array of errors
+    const errors = [];
+
     // -- Update company in Supabase -- //
-    await supabase
+    const { error: companyError } = await supabase
       .from('companies')
       .update({
         name: companyName,
@@ -58,24 +64,33 @@ const CompanyEditFormContext = ({ company, onSuccessChange, isLoading, className
       })
       .eq('id', company.id);
 
+    errors.push(companyError);
+
     // -- Edit/create a new comment -- //
-    // Check if there is an existing comment for the company
-    if (company.comments) {
-      // There is an existing comment for the company, update it
-      await supabase
-        .from('companies_comments')
-        .update({
-          comments: companyComments,
-        })
-        .eq('companyid', company.id);
-    } else {
-      // There isn't an existing comment for the company, create a new record
-      await supabase.from('companies_comments').insert([
-        {
-          companyid: company.id,
-          comments: companyComments,
-        },
-      ]);
+    // Check if the form should edit company comments
+    if (!disableAdmin) {
+      // Check if there is an existing comment for the company
+      if (company.comments) {
+        // There is an existing comment for the company, update it
+        const { error } = await supabase
+          .from('companies_comments')
+          .update({
+            comments: companyComments,
+          })
+          .eq('companyid', company.id);
+
+        errors.push(error);
+      } else {
+        // There isn't an existing comment for the company, create a new record
+        const { error } = await supabase.from('companies_comments').insert([
+          {
+            companyid: company.id,
+            comments: companyComments,
+          },
+        ]);
+
+        errors.push(error);
+      }
     }
 
     // -- Update/create company logo -- //
@@ -85,15 +100,34 @@ const CompanyEditFormContext = ({ company, onSuccessChange, isLoading, className
       // Check if the image was removed
       if (!companyLogo && company.image) {
         // The image was deleted, clear the image column in the companies table
-        await supabase.from('companies').update({ image: null }).eq('id', company.id);
+        const { error } = await supabase.from('companies').update({ image: null }).eq('id', company.id);
+        errors.push(error);
+
         // Check if the image was changed
       } else if ((companyLogo && !company.image) || companyLogo !== company.image.src) {
         // Upload the company logo to the bucket
-        await supabase.storage.from('company-image-bucket').upload(companyLogo.name, companyLogo);
+        const { error: imageUploadError } = await supabase.storage.from('company-image-bucket').upload(companyLogo.name, companyLogo);
 
         // Update the image column in the companies table
-        await supabase.from('companies').update({ image: companyLogo.name }).eq('id', company.id);
+        const { error: imageAssignmentError } = await supabase.from('companies').update({ image: companyLogo.name }).eq('id', company.id);
+
+        errors.push(imageUploadError, imageAssignmentError);
       }
+    }
+
+    console.log({ errors })
+
+    // Check if there were any errors
+    if (errors.some((e) => e != null)) {
+      // There was an error
+      setIsErrored(true);
+
+      // Error all the input fields
+      Object.keys(data).forEach((inputName) => {
+        setError(inputName);
+      });
+
+      return;
     }
 
     // Success, reset the default value of the inputs and show success message
@@ -132,15 +166,30 @@ const CompanyEditFormContext = ({ company, onSuccessChange, isLoading, className
         <CompanyEditForm
           onSubmit={handleSubmit(onSubmit)}
           submitSuccess={submitSuccess}
+
           isLoading={isLoading}
           onDeleteImage={handleDeleteImage}
+          backButton={backButton}
+          disableAdmin={disableAdmin}
         />
-        <div className={cx('my-12 transition lg:w-7/12 mx-auto', { hidden: !submitSuccess })}>
+        <div className={cx('absolute my-12 transition lg:w-7/12 mx-auto', { hidden: !submitSuccess })}>
           <Alert
             level="success"
             message="Changes saved successfully"
             className="text-white shadow-lg"
             onRequestClose={() => setSubmitSuccess(false)}
+            dismissable
+          />
+        </div>
+        <div className={cx('absolute bottom-28 left-0 right-0 transition lg:w-7/12 mx-auto', { hidden: !isErrored })}>
+          <Alert
+            level="error"
+            message="An unknown error occurred, please try again later"
+            className="text-white shadow-lg"
+            onRequestClose={() => {
+              setIsErrored(false);
+              clearErrors();
+            }}
             dismissable
           />
         </div>
@@ -168,6 +217,8 @@ const propTypes = {
   ]),
   onSuccessChange: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
+  backButton: PropTypes.element,
+  disableAdmin: PropTypes.bool,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };

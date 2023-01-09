@@ -1,10 +1,11 @@
-import { FormImageInput, FormInputGroup, FormTextArea, FormTextInput } from '@inc/ui';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
+import { FormImageInput, FormInputGroup, FormTextArea, FormTextInput } from '../index';
 
-const CompanyEditForm = ({ onSubmit, submitSuccess, isLoading, onDeleteImage }) => (
-  <form onSubmit={onSubmit}>
-    <div className="flex flex-wrap gap-8 p-8">
+const CompanyEditForm = ({ onSubmit, submitSuccess, isLoading, onDeleteImage, backButton, disableAdmin }) => (
+  <form className='flex flex-col flex-1' onSubmit={onSubmit}>
+    <div className="flex flex-1 flex-wrap gap-8 p-8">
       <div className="flex flex-col lg:flex-[3] flex-wrap">
         <div className="flex flex-1">
           <FormInputGroup
@@ -26,9 +27,9 @@ const CompanyEditForm = ({ onSubmit, submitSuccess, isLoading, onDeleteImage }) 
           </FormInputGroup>
         </div>
       </div>
-      <div className="flex-[9] flex-wrap">
-        <div className="flex flex-col w-full min-w-96 gap-12">
-          <div className="flex flex-col gap-4">
+      <div className="h-full flex-[9] flex-wrap">
+        <div className="flex flex-col h-full w-full min-w-96 gap-12">
+          <div className="flex flex-col gap-4 h-full">
             <div className="flex gap-4 justify-between">
               <FormInputGroup
                 className="flex-1"
@@ -64,17 +65,24 @@ const CompanyEditForm = ({ onSubmit, submitSuccess, isLoading, onDeleteImage }) 
               name="companyBio"
               isLoading={isLoading}
               success={submitSuccess}
+              className="flex-1"
+
             >
-              <FormTextArea maxLength={999} />
+              <FormTextArea maxLength={999} className="flex-1" />
             </FormInputGroup>
-            <FormInputGroup
-              label="Comments"
-              name="companyComments"
-              isLoading={isLoading}
-              success={submitSuccess}
-            >
-              <FormTextArea />
-            </FormInputGroup>
+            {
+              // Hide the input field for company comments if admin mode is disabled
+              !disableAdmin &&
+              <FormInputGroup
+                label="Comments"
+                name="companyComments"
+                isLoading={isLoading}
+                success={submitSuccess}
+                className="flex-1"
+              >
+                <FormTextArea />
+              </FormInputGroup>
+            }
           </div>
         </div>
       </div>
@@ -82,9 +90,14 @@ const CompanyEditForm = ({ onSubmit, submitSuccess, isLoading, onDeleteImage }) 
     <div className="flex justify-between">
       <div className="flex">
         <div className="flex px-8 pb-8">
-          <Link href="./companies" className="btn btn-primary">
-            Return To Companies
-          </Link>
+          {
+            backButton ||
+            (
+              <Link href="./companies" className="btn btn-primary">
+                Return To Companies
+              </Link>
+            )
+          }
         </div>
         <div className="gap-8 px-8">
           <button
@@ -110,6 +123,8 @@ const propTypes = {
   submitSuccess: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool,
   onDeleteImage: PropTypes.func.isRequired,
+  backButton: PropTypes.element,
+  disableAdmin: PropTypes.bool
 };
 
 CompanyEditForm.propTypes = propTypes;

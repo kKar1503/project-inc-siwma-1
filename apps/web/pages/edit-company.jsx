@@ -3,9 +3,8 @@ import { useRouter } from 'next/router';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { getCompany } from '@inc/database';
-import { CompanyEditFormContext } from '@inc/ui';
-import AdminPageLayout from '../components/layouts/AdminPageLayout';
-import NavBar from '../components/NavBar';
+import { CompanyEditFormContext, Header } from '@inc/ui';
+import Link from 'next/link';
 
 /**
  * Maps query data into a company object
@@ -58,7 +57,7 @@ const EditCompany = () => {
       getCompany({
         supabase,
         companyid,
-        getAdminComment: true,
+        getAdminComment: false,
       }),
   });
 
@@ -89,10 +88,10 @@ const EditCompany = () => {
   });
 
   return (
-    <div className="flex flex-col w-full h-full gap-8 p-6 overflow-auto xl:max-h-screen">
-      <NavBar />
+    <div className="flex flex-col w-full gap-8 p-6 overflow-auto h-screen">
+      <Header />
 
-      <div className="flex flex-col grow shadow-xl rounded-2xl bg-base-100">
+      <div className="flex flex-col flex-1 grow shadow-xl rounded-2xl bg-base-100">
         {/* Body header */}
         <div className="flex flex-col p-8 border-b">
           <h1 className="font-bold text-xl">Edit {isLoading ? 'company' : queryData.data.name}</h1>
@@ -107,12 +106,19 @@ const EditCompany = () => {
           }}
           company={company}
           isLoading={isLoading}
+          backButton={
+            // TODO: Replace with a link to the company profile page
+            <Link href="./" className="btn btn-primary">
+              Return To Company Overview
+            </Link>
+          }
+          disableAdmin
         />
       </div>
     </div>
   );
 };
 
-EditCompany.getLayout = (page) => <AdminPageLayout pageName="Companies">{page}</AdminPageLayout>;
+EditCompany.getLayout = (page) => page;
 
 export default EditCompany;
