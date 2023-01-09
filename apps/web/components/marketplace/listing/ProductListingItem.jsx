@@ -1,40 +1,91 @@
 // Import prop types
 import { Enum } from '@inc/database';
+import cx from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import Rating from '../rating/Rating';
 import BuyBadge from './BuyBadge';
 import SellBadge from './SellBadge';
 
-const ProductListingItem = ({ img, type, name, rating, href, className = '' }) => (
-  <div className={`card shadow-md rounded-lg ${className} transition-all ease-out`}>
-    <div className="z-30 absolute right-0 p-2">
-      {type === Enum.LISTING_TYPE.BUY && <BuyBadge />}
-      {type === Enum.LISTING_TYPE.SELL && <SellBadge />}
-    </div>
+const ProductListingItem = ({
+  img,
+  type,
+  name,
+  rating,
+  href,
+  price,
+  negotiable,
+  unit_price: isUnitPrice,
+  className = '',
+}) => {
+  const [imgSrc, setImgSrc] = useState(img);
 
-    <Link href={href}>
-      <div className="aspect-square w-full h-[150px] relative ">
-        {/* <picture>
-          <img src={img} alt="what" className="aspect-square" />
-        </picture> */}
-        {/* ! The reason why the image below is 150px in height is because smaller images will be zoomed in to fit the height (this is so images > 150px will zoom and crop) */}
+  return (
+    <div
+      className={cx('card rounded-xl shadow-md border transition-all ease-out', {
+        [className]: className,
+      })}
+    >
+      <div className="z-30 absolute right-0 p-2" />
 
-        {img && <Image fill src={img} alt={name} className="object-cover" />}
-      </div>
+      <Link data-cy={`product-${href}`} href={href}>
+        <div className="aspect-square w-full h-fit relative ">
+          {/* ! The reason why the image below is 150px in height is because smaller images will be zoomed in to fit the height (this is so images > 150px will zoom and crop) */}
 
-      {/* Listing content */}
-      <div className="px-2 pt-2 pb-10">
-        <p className="font-bold">{name}</p>
-
-        <div className="absolute bottom-1 my-2">
-          <Rating rating={rating} />
+          {img ? (
+            <Image
+              src={imgSrc}
+              fill
+              alt={name}
+              className="object-cover absolute rounded-xl p-1"
+              onError={() => setImgSrc('https://via.placeholder.com/150')}
+            />
+          ) : (
+            <Image
+              src="https://via.placeholder.com/150"
+              fill
+              alt={name}
+              className="object-cover absolute rounded-xl p-1"
+            />
+          )}
         </div>
-      </div>
-    </Link>
-  </div>
-);
+
+        {/* Listing content */}
+        <div className="px-2 pt-2 pb-8">
+          {type === Enum.LISTING_TYPE.BUY && <BuyBadge />}
+          {type === Enum.LISTING_TYPE.SELL && <SellBadge />}
+
+          <div className="content my-1">
+            {/* The styles below are adapted from the @tailwindcss/line-clamp documentation (https://github.com/tailwindlabs/tailwindcss-line-clamp) */}
+            <p
+              style={{
+                overflow: 'hidden',
+                display: '-webkit-box',
+                '-webkit-box-orient': 'vertical',
+                '-webkit-line-clamp': 4,
+              }}
+            >
+              {name}
+            </p>
+
+            <p className="my-2 font-bold">
+              S${price}
+              {isUnitPrice && <span className="text-sm font-normal">/unit</span>}
+            </p>
+
+            {negotiable && <p className="text-sm">Negotiable</p>}
+          </div>
+
+          <div className="absolute bottom-1 my-2">
+            <Rating rating={rating} />
+          </div>
+        </div>
+      </Link>
+    </div>
+  );
+};
 
 ProductListingItem.propTypes = {
   img: PropTypes.string,
@@ -43,6 +94,9 @@ ProductListingItem.propTypes = {
   rating: PropTypes.number,
   href: PropTypes.string,
   className: PropTypes.string,
+  price: PropTypes.number,
+  negotiable: PropTypes.bool,
+  unit_price: PropTypes.bool,
 };
 
 export default ProductListingItem;

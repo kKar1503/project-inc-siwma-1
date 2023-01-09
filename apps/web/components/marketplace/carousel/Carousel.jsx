@@ -1,3 +1,4 @@
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { Children, useEffect, useRef, useState } from 'react';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
@@ -27,12 +28,15 @@ import IconRoundButton from './IconRoundButton';
 
 const Carousel = ({
   children,
+  showButtons = true,
   carouselWrapperClassName = '',
   wrapperClassName = '',
   itemsToMoveBy = 1,
   onReachedEnd,
 }) => {
   const mainCarouselRef = useRef(null);
+
+  const numberOfItems = Children.count(children);
 
   // These ref are the first and last item in the carousel
   const firstItemRef = useRef(null);
@@ -130,26 +134,27 @@ const Carousel = ({
     <div className="flex items-center relative">
       {/* Carousel buttons */}
       {/* Carousel buttons are position absolutely */}
-      <div className="carousel-buttons flex w-full justify-between px-1 absolute">
-        {!firstItemVisible ? (
+
+      <div
+        className={cx('hidden md:block', {
+          'md:hidden': !showButtons,
+        })}
+      >
+        {(numberOfItems > 1 || !firstItemVisible) && (
           <IconRoundButton
-            icon={<IoChevronBack size={16} />}
+            icon={<IoChevronBack size={20} />}
             onClick={scrollLeft}
-            className="z-30"
+            className="z-30 absolute -left-8 top-1/2"
           />
-        ) : (
-          <div />
         )}
 
         {/* Next button */}
-        {!lastItemVisible ? (
+        {(numberOfItems > 1 || !lastItemVisible) && (
           <IconRoundButton
-            icon={<IoChevronForward size={16} />}
+            icon={<IoChevronForward size={20} />}
             onClick={scrollRight}
-            className="z-30"
+            className="z-30 absolute -right-8 top-1/2"
           />
-        ) : (
-          <div />
         )}
       </div>
 
@@ -158,27 +163,47 @@ const Carousel = ({
 
       {/* Carousel items itself */}
       <div
-        className={`w-full carousel carousel-center space-x-3 rounded-box ${carouselWrapperClassName}`}
+        className={cx('w-full carousel carousel-center space-x-3 rounded-box', {
+          [carouselWrapperClassName]: carouselWrapperClassName,
+        })}
         ref={mainCarouselRef}
       >
         {Children.map(children, (child, index) => {
           if (index === 0) {
             return (
-              <div className={`carousel-item ${wrapperClassName}`} ref={firstItemRef}>
+              <div
+                className={cx('carousel-item', {
+                  [wrapperClassName]: wrapperClassName,
+                })}
+                ref={firstItemRef}
+              >
                 {child}
               </div>
             );
           }
 
-          if (index === Children.count(children) - 1) {
+          if (index === numberOfItems - 1) {
             return (
-              <div className={`carousel-item ${wrapperClassName}`} ref={lastItemRef}>
+              <div
+                className={cx('carousel-item', {
+                  [wrapperClassName]: wrapperClassName,
+                })}
+                ref={lastItemRef}
+              >
                 {child}
               </div>
             );
           }
 
-          return <div className={`carousel-item ${wrapperClassName}`}>{child}</div>;
+          return (
+            <div
+              className={cx('carousel-item', {
+                [wrapperClassName]: wrapperClassName,
+              })}
+            >
+              {child}
+            </div>
+          );
         })}
       </div>
     </div>
@@ -196,6 +221,7 @@ const Carousel = ({
 Carousel.propTypes = {
   children: PropTypes.node,
   carouselWrapperClassName: PropTypes.string,
+  showButtons: PropTypes.bool,
   wrapperClassName: PropTypes.string,
   itemsToMoveBy: PropTypes.number,
   onReachedEnd: PropTypes.func,
