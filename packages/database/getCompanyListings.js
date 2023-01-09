@@ -9,7 +9,9 @@ const getCompanyListings = ({ supabase, companyid }) => {
   // Construct the base query to select user UUIDS
   //   const query = supabase.from('users').select('id').eq('companyid', 5);
   //   const query = (supabase.from('users').select('id').eq('companyid', 5));
-  const query = supabase.from('listing').select(`*`).eq('owner', '7bc2b79e-8eb9-4a44-9656-58327d75a0cb');
+  // const query = supabase.from('listing').select(`name, users(companyid)`).eq(`users.companyid`, 21);
+  const query = supabase.rpc('get_company_listings', { companyid2: companyid });
+  //   const query = supabase.from('listing').select(`*`).eq('owner', '022f64fa-3e2b-42e8-8ec0-6d845c3bac26');
 
   // Return the query result
   return query;

@@ -48,7 +48,7 @@ const CompanyProfile = () => {
     queryFn: async () =>
       getCompanyListings({
         supabase,
-        companyid
+        companyid,
       }),
   });
 
@@ -82,18 +82,8 @@ const CompanyProfile = () => {
         <div className="flex flex-col p-8 border-b">
           <h1 className="font-bold text-xl">
             {isLoading ? 'Loading company name' : queryData.data[0].name}
-            {isLoading2 ? 'Loading company name' : console.log(listingData)}
           </h1>
         </div>
-
-        {/* Form */}
-        {/* <CompanyEditFormContext
-          onSuccessChange={() => {
-            refreshQuery();
-          }}
-          queryData={queryData}
-          isLoading={isLoading}
-        /> */}
         {/* Display */}
         <div className="flex flex-row p-8">
           <div className="flex flex-col p-8">
@@ -125,13 +115,15 @@ const CompanyProfile = () => {
               </div>
             </div>
           </div>
-          {isLoading ? (
-            'Loading company name'
+          {isLoading2 ? (
+            'Loading company listings'
           ) : (
-            <div className="flex flex-col gap-2">
-              <h1 className="font-bold text-xl">{queryData.data[0].name}</h1>
-              <h1 className="font-bold text-xl">{queryData.data[0].bio}</h1>
-            </div>
+            console.log(listingData)
+            // console.log(listingData.data[0].name)
+            // <div className="flex flex-col gap-2">
+            //   <h1 className="font-bold text-xl">{listingData[0]}</h1>
+            //   <h1 className="font-bold text-xl">{listingData[0]}</h1>
+            // </div>
           )}
         </div>
       </div>
