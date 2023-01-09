@@ -9,9 +9,12 @@ import CategoricalForm from '../components/layouts/CategoricalForm';
 import ParameterForm from '../components/layouts/ParameterForm';
 import ListingForm from '../components/layouts/ListingForm';
 import ImageForm from '../components/layouts/ImageForm';
+import EnsureUserLoggedIn from '../hooks/ensureUserLoggedIn';
 
 const NewListing = ({session}) => {
   const client = useSupabaseClient();
+  EnsureUserLoggedIn();
+
 
   const [categoryID, setCategoryID] = React.useState(null);
   const [allCategories, setAllCategories] = React.useState([]);
