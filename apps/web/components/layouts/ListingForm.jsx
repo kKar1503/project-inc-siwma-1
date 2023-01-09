@@ -1,8 +1,17 @@
 import PropTypes from 'prop-types';
-
+import {boolean, number, object, string} from 'yup';
 import React from 'react';
 import RadioButton from '../RadioButton';
 import Input from '../Input';
+
+const listingValidationSchema = object({
+  name: string().required('Title is required'),
+  price: number('Please enter a valid number').required('Price is required').positive('Price must be positive'),
+  description: string(),
+  negotiable: boolean().required('Negotiable is required'),
+  // can only be 'Buying' or 'Selling'
+  type : string('Please select either buying or selling').required('Type is required').oneOf(['Buying', 'Selling']),
+});
 
 const ListingHook = () => {
   const [name, setName] = React.useState('');
@@ -11,9 +20,20 @@ const ListingHook = () => {
   const [negotiable, setNegotiable] = React.useState(false);
   const [type, setType] = React.useState('');
 
-  // const typeChangeHandler = (event) => {
-  //   setType(event.target.value === 'Buying' ? 1 : 2);
-  // };
+  const validate = () => {
+    try {
+      const parsedListing = listingValidationSchema.validateSync({
+        name,
+        price,
+        description,
+        negotiable,
+        type
+      });
+      return {success: true, parsedListing};
+    } catch (error) {
+      return {success: false, error};
+    }
+  }
 
   return {
     listingHook: {
@@ -27,42 +47,15 @@ const ListingHook = () => {
       setNegotiable,
       type,
       setType,
-      submittedValues: {
-        name,
-        price,
-        description,
-        negotiable,
-        type,
-      }
-    }
+      validate
+    },
   }
 }
-
-const InvalidError = () => (
-  <div className="alert alert-warning shadow-lg">
-    <div>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        className="stroke-current text-white flex-shrink-0 w-6 h-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-      <span className="text-white">All fields need to be filled in!</span>
-    </div>
-  </div>
-)
-
 const CreateListingInformation = ({
   onSubmit,
   listingHook,
 }) => {
+  const [errorMsg, setErrorMsg] = React.useState(null);
   const {
     name,
     setName,
@@ -74,15 +67,41 @@ const CreateListingInformation = ({
     setNegotiable,
     type,
     setType,
-    submittedValues,
+    validate
   } = listingHook;
   return (
     <>
-      {type &&
-        <InvalidError/>
+      {errorMsg &&
+        <div className="alert alert-warning shadow-lg">
+          <div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              className="stroke-current text-white flex-shrink-0 w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span className="text-white">{errorMsg}</span>
+          </div>
+        </div>
       }
 
-      <form className="p-5" onSubmit={(event) => onSubmit(event, submittedValues)}>
+      <form className="p-5" onSubmit={(event) => {
+        event.preventDefault();
+        const {success, parsedListing, error} = validate();
+        if (success) {
+          onSubmit(event, parsedListing)
+          setErrorMsg(null);
+        } else {
+          setErrorMsg(error.message);
+        }
+      }}>
         {/* Selling/Buying Options */}
         <RadioButton options={['Buying', 'Selling']}
           onChangeValue={(event) => setType(event.target.value)}/>
@@ -91,10 +110,10 @@ const CreateListingInformation = ({
         {type === '' ||
           <>
             {/* Title Label */}
-            <Input text="Title" value={name} onChange={(e) => setName(e.target.value)} />
+            <Input text="Title" value={name} onChange={(e) => setName(e.target.value)}/>
 
             {/* Price Label */}
-            <Input text="Price (SGD)" value={price} onChange={(e) => setPrice(e.target.value)} />
+            <Input text="Price (SGD)" value={price} onChange={(e) => setPrice(e.target.value)}/>
             <div className="form-control w-1/6 flex flex-row justify-start">
               <label className="label cursor-pointer space-x-4">
                 <span className="label-text">Negotiable</span>
@@ -148,15 +167,10 @@ CreateListingInformation.propTypes = {
     setNegotiable: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
     setType: PropTypes.func.isRequired,
-    submittedValues: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      price: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      negotiable: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
-    }).isRequired,
+    validate: PropTypes.func.isRequired,
   }).isRequired,
   onSubmit: PropTypes.func.isRequired,
+
 };
 
 export default CreateListingInformation;
