@@ -50,6 +50,7 @@ importers:
       autoprefixer: 10.4.13
       classnames: 2.3.2
       cypress: 10.11.0
+      cypress-file-upload: ^5.0.8
       daisyui: 2.33.0
       eslint: 8.26.0
       eslint-config-custom: workspace:*
@@ -103,6 +104,7 @@ importers:
     devDependencies:
       autoprefixer: 10.4.13_postcss@8.4.18
       cypress: 10.11.0
+      cypress-file-upload: 5.0.8_cypress@10.11.0
       eslint: 8.26.0
       eslint-config-custom: link:../../packages/eslint-config-custom
       postcss: 8.4.18
@@ -1780,6 +1782,15 @@ packages:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
     engines: {node: '>=4'}
     hasBin: true
+
+  /cypress-file-upload/5.0.8_cypress@10.11.0:
+    resolution: {integrity: sha512-+8VzNabRk3zG6x8f8BWArF/xA/W0VK4IZNx3MV0jFWrJS/qKn8eHfa5nU73P9fOQAgwHFJx7zjg4lwOnljMO8g==}
+    engines: {node: '>=8.2.1'}
+    peerDependencies:
+      cypress: '>3.0.0'
+    dependencies:
+      cypress: 10.11.0
+    dev: true
 
   /cypress/10.11.0:
     resolution: {integrity: sha512-lsaE7dprw5DoXM00skni6W5ElVVLGAdRUUdZjX2dYsGjbY/QnpzWZ95Zom1mkGg0hAaO/QVTZoFVS7Jgr/GUPA==}
