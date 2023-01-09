@@ -49,6 +49,7 @@ const EditUserForm = ({
                 name="companyid"
                 isLoading={isLoading}
                 success={submitSuccess}
+                required
               >
                 <FormSelectInput options={options} />
               </FormInputGroup>
@@ -58,6 +59,7 @@ const EditUserForm = ({
                 name="fullname"
                 isLoading={isLoading}
                 success={submitSuccess}
+                required
               >
                 <FormTextInput />
               </FormInputGroup>
@@ -69,6 +71,7 @@ const EditUserForm = ({
                 name="email"
                 isLoading={isLoading}
                 success={submitSuccess}
+                required
               >
                 <FormTextInput />
               </FormInputGroup>
@@ -78,17 +81,13 @@ const EditUserForm = ({
                 name="phone"
                 isLoading={isLoading}
                 success={submitSuccess}
+                required
               >
                 <FormTextInput />
               </FormInputGroup>
             </div>
             <div className="flex flex-col gap-4">
-              <FormInputGroup
-                label="Bio"
-                name="bio"
-                isLoading={isLoading}
-                success={submitSuccess}
-              >
+              <FormInputGroup label="Bio" name="bio" isLoading={isLoading} success={submitSuccess}>
                 <FormTextArea />
               </FormInputGroup>
             </div>

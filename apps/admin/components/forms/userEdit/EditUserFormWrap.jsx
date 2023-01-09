@@ -17,9 +17,11 @@ function parseUserData(data) {
     companyid: data.companyid,
     comment:
       data.users_comments && data.users_comments.length > 0 ? data.users_comments[0].comments : '',
-    profilePic: {
-      src: 'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/user-image-bucket/default-user.png',
-    },
+    profilePic:
+      (data.image && {
+        src: `https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/user-image-bucket/${data.image}`,
+      }) ||
+      null,
   };
 }
 
@@ -56,27 +58,34 @@ const EditUserFormWrap = ({
   const watchAllFields = watch();
 
   const onSubmit = async (data) => {
-    const { fullname, email, phone, companyid, bio, newPassword, confirmPassword, comment } = data;
-    console.log({ data });
+    const {
+      fullname,
+      email,
+      phone,
+      companyid,
+      bio,
+      newPassword,
+      confirmPassword,
+      comment,
+      profilePic,
+    } = data;
 
-    // await supabase
-    //   .from('users')
-    //   .update({
-    //     fullname,
-    //     email,
-    //     phone,
-    //     companyid,
-    //     bio,
-    //   })
-    //   .eq('id', user.id);
+    await supabase
+      .from('users')
+      .update({
+        fullname,
+        email,
+        phone,
+        companyid,
+        bio,
+      })
+      .eq('id', user.id);
 
     if (newPassword !== null && newPassword !== '') {
       if (newPassword === confirmPassword) {
         const { data: logindata } = await supabase.auth.getUser();
         const isAdmin = await supabase.rpc(`is_sysadmin`, { userid: logindata.user.id });
-        console.log(isAdmin);
         if (isAdmin) {
-          // hello
           const response = await fetch(`/api/auth/changePassword?userid=${user.id}`, {
             method: 'POST',
             body: JSON.stringify({
@@ -86,30 +95,30 @@ const EditUserFormWrap = ({
               'Content-Type': 'application/json',
             },
           });
-          const body = await response.json();
 
           if (!response.ok) {
-            throw new Error(body.error || 'Something went wrong.');
+            // password error
           }
         }
       }
     }
 
-    // if (user.comment) {
-    //   await supabase
-    //     .from('users_comments')
-    //     .update({
-    //       comments: comment,
-    //     })
-    //     .eq('userid', user.id);
-    // } else {
-    //   await supabase.from('users_comments').insert([
-    //     {
-    //       userid: user.id,
-    //       comments: comment,
-    //     },
-    //   ]);
-    // }
+    if (user.comment) {
+      await supabase
+        .from('users_comments')
+        .update({
+          comments: comment,
+        })
+        .eq('userid', user.id);
+    } else {
+      await supabase.from('users_comments').insert([
+        {
+          userid: user.id,
+          comments: comment,
+        },
+      ]);
+    }
+
     setSubmitSuccess(true);
     onSuccessChange();
   };

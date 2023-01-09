@@ -1,4 +1,3 @@
-import { SupabaseClient } from '@supabase/supabase-js';
 import * as yup from 'yup';
 import { createServiceSupabaseClient } from '@inc/utils';
 
@@ -28,13 +27,10 @@ const handler = async (req, res) => {
 
   const serviceSupabase = createServiceSupabaseClient();
 
-  const { data, error } = changePassword(serviceSupabase, userid, password);
+  const { data, error } = await changePassword(serviceSupabase, userid, password);
 
   if (error) {
     return res.status(500).json({ error: error.message });
-  }
-  if (!data) {
-    return res.status(500).json({ error: 'Failed to change password' });
   }
 
   return res.status(200).json({ message: 'Password changed.' });
