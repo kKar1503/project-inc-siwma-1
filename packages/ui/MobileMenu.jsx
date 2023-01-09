@@ -1,12 +1,11 @@
 // ------------------ Imports ------------------
 
 import PropTypes, {bool, func} from 'prop-types';
-import {MdBookmark, MdChat, MdExitToApp, MdHome} from 'react-icons/md';
+import {MdChat, MdExitToApp, MdHome} from 'react-icons/md';
 import cx from 'classnames';
 import SidebarDivider from './MobileMenuSubComponents/SidebarDivider';
 import SidebarItem from './MobileMenuSubComponents/SidebarItem';
 import SidebarSubItem from './MobileMenuSubComponents/SidebarSubItem';
-import SidebarSearch from './MobileMenuSubComponents/SidebarSearch';
 import SidebarDropdown from './MobileMenuSubComponents/SidebarDropdown';
 
 // ------------------ Layout Configuration ------------------
@@ -17,10 +16,9 @@ import SidebarDropdown from './MobileMenuSubComponents/SidebarDropdown';
 const LayoutEditor = ({categoryData, isLoggedIn}) => (
   <>
     {/* eslint-disable-next-line no-alert */}
-    <SidebarSearch/>
-    <SidebarDivider/>
+    {/* <SidebarSearch/> */}
+    {/* <SidebarDivider/> */}
     <SidebarItem name="Home" redirectLink="/"><MdHome/></SidebarItem>
-    <SidebarItem name="Bookmark" redirectLink="/test#bookmark"><MdBookmark/></SidebarItem>
     <SidebarDropdown name="Categories" customIcon={<MdChat/>}>
       {categoryData?.map(({name, id}) => (
         <SidebarSubItem
@@ -56,7 +54,7 @@ const MobileMenu = ({open, className, setOpen, isLoggedIn, categoryData}) => {
         <div
           className="w-96  p-2 text-center bg-base-content">
           <LayoutEditor closeHandle={closeHandle} isLoggedIn={isLoggedIn}
-                        categoryData={categoryData}/>
+            categoryData={categoryData}/>
         </div>
       </main>
     </div>
