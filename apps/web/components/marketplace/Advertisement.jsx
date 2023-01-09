@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { useQuery } from 'react-query';
+import Image from 'next/image';
 import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { useQuery } from 'react-query';
 
 const Advertisement = ({ adData }) => {
   const supabase = useSupabaseClient();
@@ -22,15 +23,14 @@ const Advertisement = ({ adData }) => {
 
   return (
     <>
-      <div onClick={handleCount} onKeyPress={handleCount} role="button" tabIndex={0}>
+      <div onClick={handleCount} onKeyPress={handleCount} role="button" tabIndex={0} className="">
         <label htmlFor={`modal-${adData.id}`} className="image">
-          <picture>
-            <img
-              src="https://images.unsplash.com/photo-1598638567141-696be94b464a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
-              className="object-cover"
-              alt="Banner"
-            />
-          </picture>
+          <Image
+            src="https://images.unsplash.com/photo-1598638567141-696be94b464a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+            fill
+            htmlFor={`modal-${adData.id}`}
+            className="object-cover absolute"
+          />
         </label>
       </div>
 

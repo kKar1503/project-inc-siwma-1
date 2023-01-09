@@ -1,7 +1,16 @@
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 
 const IconRoundButton = ({ onClick, icon, className }) => (
-  <button onClick={onClick} className={`btn btn-circle btn-md shadow-lg text-lg ${className}`}>
+  <button
+    onClick={onClick}
+    className={cx(
+      'btn btn-circle btn-md bg-white/50 border hover:bg-white/80 hover:border-gray-900/20 border-gray-900/20 text-gray-500 shadow-lg',
+      {
+        [className]: className,
+      }
+    )}
+  >
     {icon}
   </button>
 );

@@ -1,6 +1,6 @@
-import React from 'react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 const Breadcrumbs = ({ paths }) => (
   <div className="text-lg breadcrumbs">
@@ -8,9 +8,9 @@ const Breadcrumbs = ({ paths }) => (
       <li>
         <Link href="/">Home</Link>
       </li>
-      {paths.map((subpath) => (
-        <li key={subpath + 1}>
-          <Link href={`/listing/${subpath}`}>{subpath}</Link>
+      {paths.map((p) => (
+        <li key={p + 1}>
+          <Link href={`${p.path}`}>{p.name}</Link>
         </li>
       ))}
     </ul>
@@ -18,7 +18,12 @@ const Breadcrumbs = ({ paths }) => (
 );
 
 Breadcrumbs.propTypes = {
-  paths: PropTypes.arrayOf(PropTypes.string).isRequired,
+  paths: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      path: PropTypes.string,
+    })
+  ).isRequired,
 };
 
 export default Breadcrumbs;
