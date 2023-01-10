@@ -84,6 +84,32 @@ const ExistingParameters = ({ className, id }) => {
       ? 0
       : paramCountQuery.data.count;
 
+  const archiveParameter = async () => {
+    const ids = [];
+    selectedActiveParam.map((e) => ids.push(e.id));
+    await supabase
+      .from('parameter')
+      .update({
+        active: false,
+      })
+      .in('id', ids);
+    setSelectedActiveParam(selectedActiveParam.map((e) => ({ ...e, active: 'Disabled' })));
+    queryClient.invalidateQueries({ queryKey: ['existingParams'] });
+  };
+
+  const unarchiveParameter = async () => {
+    const ids = [];
+    selectedActiveParam.map((e) => ids.push(e.id));
+    await supabase
+      .from('parameter')
+      .update({
+        active: true,
+      })
+      .in('id', ids);
+    setSelectedActiveParam(selectedActiveParam.map((e) => ({ ...e, active: 'Active' })));
+    queryClient.invalidateQueries({ queryKey: ['existingParams'] });
+  };
+
   const renderTableButtons = () => {
     const tableButtons = [];
     if (paramQuery.isLoading) {
@@ -134,8 +160,16 @@ const ExistingParameters = ({ className, id }) => {
       return selectedActiveParam.every(
         (e) =>
           e.active === 'Disabled' ||
-          (!selectedActiveParam.every((category) => category.active === 'Disabled') &&
-            !selectedActiveParam.every((category) => category.active === 'Active'))
+          (!selectedActiveParam.every((parameter) => parameter.active === 'Disabled') &&
+            !selectedActiveParam.every((parameter) => parameter.active === 'Active'))
+      );
+    }
+    if (type === 'Disabled') {
+      return selectedActiveParam.every(
+        (e) =>
+          e.active === 'Active' ||
+          (!selectedActiveParam.every((parameter) => parameter.active === 'Disabled') &&
+            !selectedActiveParam.every((parameter) => parameter.active === 'Active'))
       );
     }
 
@@ -147,7 +181,7 @@ const ExistingParameters = ({ className, id }) => {
       header={
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
-            <h1 className="font-bold text-xl">Active parameters</h1>
+            <h1 className="font-bold text-xl">All parameters</h1>
             <h1 className="pr-2">
               Showing {selectedIndex * option + 1} to{' '}
               {(selectedIndex + 1) * option > existingParamCount
@@ -188,6 +222,20 @@ const ExistingParameters = ({ className, id }) => {
       footer={
         <div className="flex justify-between bg-none">
           <div className="flex gap-4">
+            <button
+              className="btn btn-primary text-white"
+              onClick={archiveParameter}
+              disabled={paramQuery.isLoading || checkInput('Active')}
+            >
+              DEACTIVATE SELECTED
+            </button>
+            <button
+              className="btn btn-primary text-white"
+              onClick={unarchiveParameter}
+              disabled={paramQuery.isLoading || checkInput('Disabled')}
+            >
+              ACTIVATE SELECTED
+            </button>
             <button
               className="btn btn-primary text-white"
               disabled={
