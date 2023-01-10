@@ -25,14 +25,19 @@ const EditUser = () => {
       refetchInterval: 6000,
       keepPreviousData: true,
     },
+    {
+      queryKey: ['getLoginData'],
+      queryFn: async () => supabase.auth.getUser(),
+    },
   ]);
 
   const refreshQuery = () => {
-    queryClient.invalidateQueries();
+    queryClient.invalidateQueries({ queryKey: ['getUser', { id: userid }] });
+    queryClient.invalidateQueries({ queryKey: ['getCompanies'] });
   };
 
   const isLoading = queries.some((e) => e.isLoading);
-  const [getUserQuery, getCompaniesQuery] = queries;
+  const [getUserQuery, getCompaniesQuery, getLoginDataQuery] = queries;
 
   return (
     <div className="flex flex-col w-full h-full gap-8 p-6 overflow-auto xl:max-h-screen">
@@ -51,11 +56,9 @@ const EditUser = () => {
           userQueryData={getUserQuery.data}
           companiesQueryData={getCompaniesQuery.data}
           isLoading={isLoading}
-          returnButton={
-            <Link href="./" className="btn btn-primary">
-              Return to users
-            </Link>
-          }
+          path="./"
+          isAdmin={false}
+          loginId={getLoginDataQuery?.data?.data.user.id}
         />
       </div>
     </div>

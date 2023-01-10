@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import Link from 'next/link';
 import {
   FormImageInput,
   FormInputGroup,
@@ -14,7 +15,8 @@ const EditUserForm = ({
   onDeleteImage,
   options,
   sendEmail,
-  returnButton,
+  path,
+  isAdmin,
 }) => (
   <form onSubmit={onSubmit}>
     <div className="flex flex-wrap gap-8 p-8">
@@ -131,16 +133,20 @@ const EditUserForm = ({
               </div>
             </div>
 
-            <div className="flex flex-col gap-4">
-              <FormInputGroup
-                label="Comment"
-                name="comment"
-                isLoading={isLoading}
-                success={submitSuccess}
-              >
-                <FormTextArea />
-              </FormInputGroup>
-            </div>
+            {isAdmin ? (
+              <div className="flex flex-col gap-4">
+                <FormInputGroup
+                  label="Comment"
+                  name="comment"
+                  isLoading={isLoading}
+                  success={submitSuccess}
+                >
+                  <FormTextArea />
+                </FormInputGroup>
+              </div>
+            ) : (
+              ''
+            )}
           </div>
         </div>
       </div>
@@ -148,7 +154,11 @@ const EditUserForm = ({
 
     <div className="flex justify-between">
       <div className="flex">
-        <div className="flex px-8 pb-8">{returnButton}</div>
+        <div className="flex px-8 pb-8">
+          <Link href={path} className="btn btn-primary">
+            Go back
+          </Link>
+        </div>
         <div className="gap-8 px-8">
           <button
             type="button"
@@ -176,7 +186,8 @@ EditUserForm.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   options: PropTypes.object,
   sendEmail: PropTypes.func.isRequired,
-  returnButton: PropTypes.element,
+  path: PropTypes.string,
+  isAdmin: PropTypes.bool,
 };
 
 export default EditUserForm;

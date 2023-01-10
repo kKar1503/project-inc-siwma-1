@@ -33,7 +33,9 @@ const EditUserFormWrap = ({
   isLoading,
   className,
   style,
-  returnButton,
+  path,
+  isAdmin,
+  loginId,
 }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitFailure, setSubmitFailure] = useState(false);
@@ -70,6 +72,8 @@ const EditUserFormWrap = ({
       profilePic,
     } = data;
 
+    console.log(data);
+
     await supabase
       .from('users')
       .update({
@@ -83,9 +87,7 @@ const EditUserFormWrap = ({
 
     if (newPassword !== null && newPassword !== '') {
       if (newPassword === confirmPassword) {
-        const { data: logindata } = await supabase.auth.getUser();
-        const isAdmin = await supabase.rpc(`is_sysadmin`, { userid: logindata.user.id });
-        if (isAdmin) {
+        if (isAdmin || loginId === user.id) {
           const response = await fetch(`/api/auth/changePassword?userid=${user.id}`, {
             method: 'POST',
             body: JSON.stringify({
@@ -103,20 +105,22 @@ const EditUserFormWrap = ({
       }
     }
 
-    if (user.comment) {
-      await supabase
-        .from('users_comments')
-        .update({
-          comments: comment,
-        })
-        .eq('userid', user.id);
-    } else {
-      await supabase.from('users_comments').insert([
-        {
-          userid: user.id,
-          comments: comment,
-        },
-      ]);
+    if (isAdmin) {
+      if (user.comment) {
+        await supabase
+          .from('users_comments')
+          .update({
+            comments: comment,
+          })
+          .eq('userid', user.id);
+      } else {
+        await supabase.from('users_comments').insert([
+          {
+            userid: user.id,
+            comments: comment,
+          },
+        ]);
+      }
     }
 
     if (profilePic !== user.profilePic) {
@@ -152,7 +156,7 @@ const EditUserFormWrap = ({
         { keepValues: Object.keys(touchedFields).length > 0, keepTouched: submitSuccess }
       );
     }
-  }, [userQueryData]);
+  }, [userQueryData, companiesQueryData]);
 
   useEffect(() => {
     if (submitSuccess && isDirty) {
@@ -170,7 +174,8 @@ const EditUserFormWrap = ({
           onDeleteImage={handleDeleteImage}
           options={companies}
           sendEmail={sendEmail}
-          returnButton={returnButton}
+          path={path}
+          isAdmin={isAdmin}
         />
         <div className={cx('my-12 transition lg:w-7/12 mx-auto', { hidden: !submitSuccess })}>
           <Alert
@@ -224,7 +229,9 @@ const propTypes = {
   isLoading: PropTypes.bool,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  returnButton: PropTypes.element,
+  path: PropTypes.string,
+  isAdmin: PropTypes.bool,
+  loginId: PropTypes.number,
 };
 
 EditUserFormWrap.propTypes = propTypes;
