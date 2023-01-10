@@ -6,8 +6,8 @@ import CardBackground from '../CardBackground';
 import ErrorMessage from './ErrorMessage';
 
 const categoryValidationSchema = object({
-  categoryId: number().required('Please select a category required').positive('Please select a category required'),
-})
+  categoryId: number('Please select a category').required('Please select a category').positive('Please select a category'),
+},'Please select a category')
 
 
 const CategoryHook = () => {
@@ -26,7 +26,7 @@ const CategoryHook = () => {
       setErrorMsg(null);
       return parsedCategory;
     } catch (error) {
-      setErrorMsg(error.message);
+      setErrorMsg('A category must be selected');
       return null;
     }
   }

@@ -1,34 +1,24 @@
 import Image from 'next/image';
 import PropTypes from 'prop-types';
-import {array, number, object, string} from 'yup';
 import {useState} from 'react';
 import CardBackground from '../CardBackground';
 import ErrorMessage from './ErrorMessage';
-
-const imageValidationSchema = object({
-  imageLength: number().required().min(1).max(10),
-  images: array().of(object({
-    link: string().required(),
-    blob: object().required(),
-  }))
-})
 
 const ImageHook = () => {
   const [selectedImages, setSelectedImages] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
 
   const validateImage = () => {
-    try {
-      const parsedImage = imageValidationSchema.validateSync({
-        imageLength: selectedImages.length,
-        selectedImages,
-      });
-      setErrorMsg(null);
-      return parsedImage;
-    } catch (error) {
-      setErrorMsg(error.message);
-      return null;
+    if (selectedImages.length > 10) {
+      setErrorMsg(`Max 10 images, you have selected ${selectedImages.length}`);
+      return false;
     }
+    if (selectedImages.length === 0) {
+      setErrorMsg('Please select at least 1 image');
+      return false;
+    }
+    setErrorMsg(null);
+    return selectedImages;
   }
 
   const onSelectFile = (event) => {

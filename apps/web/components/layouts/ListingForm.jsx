@@ -8,7 +8,7 @@ import CardBackground from '../CardBackground';
 
 const listingValidationSchema = object({
   name: string().required('Title is required'),
-  price: number('Please enter a valid number').required('Price is required').min(0,'Price must 0 or more'),
+  price: number('Please enter a valid price').required('Price is required').min(0, 'Price must 0 or more'),
   description: string(),
   negotiable: boolean().required('Negotiable is required'),
   // can only be 'Buying' or 'Selling'
@@ -35,6 +35,11 @@ const ListingHook = () => {
       setErrorMsg(null);
       return parsedListing;
     } catch (error) {
+      const {message} = error;
+      if (message.includes('price')) {
+        setErrorMsg('Price is required');
+        return null;
+      }
       setErrorMsg(error.message);
       return null;
     }
