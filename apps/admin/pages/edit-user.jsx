@@ -71,8 +71,7 @@ const EditUser = () => {
   const commentData =
     isLoading || !getCommentQuery.data.data ? {} : parseCommentData(getCommentQuery.data.data[0]);
 
-  const profilePic =
-    'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg';
+  const profilePic = `${process.env.NEXT_PUBLIC_COMPANY_BUCKET_URL}example.jpg`;
 
   const [selectedFile, setSelectedFile] = useState(null);
 

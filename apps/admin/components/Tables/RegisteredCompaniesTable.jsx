@@ -20,7 +20,7 @@ import CompanyDelete from '../Modals/CompanyDelete';
 function parseData(data) {
   return data.map((e) => ({
     id: e.id,
-    profilePicture: `https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/${e.image || 'example.jpg'}`,
+    profilePicture: `${process.env.NEXT_PUBLIC_COMPANY_BUCKET_URL}${e.image || 'example.jpg'}`,
     company: e.name,
     website: e.website,
     bio: e.bio && e.bio.length > 60 ? `${e.bio.substring(0, 59)}...` : e.bio,
