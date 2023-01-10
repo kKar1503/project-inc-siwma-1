@@ -67,7 +67,7 @@ const LayoutView = ({Component, pageProps}) => {
   } = useQuery(['get_category'], () => supabase.from('category').select('*'));
 
   const getLayout = Component.getLayout || ((page) => page);
-  const {roles, aclAbilities, allowAuthenticated, allowNonAuthenticated} = Component;
+  const {roles, aclAbilities, allowAuthenticated = true, allowNonAuthenticated} = Component;
   const {data = undefined} = categoryData || {};
   // eslint-disable-next-line no-nested-ternary
   const pageTitle = Component.title
