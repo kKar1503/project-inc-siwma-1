@@ -40,6 +40,8 @@ const EditUserFormWrap = ({
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitFailure, setSubmitFailure] = useState(false);
 
+  const errors = [];
+
   const supabase = useSupabaseClient();
 
   const formHook = useForm();
@@ -72,9 +74,7 @@ const EditUserFormWrap = ({
       profilePic,
     } = data;
 
-    console.log(data);
-
-    await supabase
+    const { error: userError } = await supabase
       .from('users')
       .update({
         fullname,
@@ -84,6 +84,8 @@ const EditUserFormWrap = ({
         bio,
       })
       .eq('id', user.id);
+
+    if (userError) errors.push('user error');
 
     if (newPassword !== null && newPassword !== '') {
       if (newPassword === confirmPassword) {
@@ -99,7 +101,7 @@ const EditUserFormWrap = ({
           });
 
           if (!response.ok) {
-            setSubmitFailure(true);
+            errors.push('password error');
           }
         }
       }
@@ -107,19 +109,21 @@ const EditUserFormWrap = ({
 
     if (isAdmin) {
       if (user.comment) {
-        await supabase
+        const { error: commentError } = await supabase
           .from('users_comments')
           .update({
             comments: comment,
           })
           .eq('userid', user.id);
+        if (commentError) errors.push('comment error');
       } else {
-        await supabase.from('users_comments').insert([
+        const { error: commentError } = await supabase.from('users_comments').insert([
           {
             userid: user.id,
             comments: comment,
           },
         ]);
+        if (commentError) errors.push('comment error');
       }
     }
 
@@ -132,12 +136,17 @@ const EditUserFormWrap = ({
         await supabase.storage.from('user-image-bucket').upload(profilePic.name, profilePic);
         await supabase.from('users').update({ image: profilePic.name }).eq('id', user.id);
       } else if (!profilePic || (profilePic.src == null && user.profilePic == null)) {
+        await supabase.storage.from('user-image-bucket').remove([user.image]);
         await supabase.from('users').update({ image: null }).eq('id', user.id);
       }
     }
-    reset(data, { keepValues: true });
-    setSubmitSuccess(true);
-    onSuccessChange();
+    if (errors.length > 0) {
+      setSubmitFailure(true);
+    } else {
+      reset(data, { keepValues: true });
+      setSubmitSuccess(true);
+      onSuccessChange();
+    }
   };
 
   const sendEmail = async () =>
