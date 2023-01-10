@@ -111,4 +111,9 @@ const InvitesPage = () => {
  */
 InvitesPage.getLayout = (page) => <AdminPageLayout pageName="Invites">{page}</AdminPageLayout>;
 
+// -- Configure AuthGuard -- //
+InvitesPage.allowAuthenticated = true;
+InvitesPage.roles = ['admin'];
+// Page.aclAbilities = [['View', 'Users']];
+
 export default InvitesPage;
