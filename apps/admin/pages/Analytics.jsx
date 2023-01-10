@@ -84,4 +84,9 @@ AnalyticCharts.getLayout = (page) => (
   <AdminPageLayout pageName="Data Analytics">{page}</AdminPageLayout>
 );
 
+// -- Configure AuthGuard -- //
+AnalyticCharts.allowAuthenticated = true;
+AnalyticCharts.roles = ['admin'];
+// Page.aclAbilities = [['View', 'Users']];
+
 export default AnalyticCharts;
