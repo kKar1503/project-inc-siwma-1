@@ -50,7 +50,7 @@ const MarketplacePage = () => {
       .from('advertisement-image-bucket')
       .getPublicUrl(ad.image);
 
-    if (error) throw new Error(error.message);
+    if (error) throw error;
 
     setAdsData((prevAds) => [...prevAds, { ...ad, image_public_url: data.publicUrl }]);
   };
