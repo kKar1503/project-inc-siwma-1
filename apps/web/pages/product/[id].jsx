@@ -169,7 +169,10 @@ const ListingPage = ({
       />
 
       <>
-        <Carousel wrapperClassName="w-full h-[500px] my-10 shadow-lg border border-black/20">
+        <Carousel
+          className="my-10"
+          wrapperClassName="w-full h-[500px]  shadow-lg border border-black/20"
+        >
           {[...carouselImages].map((image) => (
             <div key={image} className="w-full h-full flex justify-center bg-black/50 relative">
               <picture>
@@ -211,19 +214,23 @@ const ListingPage = ({
             <Title title="Description" />
             <p>{listing.description}</p>
 
-            <h1 className="text-xl font-semibold">Details</h1>
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 my-4">
-              {listingParameterValues.map((p) => (
-                <Detail
-                  title={p.display_name}
-                  detail={`${p.value}${
-                    Object.prototype.hasOwnProperty.call(UnitDictionary, p.type)
-                      ? UnitDictionary[p.type]
-                      : ''
-                  }`}
-                />
-              ))}
-            </div>
+            {listingParameterValues.length > 0 && (
+              <>
+                <h1 className="text-xl font-semibold">Details</h1>
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 my-4">
+                  {listingParameterValues.map((p) => (
+                    <Detail
+                      title={p.display_name}
+                      detail={`${p.value}${
+                        Object.prototype.hasOwnProperty.call(UnitDictionary, p.type)
+                          ? UnitDictionary[p.type]
+                          : ''
+                      }`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
 
             <div className="divider" />
 
@@ -256,11 +263,22 @@ const ListingPage = ({
                 company={listing.company_name}
               />
 
-              {user ? (
+              {user && user.id !== listing.owner && (
                 <button onClick={createRoom} className="btn btn-sm btn-primary mt-4">
                   Chat now
                 </button>
-              ) : (
+              )}
+
+              {user && user.id === listing.owner && (
+                <button
+                  onClick={() => router.push('/real-time-chat')}
+                  className="btn btn-sm btn-primary mt-4"
+                >
+                  See Chats
+                </button>
+              )}
+
+              {!user && (
                 <Link href="/login" className="btn btn-sm btn-primary mt-4">
                   Login To Chat
                 </Link>
