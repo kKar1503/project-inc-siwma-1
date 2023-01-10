@@ -43,14 +43,14 @@ export async function getServerSideProps(context) {
   let images = [];
 
   // Get the listing details
-  const { data, error } = await supabase.rpc('get_listing_by_id', {
+  const { data: getListingData, error: getListingError } = await supabase.rpc('get_listing_by_id', {
     listing_id: parseInt(params.id, 10),
   });
 
-  if (error || data.length === 0) {
+  if (getListingError || getListingData.length === 0) {
     console.log('Error while getting listing by id');
-    console.log(error);
-    console.log(data.length);
+    console.log(getListingError);
+    console.log(getListingData.length);
 
     // Redirect to the 404 page
     return {
@@ -61,29 +61,53 @@ export async function getServerSideProps(context) {
     };
   }
 
+  // Get listing images
   const listingImagesData = await getAllListingImages(params.id, supabase);
 
   if (listingImagesData.length > 0) {
     images = listingImagesData.map((image) => image.data.publicUrl);
   }
 
+  // Get parameters for the listing
+  const { data: getListingParametersData, error: getListingParametersError } = await supabase.rpc(
+    'get_parameter_values_for_listing_by_id',
+    {
+      _listing_id: getListingData[0].id,
+    }
+  );
+
+  if (getListingParametersError) {
+    // Redirect to the 404 page
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    };
+  }
+
   console.log('Listing and images data from getServerSideProps');
-  console.log(data[0]);
+  console.log(getListingData[0]);
   console.log(images);
+  console.log(getListingParametersData);
 
   return {
     props: {
       images,
-      listing: data[0],
+      listing: getListingData[0],
+      parameter_values: getListingParametersData,
     },
   };
 }
 
-const ListingPage = ({ listing, images: carouselImages }) => {
+const ListingPage = ({
+  listing,
+  images: carouselImages,
+  parameter_values: listingParameterValues,
+}) => {
   const user = useUser();
   const router = useRouter();
   const supabase = useSupabaseClient();
-  console.log(user);
 
   // This function handles creating a chat room and then redirecting to the chat page
   const createRoom = async () => {
@@ -182,20 +206,29 @@ const ListingPage = ({ listing, images: carouselImages }) => {
             <Title title="Description" />
             <p>{listing.description}</p>
 
+            <h1 className="text-xl font-semibold">Details</h1>
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 my-4">
+              {listingParameterValues.map((p) => (
+                <Detail title={p.display_name} detail={p.value} />
+              ))}
+            </div>
+
             <div className="divider" />
 
             {/* Date posted, category */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 my-4">
               <Detail title="Negotiable?" detail={listing.negotiable ? 'Yes' : 'No'} />
-              <Detail title="Length" detail="100m" />
-              <Detail title="Material" detail="Aluminum" />
+              <Detail title="Unit Price?" detail={listing.unit_price ? 'Yes' : 'No'} />
+
+              <Detail title="Category" detail={listing.category_name} />
+
               {/* Date posted */}
               <Detail
                 title="Posted on"
                 detail={DateTime.fromISO(listing.created_at).toFormat('dd MMM yyyy')}
               />
+
               <Detail title="Posted By" detail={listing.fullname} />
-              <Detail title="Category" detail={listing.category_name} />
               <Detail title="Company" detail={listing.company_name} />
             </div>
 
@@ -233,6 +266,15 @@ ListingPage.propTypes = {
     PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool])
   ),
   images: PropTypes.arrayOf(PropTypes.string),
+  parameter_values: PropTypes.arrayOf(
+    PropTypes.shape({
+      listing: PropTypes.number,
+      parameter: PropTypes.number,
+      value: PropTypes.string,
+      name: PropTypes.string,
+      display_name: PropTypes.string,
+    })
+  ),
 };
 
 ListingPage.getLayout = (page) => <Container>{page}</Container>;
