@@ -32,8 +32,6 @@ const ImageHook = () => {
   }
 
   const onSelectFile = (event) => {
-    if (selectedImages.length + event.target.files.length >= 10) return; // todo return visual error message
-
     const images = Array.from(event.target.files).map((file) => ({
       link: URL.createObjectURL(file),
       blob: file,
