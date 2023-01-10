@@ -16,7 +16,7 @@ import TableButton from './TableButton';
 function parseData(data) {
   return data.map((e) => ({
     id: e.id,
-    advertisement: e.advertisement,
+    advertisement: e.description,
     company: e.company,
     clicks: e.clicks,
     email: e.email,
@@ -61,7 +61,6 @@ const AdvertisementTable = ({ className }) => {
     },
   ]);
 
-  console.log(companiesQuery.data);
 
   // -- Handler functions -- //
   /**

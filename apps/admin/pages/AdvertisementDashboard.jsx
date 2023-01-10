@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Activeads from '../components/Ads/Activeads';
 import Clicks from '../components/Ads/Clicks';
 import ClicksGraph from '../components/Ads/ClicksGraph';
-// import Tableads from '../components/Tables/Tableads';
 import AvgGraphs from '../components/Ads/AvgChart';
 import NavBar from '../components/NavBar';
 import AdminPageLayout from '../components/layouts/AdminPageLayout';

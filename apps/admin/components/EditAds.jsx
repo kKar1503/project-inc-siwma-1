@@ -5,11 +5,13 @@ import PropTypes from 'prop-types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { FiUpload } from 'react-icons/fi';
 import crypto from 'crypto';
+import Image from 'next/image';
 
 const EditAds = ({ id }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [link, setlink] = useState('');
+  const [imageURL, setImageURL] = useState('');
   const [displayAlert, setDisplayAlert] = useState(null);
   const [error, setError] = useState(null);
   const [image, setImage] = useState(null);
@@ -60,6 +62,7 @@ const EditAds = ({ id }) => {
     return parts.join('-');
   };
 
+  // get advertisement details
   const { data } = useQuery({
     queryKey: ['editadvertisments', id],
     queryFn: async () =>
@@ -70,12 +73,15 @@ const EditAds = ({ id }) => {
     enabled: !!id,
   });
 
+  // set form values
   useEffect(() => {
     setName(data?.data[0]?.companies.name);
     setDescription(data?.data[0]?.description);
     setlink(data?.data[0]?.link);
+    setImageURL(data?.data[0]?.image);
   }, [data]);
 
+  // submit edit
   const editAdsvertisment = async (e) => {
     e.preventDefault();
 
@@ -144,6 +150,20 @@ const EditAds = ({ id }) => {
               setName(e.target.value);
             }}
           />
+        </div>
+        <div>
+          <div className="label">
+            <span className="label-text font-semibold">Current Advertisement Image</span>
+          </div>
+          <div>
+            <Image
+              src={`https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/advertisement-image-bucket/${imageURL}`}
+              alt="Company advertisement"
+              width={800}
+              height={180}
+              className="object-center"
+            />
+          </div>
         </div>
         <div className="form-control">
           <div className="label">
