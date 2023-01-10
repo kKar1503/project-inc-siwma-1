@@ -35,7 +35,7 @@ const Page = () => {
   if (logoutIsError) {
     formNote = <Alert level="error" message={logoutIsError?.message ?? 'Something went wrong!'}/>;
   } else if (logoutIsSuccess) {
-    formNote = <Alert level="success" message="You have successfully logged in!"/>;
+    formNote = <Alert level="success" message="You have successfully logged out!"/>;
   }
   logout();
 

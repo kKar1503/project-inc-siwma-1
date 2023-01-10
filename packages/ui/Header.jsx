@@ -48,7 +48,7 @@ const Header = ({categoryData, isLoggedIn}) => {
           <Image
             alt="SIWMA Logo"
             src={SIWMALogo}
-            className="min-[320px]:h-[30px] h-full min-[320px]:w-[270px] w-full object-cover lg:hidden"
+            className="h-full w-full object-cover lg:hidden"
           />
           <Image src={SIWMALogoFull}
             alt="SIWMA Logo"
@@ -68,7 +68,7 @@ const Header = ({categoryData, isLoggedIn}) => {
               <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/>
             </svg>
             <ul
-              className="p-2 z-10 menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 text-black">
+              className="p-2 z-40 menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 text-black">
               {categoryData?.map(({name, id}) => (
                 <CategoryItem
                   name={name}
