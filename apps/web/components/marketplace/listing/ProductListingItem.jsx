@@ -105,9 +105,10 @@ const ProductListingItem = ({
             <p
               style={{
                 overflow: 'hidden',
+                textOverflow: 'ellipsis',
                 display: '-webkit-box',
-                '-webkit-box-orient': 'vertical',
-                '-webkit-line-clamp': 4,
+                WebkitLineClamp: 4,
+                WebkitBoxOrient: 'vertical',
               }}
             >
               {name}
