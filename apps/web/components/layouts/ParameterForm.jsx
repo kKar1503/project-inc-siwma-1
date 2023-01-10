@@ -174,7 +174,7 @@ const ParameterForm = ({ parameterHook }) => {
             return (
               <Input
                 key={item.name}
-                text={`${item.name} /g`}
+                text={`${item.name} (g)`}
                 value={getValue(item.name) || ''}
                 onChange={(e) => {
                   updateValues(item.name, item, e.target.value);
@@ -185,7 +185,7 @@ const ParameterForm = ({ parameterHook }) => {
             return (
               <Input
                 key={item.name}
-                text={`${item.name} /mm`}
+                text={`${item.name} (mm)`}
                 value={getValue(item.name) || ''}
                 onChange={(e) => {
                   updateValues(item.name, item, e.target.value);
