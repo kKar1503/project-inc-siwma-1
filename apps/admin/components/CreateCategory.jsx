@@ -111,9 +111,9 @@ const CreateCategory = () => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Category Name"
-            // so regex being the funny it is has a minimum of at least 4 characters
-            pattern="^[^\s].[a-zA-Z\s].[^\s]*$"
-            title="Category name should only include letters and should not have spaces as the first and last characters"
+            // so regex being the funny it is has a minimum of at least 3 characters
+            pattern="^[^\s].+[^\s]$"
+            title="Category name should not have spaces as the first and last characters"
             required
           />
         </div>
@@ -126,9 +126,9 @@ const CreateCategory = () => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Category Description"
-            // so regex being the funny it is has a minimum of at least 4 characters
-            pattern="^[^\s].[a-zA-Z\s].[^\s]*$"
-            title="Category description should only include letters and should not have spaces as the first and last characters"
+            // so regex being the funny it is has a minimum of at least 3 characters
+            pattern="^[^\s].+[^\s]$"
+            title="Category description should not have spaces as the first and last characters"
             required
           />
         </div>

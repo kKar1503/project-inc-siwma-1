@@ -120,8 +120,8 @@ const EditCat = ({ id }) => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Category Name"
-            pattern="^[A-Za-z]+$"
-            title="Category name should only include letters"
+            pattern="^[^\s].+[^\s]$"
+            title="Category name should not have spaces at the start or end"
             required
             value={name}
             onChange={(e) => {
@@ -138,6 +138,7 @@ const EditCat = ({ id }) => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Category Description"
+            pattern="^[^\s].+[^\s]$"
             required
             value={description}
             onChange={(e) => {
