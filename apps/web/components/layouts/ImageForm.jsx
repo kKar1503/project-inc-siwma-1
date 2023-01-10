@@ -4,6 +4,8 @@ import {useState} from 'react';
 import CardBackground from '../CardBackground';
 import ErrorMessage from './ErrorMessage';
 
+const acceptedFileTypes = ['image/png', 'image/jpeg', 'image/webp'];
+
 const ImageHook = () => {
   const [selectedImages, setSelectedImages] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -26,7 +28,18 @@ const ImageHook = () => {
       link: URL.createObjectURL(file),
       blob: file,
     }));
-    setSelectedImages((prevImages) => prevImages.concat(images));
+
+
+    setSelectedImages((prevImages) => {
+      // concat images to selectedImages
+      const newImages = [...prevImages, ...images];
+      return newImages
+        //  filter out duplication
+        .filter((image, index) =>
+          newImages.findIndex((img) => img.link === image.link) === index)
+        //  filter out unaccepted fileTypes
+        .filter((image) => acceptedFileTypes.includes(image.blob.type));
+    });
 
     // chrome bug fix
     // eslint-disable-next-line no-param-reassign
@@ -109,7 +122,7 @@ const ImageForm = ({useImageHook}) => {
         className="hidden"
         onChange={onSelectFile}
         multiple
-        accept="image/png, image/jpeg, image/webp"
+        accept={acceptedFileTypes.join(',')}
       />
     </label>
     {selectedImages && (
