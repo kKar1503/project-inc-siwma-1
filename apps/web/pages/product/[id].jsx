@@ -100,6 +100,11 @@ export async function getServerSideProps(context) {
   };
 }
 
+const UnitDictionary = {
+  'MEASUREMENT (WEIGHT)': 'g',
+  'MEASUREMENT (DIMENSION)': 'mm',
+};
+
 const ListingPage = ({
   listing,
   images: carouselImages,
@@ -209,7 +214,14 @@ const ListingPage = ({
             <h1 className="text-xl font-semibold">Details</h1>
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 my-4">
               {listingParameterValues.map((p) => (
-                <Detail title={p.display_name} detail={p.value} />
+                <Detail
+                  title={p.display_name}
+                  detail={`${p.value}${
+                    Object.prototype.hasOwnProperty.call(UnitDictionary, p.type)
+                      ? UnitDictionary[p.type]
+                      : ''
+                  }`}
+                />
               ))}
             </div>
 
