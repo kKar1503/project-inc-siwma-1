@@ -76,7 +76,7 @@ const NewListing = () => {
     const category = validateCategory();
     const parameters = validateParameter();
 
-    if (!listing || !images || !category) return;
+    if (!listing || !images || !category || !parameters) return;
 
     const {data: listingId, error: insertListingError} = await client
       .from('listing')
