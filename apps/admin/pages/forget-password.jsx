@@ -69,4 +69,9 @@ const SignInAndUpLayoutNoSSR = dynamic(() => Promise.resolve(SignInAndUpLayout),
 
 Page.getLayout = (page) => <SignInAndUpLayoutNoSSR>{page}</SignInAndUpLayoutNoSSR>;
 
+// -- Configure AuthGuard -- //
+Page.allowAuthenticated = true;
+Page.roles = ['admin'];
+// Page.aclAbilities = [['View', 'Users']];
+
 export default Page;
