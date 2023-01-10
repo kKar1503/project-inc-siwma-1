@@ -127,8 +127,8 @@ const ParameterHook = () => {
       } catch (error) {
         setErrorMsg(
           error.message.includes('Cannot read properties of undefined')
-            ? `Please fill in the values for all parameters ${i + 1}`
-            : `${error.message} ${i + 1}`
+            ? `Please fill in the values for all parameters`
+            : `${error.message}`
         );
         return false;
       }
