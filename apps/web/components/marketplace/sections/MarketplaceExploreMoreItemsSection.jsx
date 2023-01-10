@@ -87,7 +87,7 @@ const MarketplaceExploreMoreItemsSection = () => {
               company_name: companyName,
             }) => (
               <ProductListingItem
-                className="hover:shadow-lg"
+                className="hover:shadow-lg h-full"
                 type={type}
                 negotiable={negotiable}
                 key={id}
