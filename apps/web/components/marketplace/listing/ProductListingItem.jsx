@@ -49,7 +49,7 @@ const ProductListingItem = ({
       })}
     >
       {/* User details */}
-      <div className="p-2 flex gap-2 items-center">
+      <div className="p-2 flex gap-2 items-center h-16">
         <div>
           {profilePictureUrl && (
             <Image
@@ -64,11 +64,33 @@ const ProductListingItem = ({
 
         <div className="flex-1">
           <Link href="/">
-            <p className="text-sm hover:underline font-semibold">{ownerFullName}</p>
+            <p
+              className="text-sm hover:underline font-semibold"
+              style={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+              }}
+            >
+              {ownerFullName}
+            </p>
           </Link>
 
           <Link href="/">
-            <p className="text-xs hover:underline text-gray-500">{companyName}</p>
+            <p
+              className="text-xs hover:underline text-gray-500"
+              style={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+              }}
+            >
+              {companyName}
+            </p>
           </Link>
         </div>
       </div>
