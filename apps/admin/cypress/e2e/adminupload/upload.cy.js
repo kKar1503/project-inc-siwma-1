@@ -31,7 +31,7 @@ describe('Admin uploading a advertisement', () => {
     // check that upload file button is disabled before file is uploaded
     cy.get('#submitpic').should('be.disabled');
     // upload file
-    cy.get('#file_upload').attachFile('test.png');
+    cy.get('#file_upload').attachFile('correct.png');
     // check that upload file button is enabled after file is uploaded
     cy.get('#submitpic').should('be.enabled');
     // submit file
