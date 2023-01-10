@@ -52,12 +52,9 @@ const EditUserFormWrap = ({
   const {
     handleSubmit,
     reset,
-    watch,
     setValue,
     formState: { isDirty, dirtyFields, touchedFields },
   } = formHook;
-
-  const watchAllFields = watch();
 
   const onSubmit = async (data) => {
     const {
@@ -71,8 +68,6 @@ const EditUserFormWrap = ({
       comment,
       profilePic,
     } = data;
-
-    console.log({ data });
 
     await supabase
       .from('users')
@@ -135,7 +130,7 @@ const EditUserFormWrap = ({
         await supabase.from('users').update({ image: null }).eq('id', user.id);
       }
     }
-
+    reset(data, { keepValues: true });
     setSubmitSuccess(true);
     onSuccessChange();
   };
@@ -156,13 +151,13 @@ const EditUserFormWrap = ({
         { keepValues: Object.keys(touchedFields).length > 0, keepTouched: submitSuccess }
       );
     }
-  }, [userQueryData, companiesQueryData]);
+  }, [userQueryData]);
 
   useEffect(() => {
-    if (submitSuccess && isDirty && Object.keys(touchedFields).length > 0) {
+    if (submitSuccess && isDirty) {
       setSubmitSuccess(false);
     }
-  }, [watchAllFields]);
+  }, [isDirty]);
 
   return (
     <FormProvider {...formHook}>

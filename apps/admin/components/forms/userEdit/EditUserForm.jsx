@@ -83,7 +83,14 @@ const EditUserForm = ({
                 success={submitSuccess}
                 required
               >
-                <FormTextInput />
+                <FormTextInput
+                  customValidation={{
+                    pattern: {
+                      value: /^[0-9]{8}$/,
+                      message: 'Phone number must be valid',
+                    },
+                  }}
+                />
               </FormInputGroup>
             </div>
             <div className="flex flex-col gap-4">
