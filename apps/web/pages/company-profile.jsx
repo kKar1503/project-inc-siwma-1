@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
+import Link from 'next/link';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Image from 'next/image';
 import { getCompany, getCompanyListings } from '@inc/database';
@@ -85,33 +86,40 @@ const CompanyProfile = () => {
         {/* Display */}
         <div className="flex flex-row p-8">
           <div className="flex flex-col p-8 flex-1">
-            {/* Display company details */}
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                {/* Company image with border around image element */}
+            <div className="flex flex-col p-8 flex-1">
+              {/* Display company details */}
+              <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
-                  {isLoading ? (
-                    'Loading company image'
-                  ) : (
-                    <Image
-                      src={`https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/${queryData.data[0].image}`}
-                      alt="Company logo"
-                      width={150}
-                      height={150}
-                      className="object-cover"
-                    />
-                  )}
-                  {/* //company name subheader that takes up half the div */}
-                  {isLoading ? (
-                    'Loading company name'
-                  ) : (
-                    <div className="flex flex-col gap-2">
-                      <h1 className="font-bold text-xl">{queryData.data[0].name}</h1>
-                      <h1 className="font-bold text-xl">{queryData.data[0].bio}</h1>
-                    </div>
-                  )}
+                  {/* Company image with border around image element */}
+                  <div className="flex flex-col gap-2">
+                    {isLoading ? (
+                      'Loading company image'
+                    ) : (
+                      <Image
+                        src={`https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/${queryData.data[0].image}`}
+                        alt="Company logo"
+                        width={150}
+                        height={150}
+                        className="object-cover"
+                      />
+                    )}
+                    {/* //company name subheader that takes up half the div */}
+                    {isLoading ? (
+                      'Loading company name'
+                    ) : (
+                      <div className="flex flex-col gap-2">
+                        <h1 className="font-bold text-xl">{queryData.data[0].name}</h1>
+                        <h1 className="font-bold text-xl">{queryData.data[0].bio}</h1>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
+            </div>
+            <div className="flex flex-col p-8 flex-1">
+              <Link href="edit-company/" className="w-full btn btn-outline btn-primary">
+                Edit Profile
+              </Link>
             </div>
           </div>
           {isLoading2 || listingData == null ? (
@@ -132,6 +140,7 @@ const CompanyProfile = () => {
                       <ProfileListingItem
                         type={type}
                         key={id}
+                        // images are found in listing_images table, with direct relation to listing id
                         img={null}
                         name={name}
                         href={`/products/${id}`}
