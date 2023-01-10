@@ -101,4 +101,9 @@ AdminUpload.getLayout = (page) => (
   <AdminPageLayout pageName="Advertisement">{page}</AdminPageLayout>
 );
 
+// -- Configure AuthGuard -- //
+AdminUpload.allowAuthenticated = true;
+AdminUpload.roles = ['admin'];
+// Page.aclAbilities = [['View', 'Users']];
+
 export default AdminUpload;
