@@ -58,6 +58,7 @@ export default MyApp;
 
 const LayoutView = ({Component, pageProps}) => {
   const user = useUser();
+  const router = useRouter();
   const supabase = useSupabaseClient();
   const {
     data: categoryData,
@@ -68,9 +69,28 @@ const LayoutView = ({Component, pageProps}) => {
   const getLayout = Component.getLayout || ((page) => page);
   const { roles, aclAbilities, allowAuthenticated, allowNonAuthenticated } = Component;
   const {data = undefined} = categoryData || {};
-  // window.alert(JSON.stringify(categoryData))
+  // eslint-disable-next-line no-nested-ternary
+  const pageTitle = Component.title
+    // custom title : regular title
+    ? Component.title : (() => {
+      const {pathname} = router;
+      const path = pathname.split('/');
+      let page = path[path.length - 1];
+      // account for index page
+      if (page === '[category]') page = router.query.category.toString();
+      // check if page is a parameter (e.g. [category]) has [ and ]
+      else if (/\[.*]/.test(page)) page = path[path.length - 2];
+
+      // replace '-' to ' ' and capitalize first letter of each word
+      return page
+        .replace(/-/g, ' ')
+        .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+
+    }
+    )();
   return (
     <>
+      <title>{pageTitle}</title>
       {(Component && Component.ignoreHeader) || <Header categoryData={data} isLoggedIn={user !== null}/>}
       <LayoutView>
         <AppUserProvider>
