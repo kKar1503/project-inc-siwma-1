@@ -73,7 +73,7 @@ const ParameterHook = () => {
           const formData = {
             id: parameterData[i].parameter,
             name: parameterData[i].display_name,
-            dataTypeId: parameterData[j].datatype,
+            dataTypeId: parameterData[i].datatype,
             type: parameterType[j].name,
             typeId: parameterType[j].id,
           };
