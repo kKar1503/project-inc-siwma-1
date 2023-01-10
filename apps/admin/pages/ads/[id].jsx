@@ -1,12 +1,8 @@
 import { QueryClientProvider, QueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import { useState, useMemo } from 'react';
-import Arrows from '../../components/Arrows';
-import CreateParam from '../../components/CreateParam';
 import AdminPageLayout from '../../components/layouts/AdminPageLayout';
 import NavBar from '../../components/NavBar';
-import ActiveParametersTable from '../../components/Tables/ActiveParametersTable';
-import AvailableParametersTable from '../../components/Tables/AvailableParametersTable';
 import DataContext from '../../DataContext';
 import EditAds from '../../components/EditAds';
 
