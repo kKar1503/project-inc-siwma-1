@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import {boolean, number, object, string} from 'yup';
+import { boolean, number, object, string } from 'yup';
 import CardBackground from '../CardBackground';
 import Dropdown from '../Dropdown';
 import RadioButton from '../RadioButton';
@@ -13,17 +13,29 @@ import ErrorMessage from './ErrorMessage';
 //   dataTypeId: number('Please fill in the values').required('Please fill in the values')
 // }).required('Please fill in the values');
 
-const ParameterValidationSchemaString = object({
-  value: string().required('Please fill in the values')
-}, 'Please fill in the values');
+const ParameterValidationSchemaString = object(
+  {
+    id: number().required(),
+    value: string().required('Please fill in the values'),
+  },
+  'Please fill in the values'
+);
 
-const ParameterValidationSchemaNumber = object({
-  value: number().required('Please fill in the values')
-}, 'Please fill in the values');
+const ParameterValidationSchemaNumber = object(
+  {
+    id: number().required(),
+    value: number().required('Please fill in the values'),
+  },
+  'Please fill in the values'
+);
 
-const ParameterValidationSchemaBoolean = object({
-  value: boolean().required('Please fill in the values')
-}, 'Please fill in the values');
+const ParameterValidationSchemaBoolean = object(
+  {
+    id: number().required(),
+    value: boolean().required('Please fill in the values'),
+  },
+  'Please fill in the values'
+);
 
 const ParameterHook = () => {
   const [formTypeData, setFormTypeData] = useState([]);
@@ -31,11 +43,12 @@ const ParameterHook = () => {
   const [values, setValues] = React.useState({});
 
   useEffect(() => {
-    setValues(formTypeData.reduce((acc, item) => {
-      acc[item.name] = ''
-      return acc
-    }, {}));
-
+    setValues(
+      formTypeData.reduce((acc, item) => {
+        acc[item.name] = '';
+        return acc;
+      }, {})
+    );
   }, [formTypeData]);
 
   const getValue = (name) => values[name]?.value;
@@ -45,10 +58,10 @@ const ParameterHook = () => {
       ...v,
       [name]: {
         typeData,
-        value
+        value,
       },
-    }))
-  }
+    }));
+  };
 
   const identifyParameterType = async (parameterData, parameterType, parameterChoice) => {
     const formTypes = [];
@@ -81,29 +94,48 @@ const ParameterHook = () => {
 
   const validateParameter = () => {
     const validated = [];
-    const objectValues = Object.values(values)
+    const objectValues = Object.values(values);
     for (let i = 0; i < objectValues.length; i++) {
       const item = objectValues[i];
+      console.log(item);
       try {
         switch (item.typeData.dataTypeId) {
           case 2:
-            validated.push(ParameterValidationSchemaNumber.validateSync(item, {stripUnknown: true}));
+            validated.push(
+              ParameterValidationSchemaNumber.validateSync(
+                { id: item.typeData.id, value: item.value },
+                { stripUnknown: true }
+              )
+            );
             break;
           case 3:
-            validated.push(ParameterValidationSchemaBoolean.validateSync(item, {stripUnknown: true}));
+            validated.push(
+              ParameterValidationSchemaBoolean.validateSync(
+                { id: item.typeData.id, value: item.value },
+                { stripUnknown: true }
+              )
+            );
             break;
           default:
-            validated.push(ParameterValidationSchemaString.validateSync(item, {stripUnknown: true}));
+            validated.push(
+              ParameterValidationSchemaString.validateSync(
+                { id: item.typeData.id, value: item.value },
+                { stripUnknown: true }
+              )
+            );
         }
-
       } catch (error) {
-        setErrorMsg(error.message.includes('Cannot read properties of undefined') ? `Please fill in the values for all parameters ${i + 1}` : `${error.message} ${i + 1}`);
+        setErrorMsg(
+          error.message.includes('Cannot read properties of undefined')
+            ? `Please fill in the values for all parameters ${i + 1}`
+            : `${error.message} ${i + 1}`
+        );
         return false;
       }
     }
     setErrorMsg(null);
     return validated;
-  }
+  };
 
   return {
     parameterHook: {
@@ -114,15 +146,13 @@ const ParameterHook = () => {
     },
     identifyParameterType,
     validateParameter,
-  }
-
-}
+  };
+};
 
 // check parameter_types/parameter_choices
 // formTypes: { id, name, type}
-const ParameterForm = ({parameterHook}) => {
-  const {formTypes, errorMsg, getValue, updateValues} = parameterHook;
-
+const ParameterForm = ({ parameterHook }) => {
+  const { formTypes, errorMsg, getValue, updateValues } = parameterHook;
 
   // --- Form Types ---
   // Measurement = Text Input (Weight = g / Dimension = mm)
@@ -135,43 +165,63 @@ const ParameterForm = ({parameterHook}) => {
   // Long, Short
   return (
     <CardBackground>
-      <ErrorMessage errorMsg={errorMsg}/>
+      <ErrorMessage errorMsg={errorMsg} />
       <h1 className="font-bold text-3xl">Parameters</h1>
       {/* {formSorter(formTypes)} */}
       {formTypes.map((item) => {
         switch (item.type) {
           case 'MEASUREMENT (WEIGHT)':
             return (
-              <Input key={item.name} text={`${item.name} /g`} value={getValue(item.name) || ''}
+              <Input
+                key={item.name}
+                text={`${item.name} /g`}
+                value={getValue(item.name) || ''}
                 onChange={(e) => {
-                  updateValues(item.name, item, e.target.value)
-                }}/>
+                  updateValues(item.name, item, e.target.value);
+                }}
+              />
             );
           case 'MEASUREMENT (DIMENSION)':
             return (
-              <Input key={item.name} text={`${item.name} /mm`} value={getValue(item.name) || ''}
+              <Input
+                key={item.name}
+                text={`${item.name} /mm`}
+                value={getValue(item.name) || ''}
                 onChange={(e) => {
-                  updateValues(item.name, item, e.target.value)
-                }}/>
+                  updateValues(item.name, item, e.target.value);
+                }}
+              />
             );
           case 'TWO CHOICES':
             return (
-              <RadioButton options={item.choice} onChangeValue={(e) => {
-                updateValues(item.name, item, e.target.value)
-              }}/>
+              <RadioButton
+                options={item.choice}
+                onChangeValue={(e) => {
+                  updateValues(item.name, item, e.target.value);
+                }}
+              />
             );
           case 'MANY CHOICES':
             return (
-              <Dropdown items={item.choice} onChangeValue={(e) => {
-                updateValues(item.name, item, e.target.value)
-              }} defaultValue={`${item.name}`}/>
+              <Dropdown
+                items={item.choice}
+                onChangeValue={(e) => {
+                  updateValues(item.name, item, e.target.value);
+                }}
+                defaultValue={`${item.name}`}
+              />
             );
           case 'OPEN ENDED':
             return (
-              <Input key={item.name} type='textarea' text={`${item.name}`}
-                value={getValue(item.name) || ''} onChange={(e) => {
-                  updateValues(item.name, item, e.target.value)
-                }}/>
+              <Input
+                key={item.name}
+                type="textarea"
+                text={`${item.name}`}
+                value={getValue(item.name) || ''}
+                onChange={(e) => {
+                  updateValues(item.name, item, e.target.value);
+                }}
+              />
             );
           default:
             return null;
@@ -188,9 +238,7 @@ ParameterForm.propTypes = {
         id: PropTypes.number,
         name: PropTypes.string,
         type: PropTypes.string,
-        choice: PropTypes.arrayOf(
-          PropTypes.string
-        )
+        choice: PropTypes.arrayOf(PropTypes.string),
       })
     ),
     getValue: PropTypes.func.isRequired,
