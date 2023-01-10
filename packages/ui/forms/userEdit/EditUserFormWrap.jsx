@@ -34,7 +34,7 @@ const EditUserFormWrap = ({
   className,
   style,
   path,
-  isAdmin,
+  adminContent,
   loginId,
 }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -58,7 +58,7 @@ const EditUserFormWrap = ({
     handleSubmit,
     reset,
     setValue,
-    formState: { isDirty, dirtyFields, touchedFields },
+    formState: { isDirty, touchedFields },
   } = formHook;
 
   const onSubmit = async (data) => {
@@ -74,6 +74,8 @@ const EditUserFormWrap = ({
       profilePic,
     } = data;
 
+    console.log(data);
+
     const { error: userError } = await supabase
       .from('users')
       .update({
@@ -85,11 +87,11 @@ const EditUserFormWrap = ({
       })
       .eq('id', user.id);
 
-    if (userError) errors.push('user error');
+    errors.push(userError);
 
     if (newPassword !== null && newPassword !== '') {
       if (newPassword === confirmPassword) {
-        if (isAdmin || loginId === user.id) {
+        if (adminContent || loginId === user.id) {
           const response = await fetch(`/api/auth/changePassword?userid=${user.id}`, {
             method: 'POST',
             body: JSON.stringify({
@@ -101,13 +103,13 @@ const EditUserFormWrap = ({
           });
 
           if (!response.ok) {
-            errors.push('password error');
+            errors.push({ passwordError: 'password error' });
           }
         }
       }
     }
 
-    if (isAdmin) {
+    if (adminContent) {
       if (user.comment) {
         const { error: commentError } = await supabase
           .from('users_comments')
@@ -115,7 +117,7 @@ const EditUserFormWrap = ({
             comments: comment,
           })
           .eq('userid', user.id);
-        if (commentError) errors.push('comment error');
+        errors.push(commentError);
       } else {
         const { error: commentError } = await supabase.from('users_comments').insert([
           {
@@ -123,24 +125,39 @@ const EditUserFormWrap = ({
             comments: comment,
           },
         ]);
-        if (commentError) errors.push('comment error');
+        errors.push(commentError);
       }
     }
 
-    if (profilePic !== user.profilePic) {
-      if (profilePic && !user.profilePic) {
-        await supabase.storage.from('user-image-bucket').upload(profilePic.name, profilePic);
-        await supabase.from('users').update({ image: profilePic.name }).eq('id', user.id);
-      } else if (profilePic && profilePic.src !== user.profilePic.src) {
-        await supabase.storage.from('user-image-bucket').remove([user.image]);
-        await supabase.storage.from('user-image-bucket').upload(profilePic.name, profilePic);
-        await supabase.from('users').update({ image: profilePic.name }).eq('id', user.id);
-      } else if (!profilePic || (profilePic.src == null && user.profilePic == null)) {
-        await supabase.storage.from('user-image-bucket').remove([user.image]);
-        await supabase.from('users').update({ image: null }).eq('id', user.id);
+    if (profilePic !== user.image) {
+      if (!profilePic) {
+        const { error: updateError } = await supabase
+          .from('users')
+          .update({ image: null })
+          .eq('id', user.id);
+        const { error: removeError } = await supabase.storage
+          .from('user-image-bucket')
+          .remove([user.image]);
+        errors.push(updateError, removeError);
+      } else {
+        const { error: uploadError } = await supabase.storage
+          .from('user-image-bucket')
+          .upload(profilePic.name, profilePic);
+        const { error: updateError } = await supabase
+          .from('users')
+          .update({ image: profilePic.name })
+          .eq('id', user.id);
+        errors.push(updateError, uploadError);
+        if (user.image) {
+          const { error: removeError } = await supabase.storage
+            .from('user-image-bucket')
+            .remove([user.image]);
+          errors.push(removeError);
+        }
       }
     }
-    if (errors.length > 0) {
+
+    if (errors.some((e) => e !== null)) {
       setSubmitFailure(true);
     } else {
       reset(data, { keepValues: true });
@@ -184,7 +201,7 @@ const EditUserFormWrap = ({
           options={companies}
           sendEmail={sendEmail}
           path={path}
-          isAdmin={isAdmin}
+          adminContent={adminContent}
         />
         <div className={cx('my-12 transition lg:w-7/12 mx-auto', { hidden: !submitSuccess })}>
           <Alert
@@ -238,9 +255,9 @@ const propTypes = {
   isLoading: PropTypes.bool,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  path: PropTypes.string,
-  isAdmin: PropTypes.bool,
-  loginId: PropTypes.number,
+  path: PropTypes.string.isRequired,
+  adminContent: PropTypes.bool.isRequired,
+  loginId: PropTypes.number.isRequired,
 };
 
 EditUserFormWrap.propTypes = propTypes;

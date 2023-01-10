@@ -16,7 +16,7 @@ const EditUserForm = ({
   options,
   sendEmail,
   path,
-  isAdmin,
+  adminContent,
 }) => (
   <form onSubmit={onSubmit}>
     <div className="flex flex-wrap gap-8 p-8">
@@ -133,7 +133,7 @@ const EditUserForm = ({
               </div>
             </div>
 
-            {isAdmin ? (
+            {adminContent ? (
               <div className="flex flex-col gap-4">
                 <FormInputGroup
                   label="Comment"
@@ -187,7 +187,7 @@ EditUserForm.propTypes = {
   options: PropTypes.object,
   sendEmail: PropTypes.func.isRequired,
   path: PropTypes.string,
-  isAdmin: PropTypes.bool,
+  adminContent: PropTypes.bool,
 };
 
 export default EditUserForm;

@@ -57,7 +57,7 @@ const EditUser = () => {
           companiesQueryData={getCompaniesQuery.data}
           isLoading={isLoading}
           path="./"
-          isAdmin={false}
+          adminContent={false}
           loginId={getLoginDataQuery?.data?.data.user.id}
         />
       </div>
@@ -66,5 +66,7 @@ const EditUser = () => {
 };
 
 EditUser.getLayout = (page) => page;
+
+EditUser.allowAuthenticated = true;
 
 export default EditUser;

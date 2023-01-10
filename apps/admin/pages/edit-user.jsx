@@ -59,7 +59,7 @@ const EditUser = () => {
           companiesQueryData={getCompaniesQuery.data}
           isLoading={isLoading}
           path="./users"
-          isAdmin
+          adminContent
           loginId={getLoginDataQuery?.data?.data.user.id}
         />
       </div>
