@@ -49,4 +49,9 @@ const Page = () => (
 
 Page.getLayout = (page) => <AdminPageLayout pageName="Users">{page}</AdminPageLayout>;
 
+// -- Configure AuthGuard -- //
+Page.allowAuthenticated = true;
+Page.roles = ['admin'];
+// Page.aclAbilities = [['View', 'Users']];
+
 export default Page;
