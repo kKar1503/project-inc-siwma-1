@@ -20,9 +20,7 @@ import CompanyDelete from '../Modals/CompanyDelete';
 function parseData(data) {
   return data.map((e) => ({
     id: e.id,
-    profilePicture: `https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/${
-      e.image || 'example.jpg'
-    }`,
+    profilePicture: `https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/${e.image || 'example.jpg'}`,
     company: e.name,
     website: e.website,
     bio: e.bio && e.bio.length > 60 ? `${e.bio.substring(0, 59)}...` : e.bio,
@@ -204,11 +202,11 @@ const RegisteredCompaniesTable = ({ className }) => {
 
   /**
    * Closes an alert
-   * @param {number} id The id of the alert to close
+   * @param {number} index The index of the alert to close
    */
-  const onCloseAlert = (id) => {
+  const onCloseAlert = (index) => {
     const $alerts = [...alerts];
-    $alerts.splice(id, 1);
+    $alerts.splice(index, 1);
 
     setAlerts($alerts);
   };

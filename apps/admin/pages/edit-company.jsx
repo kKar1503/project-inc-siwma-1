@@ -18,7 +18,7 @@ const parseQueryData = (data) => {
     ...data,
     image:
       (data.image && {
-        src: `https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/${data.image}`,
+        src: `${process.env.NEXT_PUBLIC_COMPANY_BUCKET_URL}${data.image}`,
       }) ||
       null,
     comments:
