@@ -290,7 +290,10 @@ const ListingPage = ({
               )}
 
               {!user && (
-                <Link href="/login" className="btn btn-sm btn-primary mt-4">
+                <Link
+                  href={`/login?redirect=/product/${listing.id}`}
+                  className="btn btn-sm btn-primary mt-4"
+                >
                   Login To Chat
                 </Link>
               )}
@@ -319,5 +322,6 @@ ListingPage.propTypes = {
 };
 
 ListingPage.getLayout = (page) => <Container>{page}</Container>;
+ListingPage.allowAuthenticated = true;
 
 export default ListingPage;

@@ -102,5 +102,6 @@ const MarketplacePage = () => {
 };
 
 MarketplacePage.getLayout = (page) => <Container>{page}</Container>;
+MarketplacePage.allowAuthenticated = true;
 
 export default MarketplacePage;
