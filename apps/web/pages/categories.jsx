@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 import { useState } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import Container from '../components/Container';
 import CategoryCard from '../components/category/CategoryCard';
 
 const getCategoriesImage = async (categories, supabaseClient) => {
@@ -52,25 +53,27 @@ const Category = () => {
   //   }
   // });
   return (
-    <div className="mx-28 my-10 h-screen">
-      <p className="font-bold text-3xl text-primary mb-5">More Metal Types</p>
-      <p className="text-secondary text-xl mb-10">
-        Choose from over 8,000 types of shapes and grades of metal!
-      </p>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:grid-cols-2 mb-10">
-        {categoriesData.map((item) => (
-          <CategoryCard
-            name={item.name}
-            img={item.imageUrl}
-            href={`/category/${item.name}?id=${item.id}`}
-            key={item.name}
-          />
-        ))}
+    <Container>
+      <div className="mx-28 my-10 h-screen">
+        <p className="font-bold text-3xl text-primary mb-5">More Metal Types</p>
+        <p className="text-secondary text-xl mb-10">
+          Choose from over 8,000 types of shapes and grades of metal!
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:grid-cols-2 mb-10">
+          {categoriesData.map((item) => (
+            <CategoryCard
+              name={item.name}
+              img={item.imageUrl}
+              href={`/category/${item.name}?id=${item.id}`}
+              key={item.name}
+            />
+          ))}
 
-        {/* image temporarily grabbed from metalsupermarkets.com */}
-        {/* hardcoded values left in to see image */}
+          {/* image temporarily grabbed from metalsupermarkets.com */}
+          {/* hardcoded values left in to see image */}
+        </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
