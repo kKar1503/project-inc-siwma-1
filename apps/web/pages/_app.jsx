@@ -1,7 +1,7 @@
 import '@inc/styles/globals.css';
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import {SessionContextProvider, useSupabaseClient, useUser} from '@supabase/auth-helpers-react';
 import {createBrowserSupabaseClient} from '@supabase/auth-helpers-nextjs';
 import {QueryClient, QueryClientProvider, useQuery} from 'react-query';
@@ -40,7 +40,7 @@ const DisallowNonAuthenticatedFallback = () => {
  *
  * @type {import('next').NextPage<PropTypes.InferProps<typeof propTypes>>}
  */
-const MyApp = ({ Component, pageProps }) => {
+const MyApp = ({Component, pageProps}) => {
   const [supabase] = useState(() => createBrowserSupabaseClient());
 
   return (
@@ -67,7 +67,7 @@ const LayoutView = ({Component, pageProps}) => {
   } = useQuery(['get_category'], () => supabase.from('category').select('*'));
 
   const getLayout = Component.getLayout || ((page) => page);
-  const { roles, aclAbilities, allowAuthenticated, allowNonAuthenticated } = Component;
+  const {roles, aclAbilities, allowAuthenticated, allowNonAuthenticated} = Component;
   const {data = undefined} = categoryData || {};
   // eslint-disable-next-line no-nested-ternary
   const pageTitle = Component.title
@@ -89,24 +89,21 @@ const LayoutView = ({Component, pageProps}) => {
     }
     )();
   return (
-    <>
-      <title>{pageTitle}</title>
-      {(Component && Component.ignoreHeader) || <Header categoryData={data} isLoggedIn={user !== null}/>}
-      <LayoutView>
-        <AppUserProvider>
-          <AuthenticationGuard
-            disallowAuthenticatedFallback={<Error404 />}
-            disallowNonAuthenticatedFallback={<DisallowNonAuthenticatedFallback />}
-            allowAuthenticated={allowAuthenticated}
-            allowNonAuthenticated={allowNonAuthenticated}
-          >
-            <AuthorizationGuard roles={roles} fallback={<Error404 />} aclAbilities={aclAbilities}>
-              {getLayout(<Component {...pageProps} />)}
-            </AuthorizationGuard>
-          </AuthenticationGuard>
-        </AppUserProvider>
-      </LayoutView>
-    </>
+    <AppUserProvider>
+      <AuthenticationGuard
+        disallowAuthenticatedFallback={<Error404/>}
+        disallowNonAuthenticatedFallback={<DisallowNonAuthenticatedFallback/>}
+        allowAuthenticated={allowAuthenticated}
+        allowNonAuthenticated={allowNonAuthenticated}
+      >
+        <AuthorizationGuard roles={roles} fallback={<Error404/>} aclAbilities={aclAbilities}>
+          <title>{pageTitle}</title>
+          {(Component && Component.ignoreHeader) ||
+              <Header categoryData={data} isLoggedIn={user !== null}/>}
+          {getLayout(<Component {...pageProps} />)}
+        </AuthorizationGuard>
+      </AuthenticationGuard>
+    </AppUserProvider>
   );
 }
 
