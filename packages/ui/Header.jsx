@@ -13,7 +13,7 @@ const Header = ({categoryData, isLoggedIn}) => {
   const toggle = () => setOpen(!open);
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-gradient-to-r from-base-300 to-gray-400 border-b-2 border-base-200">
       <div className="navbar-start">
         <div
           className=" lg:hidden"
@@ -56,7 +56,7 @@ const Header = ({categoryData, isLoggedIn}) => {
         </Link>
         <ul className="menu menu-horizontal p-0 hidden lg:flex">
           <li tabIndex={0}>
-            Categories
+            <p className='text-lg ml-4 '>Categories</p>
             <svg
               color='black'
               className="fill-current"
@@ -68,7 +68,7 @@ const Header = ({categoryData, isLoggedIn}) => {
               <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/>
             </svg>
             <ul
-              className="p-2 z-40 menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 text-black">
+              className="p-2 z-40 menu menu-compact dropdown-content mt-3 p-2 shadow-lg bg-base-100 rounded-box w-52 text-black">
               {categoryData?.map(({name, id}) => (
                 <CategoryItem
                   name={name}
