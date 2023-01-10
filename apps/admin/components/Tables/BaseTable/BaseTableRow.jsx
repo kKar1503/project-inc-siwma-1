@@ -69,7 +69,7 @@ const BaseTableRow = React.forwardRef(
     }, []);
 
     return (
-      <tr>
+      <tr className='last:border-b'>
         {showCheckbox && (
           <td>
             <label>
