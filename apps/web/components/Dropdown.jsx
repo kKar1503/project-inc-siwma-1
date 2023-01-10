@@ -15,8 +15,8 @@ const Dropdown = ({ items, onChangeValue, defaultValue, itemType }) => (
   >
 
     <option key="0" disabled>{defaultValue}</option>
-    {itemType === 'Object' ? items.map((item, index) =>
-      <option key={index} value={item.id}>{item.name}</option>
+    {itemType === 'Object' ? items.map((item) =>
+      <option key={item.id} value={item.id}>{item.name}</option>
     ) : items.map((item, index) => 
       <option key={index} value={item}>{item}</option>
     )}
