@@ -5,7 +5,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CardBackground from '../../components/CardBackground';
 import Container from '../../components/Container';
 import Breadcrumbs from '../../components/listing/Breadcrumbs';
@@ -16,7 +16,6 @@ import User from '../../components/listing/User';
 import Carousel from '../../components/marketplace/carousel/Carousel';
 import BuyBadge from '../../components/marketplace/listing/BuyBadge';
 import SellBadge from '../../components/marketplace/listing/SellBadge';
-import sampleProductImage from '../../public/sample-product-image.jpg';
 
 const getAllListingImages = async (listingId, supabaseClient) => {
   const { data, error } = await supabaseClient.rpc('get_all_images_for_listing_by_id', {
@@ -113,6 +112,18 @@ const ListingPage = ({
   const user = useUser();
   const router = useRouter();
   const supabase = useSupabaseClient();
+
+  const [profilePictureUrl, setProfilePictureUrl] = useState(null);
+
+  const getUserProfilePictureURL = async (userId) => {
+    const res = await supabase.storage.from('user-image-bucket').getPublicUrl('default-user.png');
+
+    setProfilePictureUrl(res.data.publicUrl);
+  };
+
+  useEffect(() => {
+    getUserProfilePictureURL('abc');
+  }, []);
 
   // This function handles creating a chat room and then redirecting to the chat page
   const createRoom = async () => {
@@ -258,7 +269,7 @@ const ListingPage = ({
           <div className="col-span-3">
             <CardBackground className="w-full">
               <User
-                profilePicture={sampleProductImage}
+                profilePicture={profilePictureUrl}
                 username={listing.fullname}
                 company={listing.company_name}
               />
