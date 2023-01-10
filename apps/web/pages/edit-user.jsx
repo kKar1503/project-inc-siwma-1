@@ -2,10 +2,8 @@ import { useRouter } from 'next/router';
 import { useQueries, useQueryClient } from 'react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { getAllCompanies, getUser } from '@inc/database';
-import { EditUserFormWrap } from '@inc/ui';
+import { EditUserFormWrap, Header } from '@inc/ui';
 import Link from 'next/link';
-import AdminPageLayout from '../components/layouts/AdminPageLayout';
-import NavBar from '../components/NavBar';
 
 const EditUser = () => {
   const router = useRouter();
@@ -38,7 +36,7 @@ const EditUser = () => {
 
   return (
     <div className="flex flex-col w-full h-full gap-8 p-6 overflow-auto xl:max-h-screen">
-      <NavBar />
+      <Header />
 
       <div className="flex flex-col grow h-fit shadow-xl rounded-2xl bg-base-100">
         <div className="flex flex-col p-8 border-b">
@@ -54,7 +52,7 @@ const EditUser = () => {
           companiesQueryData={getCompaniesQuery.data}
           isLoading={isLoading}
           returnButton={
-            <Link href="./users" className="btn btn-primary">
+            <Link href="./" className="btn btn-primary">
               Return to users
             </Link>
           }
@@ -64,6 +62,6 @@ const EditUser = () => {
   );
 };
 
-EditUser.getLayout = (page) => <AdminPageLayout pageName="Users">{page}</AdminPageLayout>;
+EditUser.getLayout = (page) => page;
 
 export default EditUser;

@@ -5,7 +5,7 @@ import {
   FormTextArea,
   FormTextInput,
   FormSelectInput,
-} from '@inc/ui';
+} from '../index';
 
 const EditUserForm = ({
   onSubmit,
@@ -14,6 +14,7 @@ const EditUserForm = ({
   onDeleteImage,
   options,
   sendEmail,
+  returnButton,
 }) => (
   <form onSubmit={onSubmit}>
     <div className="flex flex-wrap gap-8 p-8">
@@ -147,11 +148,7 @@ const EditUserForm = ({
 
     <div className="flex justify-between">
       <div className="flex">
-        <div className="flex px-8 pb-8">
-          <a href="./users" className="btn btn-primary">
-            Return To Users
-          </a>
-        </div>
+        <div className="flex px-8 pb-8">{returnButton}</div>
         <div className="gap-8 px-8">
           <button
             type="button"
@@ -179,6 +176,7 @@ EditUserForm.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   options: PropTypes.object,
   sendEmail: PropTypes.func.isRequired,
+  returnButton: PropTypes.element,
 };
 
 export default EditUserForm;

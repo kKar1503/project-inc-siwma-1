@@ -3,7 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import cx from 'classnames';
-import { Alert } from '@inc/ui';
+import Alert from '../../alerts/Alert';
 import EditUserForm from './EditUserForm';
 
 function parseUserData(data) {
@@ -33,6 +33,7 @@ const EditUserFormWrap = ({
   isLoading,
   className,
   style,
+  returnButton,
 }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitFailure, setSubmitFailure] = useState(false);
@@ -169,6 +170,7 @@ const EditUserFormWrap = ({
           onDeleteImage={handleDeleteImage}
           options={companies}
           sendEmail={sendEmail}
+          returnButton={returnButton}
         />
         <div className={cx('my-12 transition lg:w-7/12 mx-auto', { hidden: !submitSuccess })}>
           <Alert
@@ -222,6 +224,7 @@ const propTypes = {
   isLoading: PropTypes.bool,
   className: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  returnButton: PropTypes.element,
 };
 
 EditUserFormWrap.propTypes = propTypes;
