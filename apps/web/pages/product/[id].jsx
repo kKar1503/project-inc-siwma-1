@@ -138,7 +138,7 @@ const ListingPage = ({
 
     if (Object.prototype.hasOwnProperty.call(d, 'id')) {
       // d.id;
-      router.push(`/real-time-chat/${d.id}`);
+      router.push(`/real-time-chat`);
     }
   };
 
