@@ -7,10 +7,8 @@ const Advertisement = ({ adData }) => {
   const user = useUser();
   const supabase = useSupabaseClient();
 
-  const handleClick = () => {
-    // ALERT: currently there is no sign in, so to test the click insert, please put this uuid under the _user_uuid field
-    // 'c078a5eb-e75e-4259-8fdf-2dc196f06cbd'
-    supabase.rpc('insert_click', { _advertisement_id: adData.id, _user_uuid: user.id });
+  const handleClick = async () => {
+    await supabase.rpc('insert_click', { _advertisement_id: adData.id, _user_uuid: user.id });
   };
 
   return (
