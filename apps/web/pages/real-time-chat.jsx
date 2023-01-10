@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 // eslint-disable-next-line import/no-unresolved
 import toast, { Toaster } from 'react-hot-toast';
-import Autocomplete from 'react-autocomplete';
+// import Autocomplete from 'react-autocomplete';
 
 import '@inc/styles/globals.css';
 import { Header } from '@inc/ui';
@@ -117,7 +117,7 @@ const RealTimeChat = () => {
 
     if (error) {
       console.log('error', error);
-    } else if (data.length != 0){
+    } else if (data.length != 0) {
       console.log(data);
       const userid = data[0].profile_uuid;
 
@@ -182,13 +182,16 @@ const RealTimeChat = () => {
     fetchLastMsg(notifs.content_id);
   }, [notifs]);
 
+  const params = new URLSearchParams(window.location.search)
+  const [activeChatID, setActiveChatID] = useState(params.get('id') || null);
+
   return (
     <div className="drawer">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="grid grid-cols-10 gap-4 h-screen drawer-content">
         <Toaster />
         <div className="col-span-10 md:col-span-7 bg-blue-50 rounded-3xl h-screen drawer-content">
-              <Header/>
+          <Header />
           <div className="md:flex border-b-4 items-center md:px-6 md:py-4">
             <div className="hidden lg:block">
               <h2 className="font-bold text-xl">Conversations</h2>
