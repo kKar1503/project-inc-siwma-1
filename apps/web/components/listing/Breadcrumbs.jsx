@@ -9,7 +9,7 @@ const Breadcrumbs = ({ paths }) => (
         <Link href="/">Home</Link>
       </li>
       {paths.map((p) => (
-        <li key={p + 1}>
+        <li key={p.path + p.name}>
           <Link href={`${p.path}`}>{p.name}</Link>
         </li>
       ))}
