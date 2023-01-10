@@ -1,60 +1,36 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import crypto from 'crypto';
+import {NextResponse} from 'next/server';
+import {useEffect, useState} from 'react';
 import {useQuery} from 'react-query';
-import {useSupabaseClient} from '@supabase/auth-helpers-react';
-import Log from '@inc/utils/logger';
-import CardBackground from '../components/CardBackground';
+import {useSupabaseClient, useUser} from '@supabase/auth-helpers-react';
 import CategoricalForm from '../components/layouts/CategoricalForm';
 import ParameterForm from '../components/layouts/ParameterForm';
 import ListingForm from '../components/layouts/ListingForm';
 import ImageForm from '../components/layouts/ImageForm';
-import EnsureUserLoggedIn from '../hooks/ensureUserLoggedIn';
 
-const NewListing = ({session}) => {
+const NewListing = () => {
+  const user = useUser();
   const client = useSupabaseClient();
   // EnsureUserLoggedIn();
+  const [formTypeData, setFormTypeData] = useState([]);
 
-
-  const [categoryID, setCategoryID] = React.useState(null);
-  const [allCategories, setAllCategories] = React.useState([]);
-  const [parameters, setParameters] = React.useState([]);
-  const [parameterTypes, setParameterTypes] = React.useState([]);
-  const [parameterChoices, setParameterChoices] = React.useState([]);
-
-  const [formTypeData, setFormTypeData] = React.useState([]);
-  // const [formChoiceData, setFormChoiceData] = React.useState([]);
-
-  // used for image form
-  const {selectedImages, imageHook} = ImageForm.UseHook();
-
-  // Form states
-  const {listingHook} = ListingForm.UseHook();
-
-  // const identifyParameterType = async (parameterData, parameterType) => {
-  //   const formTypes = [];
-
-  //   // match paramter types to individual parameters via the key id 
-  //   for (let i = 0; i < parameterData.length; i++) {
-  //     for (let j = 0; j < parameterType.length; j++) {
-  //       if (parameterData[i].type === parameterType[j].id) {
-  //         formTypes.push({ id: parameterType[j].id, name: parameterData[i].display_name, type: parameterType[j].name});
-  //       }
-  //     }
-  //   }
-
-  //   setFormTypeData(formTypes);
-  // };
+  const {categoryID, categoryHook, validateCategory} = CategoricalForm.useHook();
+  const {imageHook, validateImage} = ImageForm.useHook();
+  const {listingHook, validateListing} = ListingForm.useHook();
 
   const identifyParameterType = async (parameterData, parameterType, parameterChoice) => {
     const formTypes = [];
     let formData = {};
 
-    // match paramter types to individual parameters via the key id 
+    // match parameter types to individual parameters via the key id
     for (let i = 0; i < parameterData.length; i++) {
       for (let j = 0; j < parameterType.length; j++) {
         if (parameterData[i].type === parameterType[j].id) {
-          formData = { id: parameterData[i].parameter, name: parameterData[i].display_name, type: parameterType[j].name, choice: null};
+          formData = {
+            id: parameterData[i].parameter,
+            name: parameterData[i].display_name,
+            type: parameterType[j].name,
+            choice: null
+          };
 
           for (let k = 0; k < parameterChoice.length; k++) {
             if (parameterData[i].parameter === parameterChoice[k].parameter) {
@@ -68,23 +44,7 @@ const NewListing = ({session}) => {
     }
 
     setFormTypeData(formTypes);
-    console.log(formTypes);
   };
-  
-  // const identifyParameterChoice = async (parameterData, parameterChoice) => {
-  //   const formChoices = [];
-
-  //   // match paramter types to individual parameters via the key id 
-  //   for (let i = 0; i < parameterData.length; i++) {
-  //     for (let j = 0; j < parameterChoice.length; j++) {
-  //       if (parameterData[i].id === parameterChoice[j].parameter) {
-  //         formChoices.push({ id: parameterData[i].id, name: parameterData[i].display_name, choice: parameterChoice[j].choice});
-  //       }
-  //     }
-  //   }
-
-  //   setFormChoiceData(formChoices);
-  // }
 
   const {
     data: categoriesData,
@@ -95,10 +55,6 @@ const NewListing = ({session}) => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    onSuccess: (categoryAPIData) => {
-      Log('green', categoryAPIData.data);
-      setAllCategories(categoryAPIData.data);
-    }
   });
 
   const {
@@ -107,10 +63,6 @@ const NewListing = ({session}) => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    onSuccess: (parameterTypesAPIData) => {
-      Log('green', parameterTypesAPIData.data);
-      setParameterTypes(parameterTypesAPIData.data);
-    }
   });
 
   const {
@@ -119,10 +71,6 @@ const NewListing = ({session}) => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    onSuccess: (parameterChoicesAPIData) => {
-      Log('green', parameterChoicesAPIData.data);
-      setParameterChoices(parameterChoicesAPIData.data);
-    }
   });
 
   const {
@@ -130,65 +78,74 @@ const NewListing = ({session}) => {
     isLoading: parametersLoading,
     isError: parametersError,
     status: parametersStatus,
-  } = useQuery(['get_category_parameters', categoryID], async () => client.rpc('get_category_parameters', {_category_id: categoryID}), {
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    onSuccess: (parameterAPIData) => {
-      Log('green', parameterAPIData.data);
-      setParameters(parameterAPIData.data);
+  } = useQuery(
+    ['get_category_parameters', categoryID],
+    async () => client.rpc('get_category_parameters', {_category_id: categoryID}),
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
     }
-  });
+  );
 
-  React.useEffect(() => {
-    console.log(formTypeData);
-    // console.log(formChoiceData);
-  }, [formTypeData]);
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (parameterTypesData && parametersData && parametersData.data && parameterTypesData.data && parameterChoicesData && parameterChoicesData.data) {
       identifyParameterType(parametersData.data, parameterTypesData.data, parameterChoicesData.data);
-    };
-  }, [parameters, parameterTypes, parameterChoices]);
+    }
+  }, [parametersData, parameterTypesData, parameterChoicesData]);
 
-  const handleCategoryChange = (event) => {
-    setCategoryID(event.target.value);
-  };
+  const onSubmit = async (event) => {
+    event.preventDefault();
 
-  const insertNewListingHandler = async (e,values) => {
-    e.preventDefault();
-    const {name, price, description, negotiable, type} = values;
-    console.log(name);
-    console.log(price);
-    console.log(description);
-    console.log(negotiable);
+    const listing = validateListing();
+    const images = validateImage();
+    const category = validateCategory();
+    const parameters = []
 
-    const {data} = await client
+    if (!listing || !images || !category) return;
+
+    const {data: listingId, error: insertListingError} = await client
       .from('listing')
       .insert({
-        name,
-        description,
-        price,
-        unit_price: false,
-        negotiable,
-        category: '1',
-        type,
-        owner: 'c078a5eb-e75e-4259-8fdf-2dc196f06cbd', // THIS IS ELON MUSK
+        listing: listing.name,
+        description: listing.description,
+        price: listing.price,
+        negotiable: listing.negotiable,
+        category: category.categoryId,
+        type: (listing.type === 'Buying' ? 1 : 2),
+        owner: user.id,
       })
       .returns('id');
 
-    const uuidArray = [];
-    selectedImages.forEach(async (image, index) => {
-      const randomUUID = crypto.randomUUID();
-      await client.storage.from('listing-image-bucket').upload(randomUUID, image.blob);
-      uuidArray[index] = {listing: data[0].id, image: randomUUID};
+    if (insertListingError) throw new Error(insertListingError.message);
+
+    const parameterPromises = parameters.map(async (parameter) => client.from('listing').insert({
+      listing: listingId.data,
+      parameter,
+      // TODO: wait for the parameter form to be done
+      // value,
+    }));
+
+    const imagePromises = images.images.map((image) => {
+      const uuid = crypto.randomUUID();
+      const promise1 = client.storage
+        .from('listing-image-bucket')
+        .upload(uuid, image.blob);
+      const promise2 = client.from('listing_images').insert({
+        listing: listingId.data,
+        image: uuid,
+      })
+      return Promise.all([promise1, promise2]);
     });
 
-    await client.from('listing').insert(uuidArray);
+    const promises = Promise.all([...parameterPromises, ...imagePromises]);
 
-    // NextResponse.redirect(`/listing/${data[0].id}`);
+    const {error: insertError} = await promises;
+
+    if (insertError) throw new Error(insertError.message);
+
+    NextResponse.redirect(`/listing/${listingId[0].id}`);
   };
-
 
   return (
     <main>
@@ -197,34 +154,24 @@ const NewListing = ({session}) => {
           {!categoriesLoading &&
             !categoriesError &&
             categoriesStatus === 'success' &&
-            allCategories && (
-            <CategoricalForm items={categoriesData.data} onChangeValue={handleCategoryChange}/>
+            categoriesData && (
+            <CategoricalForm items={categoriesData.data} categoryHook={categoryHook}/>
           )}
 
           {!parametersLoading &&
             !parametersError &&
             parametersStatus === 'success' &&
-            parameters.length !== 0 && formTypeData !== null && (
+            parametersData.data.length !== 0 && formTypeData !== null && (
             <ParameterForm formTypes={formTypeData}/>
           )}
 
           <ImageForm useImageHook={imageHook}/>
         </div>
         <div className="flex flex-col w-3/5">
-          <CardBackground>
-            <ListingForm
-              listingHook={listingHook}
-              onSubmit={insertNewListingHandler}
-            />
-          </CardBackground>
+          <ListingForm listingHook={listingHook} onSubmit={onSubmit}/>
         </div>
       </div>
     </main>
   );
 };
-
-NewListing.propTypes = {
-  session: PropTypes.func,
-};
-
 export default NewListing;

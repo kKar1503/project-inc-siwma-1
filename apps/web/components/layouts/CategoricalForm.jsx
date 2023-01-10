@@ -47,10 +47,10 @@ const CategoricalForm = ({items, categoryHook}) => {
     <CardBackground>
       <ErrorMessage errorMsg={errorMsg}/>
       <h1 className="font-bold text-3xl">Category</h1>
-      <Dropdown items={items} onChangeValue={onChangeValue} defaultValue='Category'/>
+      <Dropdown items={items} onChangeValue={onChangeValue} defaultValue='Category' itemType='Object'/>
     </CardBackground>
   );
-}
+};
 
 CategoricalForm.propTypes = {
   items: PropTypes.arrayOf(
