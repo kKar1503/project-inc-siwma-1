@@ -48,11 +48,11 @@ const ParameterForm  = ({ formTypes }) => {
         switch (item.type) {
           case 'MEASUREMENT (WEIGHT)':
             return (
-              <Input key={item.name} text={`${item.name} /g`} value={getValue(item.name)} onChange = {(e) => {updateValues(e.target.value, item.name)}} />
+              <Input key={item.name} text={`${item.name} /g`} value={getValue(item.name) || ''} onChange = {(e) => {updateValues(e.target.value, item.name)}} />
             );
           case 'MEASUREMENT (DIMENSION)':
             return (
-              <Input key={item.name} text={`${item.name} /mm`} value={getValue(item.name)} onChange = {(e) => {updateValues(e.target.value, item.name)}} />
+              <Input key={item.name} text={`${item.name} /mm`} value={getValue(item.name) || ''} onChange = {(e) => {updateValues(e.target.value, item.name)}} />
             );
           case 'TWO CHOICES':
             return (
@@ -64,7 +64,7 @@ const ParameterForm  = ({ formTypes }) => {
             );
           case 'OPEN ENDED':
             return (
-              <Input key={item.name} type='textarea' text={`${item.name}`} value={getValue(item.name)} onChange = {(e) => {updateValues(e.target.value, item.name)}} />
+              <Input key={item.name} type='textarea' text={`${item.name}`} value={getValue(item.name) || ''} onChange = {(e) => {updateValues(e.target.value, item.name)}} />
             );
           default:
             return null;
