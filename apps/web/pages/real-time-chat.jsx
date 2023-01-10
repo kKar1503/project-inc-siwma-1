@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 // eslint-disable-next-line import/no-unresolved
 import toast, { Toaster } from 'react-hot-toast';
-// import Autocomplete from 'react-autocomplete';
+import Autocomplete from 'react-autocomplete';
 
 import '@inc/styles/globals.css';
 import { Header } from '@inc/ui';
@@ -182,8 +182,7 @@ const RealTimeChat = () => {
     fetchLastMsg(notifs.content_id);
   }, [notifs]);
 
-  const params = new URLSearchParams(window.location.search)
-  const [activeChatID, setActiveChatID] = useState(params.get('id') || null);
+
 
   return (
     <div className="drawer">
