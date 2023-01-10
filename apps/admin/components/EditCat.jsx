@@ -1,6 +1,7 @@
 import { useQueries, useQueryClient, useQuery } from 'react-query';
 import { useEffect, useState } from 'react';
 import { Alert } from '@inc/ui';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { FiUpload } from 'react-icons/fi';
@@ -174,7 +175,12 @@ const EditCat = ({ id }) => {
           </label>
         </div>
         <div className="modal-action">
-          <button className="btn btn-outline btn-primary w-full" type="submit">
+          <div className="flex px-8 pb-8">
+            <Link href="/category_management" className="btn btn-outline btn-warning">
+                Return To Category
+            </Link>
+          </div>
+          <button className="btn btn-outline btn-primary" type="submit">
             Save
           </button>
         </div>
