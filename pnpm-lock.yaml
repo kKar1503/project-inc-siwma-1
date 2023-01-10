@@ -110,8 +110,6 @@ importers:
 
   apps/web:
     specifiers:
-      '@casl/ability': ^6.3.3
-      '@casl/react': ^3.1.0
       '@inc/chat': workspace:*
       '@inc/database': workspace:0.0.0
       '@inc/notifications': workspace:*
@@ -145,8 +143,6 @@ importers:
       tailwindcss: 3.2.1
       yup: 0.32.11
     dependencies:
-      '@casl/ability': 6.3.3
-      '@casl/react': 3.1.0_njj54owfq3na6bd4rvqbzsj5l4
       '@inc/chat': link:../../packages/chat
       '@inc/database': link:../../packages/database
       '@inc/notifications': link:../../packages/notifications
@@ -972,6 +968,10 @@ packages:
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
     dev: true
 
+  /@types/node/14.18.32:
+    resolution: {integrity: sha512-Y6S38pFr04yb13qqHf8uk1nHE3lXgQ30WZbv1mLliV9pt0NjvqdWttLcrOYLnXbOafknVYRHZGoMSpR9UwfYow==}
+    dev: true
+
   /@types/node/14.18.33:
     resolution: {integrity: sha512-qelS/Ra6sacc4loe/3MSjXNL1dNQ/GjxNHVzuChwMfmk7HuycRLVQN2qNY3XahK+fZc5E2szqQSKUyAF0E+2bg==}
     dev: true
@@ -1004,7 +1004,7 @@ packages:
     resolution: {integrity: sha512-Cn6WYCm0tXv8p6k+A8PvbDG763EDpBoTzHdA+Q/MF6H3sapGjCm9NzoaJncJS9tUKSuCoDs9XHxYYsQDgxR6kw==}
     requiresBuild: true
     dependencies:
-      '@types/node': 14.18.33
+      '@types/node': 14.18.32
     dev: true
     optional: true
 
@@ -1782,7 +1782,7 @@ packages:
     dependencies:
       '@cypress/request': 2.88.10
       '@cypress/xvfb': 1.2.4_supports-color@8.1.1
-      '@types/node': 14.18.33
+      '@types/node': 14.18.32
       '@types/sinonjs__fake-timers': 8.1.1
       '@types/sizzle': 2.3.3
       arch: 2.2.0
@@ -4396,6 +4396,14 @@ packages:
       postcss-selector-parser: 6.0.11
     dev: true
 
+  /postcss-selector-parser/6.0.10:
+    resolution: {integrity: sha512-IQ7TZdoaqbT+LCpShg46jnZVlhWD2w6iQYAcYXfHARZ7X1t/UGhhceQDs5X0cGqKvYlHNOuv7Oa1xmb0oQuA3w==}
+    engines: {node: '>=4'}
+    dependencies:
+      cssesc: 3.0.0
+      util-deprecate: 1.0.2
+    dev: true
+
   /postcss-selector-parser/6.0.11:
     resolution: {integrity: sha512-zbARubNdogI9j7WY4nQJBiNqQf3sLS3wCP4WfOidu+p28LofJqDH1tcXypGrcmMHhDk2t9wGhCsYe/+szLTy1g==}
     engines: {node: '>=4'}
@@ -5149,7 +5157,7 @@ packages:
       postcss-js: 4.0.0_postcss@8.4.18
       postcss-load-config: 3.1.4_postcss@8.4.18
       postcss-nested: 6.0.0_postcss@8.4.18
-      postcss-selector-parser: 6.0.11
+      postcss-selector-parser: 6.0.10
       postcss-value-parser: 4.2.0
       quick-lru: 5.1.1
       resolve: 1.22.1

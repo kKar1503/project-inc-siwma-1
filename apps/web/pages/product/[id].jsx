@@ -1,144 +1,176 @@
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { DateTime } from 'luxon';
+import PropTypes from 'prop-types';
 import React from 'react';
-import { useRouter } from 'next/router';
-import Image from 'next/image';
-import { useQuery } from 'react-query';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import Skeleton from 'react-loading-skeleton';
-import Log from '@inc/utils/logger';
-import ErrorPage from '../../components/listing/ErrorPage';
-import FlexContainer from '../../components/listing/FlexContainer';
-import Breadcrumbs from '../../components/listing/Breadcrumbs';
-import Title from '../../components/listing/Title';
-import Price from '../../components/listing/Price';
-import Detail from '../../components/listing/Detail';
-import Description from '../../components/listing/Description';
-import User from '../../components/listing/User';
 import CardBackground from '../../components/CardBackground';
+import Container from '../../components/Container';
+import Breadcrumbs from '../../components/listing/Breadcrumbs';
+import Detail from '../../components/listing/Detail';
+import Price from '../../components/listing/Price';
+import Title from '../../components/listing/Title';
+import User from '../../components/listing/User';
 import Carousel from '../../components/marketplace/carousel/Carousel';
+import BuyBadge from '../../components/marketplace/listing/BuyBadge';
+import SellBadge from '../../components/marketplace/listing/SellBadge';
 import sampleProductImage from '../../public/sample-product-image.jpg';
 
-const Listing = () => {
-  const { query, isReady } = useRouter();
+const getAllListingImages = async (listingId, supabaseClient) => {
+  const { data, error } = await supabaseClient.rpc('get_all_images_for_listing_by_id', {
+    _id: listingId,
+  });
 
-  const client = useSupabaseClient();
+  if (error) throw new Error("There was a problem loading this listing's images");
 
-  const [listing, setListing] = React.useState(null);
-  const [user, setUser] = React.useState(null);
-  const [carouselImages, setCarouselImages] = React.useState([]);
+  const imagesPromises = data.map((imagesData) => {
+    const { image: uuid } = imagesData;
 
-  const {
-    data: listingData,
-    isError: listingError,
-    error: listingErrorData,
-    isLoading: listingLoading,
-    status: listingStatus,
-  } = useQuery(
-    ['get_listing_by_id', query.id],
-    async () => client.rpc('get_listing_by_id', { listing_id: parseInt(query.id, 10) }),
-    {
-      enabled: isReady,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-    }
-  );
+    return supabaseClient.storage.from('listing-image-bucket').getPublicUrl(uuid);
+  });
 
-  const {
-    data: listingImageData,
-    isError: listingImageError,
-    error: listingImageErrorData,
-    isLoading: listingImageLoading,
-    status: listingImageStatus,
-    refetch: listingImageRefetch,
-  } = useQuery(
-    ['get_listing_images'],
-    async () =>
-      client.storage
-        .from('listing-image-bucket')
-        .getPublicUrl('5292cf25-72e7-4f1c-b0e1-5a1e0c2009b4'),
-    {
-      enabled: isReady,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-    }
-  );
-
-  React.useEffect(() => {
-    if (listingStatus === 'success') {
-      Log('Listing data', listingData.data);
-      setListing(listingData.data);
-    }
-  }, [listingData, listingStatus]);
-
-  React.useEffect(() => {
-    if (listingImageStatus === 'success') {
-      Log('Listing image data', listingImageData.data);
-
-      if (listingImageData.data) {
-        setCarouselImages((previousImages) => [...previousImages, listingImageData.data.publicUrl]);
-      }
-    }
-  }, [listingImageData, listingImageStatus]);
-
-  return (
-    <main>
-      {listingLoading && <Skeleton count={10} />}
-
-      {listingError && <ErrorPage errorCode={500} errorMessage={`${listingErrorData.message}!`} />}
-
-      {isReady && listing === undefined && (
-        <ErrorPage errorCode={404} errorMessage="Listing not found!" />
-      )}
-
-      {isReady && listing && !listingLoading && !listingError && listingStatus === 'success' && (
-        <FlexContainer className="flex-col w-full">
-          <div className="mx-20 space-y-4">
-            <Breadcrumbs paths={[listing.category_name, listing.name]} />
-            <Carousel>
-              <div className="w-[1900px] h-[300px]">
-                {carouselImages.map((image) => (
-                  <div key={image} className="w-full h-full relative">
-                    <Image
-                      src={image}
-                      alt={listing.name}
-                      className="object-cover border border-white rounded-2xl"
-                      fill
-                    />
-                  </div>
-                ))}
-              </div>
-            </Carousel>
-            <FlexContainer className="flex-row space-x-8">
-              <div className="w-3/4 space-y-4">
-                <Title title={listing.name}>
-                  <span className="text-grey-400">
-                    Posted on: {new Date(listing.created_at).getDay()}-
-                    {new Date(listing.created_at).getMonth()}-
-                    {new Date(listing.created_at).getFullYear()}
-                  </span>
-                </Title>
-                <Price price={listing.price} />
-                <FlexContainer className="flex-row space-x-24">
-                  <Detail title="Length" detail="100m" />
-                  <Detail title="Material" detail="Aluminum" />
-                </FlexContainer>
-                <div className="divider" />
-                <Title title="Description" />
-                <Description description={listing.description} />
-              </div>
-              <div className="w-1/4">
-                <CardBackground className="text-center">
-                  <User profilePicture={sampleProductImage} username="xiaoming" />
-                  <button className="btn btn-primary mt-4">Chat now</button>
-                </CardBackground>
-              </div>
-            </FlexContainer>
-          </div>
-        </FlexContainer>
-      )}
-    </main>
-  );
+  return Promise.all(imagesPromises);
 };
 
-export default Listing;
+export async function getServerSideProps(context) {
+  const { params } = context;
+
+  // Create supabase client
+  const supabase = createServerSupabaseClient(context);
+
+  let images = [];
+
+  // Get the listing details
+  const { data, error } = await supabase.rpc('get_listing_by_id', {
+    listing_id: parseInt(params.id, 10),
+  });
+
+  if (error || data.length === 0) {
+    console.log('Error while getting listing by id');
+    console.log(error);
+    console.log(data.length);
+
+    // Redirect to the 404 page
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    };
+  }
+
+  const listingImagesData = await getAllListingImages(params.id, supabase);
+
+  if (listingImagesData.length > 0) {
+    images = listingImagesData.map((image) => image.data.publicUrl);
+  }
+
+  console.log('Listing and images data from getServerSideProps');
+  console.log(data[0]);
+  console.log(images);
+
+  return {
+    props: {
+      images,
+      listing: data[0],
+    },
+  };
+}
+
+const ListingPage = ({ listing, images: carouselImages }) => (
+  // const [user, setUser] = React.useState(null);
+
+  <>
+    {/* {listingError && <ErrorPage errorCode={500} errorMessage={`${listingErrorData.message}!`} />} */}
+    {/* {!listing && <ErrorPage errorCode={404} errorMessage="Listing not found!" />} */}
+    <Breadcrumbs
+      paths={[
+        {
+          name: listing.category_name,
+          path: `/category/${listing.category_name}`,
+        },
+        {
+          name: listing.name,
+          path: `/product/${listing.id}`,
+        },
+      ]}
+    />
+
+    <>
+      <Carousel wrapperClassName="w-full h-[300px] my-10">
+        {[...carouselImages].map((image) => (
+          <div key={image} className="w-full h-full flex justify-center bg-black/50 relative">
+            <picture>
+              <img
+                src={image}
+                alt={listing.name}
+                className="w-full h-full object-fit blur-2xl absolute top-0 left-0"
+              />
+            </picture>
+
+            <picture className="z-10">
+              <img src={image} alt={listing.name} className="h-full" />
+            </picture>
+            {/* <div className="relative w-fit h-full">
+                  <Image
+                    src={image}
+                    alt={listing.name}
+                    className="aspect-auto w-auto h-full"
+                    fill
+                  />
+                </div> */}
+          </div>
+        ))}
+      </Carousel>
+
+      <div className="lg:grid lg:grid-cols-10 my-5 gap-5 space-y-4">
+        {/* Listing details */}
+        <div className="space-y-4 col-span-7">
+          {/* Listing title and badge */}
+          <div className="flex flex-wrap items-center gap-3">
+            {listing.listing_type_name === 'SELL' ? <SellBadge /> : <BuyBadge />}
+            <Title title={listing.name} />
+          </div>
+
+          <Price price={listing.price} unitPrice={listing.unit_price} />
+
+          <div className="divider" />
+
+          <Title title="Description" />
+
+          {/* Date posted, category */}
+          <div className="flex flex-wrap gap-5 my-4">
+            <Detail title="Negotiable?" detail={listing.negotiable ? 'Yes' : 'No'} />
+            <Detail title="Length" detail="100m" />
+            <Detail title="Material" detail="Aluminum" />
+            {/* Date posted */}
+            <Detail
+              title="Posted on"
+              detail={DateTime.fromISO(listing.created_at).toFormat('dd MMM yyyy')}
+            />
+            <Detail title="Category" detail={listing.category_name} />
+          </div>
+
+          <p>{listing.description}</p>
+          {/* <Description description={listing.description} /> */}
+        </div>
+
+        {/* Chat now details */}
+        <div className="col-span-3">
+          <CardBackground className="text-center w-full">
+            <User profilePicture={sampleProductImage} username="xiaoming" />
+            <button className="btn btn-sm btn-primary mt-4">Chat now</button>
+          </CardBackground>
+        </div>
+      </div>
+    </>
+  </>
+);
+ListingPage.propTypes = {
+  listing: PropTypes.objectOf(
+    PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool])
+  ),
+  images: PropTypes.arrayOf(PropTypes.string),
+};
+
+ListingPage.getLayout = (page) => <Container>{page}</Container>;
+
+export default ListingPage;

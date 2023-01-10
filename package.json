@@ -16,7 +16,9 @@
     "git-reset": "git reset --hard HEAD",
     "prepare": "run-script-os",
     "prepare:macos": "husky install && chmod ug+x .husky/*",
-    "prepare:default": "husky install"
+    "prepare:default": "husky install",
+    "cypress:open": "turbo run cypress:open",
+    "cypress:run": "turbo run cypress:run"
   },
   "devDependencies": {
     "@commitlint/cli": "17.3.0",
