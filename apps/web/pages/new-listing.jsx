@@ -1,5 +1,5 @@
 import {NextResponse} from 'next/server';
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import {useQuery} from 'react-query';
 import {useSupabaseClient, useUser} from '@supabase/auth-helpers-react';
 import CategoricalForm from '../components/layouts/CategoricalForm';
@@ -11,40 +11,14 @@ const NewListing = () => {
   const user = useUser();
   const client = useSupabaseClient();
   // EnsureUserLoggedIn();
-  const [formTypeData, setFormTypeData] = useState([]);
+  // const [formTypeData, setFormTypeData] = useState([]);
 
   const {categoryID, categoryHook, validateCategory} = CategoricalForm.useHook();
   const {imageHook, validateImage} = ImageForm.useHook();
   const {listingHook, validateListing} = ListingForm.useHook();
+  const {parameterHook, validateParameter,identifyParameterType} = ParameterForm.useHook();
 
-  const identifyParameterType = async (parameterData, parameterType, parameterChoice) => {
-    const formTypes = [];
-    let formData = {};
 
-    // match parameter types to individual parameters via the key id
-    for (let i = 0; i < parameterData.length; i++) {
-      for (let j = 0; j < parameterType.length; j++) {
-        if (parameterData[i].type === parameterType[j].id) {
-          formData = {
-            id: parameterData[i].parameter,
-            name: parameterData[i].display_name,
-            type: parameterType[j].name,
-            choice: null
-          };
-
-          for (let k = 0; k < parameterChoice.length; k++) {
-            if (parameterData[i].parameter === parameterChoice[k].parameter) {
-              formData.choice = parameterChoice[k].choice;
-            }
-          }
-
-          formTypes.push(formData);
-        }
-      }
-    }
-
-    setFormTypeData(formTypes);
-  };
 
   const {
     data: categoriesData,
@@ -92,7 +66,7 @@ const NewListing = () => {
     if (parameterTypesData && parametersData && parametersData.data && parameterTypesData.data && parameterChoicesData && parameterChoicesData.data) {
       identifyParameterType(parametersData.data, parameterTypesData.data, parameterChoicesData.data);
     }
-  }, [parametersData, parameterTypesData, parameterChoicesData]);
+  }, [parametersData, parameterTypesData, parameterChoicesData,identifyParameterType]);
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -100,7 +74,7 @@ const NewListing = () => {
     const listing = validateListing();
     const images = validateImage();
     const category = validateCategory();
-    const parameters = []
+    const parameters = validateParameter();
 
     if (!listing || !images || !category) return;
 
@@ -161,8 +135,8 @@ const NewListing = () => {
           {!parametersLoading &&
             !parametersError &&
             parametersStatus === 'success' &&
-            parametersData.data.length !== 0 && formTypeData !== null && (
-            <ParameterForm formTypes={formTypeData}/>
+            parametersData.data.length !== 0 && (
+            <ParameterForm parameterHook={parameterHook}/>
           )}
 
           <ImageForm useImageHook={imageHook}/>
