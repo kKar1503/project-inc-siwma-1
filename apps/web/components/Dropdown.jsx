@@ -14,12 +14,18 @@ const Dropdown = ({ items, onChangeValue, defaultValue, itemType }) => (
     defaultValue="Category"
   >
 
-    <option key="0" disabled>{defaultValue}</option>
-    {itemType === 'Object' ? items.map((item) =>
-      <option key={item.id} value={item.id}>{item.name}</option>
-    ) : items.map((item, index) => 
-      <option key={index} value={item}>{item}</option>
-    )}
+    <option hidden value={undefined} selected>{defaultValue}</option>
+    <option disabled value={undefined}>{defaultValue}</option>
+    {itemType === 'Object'
+      ? items.map((item) =>
+        <option key={item.id} value={item.id}>
+          {item.name}
+        </option>    )
+      : items.map((item, index) =>
+        <option key={index} value={item}>
+          {item}
+        </option>
+      )}
   </select>
 );
 
