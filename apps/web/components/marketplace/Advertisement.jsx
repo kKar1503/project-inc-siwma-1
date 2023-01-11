@@ -46,7 +46,7 @@ const Advertisement = ({ adData }) => {
           <h3 className="text-lg font-bold text-center">{adData.company_name}</h3>
           <p className="py-4">{adData.description}</p>
           <div className="modal-action">
-            <Link href={adData.link} htmlFor="my-modal" className="btn">
+            <Link href={adData.link} target="_blank" htmlFor="my-modal" className="btn">
               Show me!
             </Link>
             <label htmlFor={`modal-${adData.id}`} className="btn">
