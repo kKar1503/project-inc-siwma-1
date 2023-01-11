@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import { useEffect, useState } from 'react';
 import { Alert } from '@inc/ui';
 import Link from 'next/link';
@@ -14,8 +14,6 @@ const EditParam = ({ id }) => {
   const [tags, setTags] = useState([]);
   const [displayAlert, setDisplayAlert] = useState(null);
   const [error, setError] = useState(false);
-  const [colourMessage, setColourMessage] = useState('text-center text-green-500 pt-4');
-  const [errorMessage, setErrorMessage] = useState('');
   const supabase = useSupabaseClient();
 
   const { data: parameterType } = useQuery({
@@ -308,9 +306,6 @@ const EditParam = ({ id }) => {
           </button>
         </div>
       </form>
-      {displayAlert && error && (
-        <Alert level="error" message="Duplicate parameter name found" className="mt-4" />
-      )}
       {displayAlert && error === false && (
         <Alert
           level="success"
@@ -319,7 +314,7 @@ const EditParam = ({ id }) => {
         />
       )}
       {displayAlert && error === 'choices' && (
-        <Alert level="error" message="No choices entered" className="mt-4" />
+        <Alert level="error" message="Duplicate parameter name found or No choices entered" className="mt-4" />
       )}
     </div>
   );
