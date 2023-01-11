@@ -1,9 +1,11 @@
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 /* eslint-disable jsx-a11y/label-has-associated-control */
+// noinspection HtmlUnknownTarget
+
 import Image from 'next/image';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
-import {useMemo, useState} from 'react';
+import {useState} from 'react';
 import {MdAdd, MdChat, MdDashboard, MdLogin, MdLogout} from 'react-icons/md';
 import SIWMALogo from './public/siwma-logo.png';
 import SIWMALogoFull from './public/siwma-logo-full.png';
@@ -13,18 +15,11 @@ const Header = ({categoryData, isLoggedIn}) => {
   const [open, setOpen] = useState(false);
   const toggle = () => setOpen(!open);
 
-  const iconContextValue = useMemo(() => ({
-    color: '#9c3636'
-    // color: '#9c3636'
-  })
-  , []);
-
   return (
     <div className="navbar bg-base-100 border-b-2 border-base-200">
       <div className="navbar-start">
         <div
-          className=" lg:hidden"
-          // className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-primary-focus text-white"
+          className="px-4 lg:hidden rounded-md hover:bg-base-200 cursor-pointer"
         >
           <label onClick={toggle} role="presentation" tabIndex={0}>
             <svg
@@ -95,31 +90,43 @@ const Header = ({categoryData, isLoggedIn}) => {
       </div>
       <div className="navbar-end hidden sm:flex">
         <div className="dropdown dropdown-end">
-          <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-            <div className="w-10 rounded-full">
-              <Image src="/../public/sample-profile-image.jpg" alt="Person" width={20}
-                height={20}/>
-            </div>
-          </label>
-          <ul
-            tabIndex={0}
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 text-black"
-          >
-            {/* <li> */}
-            {/*  <Link className="justify-between" href="/profile"> Profile </Link> */}
-            {/* </li> */}
-            {/* <li> */}
-            {/*  <Link href="/settings">Settings</Link> */}
-            {/* </li> */}
-            {isLoggedIn
-              ? (<li>
-                <Link href="/logout"><MdLogout/>Logout</Link>
-              </li>)
-              : (
-                <li>
-                  <Link href="/login"><MdLogin/>Login</Link>
-                </li>)}
-          </ul>
+          {/* <label tabIndex={0} className="btn btn-ghost btn-circle avatar"> */}
+          {/*  <div className="w-10 rounded-full"> */}
+          {/*    <Image src="/../public/sample-profile-image.jpg" alt="Person" width={20} */}
+          {/*      height={20}/> */}
+          {/*  </div> */}
+          {/* </label> */}
+          {/* <ul */}
+          {/*  tabIndex={0} */}
+          {/*  className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 text-black" */}
+          {/* > */}
+          {/* <li> */}
+          {/*  <Link className="justify-between" href="/profile"> Profile </Link> */}
+          {/* </li> */}
+          {/* <li> */}
+          {/*  <Link href="/settings">Settings</Link> */}
+          {/* </li> */}
+          {/*  {isLoggedIn */}
+          {/*    ? (<li> */}
+          {/*      <Link href="/logout"><MdLogout/>Logout</Link> */}
+          {/*    </li>) */}
+          {/*    : ( */}
+          {/*      <li> */}
+          {/*        <Link href="/login"><MdLogin/>Login</Link> */}
+          {/*      </li>)} */}
+          {/* </ul> */}
+          {isLoggedIn
+            ?<ul className="menu menu-horizontal p-0 hidden lg:flex mx-auto">
+              <li tabIndex={0}>
+                <Link href='/logout' className='text-lg mx-auto font-bold'><MdLogout/>Logout</Link>
+              </li>
+            </ul>
+            :<ul className="menu menu-horizontal p-0 hidden lg:flex mx-auto">
+              <li tabIndex={0}>
+                <Link href='/login'
+                  className='text-lg mx-auto font-bold'><MdLogin/>Login</Link>
+              </li>
+            </ul>}
         </div>
       </div>
     </div>
