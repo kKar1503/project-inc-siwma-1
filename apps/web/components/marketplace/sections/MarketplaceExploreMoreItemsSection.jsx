@@ -80,10 +80,14 @@ const MarketplaceExploreMoreItemsSection = () => {
               listing_type: type,
               price,
               negotiable,
+              created_at: createdAt,
+              owner: ownerId,
+              fullname: ownerFullName,
               unit_price: unitPrice,
+              company_name: companyName,
             }) => (
               <ProductListingItem
-                className="hover:shadow-lg"
+                className="hover:shadow-lg h-full"
                 type={type}
                 negotiable={negotiable}
                 key={id}
@@ -91,7 +95,11 @@ const MarketplaceExploreMoreItemsSection = () => {
                 img={imageUrl}
                 name={name}
                 rating={4.5}
+                ownerId={ownerId}
+                ownerFullName={ownerFullName}
+                createdAt={createdAt}
                 unit_price={unitPrice}
+                companyName={companyName}
                 href={`/product/${id}`}
               />
             )

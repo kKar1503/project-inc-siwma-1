@@ -115,4 +115,9 @@ const EditCompany = () => {
 
 EditCompany.getLayout = (page) => <AdminPageLayout pageName="Companies">{page}</AdminPageLayout>;
 
+// -- Configure AuthGuard -- //
+EditCompany.allowAuthenticated = true;
+EditCompany.roles = ['admin'];
+// Page.aclAbilities = [['View', 'Users']];
+
 export default EditCompany;

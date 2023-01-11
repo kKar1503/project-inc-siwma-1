@@ -225,4 +225,9 @@ const EditUser = () => {
 
 EditUser.getLayout = (page) => <AdminPageLayout pageName="Users">{page}</AdminPageLayout>;
 
+// -- Configure AuthGuard -- //
+EditUser.allowAuthenticated = true;
+EditUser.roles = ['admin'];
+// Page.aclAbilities = [['View', 'Users']];
+
 export default EditUser;

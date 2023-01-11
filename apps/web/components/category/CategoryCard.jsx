@@ -6,7 +6,7 @@ const CategoryCard = ({ img, name, href }) => (
   <div className="card shadow-md min-w-fit transition ease-in-out hover:-translate-y-1">
     <a href={href}>
       <picture className="flex place-content-center h-64">
-        <img className="object-cover w-full h-full" src={img} alt={name} />
+        <img className="object-cover" src={img} alt={name} />
       </picture>
       {/* horizontal line to seperate img and text */}
       <hr
