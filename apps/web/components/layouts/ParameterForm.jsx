@@ -13,6 +13,7 @@ import ErrorMessage from './ErrorMessage';
 //   dataTypeId: number('Please fill in the values').required('Please fill in the values')
 // }).required('Please fill in the values');
 
+// Validation
 const ParameterValidationSchemaString = object(
   {
     id: number().required(),
@@ -63,35 +64,6 @@ const ParameterHook = () => {
     }));
   };
 
-  const identifyParameterType = async (parameterData, parameterType, parameterChoice) => {
-    const formTypes = [];
-
-    // match parameter types to individual parameters via the key id
-    for (let i = 0; i < parameterData.length; i++) {
-      for (let j = 0; j < parameterType.length; j++) {
-        if (parameterData[i].type === parameterType[j].id) {
-          const formData = {
-            id: parameterData[i].parameter,
-            name: parameterData[i].display_name,
-            dataTypeId: parameterData[i].datatype,
-            type: parameterType[j].name,
-            typeId: parameterType[j].id,
-          };
-
-          for (let k = 0; k < parameterChoice.length; k++) {
-            if (parameterData[i].parameter === parameterChoice[k].parameter) {
-              formData.choice = parameterChoice[k].choice;
-            }
-          }
-
-          formTypes.push(formData);
-        }
-      }
-    }
-
-    setFormTypeData(formTypes);
-  };
-
   const validateParameter = () => {
     const validated = [];
     const objectValues = Object.values(values);
@@ -137,6 +109,39 @@ const ParameterHook = () => {
     return validated;
   };
 
+  // Parameter Sorter
+  // Parameters have two sets of values (parameter values/parameter choices)
+  // Every Parameter has a type
+  // Choice type Parameters have parameter choices
+  // This function identifys the parameter type and choices of every parameter of the category
+  const identifyParameterType = async (parameterData, parameterType, parameterChoice) => {
+    const formTypes = [];
+
+    for (let i = 0; i < parameterData.length; i++) {
+      for (let j = 0; j < parameterType.length; j++) {
+        if (parameterData[i].type === parameterType[j].id) {
+          const formData = {
+            id: parameterData[i].parameter,
+            name: parameterData[i].display_name,
+            dataTypeId: parameterData[i].datatype,
+            type: parameterType[j].name,
+            typeId: parameterType[j].id,
+          };
+
+          for (let k = 0; k < parameterChoice.length; k++) {
+            if (parameterData[i].parameter === parameterChoice[k].parameter) {
+              formData.choice = parameterChoice[k].choice;
+            }
+          }
+
+          formTypes.push(formData);
+        }
+      }
+    }
+
+    setFormTypeData(formTypes);
+  };
+
   return {
     parameterHook: {
       formTypes: formTypeData,
@@ -149,20 +154,16 @@ const ParameterHook = () => {
   };
 };
 
-// check parameter_types/parameter_choices
-// formTypes: { id, name, type}
+/**
+ * ParameterForm is a component that renders the parameters of a category
+ * The form includes different input types per parameter in relation to its parameter type
+ * @param {Object} parameterHook - ParameterHook
+ * @returns {JSX.Element} - ParameterForm
+ * @constructor
+ */
 const ParameterForm = ({ parameterHook }) => {
   const { formTypes, errorMsg, getValue, updateValues } = parameterHook;
 
-  // --- Form Types ---
-  // Measurement = Text Input (Weight = g / Dimension = mm)
-  // Two Choices = Radio Button
-  // Many Choices = Dropdown
-  // Open Ended = Text Input
-  // --- Form Choices ---
-  // Long, Medium, Short
-  // Long, Medium
-  // Long, Short
   return (
     <CardBackground>
       <ErrorMessage errorMsg={errorMsg} />
