@@ -1,10 +1,9 @@
-import { useQuery, useQueries, useQueryClient } from 'react-query';
+import { useQueryClient, useMutation } from 'react-query';
 import PropType from 'prop-types';
 import { FiUpload } from 'react-icons/fi';
 import { useState } from 'react';
-import { Alert } from '@inc/ui';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import crypto from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 
 const UploadCard = ({ id, des, link, state, setAlert }) => {
   const [image, setImage] = useState(null);
@@ -46,20 +45,11 @@ const UploadCard = ({ id, des, link, state, setAlert }) => {
     }
   };
 
-  const changeUUID = (uuid) => {
-    const parts = [];
-    parts.push(uuid.slice(0, 8));
-    parts.push(uuid.slice(8, 12));
-    parts.push(uuid.slice(12, 16));
-    parts.push(uuid.slice(16, 20));
-    parts.push(uuid.slice(20, 32));
-    return parts.join('-');
-  };
-
   // insert image into supabase
-  const addAdvertisement = async (e) => {
+  const addAdvertisement = async ({ e }) => {
     e.preventDefault();
 
+    // insert advertisement details
     const { data, status } = await supabase
       .from('advertisements')
       .insert({
@@ -76,11 +66,9 @@ const UploadCard = ({ id, des, link, state, setAlert }) => {
       }, 4000);
     } else {
       // create uuid
-      const randomUUID = crypto.randomBytes(32).toString('hex');
-      const newUUID = changeUUID(randomUUID);
-
+      const newUUID = uuidv4();
       // upload image to storage
-      await supabase.storage.from('advertisement').upload(newUUID, image);
+      await supabase.storage.from('advertisement-image-bucket').upload(newUUID, image);
 
       // update advertisement table
       const { error: message } = await supabase
@@ -93,9 +81,20 @@ const UploadCard = ({ id, des, link, state, setAlert }) => {
         setAlert(false);
       }, 4000);
     }
-
-    queryClient.invalidateQueries({ queryKey: ['ads'] });
   };
+
+  // set useMutation conditions
+  const refresh = {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ads'] });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  };
+
+  // insert advertisement details mutation
+  const { mutate } = useMutation(addAdvertisement, refresh);
 
   return (
     <div className="card w-1/3  max-sm:w-full h-80 bg-base-100 shadow-xl max-sm:mb-10">
@@ -103,7 +102,7 @@ const UploadCard = ({ id, des, link, state, setAlert }) => {
         <div className="justify-center m-4 ">
           <form
             onSubmit={async (e) => {
-              await addAdvertisement(e);
+              mutate({ e : e });
             }}
           >
             <label className="flex justify-center w-full h-40 px-4 mt-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
@@ -148,7 +147,9 @@ const UploadCard = ({ id, des, link, state, setAlert }) => {
                   errorMessage === '' ||
                   errorMessage === 'Only image file is allowed' ||
                   // disable when image size is incorrect
-                  imgSizeState === null || errorMessage === 'Please upload an image according to the size range mentioned.(1500px x 300px)'
+                  imgSizeState === null ||
+                  errorMessage ===
+                    'Please upload an image according to the size range mentioned.(1500px x 300px)'
                 }
                 type="submit"
                 id="submitpic"
@@ -168,6 +169,6 @@ UploadCard.propTypes = {
   id: PropType.number.isRequired,
   des: PropType.string.isRequired,
   link: PropType.string.isRequired,
-  setAlert: PropType.bool.isRequired,
+  setAlert: PropType.func.isRequired,
 };
 export default UploadCard;
