@@ -3,6 +3,22 @@ import Link from 'next/link';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 
+const propTypes = {
+  adData: PropTypes.shape({
+    id: PropTypes.number,
+    description: PropTypes.string,
+    company_id: PropTypes.number,
+    company_name: PropTypes.string,
+    image_public_url: PropTypes.string,
+    link: PropTypes.string,
+  }),
+}
+
+/**
+ * Advertisement is a component that renders an advertisement in a carousell
+ * The component is used in the marketplace page, with 5 maximum advertisements at a time
+ * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
+ */
 const Advertisement = ({ adData }) => {
   const user = useUser();
   const supabase = useSupabaseClient();
@@ -43,15 +59,6 @@ const Advertisement = ({ adData }) => {
   );
 };
 
-Advertisement.propTypes = {
-  adData: PropTypes.shape({
-    id: PropTypes.number,
-    description: PropTypes.string,
-    company_id: PropTypes.number,
-    company_name: PropTypes.string,
-    image_public_url: PropTypes.string,
-    link: PropTypes.string,
-  }),
-};
+Advertisement.propTypes = propTypes;
 
 export default Advertisement;
