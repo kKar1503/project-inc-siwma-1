@@ -1,14 +1,18 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import {number, object} from 'yup';
+import { number, object } from 'yup';
 import Dropdown from '../Dropdown';
 import CardBackground from '../CardBackground';
 import ErrorMessage from './ErrorMessage';
 
-const categoryValidationSchema = object({
-  categoryId: number('Please select a category').required('Please select a category').positive('Please select a category'),
-},'Please select a category')
-
+const categoryValidationSchema = object(
+  {
+    categoryId: number('Please select a category')
+      .required('Please select a category')
+      .positive('Please select a category'),
+  },
+  'Please select a category'
+);
 
 const CategoryHook = () => {
   const [categoryId, setCategoryID] = useState(null);
@@ -21,7 +25,7 @@ const CategoryHook = () => {
   const validateCategory = () => {
     try {
       const parsedCategory = categoryValidationSchema.validateSync({
-        categoryId
+        categoryId,
       });
       setErrorMsg(null);
       return parsedCategory;
@@ -29,7 +33,7 @@ const CategoryHook = () => {
       setErrorMsg('A category must be selected');
       return null;
     }
-  }
+  };
 
   return {
     categoryHook: {
@@ -37,17 +41,22 @@ const CategoryHook = () => {
       onChangeValue,
     },
     categoryID: categoryId,
-    validateCategory
+    validateCategory,
   };
-}
+};
 
-const CategoricalForm = ({items, categoryHook}) => {
-  const {errorMsg,onChangeValue} = categoryHook;
+const CategoricalForm = ({ items, categoryHook }) => {
+  const { errorMsg, onChangeValue } = categoryHook;
   return (
     <CardBackground>
-      <ErrorMessage errorMsg={errorMsg}/>
-      <h1 className="font-bold text-3xl">Category</h1>
-      <Dropdown items={items} onChangeValue={onChangeValue} defaultValue='Category' itemType='Object'/>
+      <ErrorMessage errorMsg={errorMsg} />
+      <h1 className="font-bold text-3xl mb-3">Category</h1>
+      <Dropdown
+        items={items}
+        onChangeValue={onChangeValue}
+        defaultValue="Category"
+        itemType="Object"
+      />
     </CardBackground>
   );
 };

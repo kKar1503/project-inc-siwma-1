@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import {boolean, number, object, string} from 'yup';
+import { boolean, number, object, string } from 'yup';
 import React from 'react';
 import RadioButton from '../RadioButton';
 import Input from '../Input';
@@ -8,11 +8,15 @@ import CardBackground from '../CardBackground';
 
 const listingValidationSchema = object({
   name: string().required('Title is required'),
-  price: number('Please enter a valid price').required('Price is required').min(0, 'Price must 0 or more'),
+  price: number('Please enter a valid price')
+    .required('Price is required')
+    .min(0, 'Price must 0 or more'),
   description: string(),
   negotiable: boolean().required('Negotiable is required'),
   // can only be 'Buying' or 'Selling'
-  type: string('Please select either buying or selling').required('Type is required').oneOf(['Buying', 'Selling']),
+  type: string('Please select either buying or selling')
+    .required('Type is required')
+    .oneOf(['Buying', 'Selling']),
 });
 
 const ListingHook = () => {
@@ -30,12 +34,12 @@ const ListingHook = () => {
         price,
         description,
         negotiable,
-        type
+        type,
       });
       setErrorMsg(null);
       return parsedListing;
     } catch (error) {
-      const {message} = error;
+      const { message } = error;
       if (message.includes('price')) {
         setErrorMsg('Price is required');
         return null;
@@ -43,7 +47,7 @@ const ListingHook = () => {
       setErrorMsg(error.message);
       return null;
     }
-  }
+  };
 
   return {
     listingHook: {
@@ -59,13 +63,10 @@ const ListingHook = () => {
       setType,
       errorMsg,
     },
-    validateListing
-  }
-}
-const CreateListingInformation = ({
-  onSubmit,
-  listingHook,
-}) => {
+    validateListing,
+  };
+};
+const CreateListingInformation = ({ onSubmit, listingHook }) => {
   const {
     name,
     setName,
@@ -81,21 +82,22 @@ const CreateListingInformation = ({
   } = listingHook;
   return (
     <CardBackground>
-      <ErrorMessage errorMsg={errorMsg}/>
-
       <form className="p-5" onSubmit={onSubmit}>
+        <ErrorMessage errorMsg={errorMsg} />
         {/* Selling/Buying Options */}
-        <RadioButton options={['Buying', 'Selling']}
-          onChangeValue={(event) => setType(event.target.value)}/>
+        <RadioButton
+          options={['Buying', 'Selling']}
+          onChangeValue={(event) => setType(event.target.value)}
+        />
 
         {/* Selling/Buying Form */}
-        {type === '' ||
+        {type === '' || (
           <>
             {/* Title Label */}
-            <Input text="Title" value={name} onChange={(e) => setName(e.target.value)}/>
+            <Input text="Title" value={name} onChange={(e) => setName(e.target.value)} />
 
             {/* Price Label */}
-            <Input text="Price (SGD)" value={price} onChange={(e) => setPrice(e.target.value)}/>
+            <Input text="Price (SGD)" value={price} onChange={(e) => setPrice(e.target.value)} />
             <div className="form-control w-1/6 flex flex-row justify-start">
               <label className="label cursor-pointer space-x-4">
                 <span className="label-text">Negotiable</span>
@@ -116,8 +118,7 @@ const CreateListingInformation = ({
               onChange={(e) => setDescription(e.target.value)}
             />
           </>
-        }
-
+        )}
 
         {/* List Now Submit Btn */}
         {type && (
@@ -133,7 +134,7 @@ const CreateListingInformation = ({
       </form>
     </CardBackground>
   );
-}
+};
 
 CreateListingInformation.useHook = ListingHook;
 
@@ -152,7 +153,6 @@ CreateListingInformation.propTypes = {
     errorMsg: PropTypes.string,
   }).isRequired,
   onSubmit: PropTypes.func.isRequired,
-
 };
 
 export default CreateListingInformation;

@@ -12,7 +12,7 @@ const RadioButton = ({ options, onChangeValue }) => (
     <label htmlFor="condition" className="label">
       <span className="label-text mt-3 text-xl font-bold">Type of Listing</span>
     </label>
-    <div id="condition" className="btn-group mb-5 w-full">
+    <div id="condition" className="btn-group w-full">
       {options.map((option) => (
         <input
           type="radio"
