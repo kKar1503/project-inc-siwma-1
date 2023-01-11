@@ -3,7 +3,6 @@ import PropType from 'prop-types';
 import { FiUpload } from 'react-icons/fi';
 import { useState } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { v4 as uuidv4 } from 'uuid';
 
 const UploadCard = ({ id, des, link, state, setAlert }) => {
   const [image, setImage] = useState(null);
@@ -66,7 +65,7 @@ const UploadCard = ({ id, des, link, state, setAlert }) => {
       }, 4000);
     } else {
       // create uuid
-      const newUUID = uuidv4();
+      const newUUID = crypto.randomUUID();
       // upload image to storage
       await supabase.storage.from('advertisement-image-bucket').upload(newUUID, image);
 
