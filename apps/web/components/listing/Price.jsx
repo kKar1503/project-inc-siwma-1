@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 const Price = ({ price, unitPrice }) => (
   <h1 className="text-3xl font-bold">
-    S${price}
+    S{new Intl.NumberFormat('en-SG', { style: 'currency', currency: 'SGD' }).format(price)}
     {unitPrice && <span className="text-2xl font-normal">/unit</span>}
   </h1>
 );

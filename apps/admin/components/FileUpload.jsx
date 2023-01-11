@@ -1,5 +1,6 @@
 /* eslint-disable no-alert */
 import cx from 'classnames';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
@@ -8,19 +9,21 @@ import * as XLSX from 'xlsx';
 
 const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError }) => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const supabase = useSupabaseClient();
 
   const changeHandler = async (event) => {
     if (event.target.files[0].size > 64000000) {
       // 64000000 bytes = 64 MB
       // TODO: Replace with custom alert component
       alert('File is too big!');
+      setError(true);
       return;
     }
 
     setSelectedFile(event.target.files[0]);
 
     const reader = new FileReader();
-    reader.onload = (evt) => {
+    reader.onload = async (evt) => {
       /*
       XLSX Workbooks are essentially just a zip containing XMLs called Worksheets.
       As we are only interested in the first Worksheet, we can just grab it directly and it is guaranteed to exist unless the XLSX itself is corrupt.
@@ -48,7 +51,13 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError
 
       // Create userData and companyData arrays
       let companyData = [];
-      userData.forEach((row) => {
+
+      // Identify duplicate emails and mobile numbers
+      const duplicateEmails = new Set();
+      const duplicateMobileNumbers = new Set();
+
+      for (let i = 0; i < userData.length; i++) {
+        const row = userData[i];
         // Check if company already exists in companyData
         const index = companyData.findIndex((company) => company[0] === row[0]);
 
@@ -62,36 +71,79 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError
             email: row[3],
           };
         }
-      });
 
-      // Remove incomplete rows
-      userData = userData.filter(
-        (element) =>
-          element[0] !== '' && element[1] !== '' && element[2] !== '' && element[3] !== ''
-      );
+        // Check if user is missing information. row[3] is the company email, which is optional
+        if (
+          row[0] === undefined ||
+          row[0].trim() === '' ||
+          row[1] === undefined ||
+          row[1].trim() === '' ||
+          row[2] === undefined ||
+          row[2].trim() === '' ||
+          row[4] === undefined ||
+          row[4].trim() === ''
+        ) {
+          // TODO: Replace with custom alert component
+          alert(`User is missing information.`);
+          setSelectedFile(null);
+          setError(true);
+          return;
+        }
 
-      // Identify duplicate emails and mobile numbers
-      const duplicateEmails = new Set();
-      const duplicateMobileNumbers = new Set();
-
-      userData.forEach((element) => {
-        const email = element[1];
-        const mobileNumber = element[2];
+        const email = row[1];
+        const mobileNumber = row[2];
         if (duplicateEmails.has(email)) {
           // TODO: Replace with custom alert component
           alert(`Duplicate email found: ${email}`);
+          setSelectedFile(null);
           setError(true);
-        } else {
-          duplicateEmails.add(email);
+          return;
         }
+        duplicateEmails.add(email);
+
         if (duplicateMobileNumbers.has(mobileNumber)) {
           // TODO: Replace with custom alert component
           alert(`Duplicate mobile number found: ${mobileNumber}`);
+          setSelectedFile(null);
           setError(true);
-        } else {
-          duplicateMobileNumbers.add(mobileNumber);
+          return;
         }
-      });
+        duplicateMobileNumbers.add(mobileNumber);
+      }
+
+      // Verify that there are no duplicate emails or mobile numbers in Supabase
+      const verifyDuplicateEmails = () =>
+        supabase
+          .from('users')
+          .select('*')
+          .in('email', [...duplicateEmails]);
+
+      const verifyDuplicateMobileNumbers = () =>
+        supabase
+          .from('users')
+          .select('*')
+          .in('phone', [...duplicateMobileNumbers]);
+
+      const [{ data: matchingEmail }, { data: matchingMobileNumber }] = await Promise.all([
+        verifyDuplicateEmails(),
+        verifyDuplicateMobileNumbers(),
+      ]);
+
+      if (matchingEmail.length > 0) {
+        // TODO: Replace with custom alert component
+        alert(`The user with email ${matchingEmail[0].email} already exists.`);
+        setSelectedFile(null);
+        setError(true);
+        return;
+      }
+
+      if (matchingMobileNumber.length > 0) {
+        // TODO: Replace with custom alert component
+        alert(`The user with email ${matchingEmail[0].email} already exists.`);
+        setSelectedFile(null);
+        setError(true);
+        return;
+      }
 
       // Add ids and convert to objects
       companyData = companyData.map((company, index) => ({
@@ -109,6 +161,7 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError
 
       setCompanyTableData(companyData);
       setUserTableData(userData);
+      setError(false); // Reset error state in case there was an error previously
     };
     reader.readAsBinaryString(event.target.files[0]);
   };

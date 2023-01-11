@@ -80,7 +80,7 @@ const MarketplacePage = () => {
       <div className="my-10">
         {adsData.length > 0 && (
           /* Image banner - Object cover covers the image (zoom crop) */
-          <AnimatedCarousel wrapperClassName="w-full h-[300px]" animationDuration={5000}>
+          <AnimatedCarousel wrapperClassName="w-full h-[400px]" animationDuration={5000}>
             {adsData.map((ad) => (
               <div key={ad.id} className="w-full relative">
                 <Advertisement adData={ad} />
@@ -102,5 +102,6 @@ const MarketplacePage = () => {
 };
 
 MarketplacePage.getLayout = (page) => <Container>{page}</Container>;
+MarketplacePage.allowAuthenticated = true;
 
 export default MarketplacePage;
