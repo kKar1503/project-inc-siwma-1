@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import {useState} from 'react';
+import {MdAdd, MdChat, MdDashboard, MdLogin, MdLogout} from 'react-icons/md';
 import SIWMALogo from './public/siwma-logo.png';
 import SIWMALogoFull from './public/siwma-logo-full.png';
 import {MobileMenu} from './index';
@@ -54,9 +55,10 @@ const Header = ({categoryData, isLoggedIn}) => {
             alt="SIWMA Logo"
             className="h-full w-full object-cover hidden lg:flex"/>
         </Link>
+
         <ul className="menu menu-horizontal p-0 hidden lg:flex">
           <li tabIndex={0}>
-            <p className='text-lg ml-4 '>Categories</p>
+            <p className='text-lg ml-4'><MdDashboard/>Categories</p>
             <svg
               color='black'
               className="fill-current"
@@ -79,6 +81,19 @@ const Header = ({categoryData, isLoggedIn}) => {
             </ul>
           </li>
         </ul>
+
+        <ul className="menu menu-horizontal p-0 hidden lg:flex">
+          <li tabIndex={0}>
+            <Link href='/real-time-chat' className='text-lg ml-4'><MdChat/>Chat</Link>
+          </li>
+        </ul>
+
+        <ul className="menu menu-horizontal p-0 hidden lg:flex">
+          <li tabIndex={0}>
+            <Link href='/new-listing' className='text-lg ml-4'><MdAdd/>New Listing</Link>
+          </li>
+        </ul>
+
       </div>
       <div className="navbar-end hidden sm:flex">
         <div className="dropdown dropdown-end">
@@ -99,11 +114,11 @@ const Header = ({categoryData, isLoggedIn}) => {
             {/* </li> */}
             {isLoggedIn
               ? (<li>
-                <Link href="/logout">Logout</Link>
+                <Link href="/logout"><MdLogout/>Logout</Link>
               </li>)
               : (
                 <li>
-                  <Link href="/login">Login</Link>
+                  <Link href="/login"><MdLogin/>Login</Link>
                 </li>)}
           </ul>
         </div>

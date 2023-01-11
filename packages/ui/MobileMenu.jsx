@@ -1,7 +1,7 @@
 // ------------------ Imports ------------------
 
 import PropTypes, {bool, func} from 'prop-types';
-import {MdChat, MdExitToApp, MdHome} from 'react-icons/md';
+import {MdChat, MdDashboard, MdLogout, MdHome, MdLogin,MdAdd} from 'react-icons/md';
 import cx from 'classnames';
 import SidebarDivider from './MobileMenuSubComponents/SidebarDivider';
 import SidebarItem from './MobileMenuSubComponents/SidebarItem';
@@ -19,7 +19,7 @@ const LayoutEditor = ({categoryData, isLoggedIn}) => (
     {/* <SidebarSearch/> */}
     {/* <SidebarDivider/> */}
     <SidebarItem name="Home" redirectLink="/"><MdHome/></SidebarItem>
-    <SidebarDropdown name="Categories" customIcon={<MdChat/>}>
+    <SidebarDropdown name="Categories" customIcon={<MdDashboard/>}>
       {categoryData?.map(({name, id}) => (
         <SidebarSubItem
           name={name}
@@ -29,10 +29,17 @@ const LayoutEditor = ({categoryData, isLoggedIn}) => (
       ))}
     </SidebarDropdown>
 
+
+    <SidebarItem name="Chat" redirectLink="/real-time-chat"><MdChat/></SidebarItem>
+
     <SidebarDivider/>
 
-    {isLoggedIn ? <SidebarItem name="Logout" redirectLink="/logout"><MdExitToApp/></SidebarItem>
-      : <SidebarItem name="Login" redirectLink="/login"><MdExitToApp/></SidebarItem>}
+    <SidebarItem name="New Listing" redirectLink="/new-listing"><MdAdd/></SidebarItem>
+
+    <SidebarDivider/>
+
+    {isLoggedIn ? <SidebarItem name="Logout" redirectLink="/logout"><MdLogout/></SidebarItem>
+      : <SidebarItem name="Login" redirectLink="/login"><MdLogin/></SidebarItem>}
   </>
 );
 
@@ -48,7 +55,7 @@ const MobileMenu = ({open, className, setOpen, isLoggedIn, categoryData}) => {
   // ------------------ Return -----------------
   return (
     <div
-      className={cx(className,`h1 z-40 absolute my-4 shadow-xl bg-base-100 rounded-box border-2 `, {hidden: !open})}>
+      className={cx(className, `h1 z-40 absolute my-4 shadow-xl bg-base-100 rounded-box border-2 `, {hidden: !open})}>
       <main>
         <div
           className="p-2 text-center bg-base-100">
