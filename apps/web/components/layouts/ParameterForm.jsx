@@ -97,7 +97,7 @@ const ParameterHook = () => {
     const objectValues = Object.values(values);
     for (let i = 0; i < objectValues.length; i++) {
       const item = objectValues[i];
-      console.log(item);
+
       try {
         switch (item.typeData.dataTypeId) {
           case 2:
