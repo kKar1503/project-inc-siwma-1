@@ -1,9 +1,16 @@
-import PropTypes from 'prop-types';
 import '@inc/styles/globals.css';
-import { useState } from 'react';
-import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { QueryClientProvider, QueryClient } from 'react-query';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import AuthenticationGuard from '../components/auth/AuthenticationGuard';
+import AuthorizationGuard from '../components/auth/AuthorizationGuard';
+import AppUserProvider from '../components/auth/UserProvider';
+import Error404 from '../components/fallbacks/Error404';
+
+const queryClient = new QueryClient();
 
 const propTypes = {
   // If getServerSideProps is used, we cannot guarantee the shape of the page props
@@ -11,6 +18,14 @@ const propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   pageProps: PropTypes.any,
   Component: PropTypes.elementType,
+};
+
+const DisallowNonAuthenticatedFallback = () => {
+  const router = useRouter();
+  useEffect(() => {
+    router.push(`/login?redirect=${router.asPath}`);
+  }, [router]);
+  return <div>Not allowed</div>;
 };
 
 /**
@@ -24,27 +39,31 @@ const propTypes = {
  * @type {import('next').NextPage<PropTypes.InferProps<typeof propTypes>>}
  */
 const MyApp = ({ Component, pageProps }) => {
-  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
-  const [queryClient] = useState(() => new QueryClient());
-
+  const [supabase] = useState(() => createBrowserSupabaseClient());
+  // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout || ((page) => page);
+  const { roles, aclAbilities, allowAuthenticated, allowNonAuthenticated } = Component;
 
   return (
-    <SessionContextProvider
-      supabaseClient={supabaseClient}
-      initialSession={pageProps.initialSession}
-    >
+    <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
       <QueryClientProvider client={queryClient}>
-        {getLayout(<Component {...pageProps} />)}
+        <AppUserProvider>
+          <AuthenticationGuard
+            disallowAuthenticatedFallback={<Error404 />}
+            disallowNonAuthenticatedFallback={<DisallowNonAuthenticatedFallback />}
+            allowAuthenticated={allowAuthenticated}
+            allowNonAuthenticated={allowNonAuthenticated}
+          >
+            <AuthorizationGuard roles={roles} fallback={<Error404 />} aclAbilities={aclAbilities}>
+              {getLayout(<Component {...pageProps} />)}
+            </AuthorizationGuard>
+          </AuthenticationGuard>
+        </AppUserProvider>
       </QueryClientProvider>
     </SessionContextProvider>
   );
 };
 
-MyApp.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  pageProps: PropTypes.any,
-  Component: PropTypes.elementType,
-};
+MyApp.propTypes = propTypes;
 
 export default MyApp;

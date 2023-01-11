@@ -28,32 +28,43 @@ const RegisteredUsersTable = ({ className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [option, setOption] = useState(paginationValues[0]);
+  const [searchInput, setSearchInput] = useState('');
 
   const [usersQuery, userCountQuery] = useQueries([
     {
       queryKey: [
         'getUsers',
-        { from: selectedIndex * option, to: (selectedIndex + 1) * option - 1 },
+        selectedIndex * 10,
+        { from: (selectedIndex * option), to: (selectedIndex + 1) * option - 1, matching: searchInput },
       ],
       queryFn: async () =>
         supabase
           .from('users')
           .select(`id, email, fullname, phone, companies:companyid(name), enabled`)
-          .range(selectedIndex * option, (selectedIndex + 1) * option - 1)
+          .ilike('fullname', `%${searchInput}%`)
+          .range((selectedIndex * option), (selectedIndex + 1) * option - 1)
           .order('fullname', { ascending: true }),
       keepPreviousData: true,
-      refetchInterval: 300000,
+      refetchInterval: 60000,
     },
     {
-      queryKey: ['getUserCount'],
-      queryFn: async () => supabase.from('users').select('*', { count: 'exact', head: true }),
+      queryKey: ['getUserCount', { matching: searchInput }],
+      queryFn: async () =>
+        supabase
+          .from('users')
+          .select('*', { count: 'exact', head: true })
+          .ilike('fullname', `%${searchInput}%`),
       keepPreviousData: true,
-      refetchInterval: 300000,
+      refetchInterval: 60000,
     },
   ]);
   console.log(usersQuery);
 
-  const userCount = userCountQuery.isLoading ? 0 : userCountQuery.data.count;
+  const queries = [usersQuery, userCountQuery];
+
+  const isLoading = queries.some((e) => e.isLoading);
+
+  const userCount = isLoading ? 0 : userCountQuery.data.count;
 
   useEffect(() => {
     setSelectedIndex(0);
@@ -118,7 +129,7 @@ const RegisteredUsersTable = ({ className }) => {
 
   const renderTableButtons = () => {
     const tableButtons = [];
-    if (usersQuery.isLoading) {
+    if (isLoading) {
       return (
         <TableButton
           index={0}
@@ -148,17 +159,24 @@ const RegisteredUsersTable = ({ className }) => {
     return tableButtons;
   };
 
+  if (selectedIndex > 0 && (selectedIndex + 1) * 10 > Math.ceil(userCount / 10) * 10)
+    // It is out of bounds, set the selected index to be that of the last button
+    setSelectedIndex(Math.floor(userCount / 10));
+
   return (
     <BaseTable
       header={
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col pb-3">
             <h1 className="font-bold text-xl">Registered Users</h1>
-            <h1 className="pr-2">
-              Showing {selectedIndex * option + 1} to{' '}
-              {(selectedIndex + 1) * option > userCount ? userCount : (selectedIndex + 1) * option}{' '}
-              of {userCount} entries
-            </h1>
+            {isLoading ? (
+              <h1 className="pr-2">Showing 0 to 0 of 0 entries</h1>
+            ) : (
+              <h1 className="pr-2">
+                Showing {Math.min(selectedIndex * option + 1, userCount)} to{' '}
+                {Math.min((selectedIndex + 1) * option, userCount)} of {userCount} entries
+              </h1>
+            )}
           </div>
           <div className="flex flex-row gap-4">
             <h1 className="mt-3">Show</h1>
@@ -171,7 +189,7 @@ const RegisteredUsersTable = ({ className }) => {
                 <option value={value}>{value} per page</option>
               ))}
             </select>
-            <SearchBar placeholder="Search by name" />
+            <SearchBar placeholder="Search by name" value={searchInput} setValue={setSearchInput} />
           </div>
         </div>
       }
@@ -181,21 +199,21 @@ const RegisteredUsersTable = ({ className }) => {
       className={className}
       columnKeys={['name', 'email', 'company', 'mobileNumber', 'enabled']}
       onChange={onChangeHandler}
-      data={usersQuery.isLoading ? undefined : parseData(usersQuery.data?.data)}
+      data={isLoading ? [] : parseData(usersQuery.data?.data)}
       footer={
         <div className="flex justify-between bg-none">
           <div className="flex gap-4">
             <button
               className="btn btn-primary text-white"
               onClick={suspendUsers}
-              disabled={usersQuery.isLoading || checkInput('Activated')}
+              disabled={isLoading || checkInput('Activated')}
             >
               DEACTIVATE SELECTED
             </button>
             <button
               className="btn btn-primary text-white"
               onClick={activateUsers}
-              disabled={usersQuery.isLoading || checkInput('Suspended')}
+              disabled={isLoading || checkInput('Suspended')}
             >
               ACTIVATE SELECTED
             </button>
