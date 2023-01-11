@@ -3,7 +3,7 @@
 // import Autocomplete from 'react-autocomplete';
 import { useState, useEffect, useContext } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import { useUser } from '@supabase/auth-helpers-react';
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import toast, { Toaster } from 'react-hot-toast';
 
 import '@inc/styles/globals.css';
@@ -18,9 +18,9 @@ import ItemDetails from '../components/rtc/ItemDetails';
 import ChatFilter from '../components/rtc/ChatFilter';
 import Container from '../components/Container';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+// const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+// const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+// const supabase = createClient(supabaseUrl, supabaseKey);
 
 const roomsData = [
   {
@@ -70,15 +70,140 @@ const roomsData = [
 const options = ['All Chats', 'Selling', 'Buying', 'Archived'];
 
 const RealTimeChat = () => {
+  const supabase = useSupabaseClient();
   const [allMessages, setAllMessages] = useState([]);
   const [filteredData, setFilteredData] = useState(roomsData);
   const [selectedFilter, setSelectedFilter] = useState(options[0]);
-  const [selectedRoom, setSelectedRoom] = useState('');
+  // Select room id of 15 
+  const [selectedRoom, setSelectedRoom] = useState(15);
   const [notifs, setAllNotifs] = useState('');
   const [sidebarVisible, setSidebarVisible] = useState(false);
 
   const filterChatList = (filter) => filter.type === selectedFilter;
   const userdata = useUser();
+
+  const fetchRoomsByUserId = async () => {
+    if (userdata == null) {
+      console.error('User data is null');
+      return;
+    }
+
+    console.log('FETCHING ROOMS BY USER ID');
+
+    // Get chats if i'm a seller
+    const chatsIfImSeller = supabase.rpc('get_sidebar_messages_for_user_seller', {
+      _user_uuid: userdata.id,
+    });
+
+    // Get chats if i'm a buyer
+    const chatsIfImBuyer = supabase.rpc('get_sidebar_messages_for_user_buyer', {
+      _user_uuid: userdata.id,
+    });
+
+    Promise.all([chatsIfImBuyer, chatsIfImSeller]).then(
+      ([chatsIfImBuyerData, chatsIfImSellerData]) => {
+        let finalBuyerData = [];
+        let finalSellerData = [];
+
+        // Stop execution if there is an error
+        if (chatsIfImBuyerData.error || chatsIfImSellerData.error) {
+          console.error('Something went wrong while fetching chats');
+          console.log(chatsIfImBuyerData);
+          console.log(chatsIfImSellerData);
+          return;
+        }
+
+        // Map the buyer data
+        if (chatsIfImBuyerData.data.length > 0) {
+          const d = chatsIfImBuyerData.data;
+          finalBuyerData = d.map(
+            ({ listing_id: id, fullname, text, file, image, offer, created_at: createdAt }) => {
+              let messageType = '';
+              let lastMessage = '';
+
+              if (text !== null) {
+                messageType = 'text';
+                lastMessage = text;
+              }
+
+              if (file !== null) {
+                messageType = 'file';
+                lastMessage = file;
+              }
+
+              if (image !== null) {
+                messageType = 'image';
+                lastMessage = image;
+              }
+              if (offer !== null) {
+                messageType = 'offer';
+                lastMessage = offer;
+              }
+
+              return {
+                id,
+                name: fullname,
+                lastMessage,
+                messageType,
+                type: 'Buying',
+                createdAt,
+              };
+            }
+          );
+        }
+
+        // Map the seller data
+        if (chatsIfImSellerData.data.length > 0) {
+          const d = chatsIfImSellerData.data;
+          finalSellerData = d.map(
+            ({ listing_id: id, fullname, text, file, image, offer, created_at: createdAt }) => {
+              let messageType = '';
+              let lastMessage = '';
+
+              if (text !== null) {
+                messageType = 'text';
+                lastMessage = text;
+              }
+
+              if (file !== null) {
+                messageType = 'file';
+                lastMessage = file;
+              }
+
+              if (image !== null) {
+                messageType = 'image';
+                lastMessage = image;
+              }
+              if (offer !== null) {
+                messageType = 'offer';
+                lastMessage = offer;
+              }
+
+              return {
+                id,
+                name: fullname,
+                type: 'Selling',
+                lastMessage,
+                messageType,
+                createdAt,
+              };
+            }
+          );
+        }
+
+        // Combine both data together
+        let combinedData = [];
+
+        combinedData = [...finalSellerData, ...finalBuyerData].sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+
+        console.log('Merged data!')
+        console.log(combinedData)
+        setFilteredData(combinedData)
+      }
+    );
+  };
 
   const retrieveFilteredData = () => {
     console.log(roomsData);
@@ -91,15 +216,28 @@ const RealTimeChat = () => {
     console.log(filteredData);
   };
 
-  const fetchMessages = async () => {
-    const { data: content, error } = await supabase.from('contents').select('*');
+  const fetchMessages = async (roomId) => {
+    const fetchMessagesData = await supabase.rpc('get_all_messages_for_room_id', {
+      _room_id: roomId
+    })
 
-    if (error) {
-      console.log('error', error);
-    } else {
-      console.log(content);
-      setAllMessages(content);
+    if(fetchMessagesData.error){
+      console.error('There is an error fetching messages for this room')
+      return;
     }
+
+    console.log(`Fetched messages for room id ${roomId}`)
+    console.log(fetchMessagesData.data)
+    setAllMessages(fetchMessagesData.data);
+
+    // const { data: content, error } = await supabase.from('contents').select('*');
+
+    // if (error) {
+    //   console.log('error', error);
+    // } else {
+    //   console.log(content);
+    //   setAllMessages(content);
+    // }
   };
 
   // Function to fetch last message and to check if message was sent by current user
@@ -155,20 +293,28 @@ const RealTimeChat = () => {
   };
 
   useEffect(() => {
-    fetchMessages();
+    fetchRoomsByUserId();
+  }, [userdata]);
 
-    supabase
-      .channel('public:messages')
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'contents' },
-        (payload) => {
-          console.log('Change received!', payload);
-          setAllMessages((current) => [...current, payload.new]);
-          setAllNotifs(payload.new);
-        }
-      )
-      .subscribe();
+  // Call fetchMessages everytime selectedRoom changes
+  useEffect(() => {
+    fetchMessages(selectedRoom);
+  }, [selectedRoom])
+
+  useEffect(() => {
+    // fetchMessages();
+    // supabase
+    //   .channel('public:messages')
+    //   .on(
+    //     'postgres_changes',
+    //     { event: 'INSERT', schema: 'public', table: 'contents' },
+    //     (payload) => {
+    //       console.log('Change received!', payload);
+    //       setAllMessages((current) => [...current, payload.new]);
+    //       setAllNotifs(payload.new);
+    //     }
+    //   )
+    //   .subscribe();
   }, []);
 
   useEffect(() => {
