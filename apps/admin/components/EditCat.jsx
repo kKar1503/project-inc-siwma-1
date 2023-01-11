@@ -189,7 +189,7 @@ const EditCat = ({ id }) => {
         <Alert level="error" message="Duplicate category name found" className="mt-4" />
       )}
       {displayAlert && error === false && (
-        <Alert level="success" message="Category successfully created, please click back to return to category page" className="mt-4" />
+        <Alert level="success" message="Category successfully edited, please click back to return to category page" className="mt-4" />
       )}
     </div>
   );
