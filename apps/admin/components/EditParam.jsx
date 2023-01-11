@@ -80,7 +80,7 @@ const EditParam = ({ id }) => {
         }, 4000);
       } else {
         setDisplayAlert(true);
-  
+
         setTimeout(() => {
           setDisplayAlert(false);
         }, 4000);
@@ -123,38 +123,47 @@ const EditParam = ({ id }) => {
   const editParameter = async (e) => {
     e.preventDefault();
 
-    const { status } = await supabase
-      .from('parameter')
-      .update({
-        name: `${name}`,
-        display_name: `${displayName}`,
-        type: `${paramT}`,
-        datatype: `${dataT}`,
-      })
-      .eq('id', `${id}`);
-
-    if (choices?.data.length !== 0 && tags.length !== 0) {
-      const { status: choiceStatus } = await supabase
-        .from('parameter_choices')
-        .update({
-          choice: tags,
-        })
-        .eq('parameter', `${id}`);
-    }
-
-    if (status === 409) {
+    if (tags.length !== 0 && (paramT !== '3' || paramT !== '4')) {
       setDisplayAlert(true);
-      setError(true);
+      setError('choices');
       setTimeout(() => {
         setDisplayAlert(false);
         setError(false);
       }, 4000);
     } else {
-      setDisplayAlert(true);
+      const { status } = await supabase
+        .from('parameter')
+        .update({
+          name: `${name}`,
+          display_name: `${displayName}`,
+          type: `${paramT}`,
+          datatype: `${dataT}`,
+        })
+        .eq('id', `${id}`);
 
-      setTimeout(() => {
-        setDisplayAlert(false);
-      }, 4000);
+      if (choices?.data.length !== 0) {
+        const { status: choiceStatus } = await supabase
+          .from('parameter_choices')
+          .update({
+            choice: tags,
+          })
+          .eq('parameter', `${id}`);
+      }
+
+      if (status === 409) {
+        setDisplayAlert(true);
+        setError(true);
+        setTimeout(() => {
+          setDisplayAlert(false);
+          setError(false);
+        }, 4000);
+      } else {
+        setDisplayAlert(true);
+
+        setTimeout(() => {
+          setDisplayAlert(false);
+        }, 4000);
+      }
     }
   };
 
@@ -303,7 +312,11 @@ const EditParam = ({ id }) => {
         <Alert level="error" message="Duplicate parameter name found" className="mt-4" />
       )}
       {displayAlert && error === false && (
-        <Alert level="success" message="Parameter successfully edited, please click back to return to category page" className="mt-4" />
+        <Alert
+          level="success"
+          message="Parameter successfully edited, please click back to return to category page"
+          className="mt-4"
+        />
       )}
       {displayAlert && error === 'choices' && (
         <Alert level="error" message="No choices entered" className="mt-4" />
