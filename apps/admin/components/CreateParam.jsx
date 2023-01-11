@@ -64,6 +64,21 @@ const CreateParam = () => {
 
       await supabase.from('parameter_choices').insert({ parameter: data[0].id, choice: tags });
       queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
+      
+      if (status === 409) {
+        setDisplayAlert(true);
+        setError(true);
+        setTimeout(() => {
+          setDisplayAlert(false);
+          setError(false);
+        }, 4000);
+      } else {
+        setDisplayAlert(true);
+  
+        setTimeout(() => {
+          setDisplayAlert(false);
+        }, 4000);
+      }
     }
   };
 
@@ -223,13 +238,10 @@ const CreateParam = () => {
         </div>
       </form>
       {displayAlert && error && (
-        <Alert level="error" message="Duplicate parameter name found" className="mt-4" />
+        <Alert level="error" message="Duplicate parameter name found or No choices entered" className="mt-4" />
       )}
       {displayAlert && error === false && (
         <Alert level="success" message="Parameter successfully created" className="mt-4" />
-      )}
-      {displayAlert && error === 'choices' && (
-        <Alert level="error" message="No choices entered" className="mt-4" />
       )}
     </div>
   );
