@@ -13,6 +13,22 @@ import ErrorMessage from './ErrorMessage';
 //   dataTypeId: number('Please fill in the values').required('Please fill in the values')
 // }).required('Please fill in the values');
 
+const propTypes = {
+  parameterHook: PropTypes.shape({
+    formTypes: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        type: PropTypes.string,
+        choice: PropTypes.arrayOf(PropTypes.string),
+      })
+    ),
+    getValue: PropTypes.func.isRequired,
+    updateValues: PropTypes.func.isRequired,
+    errorMsg: PropTypes.string,
+  }).isRequired,
+}
+
 // Validation
 const ParameterValidationSchemaString = object(
   {
@@ -155,11 +171,9 @@ const ParameterHook = () => {
 };
 
 /**
- * ParameterForm is a component that renders the parameters of a category
- * The form includes different input types per parameter in relation to its parameter type
- * @param {Object} parameterHook - ParameterHook
- * @returns {JSX.Element} - ParameterForm
- * @constructor
+ * Parameter Form is a component that renders the form for the parameters
+ * The parameters rendered are dependent on the category selected
+ * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
 const ParameterForm = ({ parameterHook }) => {
   const { formTypes, errorMsg, getValue, updateValues } = parameterHook;
@@ -232,21 +246,7 @@ const ParameterForm = ({ parameterHook }) => {
   );
 };
 
-ParameterForm.propTypes = {
-  parameterHook: PropTypes.shape({
-    formTypes: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        type: PropTypes.string,
-        choice: PropTypes.arrayOf(PropTypes.string),
-      })
-    ),
-    getValue: PropTypes.func.isRequired,
-    updateValues: PropTypes.func.isRequired,
-    errorMsg: PropTypes.string,
-  }).isRequired,
-};
+ParameterForm.propTypes = propTypes;
 ParameterForm.useHook = ParameterHook;
 
 export default ParameterForm;
