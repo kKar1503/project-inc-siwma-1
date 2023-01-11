@@ -108,8 +108,6 @@ const EditParam = ({ id }) => {
     }
   }, [data, choices]);
 
-  console.log(choices);
-
   const editParameter = async (e) => {
     e.preventDefault();
 
@@ -245,38 +243,39 @@ const EditParam = ({ id }) => {
             ))}
           </select>
         </div>
-        {(paramT === '3' ||
-          paramT === '4' ||
-          paramT === 3 ||
-          (paramT === 4 && tags !== undefined)) && (
-          <div className="form-control">
-            <div className="label">
-              <span className="label-text font-semibold">Choices</span>
+        {tags === undefined ? (
+          <div />
+        ) : (
+          (paramT === '3' || paramT === '4' || paramT === 3 || paramT === 4) && (
+            <div className="form-control">
+              <div className="label">
+                <span className="label-text font-semibold">Choices</span>
+              </div>
+              <input
+                name="choices"
+                type="text"
+                className="input-group input input-bordered"
+                placeholder="Choice Options"
+                onKeyDown={(e) => (e.key === 'Enter' ? addTags(e) : null)}
+              />
+              <ul className="flex gap-3 flex-wrap pt-2">
+                {tags.map((tag, index) => (
+                  <li className="btn btn-primary">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        removeTags(index);
+                      }}
+                      className="flex"
+                    >
+                      <span className="mr-2">{tag}</span>
+                      <AiFillCloseCircle />
+                    </button>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <input
-              name="choices"
-              type="text"
-              className="input-group input input-bordered"
-              placeholder="Choice Options"
-              onKeyDown={(e) => (e.key === 'Enter' ? addTags(e) : null)}
-            />
-            <ul className="flex gap-3 flex-wrap pt-2">
-              {tags.map((tag, index) => (
-                <li className="btn btn-primary">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      removeTags(index);
-                    }}
-                    className="flex"
-                  >
-                    <span className="mr-2">{tag}</span>
-                    <AiFillCloseCircle />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+          )
         )}
         <div className="modal-action">
           <div className="flex px-8 pb-8">
