@@ -77,7 +77,15 @@ const LayoutView = ({Component, pageProps}) => {
       const path = pathname.split('/');
       let page = path[path.length - 1];
       // account for index page
-      if (page === '[category]') page = router.query.category.toString();
+      if (page === '[category]') {
+        // removing try catch results in build failure; does nothing otherwise
+        try {
+          page = router.query.category.toString();
+        }
+        catch (e) {
+          page = 'category';
+        }
+      }
       // check if page is a parameter (e.g. [category]) has [ and ]
       else if (/\[.*]/.test(page)) page = path[path.length - 2];
 
