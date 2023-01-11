@@ -16,7 +16,6 @@ const EditParam = ({ id }) => {
   const [error, setError] = useState(null);
   const [colourMessage, setColourMessage] = useState('text-center text-green-500 pt-4');
   const [errorMessage, setErrorMessage] = useState('');
-  const queryClient = useQueryClient();
   const supabase = useSupabaseClient();
 
   const { data: parameterType } = useQuery({
@@ -61,20 +60,10 @@ const EditParam = ({ id }) => {
         setError(false);
       }, 4000);
     } else {
-      const { data, status: newChoiceStatus } = await supabase
-        .from('parameter')
-        .insert({
-          name: e.target.paramName.value,
-          display_name: e.target.displayName.value,
-          type: e.target.paramType.value,
-          datatype: e.target.dataType.value,
-        })
-        .select('id');
-
       // tags.map((tag) => tagsObj.push({ parameter: data[0].id, choice: tag }));
       // console.log(tagsObj);
 
-      await supabase.from('parameter_choices').insert({ parameter: data[0].id, choice: tags });
+      await supabase.from('parameter_choices').insert({ parameter: id, choice: tags });
     }
   };
 
@@ -100,6 +89,7 @@ const EditParam = ({ id }) => {
   });
 
   useEffect(() => {
+    setTags([]);
     setName(data?.data[0].name);
     setDisplayName(data?.data[0].display_name);
     setParamType(data?.data[0].parameter_type.id);
