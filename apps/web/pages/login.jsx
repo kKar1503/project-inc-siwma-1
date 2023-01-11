@@ -69,6 +69,6 @@ Page.getLayout = (page) => <SignInAndUpLayoutNoSSR>{page}</SignInAndUpLayoutNoSS
 Page.ignoreHeader = true;
 
 Page.allowNonAuthenticated = true;
-Page.allowAuthenticated = true;
+Page.allowAuthenticated = false;
 
 export default Page;
