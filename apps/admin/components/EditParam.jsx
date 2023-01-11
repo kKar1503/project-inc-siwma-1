@@ -102,7 +102,7 @@ const EditParam = ({ id }) => {
   const editParameter = async (e) => {
     e.preventDefault();
 
-    const { status: updateStatus } = await supabase
+    const { status } = await supabase
       .from('parameter')
       .update({
         name: `${name}`,
@@ -119,6 +119,21 @@ const EditParam = ({ id }) => {
           choice: tags,
         })
         .eq('parameter', `${id}`);
+    }
+
+    if (status === 409) {
+      setDisplayAlert(true);
+      setError(true);
+      setTimeout(() => {
+        setDisplayAlert(false);
+        setError(false);
+      }, 4000);
+    } else {
+      setDisplayAlert(true);
+
+      setTimeout(() => {
+        setDisplayAlert(false);
+      }, 4000);
     }
   };
 
