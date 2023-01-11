@@ -172,26 +172,28 @@ const CompanyEditFormContext = ({ company, onSuccessChange, isLoading, backButto
           backButton={backButton}
           disableAdmin={disableAdmin}
         />
-        <div className={cx('absolute bottom-28 left-0 right-0 transition lg:w-7/12 mx-auto', { hidden: !submitSuccess })}>
-          <Alert
-            level="success"
-            message="Changes saved successfully"
-            className="text-white shadow-lg"
-            onRequestClose={() => setSubmitSuccess(false)}
-            dismissable
-          />
-        </div>
-        <div className={cx('absolute bottom-28 left-0 right-0 transition lg:w-7/12 mx-auto', { hidden: !isErrored })}>
-          <Alert
-            level="error"
-            message="An unknown error occurred, please try again later"
-            className="text-white shadow-lg"
-            onRequestClose={() => {
-              setIsErrored(false);
-              clearErrors();
-            }}
-            dismissable
-          />
+        <div className='relative'>
+          <div className={cx('absolute bottom-28 left-0 right-0 transition lg:w-7/12 mx-auto', { hidden: !submitSuccess })}>
+            <Alert
+              level="success"
+              message="Changes saved successfully"
+              className="text-white shadow-lg"
+              onRequestClose={() => setSubmitSuccess(false)}
+              dismissable
+            />
+          </div>
+          <div className={cx('absolute bottom-28 left-0 right-0 transition lg:w-7/12 mx-auto', { hidden: !isErrored })}>
+            <Alert
+              level="error"
+              message="An unknown error occurred, please try again later"
+              className="text-white shadow-lg"
+              onRequestClose={() => {
+                setIsErrored(false);
+                clearErrors();
+              }}
+              dismissable
+            />
+          </div>
         </div>
       </div>
     </FormProvider>
