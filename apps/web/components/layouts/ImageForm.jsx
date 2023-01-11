@@ -71,11 +71,6 @@ const ImageCard = ({ link, name, onClick }) => (
   </div>
 );
 
-ImageCard.propTypes = {
-  name: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-};
 const ImageForm = ({ useImageHook }) => {
   const { selectedImages, onSelectFile, imageDeleteHandler, errorMsg } = useImageHook;
 
@@ -142,6 +137,12 @@ ImageForm.propTypes = {
     imageDeleteHandler: PropTypes.func,
     errorMsg: PropTypes.string,
   }).isRequired,
+};
+
+ImageCard.propTypes = {
+  name: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default ImageForm;

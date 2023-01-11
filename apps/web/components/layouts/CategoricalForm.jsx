@@ -5,6 +5,25 @@ import Dropdown from '../Dropdown';
 import CardBackground from '../CardBackground';
 import ErrorMessage from './ErrorMessage';
 
+const propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      category: PropTypes.string,
+      subcategory: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          category: PropTypes.string,
+        })
+      ),
+    })
+  ),
+  categoryHook: PropTypes.shape({
+    onChangeValue: PropTypes.func.isRequired,
+    errorMsg: PropTypes.string,
+  }).isRequired,
+};
+
 const categoryValidationSchema = object(
   {
     categoryId: number('Please select a category')
@@ -45,6 +64,11 @@ const CategoryHook = () => {
   };
 };
 
+/**
+ * Categorical Form is a form that allows the user to select a category
+ * This category is used to define the listing
+ * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
+ */
 const CategoricalForm = ({ items, categoryHook }) => {
   const { errorMsg, onChangeValue } = categoryHook;
   return (
@@ -61,25 +85,7 @@ const CategoricalForm = ({ items, categoryHook }) => {
   );
 };
 
-CategoricalForm.propTypes = {
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      category: PropTypes.string,
-      subcategory: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.number,
-          category: PropTypes.string,
-        })
-      ),
-    })
-  ),
-  categoryHook: PropTypes.shape({
-    onChangeValue: PropTypes.func.isRequired,
-    errorMsg: PropTypes.string,
-  }).isRequired,
-};
-
+CategoricalForm.propTypes = propTypes;
 CategoricalForm.useHook = CategoryHook;
 
 export default CategoricalForm;

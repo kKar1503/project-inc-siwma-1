@@ -6,6 +6,23 @@ import Input from '../Input';
 import ErrorMessage from './ErrorMessage';
 import CardBackground from '../CardBackground';
 
+const propTypes = {
+  listingHook: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    setName: PropTypes.func.isRequired,
+    price: PropTypes.string.isRequired,
+    setPrice: PropTypes.func.isRequired,
+    description: PropTypes.string.isRequired,
+    setDescription: PropTypes.func.isRequired,
+    negotiable: PropTypes.bool.isRequired,
+    setNegotiable: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired,
+    setType: PropTypes.func.isRequired,
+    errorMsg: PropTypes.string,
+  }).isRequired,
+  onSubmit: PropTypes.func.isRequired,
+}
+
 const listingValidationSchema = object({
   name: string().required('Title is required'),
   price: number('Please enter a valid price')
@@ -66,6 +83,12 @@ const ListingHook = () => {
     validateListing,
   };
 };
+
+/**
+ * Listing Form is a component that renders a form for creating a listing.
+ * It gives a step-by-step process for the user to fill in the values required for the listing information.
+ * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
+ */
 const CreateListingInformation = ({ onSubmit, listingHook }) => {
   const {
     name,
@@ -137,22 +160,6 @@ const CreateListingInformation = ({ onSubmit, listingHook }) => {
 };
 
 CreateListingInformation.useHook = ListingHook;
-
-CreateListingInformation.propTypes = {
-  listingHook: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    setName: PropTypes.func.isRequired,
-    price: PropTypes.string.isRequired,
-    setPrice: PropTypes.func.isRequired,
-    description: PropTypes.string.isRequired,
-    setDescription: PropTypes.func.isRequired,
-    negotiable: PropTypes.bool.isRequired,
-    setNegotiable: PropTypes.func.isRequired,
-    type: PropTypes.string.isRequired,
-    setType: PropTypes.func.isRequired,
-    errorMsg: PropTypes.string,
-  }).isRequired,
-  onSubmit: PropTypes.func.isRequired,
-};
+CreateListingInformation.propTypes = propTypes;
 
 export default CreateListingInformation;
