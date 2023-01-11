@@ -139,7 +139,7 @@ const AdvertisementTable = ({ className }) => {
     selectedCompanies.map((e) => ids.push(e.id));
     await supabase.from('advertisements').update({ active: false }).in('id', ids);
     setselectedCompanies(selectedCompanies.map((e) => ({ ...e, active: 'Disabled' })));
-    queryClient.invalidateQueries({ queryKey: 'get_active_ads' });
+    queryClient.invalidateQueries({ queryKey: 'activeAd' });
   };
 
   const activateAds = async () => {
@@ -147,7 +147,7 @@ const AdvertisementTable = ({ className }) => {
     selectedCompanies.map((e) => ids.push(e.id));
     await supabase.from('advertisements').update({ active: true }).in('id', ids);
     setselectedCompanies(selectedCompanies.map((e) => ({ ...e, active: 'Active' })));
-    queryClient.invalidateQueries({ queryKey: 'get_active_ads' });
+    queryClient.invalidateQueries({ queryKey: 'activeAd' });
   };
 
   return (

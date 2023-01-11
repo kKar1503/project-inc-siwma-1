@@ -42,4 +42,9 @@ AdvertisementEditPage.getLayout = (page) => (
   <AdminPageLayout pageName="Advertisement">{page}</AdminPageLayout>
 );
 
+// -- Configure AuthGuard -- //
+AdvertisementEditPage.allowAuthenticated = true;
+AdvertisementEditPage.roles = ['admin'];
+// Page.aclAbilities = [['View', 'Users']];
+
 export default AdvertisementEditPage;

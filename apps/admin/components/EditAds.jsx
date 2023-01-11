@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { FiUpload } from 'react-icons/fi';
 import crypto from 'crypto';
-import Image from 'next/image';
+// import Image from 'next/image';
 
 const EditAds = ({ id }) => {
   const [name, setName] = useState('');
@@ -114,6 +114,7 @@ const EditAds = ({ id }) => {
         })
         .eq('id', `${id}`);
       setDisplayAlert(true);
+      setError(false);
       setErrorMessage('');
       setImage(null);
       setTimeout(() => {
@@ -156,7 +157,7 @@ const EditAds = ({ id }) => {
             <span className="label-text font-semibold">Current Advertisement Image</span>
           </div>
           <div>
-            <Image
+            <img
               src={`https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/advertisement-image-bucket/${imageURL}`}
               alt="Company advertisement"
               width={800}
@@ -188,10 +189,9 @@ const EditAds = ({ id }) => {
           </div>
           <input
             name="companylink"
-            type="text"
+            type="url"
             className="input-group input input-bordered"
             placeholder="Company Link"
-            required
             value={link}
             onChange={(e) => {
               setlink(e.target.value);
@@ -202,10 +202,15 @@ const EditAds = ({ id }) => {
         <div className="w-auto">
           <label className="flex justify-center w-full h-40 px-4 mt-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
             <span className="items-center space-x-2">
-              {image !== null ? (
+              {imgSizeState !== null ? (
                 <div>
-                  <p className="text-xl text-gray-600 text-center my-6">Image Name:</p>
-                  <p className="text-xl text-gray-600 text-center my-6">{image.name}</p>
+                  <p className="text-xl text-gray-600 text-center my-4 ">Image Size:</p>
+                  <p className="text-xl text-cyan-600 text-center my-4">
+                    Width : {imgSizeState.width}px
+                  </p>
+                  <p className="text-xl text-cyan-600 text-center my-4">
+                    Height : {imgSizeState.height}px
+                  </p>
                 </div>
               ) : (
                 <div>
@@ -248,7 +253,7 @@ const EditAds = ({ id }) => {
         <Alert level="error" message="Duplicate category name found" className="mt-4" />
       )}
       {displayAlert && error === false && (
-        <Alert level="success" message="Category successfully created" className="mt-4" />
+        <Alert level="success" message="Advertisement successfully updated" className="mt-4" />
       )}
     </div>
   );
