@@ -59,7 +59,7 @@ const Header = ({categoryData, isLoggedIn}) => {
 
         <ul className="menu menu-horizontal p-0 hidden lg:flex mx-auto">
           <li tabIndex={0}>
-            <p className='text-lg ml-4 mx-auto font-bold'><MdDashboard/>Categories</p>
+            <p className='text-lg ml-4 mx-auto'><MdDashboard/>Categories</p>
             <ul
               className="p-2 z-40 menu menu-compact dropdown-content mt-3 p-2 shadow-lg bg-base-100 rounded-box text-black">
               {categoryData?.map(({name, id}) => (
@@ -76,13 +76,13 @@ const Header = ({categoryData, isLoggedIn}) => {
         <ul className="menu menu-horizontal p-0 hidden lg:flex mx-auto">
           <li tabIndex={0}>
             <Link href='/real-time-chat'
-              className='text-lg mx-auto font-bold'><MdChat/>Chat</Link>
+              className='text-lg mx-auto'><MdChat/>Chat</Link>
           </li>
         </ul>
 
         <ul className="menu menu-horizontal p-0 hidden lg:flex mx-auto">
           <li tabIndex={0}>
-            <Link href='/new-listing' className='text-lg mx-auto font-bold'><MdAdd/>New
+            <Link href='/new-listing' className='text-lg mx-auto'><MdAdd/>New
               Listing</Link>
           </li>
         </ul>
@@ -118,13 +118,13 @@ const Header = ({categoryData, isLoggedIn}) => {
           {isLoggedIn
             ?<ul className="menu menu-horizontal p-0 hidden lg:flex mx-auto">
               <li tabIndex={0}>
-                <Link href='/logout' className='text-lg mx-auto font-bold'><MdLogout/>Logout</Link>
+                <Link href='/logout' className='text-lg mx-auto'><MdLogout/>Logout</Link>
               </li>
             </ul>
             :<ul className="menu menu-horizontal p-0 hidden lg:flex mx-auto">
               <li tabIndex={0}>
                 <Link href='/login'
-                  className='text-lg mx-auto font-bold'><MdLogin/>Login</Link>
+                  className='text-lg mx-auto'><MdLogin/>Login</Link>
               </li>
             </ul>}
         </div>
