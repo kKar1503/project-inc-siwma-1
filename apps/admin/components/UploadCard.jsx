@@ -102,7 +102,7 @@ const UploadCard = ({ id, des, link, state, setAlert }) => {
         <div className="justify-center m-4 ">
           <form
             onSubmit={async (e) => {
-              mutate({ e : e });
+              mutate({ e });
             }}
           >
             <label className="flex justify-center w-full h-40 px-4 mt-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
