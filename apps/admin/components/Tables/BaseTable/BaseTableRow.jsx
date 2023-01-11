@@ -69,7 +69,7 @@ const BaseTableRow = React.forwardRef(
     }, []);
 
     return (
-      <tr>
+      <tr className='last:border-b'>
         {showCheckbox && (
           <td>
             <label>
@@ -143,12 +143,12 @@ const BaseTableRow = React.forwardRef(
               {/* Action Menu */}
               <div className="relative">
                 <div
-                  className={cx('absolute right-[6vw] top-0 h-fit transition-all', {
+                  className={cx('absolute right-[3vw] top-0 h-fit transition-all', {
                     'invisible opacity-0': !showActionMenu,
                   })}
                   ref={actionMenuRef}
                 >
-                  {React.cloneElement(actionMenu, { companyid: data.id, status: data.active })}
+                  {React.cloneElement(actionMenu, { data })}
                 </div>
               </div>
             </td>

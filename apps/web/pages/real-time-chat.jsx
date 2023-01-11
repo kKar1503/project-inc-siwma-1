@@ -1,23 +1,21 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import { useEffect, useState } from 'react';
 
-import PropTypes from 'prop-types';
 import '@inc/styles/globals.css';
-import Header from '@inc/ui/Header';
 import ChatList from '../components/rtc/ChatList';
 import ChatHeader from '../components/rtc/ChatHeader';
 import ChatBubbles from '../components/rtc/ChatBubbles';
-import InputText from '../components/rtc/InputText';
-import ImageModal from '../components/rtc/ImageModal';
 import FileModal from '../components/rtc/FileModal';
+import ImageModal from '../components/rtc/ImageModal';
+import InputText from '../components/rtc/InputText';
 import OfferModal from '../components/rtc/OfferModal';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const MyApp = ({ Component, pageProps }) => {
+const MyApp = () => {
   const [allMessages, setAllMessages] = useState([]);
   const fetchMessages = async () => {
     const { data: content, error } = await supabase.from('contents').select('*');
@@ -48,9 +46,6 @@ const MyApp = ({ Component, pageProps }) => {
 
   return (
     <div data-theme="">
-      <div>
-        <Header />
-      </div>
       <div className="flex flex-row max-h-screen">
         <div className="min-[320px]:hidden sm:hidden md:flex lg:flex">
           <ChatList />
@@ -110,9 +105,6 @@ const MyApp = ({ Component, pageProps }) => {
   );
 };
 
-MyApp.propTypes = {
-  pageProps: PropTypes.shape({}),
-  Component: PropTypes.elementType,
-};
+MyApp.allowAuthenticated = true;
 
 export default MyApp;

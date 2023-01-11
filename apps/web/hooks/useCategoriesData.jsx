@@ -48,7 +48,8 @@ const useCategoriesData = () => {
     {
       onSuccess: async (data) => {
         if (data.error) {
-          throw new Error('Problem fetching categories data from the database.');
+          setCategoriesData([]);
+          return;
         }
 
         const categoriesWithImages = await getCategoriesImage(data.data, supabase);

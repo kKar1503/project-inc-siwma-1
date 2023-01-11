@@ -1,4 +1,4 @@
-import { SupabaseClient, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -130,6 +130,7 @@ const SignInAndUpLayoutNoSSR = dynamic(() => Promise.resolve(SignInAndUpLayout),
 });
 
 Page.getLayout = (page) => <SignInAndUpLayoutNoSSR>{page}</SignInAndUpLayoutNoSSR>;
+Page.ignoreHeader = true;
 
 export default Page;
 
