@@ -1,7 +1,6 @@
 import { QueryClientProvider, QueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import { useState, useMemo } from 'react';
-import Arrows from '../../components/Arrows';
 import EditParam from '../../components/EditParam';
 import AdminPageLayout from '../../components/layouts/AdminPageLayout';
 import NavBar from '../../components/NavBar';
