@@ -159,4 +159,7 @@ const NewListing = () => {
     </main>
   );
 };
+
+NewListing.allowAuthenticated = true;
+
 export default NewListing;
