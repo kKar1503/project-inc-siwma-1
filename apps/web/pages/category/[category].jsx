@@ -59,6 +59,8 @@ const Category = () => {
     }
   );
 
+  console.log(listingData);
+
   return (
     <Container>
       <div className="m-auto my-10 flex flex-col justify-center w-10/12">
@@ -78,10 +80,15 @@ const Category = () => {
                 listing_type: type,
                 price,
                 negotiable,
+                created_at: createdAt,
+                owner: ownerId,
+                fullname: ownerFullName,
                 unit_price: unitPrice,
+                company_name: companyName,
               }) => (
                 <ProductListingItem
                   className="hover:shadow-lg"
+                  companyName={companyName}
                   type={type}
                   negotiable={negotiable}
                   key={id}
@@ -89,6 +96,9 @@ const Category = () => {
                   img={imageUrl}
                   name={name}
                   rating={4.5}
+                  ownerId={ownerId}
+                  ownerFullName={ownerFullName}
+                  createdAt={createdAt}
                   unit_price={unitPrice}
                   href={`/product/${id}`}
                 />
