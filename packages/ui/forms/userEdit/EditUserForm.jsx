@@ -76,7 +76,16 @@ const EditUserForm = ({
                 success={submitSuccess}
                 required
               >
-                <FormTextInput />
+                <FormTextInput
+                  customValidation={{
+                    // Regexp for validating emails taken from https://regexr.com/39nr7
+                    pattern: {
+                      value:
+                        /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
+                      message: 'Email address must be of a valid format',
+                    },
+                  }}
+                />
               </FormInputGroup>
               <FormInputGroup
                 className="flex-1"
@@ -89,7 +98,7 @@ const EditUserForm = ({
                 <FormTextInput
                   customValidation={{
                     pattern: {
-                      value: /^[0-9]{8}$/,
+                      value: /^(\+\d{2})?\d+$/,
                       message: 'Phone number must be valid',
                     },
                   }}
@@ -98,7 +107,7 @@ const EditUserForm = ({
             </div>
             <div className="flex flex-col gap-4">
               <FormInputGroup label="Bio" name="bio" isLoading={isLoading} success={submitSuccess}>
-                <FormTextArea />
+                <FormTextArea maxLength={999} />
               </FormInputGroup>
             </div>
             <div className="flex flex-col">

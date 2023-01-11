@@ -32,7 +32,10 @@ const FormSelect = ({
       <Skeleton className="h-12" />
     ) : (
       <select
-        className={cx(className, 'input-group input input-bordered')}
+        className={cx(className, 'select input-bordered', {
+          'input-error': errors[name],
+          'input-success': success,
+        })}
         {...hookInput(name, label, customValidation)}
         style={style}
       >
