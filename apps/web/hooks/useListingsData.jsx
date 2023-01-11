@@ -55,13 +55,16 @@ const useListingsData = (offset = 0, limit = 10, tag = '') => {
     {
       onSuccess: async (apiData) => {
         if (apiData.error) {
-          throw new Error('Problem fetching listings data from the database.');
+          console.log('Error getting listings');
+          setListingData([]);
+          return;
         }
 
         const { data } = apiData;
         const listingsWithImageUrls = await getListingFirstImage(data, supabase);
         setListingData(listingsWithImageUrls);
       },
+      refetchOnMount: true,
     }
   );
 
