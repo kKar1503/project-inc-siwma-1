@@ -27,7 +27,10 @@ const Page = () => {
   const refreshQuery = () => {
     queryClient.invalidateQueries({ queryKey: ['getUsers'] });
     queryClient.invalidateQueries({ queryKey: ['getUserCount'] });
+    queryClient.invalidateQueries({ queryKey: ['getInvites'] });
+    queryClient.invalidateQueries({ queryKey: ['getInviteCount'] });
   };
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">

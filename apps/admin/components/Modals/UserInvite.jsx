@@ -1,60 +1,69 @@
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { getAllCompanies } from '@inc/database';
+import { useQuery } from 'react-query';
+import cx from 'classnames';
+import { Alert } from '@inc/ui';
+import { UserInviteFormWrap } from '../forms/userInvite';
 import BaseModal from './BaseModal';
 
-const UserInvite = ({ isOpen, onRequestClose }) => (
-  <BaseModal
-    isOpen={isOpen}
-    onRequestClose={onRequestClose}
-    header={
-      <div>
-        <h3 className="text-lg font-bold">Create an individual invite</h3>
-        <p className="text-sm">Invite an individual user to the system</p>
-      </div>
+const UserInvite = ({ isOpen, onRequestClose, onSuccess }) => {
+  const supabase = useSupabaseClient();
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['getCompanies'],
+    refetchInterval: 60000,
+    queryFn: async () =>
+      getAllCompanies({
+        supabase,
+      }),
+  });
+
+  const onSuccessChange = (value) => {
+    if (value && onSuccess) {
+      onSuccess();
     }
-  >
-    <form>
-      <div>
-        <div className="form-control">
-          <div className="label">
-            <span className="label-text font-semibold">E-mail</span>
-          </div>
-          <input
-            type="text"
-            className="input-group input input-bordered"
-            placeholder="User's e-mail"
+    setSubmitSuccess(value);
+  };
+
+  return (
+    <BaseModal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      header={
+        <div>
+          <h3 className="text-lg font-bold">Create an individual invite</h3>
+          <p className="text-sm">Invite an individual user to the system</p>
+        </div>
+      }
+      siblings={
+        <div className={cx('w-full transition', { hidden: !submitSuccess })}>
+          <Alert
+            level="success"
+            message="User invite sent."
+            className="text-white lg:w-1/3 !absolute shadow-lg translate-x-1/2 right-[50%] mt-5"
+            onRequestClose={() => setSubmitSuccess(false)}
+            dismissable
           />
         </div>
-        <div className="form-control">
-          <div className="label">
-            <span className="label-text font-semibold">Company</span>
-          </div>
-          <select className="select select-bordered font-normal text-gray-400">
-            <option>User&apos;s company</option>
-            <option>Option 1</option>
-            <option>Option 2</option>
-          </select>
-        </div>
-        <div className="form-control">
-          <div className="label">
-            <span className="label-text font-semibold">Mobile number(optional)</span>
-          </div>
-          <input
-            type="text"
-            className="input-group input input-bordered"
-            placeholder="User's mobile no."
-          />
-        </div>
-      </div>
-      <div className="modal-action">
-        <button className="btn btn-outline btn-primary w-full">Send Invite</button>
-      </div>
-    </form>
-  </BaseModal>
-);
+      }
+    >
+      <UserInviteFormWrap
+        isLoading={isLoading}
+        companiesQuery={data}
+        submitSuccess={submitSuccess}
+        onSuccessChange={onSuccessChange}
+      />
+    </BaseModal>
+  );
+};
 
 UserInvite.propTypes = {
   isOpen: PropTypes.bool,
   onRequestClose: PropTypes.func,
+  onSuccess: PropTypes.func,
 };
 
 export default UserInvite;
