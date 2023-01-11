@@ -28,6 +28,13 @@ const EditParam = ({ id }) => {
     queryFn: async () => supabase.from('datatype').select(`id, name`),
   });
 
+  const { data: choices } = useQuery({
+    queryKey: ['choices'],
+    queryFn: async () =>
+      supabase.from('parameter_choices').select(`choice`).eq('parameter', `${id}`),
+    enabled: !!id,
+  });
+
   const addTags = (e) => {
     e.preventDefault();
     if (e.target.value !== '') {
@@ -94,9 +101,14 @@ const EditParam = ({ id }) => {
   useEffect(() => {
     setName(data?.data[0].name);
     setDisplayName(data?.data[0].display_name);
-    setParamType(data?.data[0].paramT);
-    setDataType(data?.data[0].dataT);
-  }, [data]);
+    setParamType(data?.data[0].parameter_type.id);
+    setDataType(data?.data[0].datatype.id);
+    if (choices?.data.length !== 0) {
+      setTags(choices?.data[0].choice);
+    }
+  }, [data, choices]);
+
+  console.log(choices);
 
   const editParameter = async (e) => {
     e.preventDefault();
@@ -233,7 +245,10 @@ const EditParam = ({ id }) => {
             ))}
           </select>
         </div>
-        {(paramT === '3' || paramT === '4') && (
+        {(paramT === '3' ||
+          paramT === '4' ||
+          paramT === 3 ||
+          (paramT === 4 && tags !== undefined)) && (
           <div className="form-control">
             <div className="label">
               <span className="label-text font-semibold">Choices</span>
@@ -266,7 +281,7 @@ const EditParam = ({ id }) => {
         <div className="modal-action">
           <div className="flex px-8 pb-8">
             <Link href="/parameters-management" className="btn btn-outline btn-warning">
-                Return To Parameters
+              Return To Parameters
             </Link>
           </div>
           <button className="btn btn-outline btn-primary" type="submit">
