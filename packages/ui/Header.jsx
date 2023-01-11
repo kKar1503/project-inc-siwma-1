@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import {MdAdd, MdChat, MdDashboard, MdLogin, MdLogout} from 'react-icons/md';
 import SIWMALogo from './public/siwma-logo.png';
 import SIWMALogoFull from './public/siwma-logo-full.png';
@@ -13,8 +13,14 @@ const Header = ({categoryData, isLoggedIn}) => {
   const [open, setOpen] = useState(false);
   const toggle = () => setOpen(!open);
 
+  const iconContextValue = useMemo(() => ({
+    color: '#9c3636'
+    // color: '#9c3636'
+  })
+  , []);
+
   return (
-    <div className="navbar bg-gradient-to-r from-base-300 to-gray-400 border-b-2 border-base-200">
+    <div className="navbar bg-base-100 border-b-2 border-base-200">
       <div className="navbar-start">
         <div
           className=" lg:hidden"
@@ -56,21 +62,11 @@ const Header = ({categoryData, isLoggedIn}) => {
             className="h-full w-full object-cover hidden lg:flex"/>
         </Link>
 
-        <ul className="menu menu-horizontal p-0 hidden lg:flex">
+        <ul className="menu menu-horizontal p-0 hidden lg:flex mx-auto">
           <li tabIndex={0}>
-            <p className='text-lg ml-4'><MdDashboard/>Categories</p>
-            <svg
-              color='black'
-              className="fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-            >
-              <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/>
-            </svg>
+            <p className='text-lg ml-4 mx-auto font-bold'><MdDashboard/>Categories</p>
             <ul
-              className="p-2 z-40 menu menu-compact dropdown-content mt-3 p-2 shadow-lg bg-base-100 rounded-box w-52 text-black">
+              className="p-2 z-40 menu menu-compact dropdown-content mt-3 p-2 shadow-lg bg-base-100 rounded-box text-black">
               {categoryData?.map(({name, id}) => (
                 <CategoryItem
                   name={name}
@@ -82,15 +78,17 @@ const Header = ({categoryData, isLoggedIn}) => {
           </li>
         </ul>
 
-        <ul className="menu menu-horizontal p-0 hidden lg:flex">
+        <ul className="menu menu-horizontal p-0 hidden lg:flex mx-auto">
           <li tabIndex={0}>
-            <Link href='/real-time-chat' className='text-lg ml-4'><MdChat/>Chat</Link>
+            <Link href='/real-time-chat'
+              className='text-lg mx-auto font-bold'><MdChat/>Chat</Link>
           </li>
         </ul>
 
-        <ul className="menu menu-horizontal p-0 hidden lg:flex">
+        <ul className="menu menu-horizontal p-0 hidden lg:flex mx-auto">
           <li tabIndex={0}>
-            <Link href='/new-listing' className='text-lg ml-4'><MdAdd/>New Listing</Link>
+            <Link href='/new-listing' className='text-lg mx-auto font-bold'><MdAdd/>New
+              Listing</Link>
           </li>
         </ul>
 
@@ -99,7 +97,8 @@ const Header = ({categoryData, isLoggedIn}) => {
         <div className="dropdown dropdown-end">
           <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
             <div className="w-10 rounded-full">
-              <Image src="/../public/sample-profile-image.jpg" alt="Person" width={20} height={20}/>
+              <Image src="/../public/sample-profile-image.jpg" alt="Person" width={20}
+                height={20}/>
             </div>
           </label>
           <ul
