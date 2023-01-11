@@ -135,28 +135,30 @@ const Carousel = ({
       {/* Carousel buttons */}
       {/* Carousel buttons are position absolutely */}
 
-      <div
-        className={cx('hidden md:block', {
-          'md:hidden': !showButtons,
-        })}
-      >
-        {(numberOfItems > 1 || !firstItemVisible) && (
-          <IconRoundButton
-            icon={<IoChevronBack size={20} />}
-            onClick={scrollLeft}
-            className="z-30 absolute -left-8 top-1/2"
-          />
-        )}
+      {numberOfItems > 1 && (
+        <div
+          className={cx('hidden md:block', {
+            'md:hidden': !showButtons,
+          })}
+        >
+          {!firstItemVisible && (
+            <IconRoundButton
+              icon={<IoChevronBack size={20} />}
+              onClick={scrollLeft}
+              className="z-30 absolute -left-8 top-1/2"
+            />
+          )}
 
-        {/* Next button */}
-        {(numberOfItems > 1 || !lastItemVisible) && (
-          <IconRoundButton
-            icon={<IoChevronForward size={20} />}
-            onClick={scrollRight}
-            className="z-30 absolute -right-8 top-1/2"
-          />
-        )}
-      </div>
+          {/* Next button */}
+          {!lastItemVisible && (
+            <IconRoundButton
+              icon={<IoChevronForward size={20} />}
+              onClick={scrollRight}
+              className="z-30 absolute -right-8 top-1/2"
+            />
+          )}
+        </div>
+      )}
 
       {/* <div className="left-0 w-[20px] h-full bg-gradient-to-r from-white to-transparent absolute z-20" />
       <div className="right-0 w-[20px] h-full bg-gradient-to-r from-transparent to-white absolute z-20" /> */}
