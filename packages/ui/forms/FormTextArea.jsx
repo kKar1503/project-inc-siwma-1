@@ -39,10 +39,10 @@ const FormTextArea = ({
     });
 
   return isLoading ? (
-    <Skeleton className="h-32" />
+    <Skeleton className="h-full" />
   ) : (
     <textarea
-      className={cx(className, 'textarea textarea-bordered h-32', {
+      className={cx(className, 'textarea textarea-bordered h-full', {
         'textarea-error': errors[name],
         'textarea-success': success,
       })}

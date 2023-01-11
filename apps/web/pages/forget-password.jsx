@@ -50,23 +50,21 @@ const ForgetPasswordFormWrap = () => {
   );
 };
 
-const Page = () => {
-  const t = 0;
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col">
-        <h1 className="font-bold text-xl">Forget Password</h1>
-        <p>Please enter an email associated with your account.</p>
-      </div>
-      <ForgetPasswordFormWrap />
+const Page = () => (
+  <div className="flex flex-col gap-4">
+    <div className="flex flex-col">
+      <h1 className="font-bold text-xl">Forget Password</h1>
+      <p>Please enter an email associated with your account.</p>
     </div>
-  );
-};
+    <ForgetPasswordFormWrap />
+  </div>
+);
 
 const SignInAndUpLayoutNoSSR = dynamic(() => Promise.resolve(SignInAndUpLayout), {
   ssr: false,
 });
 
 Page.getLayout = (page) => <SignInAndUpLayoutNoSSR>{page}</SignInAndUpLayoutNoSSR>;
+Page.ignoreHeader = true;
 
 export default Page;
