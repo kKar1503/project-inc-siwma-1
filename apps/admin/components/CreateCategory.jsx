@@ -1,4 +1,4 @@
-import { useQuery, useQueries, useQueryClient } from 'react-query';
+import { useQueryClient } from 'react-query';
 import { useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
 import { Alert } from '@inc/ui';
@@ -10,7 +10,7 @@ const CreateCategory = () => {
   const supabase = useSupabaseClient();
 
   const [displayAlert, setDisplayAlert] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
   const [image, setImage] = useState(null);
   const [colourMessage, setColourMessage] = useState('text-center text-green-500 pt-1');
   const [errorMessage, setErrorMessage] = useState('');

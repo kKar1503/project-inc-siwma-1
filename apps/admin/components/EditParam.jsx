@@ -13,7 +13,7 @@ const EditParam = ({ id }) => {
   const [dataT, setDataType] = useState('');
   const [tags, setTags] = useState([]);
   const [displayAlert, setDisplayAlert] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
   const [colourMessage, setColourMessage] = useState('text-center text-green-500 pt-4');
   const [errorMessage, setErrorMessage] = useState('');
   const supabase = useSupabaseClient();

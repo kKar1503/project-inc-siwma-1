@@ -11,7 +11,7 @@ const EditCat = ({ id }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [displayAlert, setDisplayAlert] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
   const [image, setImage] = useState(null);
   const [colourMessage, setColourMessage] = useState('text-center text-green-500 pt-4');
   const [errorMessage, setErrorMessage] = useState('');
@@ -189,7 +189,7 @@ const EditCat = ({ id }) => {
         <Alert level="error" message="Duplicate category name found" className="mt-4" />
       )}
       {displayAlert && error === false && (
-        <Alert level="success" message="Category successfully created" className="mt-4" />
+        <Alert level="success" message="Category successfully created, please click back to return to category page" className="mt-4" />
       )}
     </div>
   );

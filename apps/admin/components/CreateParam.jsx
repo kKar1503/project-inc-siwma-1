@@ -12,7 +12,7 @@ const CreateParam = () => {
   const [dataT, setDataType] = useState('');
   const [tags, setTags] = useState([]);
   const [displayAlert, setDisplayAlert] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
 
   const { data: parameterType } = useQuery({
     queryKey: ['parameterType'],
