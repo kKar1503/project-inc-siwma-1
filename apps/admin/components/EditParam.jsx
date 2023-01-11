@@ -130,34 +130,6 @@ const EditParam = ({ id }) => {
         })
         .eq('parameter', `${id}`);
     }
-
-    // if (status === 409) {
-    //   setDisplayAlert(true);
-    //   setError(true);
-    //   setTimeout(() => {
-    //     setDisplayAlert(false);
-    //     setError(false);
-    //   }, 4000);
-    // } else {
-    //   let newUUID = data?.data[0].image;
-    //   if (image !== null) {
-    //     const randomUUID = crypto.randomBytes(32).toString('hex');
-    //     newUUID = changeUUID(randomUUID);
-    //     await supabase.storage.from('category-image-bucket').upload(newUUID, image);
-    //   }
-    //   await supabase
-    //     .from('category')
-    //     .update({
-    //       image: `${newUUID}`,
-    //     })
-    //     .eq('id', `${id}`);
-    //   setDisplayAlert(true);
-    //   setErrorMessage('');
-    //   setImage(null);
-    //   setTimeout(() => {
-    //     setDisplayAlert(false);
-    //   }, 4000);
-    // }
   };
 
   return (
