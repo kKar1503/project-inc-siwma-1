@@ -5,8 +5,6 @@ import Link from 'next/link';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import PropTypes from 'prop-types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { FiUpload } from 'react-icons/fi';
-import crypto from 'crypto';
 
 const EditParam = ({ id }) => {
   const [name, setName] = useState('');
@@ -16,7 +14,6 @@ const EditParam = ({ id }) => {
   const [tags, setTags] = useState([]);
   const [displayAlert, setDisplayAlert] = useState(null);
   const [error, setError] = useState(null);
-  const [image, setImage] = useState(null);
   const [colourMessage, setColourMessage] = useState('text-center text-green-500 pt-4');
   const [errorMessage, setErrorMessage] = useState('');
   const supabase = useSupabaseClient();
@@ -47,7 +44,6 @@ const EditParam = ({ id }) => {
   };
 
   const addChoiceParam = async (e) => {
-    // const tagsObj = [];
     if (tags.length === 0) {
       setDisplayAlert(true);
       setError('choices');
@@ -89,7 +85,7 @@ const EditParam = ({ id }) => {
     queryFn: async () =>
       supabase
         .from('parameter')
-        .select(`id, name, display_name, parameter_type(id, name), datatype(id, name)`)
+        .select(`name, display_name, parameter_type(id, name), datatype(id, name)`)
         .order('name', { ascending: true })
         .eq('id', `${id}`),
     enabled: !!id,
@@ -150,8 +146,13 @@ const EditParam = ({ id }) => {
         <h3 className="text-lg font-bold">Edit Parameter</h3>
       </div>
       <form
-        onSubmit={async (e) => {
-          await editParameter(e);
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (e.target.paramType.value === '3' || e.target.paramType.value === '4') {
+            addChoiceParam(e);
+          } else {
+            editParameter(e);
+          }
         }}
       >
         <div className="form-control">
