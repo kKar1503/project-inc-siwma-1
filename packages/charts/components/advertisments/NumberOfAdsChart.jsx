@@ -1,23 +1,11 @@
 import { VictoryChart, VictoryBar, VictoryAxis, VictoryLabel, Bar } from 'victory';
 import PropType from 'prop-types';
 
-// const dataset = [
-//   { month: 'Jan', ad_space: 5 },
-//   { month: 'Feb', ad_space: 1 },
-//   { month: 'Mar', ad_space: 2 },
-//   { month: 'Apr', ad_space: 4 },
-//   { month: 'May', ad_space: 4 },
-//   { month: 'Jun', ad_space: 1 },
-//   { month: 'Jul', ad_space: 4 },
-//   { month: 'Aug', ad_space: 1 },
-//   { month: 'Sep', ad_space: 3 },
-//   { month: 'Oct', ad_space: 4 },
-// ];
-
 const ticks = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const tick2 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 
-const month = '11';
+const d = new Date();
+const month = (d.getMonth() + 1 ).toString();
 const width = 35;
 
 const NumberOfAdsCharts = ({ dataset }) => (

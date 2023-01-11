@@ -12,7 +12,7 @@ const ClicksGraphs = () => {
   const { data, isFetching } = useQuery('ClicksGraph', fetchClicks);
 
   if (data) {
-    console.log(data);
+    // console.log(data);
     data1 = data.data;
   }
 

@@ -1,10 +1,10 @@
-import { useQueries, useQueryClient, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useEffect, useState } from 'react';
 import { Alert } from '@inc/ui';
 import PropTypes from 'prop-types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { FiUpload } from 'react-icons/fi';
-import crypto from 'crypto';
+// import crypto from 'crypto';
 // import Image from 'next/image';
 
 const EditAds = ({ id }) => {
@@ -19,6 +19,8 @@ const EditAds = ({ id }) => {
   const [colourMessage, setColourMessage] = useState('text-center text-green-500 pt-4');
   const [errorMessage, setErrorMessage] = useState('');
   const supabase = useSupabaseClient();
+  // Get QueryClient from the context
+  const queryClient = useQueryClient();
 
   const checkFile = async (e) => {
     if (e.target.files[0] === undefined) {
@@ -52,16 +54,6 @@ const EditAds = ({ id }) => {
     }
   };
 
-  const changeUUID = (uuid) => {
-    const parts = [];
-    parts.push(uuid.slice(0, 8));
-    parts.push(uuid.slice(8, 12));
-    parts.push(uuid.slice(12, 16));
-    parts.push(uuid.slice(16, 20));
-    parts.push(uuid.slice(20, 32));
-    return parts.join('-');
-  };
-
   // get advertisement details
   const { data } = useQuery({
     queryKey: ['editadvertisments', id],
@@ -82,7 +74,7 @@ const EditAds = ({ id }) => {
   }, [data]);
 
   // submit edit
-  const editAdsvertisment = async (e) => {
+  const editAdsvertisment = async ({ e }) => {
     e.preventDefault();
 
     const { status } = await supabase
@@ -103,9 +95,8 @@ const EditAds = ({ id }) => {
     } else {
       let newUUID = data?.data[0].image;
       if (image !== null) {
-        const randomUUID = crypto.randomBytes(32).toString('hex');
-        newUUID = changeUUID(randomUUID);
-        await supabase.storage.from('advertisement').upload(newUUID, image);
+        newUUID = crypto.randomUUID();
+        await supabase.storage.from('advertisement-image-bucket').upload(newUUID, image);
       }
       await supabase
         .from('advertisements')
@@ -123,6 +114,19 @@ const EditAds = ({ id }) => {
     }
   };
 
+  // set useMutation conditions
+  const refresh = {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['editadvertisments'] });
+    },
+    onError: (updateError) => {
+      console.log(updateError);
+    },
+  };
+
+  // insert advertisement details mutation
+  const { mutate } = useMutation(editAdsvertisment, refresh);
+
   return (
     <div>
       <div>
@@ -130,7 +134,7 @@ const EditAds = ({ id }) => {
       </div>
       <form
         onSubmit={async (e) => {
-          await editAdsvertisment(e);
+          mutate({ e });
         }}
       >
         <div className="form-control">
