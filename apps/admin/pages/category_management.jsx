@@ -27,4 +27,9 @@ const CategoryPage = () => (
  */
 CategoryPage.getLayout = (page) => <AdminPageLayout pageName="Category">{page}</AdminPageLayout>;
 
+// -- Configure AuthGuard -- //
+CategoryPage.allowAuthenticated = true;
+CategoryPage.roles = ['admin'];
+// Page.aclAbilities = [['View', 'Users']];
+
 export default CategoryPage;

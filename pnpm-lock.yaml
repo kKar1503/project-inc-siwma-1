@@ -110,6 +110,8 @@ importers:
 
   apps/web:
     specifiers:
+      '@casl/ability': ^6.3.3
+      '@casl/react': ^3.1.0
       '@inc/chat': workspace:*
       '@inc/database': workspace:0.0.0
       '@inc/notifications': workspace:*
@@ -145,6 +147,8 @@ importers:
       tailwindcss: 3.2.1
       yup: 0.32.11
     dependencies:
+      '@casl/ability': 6.3.3
+      '@casl/react': 3.1.0_njj54owfq3na6bd4rvqbzsj5l4
       '@inc/chat': link:../../packages/chat
       '@inc/database': link:../../packages/database
       '@inc/notifications': link:../../packages/notifications

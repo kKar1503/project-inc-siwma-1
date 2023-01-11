@@ -163,4 +163,9 @@ const UserOverview = () => (
 
 UserOverview.getLayout = (page) => <AdminPageLayout pageName="Overview">{page}</AdminPageLayout>;
 
+// -- Configure AuthGuard -- //
+UserOverview.allowAuthenticated = true;
+UserOverview.roles = ['admin'];
+// Page.aclAbilities = [['View', 'Users']];
+
 export default UserOverview;

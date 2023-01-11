@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
-import TableButton from './TableButton';
 
 // This table shows a preview of Company Profiles and is built on the BaseTable component.
 
 const CompanyProfilesPreviewTable = ({ data }) => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  // For Search Support
+  const [displayData, setDisplayData] = useState(data); // Data to be displayed in the table
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useMemo(() => {
+    setDisplayData(data.filter((row) => {
+      const lowerCaseTerm = searchTerm.toLowerCase();
+      return row.name.toLowerCase().includes(lowerCaseTerm) || 
+      (row.website !== undefined && row.website.toLowerCase().includes(lowerCaseTerm));
+    }))
+  }, [data, searchTerm]);
 
   return (
     <BaseTable
@@ -24,7 +33,7 @@ const CompanyProfilesPreviewTable = ({ data }) => {
               <option>15 per page</option>
               <option>50 per page</option>
             </select>
-            <SearchBar placeholder="Search by name" />
+            <SearchBar value={searchTerm} setValue={setSearchTerm} placeholder="Search by name" />
           </div>
         </div>
       }
@@ -32,34 +41,7 @@ const CompanyProfilesPreviewTable = ({ data }) => {
       headingColor="bg-primary"
       showCheckbox
       columnKeys={['name', 'website']}
-      data={data}
-      footer={
-        <div className="flex justify-end bg-none">
-          <div className="flex justify-end bg-none">
-            <TableButton
-              index={0}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-primary"
-              className="rounded-l-lg hover:bg-primary"
-            />
-            <TableButton
-              index={1}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-primary"
-              className="hover:bg-primary"
-            />
-            <TableButton
-              index={2}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              selectedColor="bg-primary"
-              className="rounded-r-lg hover:bg-primary"
-            />
-          </div>
-        </div>
-      }
+      data={displayData}
     />
   );
 };
