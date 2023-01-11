@@ -1,5 +1,5 @@
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import Container from '../components/Container';
 import Advertisement from '../components/marketplace/Advertisement';
@@ -40,15 +40,27 @@ const MarketplacePage = () => {
   //         img: `https://images.unsplash.com/photo-1667925459217-e7b7a9797409?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80`,
   //       };
   //     });
-  const {
-    data: adsAPIData,
-    status: adsStatus,
-    isLoading: adsIsLoading,
-    error: adsError,
-  } = useQuery(['get_advertisements'], async () => supabase.rpc('get_advertisements'), {
-    refetchOnMount: false,
+  const getAdvertisementImages = async (ad) => {
+    if (ad.image === null) {
+      setAdsData((prevAds) => [...prevAds, { ...ad, image_public_url: '/' }]);
+      return;
+    }
+
+    const { data, error } = await supabase.storage
+      .from('advertisement-image-bucket')
+      .getPublicUrl(ad.image);
+
+    if (error) throw error;
+
+    setAdsData((prevAds) => [...prevAds, { ...ad, image_public_url: data.publicUrl }]);
+  };
+
+  useQuery(['get_advertisements'], async () => supabase.rpc('get_advertisements'), {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    onSuccess: (data) => {
+      data.data.forEach((path) => getAdvertisementImages(path));
+    },
   });
 
   //       return {
@@ -66,13 +78,6 @@ const MarketplacePage = () => {
   //     const res = await supabase.storage
   //       .from('listing-image-bucket')
   //       .getPublicUrl('5292cf25-72e7-4f1c-b0e1-5a1e0c2009b4');
-
-  useEffect(() => {
-    if (adsStatus === 'success') {
-      console.log('Success ads', adsAPIData.data);
-      setAdsData(adsAPIData.data);
-    }
-  }, [adsStatus, adsAPIData]);
 
   return (
     <div>
