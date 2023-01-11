@@ -61,7 +61,7 @@ const ResetPasswordFormWrap = () => {
   );
 
   useEffect(() => {
-    const { data: authSubscription } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: authSubscription } = supabase.auth.onAuthStateChange(async (event) => {
       // PASSWORD_RECOVERY does not seem to work as expected. Use SIGNED_IN instead to achieve a
       // similar effect.
       if (event === 'SIGNED_IN') {
@@ -110,5 +110,6 @@ const SignInAndUpLayoutNoSSR = dynamic(() => Promise.resolve(SignInAndUpLayout),
 });
 
 Page.getLayout = (page) => <SignInAndUpLayoutNoSSR>{page}</SignInAndUpLayoutNoSSR>;
+Page.ignoreHeader = true;
 
 export default Page;

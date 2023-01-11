@@ -287,6 +287,7 @@ importers:
   packages/ui:
     specifiers:
       '@inc/utils': workspace:^0.0.0
+      '@supabase/auth-helpers-react': 0.3.1
       '@supabase/supabase-js': 2.1.0
       classnames: 2.3.2
       eslint: 7.32.0
@@ -300,6 +301,7 @@ importers:
       react-query: 3.39.2
     dependencies:
       '@inc/utils': link:../utils
+      '@supabase/auth-helpers-react': 0.3.1_zj6vbgpit7u2xp5t7lhhtyhq6e
       '@supabase/supabase-js': 2.1.0
       classnames: 2.3.2
       next: 13.0.0_react@18.2.0
