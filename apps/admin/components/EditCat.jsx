@@ -5,7 +5,6 @@ import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { FiUpload } from 'react-icons/fi';
-import crypto from 'crypto';
 
 const EditCat = ({ id }) => {
   const [name, setName] = useState('');
@@ -33,16 +32,6 @@ const EditCat = ({ id }) => {
         setColourMessage('text-center text-green-500 pt-1');
       }, 4000);
     }
-  };
-
-  const changeUUID = (uuid) => {
-    const parts = [];
-    parts.push(uuid.slice(0, 8));
-    parts.push(uuid.slice(8, 12));
-    parts.push(uuid.slice(12, 16));
-    parts.push(uuid.slice(16, 20));
-    parts.push(uuid.slice(20, 32));
-    return parts.join('-');
   };
 
   const { data } = useQuery({
@@ -83,8 +72,7 @@ const EditCat = ({ id }) => {
     } else {
       let newUUID = data?.data[0].image;
       if (image !== null) {
-        const randomUUID = crypto.randomBytes(32).toString('hex');
-        newUUID = changeUUID(randomUUID);
+        newUUID = crypto.randomUUID();
         await supabase.storage.from('category-image-bucket').upload(newUUID, image);
       }
       await supabase

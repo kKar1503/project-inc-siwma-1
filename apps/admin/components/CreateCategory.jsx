@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
 import { Alert } from '@inc/ui';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import crypto from 'crypto';
 
 const CreateCategory = () => {
   const queryClient = useQueryClient();
@@ -44,16 +43,6 @@ const CreateCategory = () => {
   //   queryFn: async () => supabase.from('category').select(`id, name`),
   // });
 
-  const changeUUID = (uuid) => {
-    const parts = [];
-    parts.push(uuid.slice(0, 8));
-    parts.push(uuid.slice(8, 12));
-    parts.push(uuid.slice(12, 16));
-    parts.push(uuid.slice(16, 20));
-    parts.push(uuid.slice(20, 32));
-    return parts.join('-');
-  };
-
   const addCategory = async (e) => {
     e.preventDefault();
 
@@ -73,9 +62,7 @@ const CreateCategory = () => {
         setError(false);
       }, 4000);
     } else {
-      const randomUUID = crypto.randomBytes(32).toString('hex');
-      const newUUID = changeUUID(randomUUID);
-
+      const newUUID = crypto.randomUUID();
       await supabase.storage.from('category-image-bucket').upload(newUUID, image);
       const { error: message } = await supabase
         .from('category')
