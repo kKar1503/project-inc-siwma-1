@@ -1,4 +1,4 @@
-import { useQueries, useQueryClient, useQuery, queryClient } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { useEffect, useState } from 'react';
 import { Alert } from '@inc/ui';
 import Link from 'next/link';
@@ -16,6 +16,7 @@ const EditParam = ({ id }) => {
   const [error, setError] = useState(null);
   const [colourMessage, setColourMessage] = useState('text-center text-green-500 pt-4');
   const [errorMessage, setErrorMessage] = useState('');
+  const queryClient = useQueryClient();
   const supabase = useSupabaseClient();
 
   const { data: parameterType } = useQuery({
@@ -41,6 +42,7 @@ const EditParam = ({ id }) => {
       setTags([...tags, e.target.value]);
       e.target.value = '';
     }
+
     if (tags.length > 0) {
       setParamType('4');
     }
@@ -59,7 +61,7 @@ const EditParam = ({ id }) => {
         setError(false);
       }, 4000);
     } else {
-      const { data, status } = await supabase
+      const { data, status: newChoiceStatus } = await supabase
         .from('parameter')
         .insert({
           name: e.target.paramName.value,
@@ -73,7 +75,6 @@ const EditParam = ({ id }) => {
       // console.log(tagsObj);
 
       await supabase.from('parameter_choices').insert({ parameter: data[0].id, choice: tags });
-      queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
     }
   };
 
@@ -111,15 +112,24 @@ const EditParam = ({ id }) => {
   const editParameter = async (e) => {
     e.preventDefault();
 
-    const { status } = await supabase
+    const { status: updateStatus } = await supabase
       .from('parameter')
       .update({
         name: `${name}`,
         display_name: `${displayName}`,
         type: `${paramT}`,
-        datatype: `${dataType}`,
+        datatype: `${dataT}`,
       })
       .eq('id', `${id}`);
+
+    if (choices?.data.length !== 0) {
+      const { status: choiceStatus } = await supabase
+        .from('parameter_choices')
+        .update({
+          choice: tags,
+        })
+        .eq('parameter', `${id}`);
+    }
 
     // if (status === 409) {
     //   setDisplayAlert(true);
@@ -158,7 +168,10 @@ const EditParam = ({ id }) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (e.target.paramType.value === '3' || e.target.paramType.value === '4') {
+          if (
+            (e.target.paramType.value === '3' || e.target.paramType.value === '4') &&
+            choices?.data.length === 0
+          ) {
             addChoiceParam(e);
           } else {
             editParameter(e);
