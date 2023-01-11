@@ -100,4 +100,5 @@ const Category = () => {
 //     },
 //   };
 // }
+Category.allowAuthenticated = true;
 export default Category;
