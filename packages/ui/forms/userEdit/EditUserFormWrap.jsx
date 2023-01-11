@@ -203,23 +203,25 @@ const EditUserFormWrap = ({
           path={path}
           adminContent={adminContent}
         />
-        <div className={cx('my-12 transition lg:w-7/12 mx-auto', { hidden: !submitSuccess })}>
-          <Alert
-            level="success"
-            message="User edited successfully"
-            className="text-white shadow-lg"
-            onRequestClose={() => setSubmitSuccess(false)}
-            dismissable
-          />
-        </div>
-        <div className={cx('my-12 transition lg:w-7/12 mx-auto', { hidden: !submitFailure })}>
-          <Alert
-            level="error"
-            message="Something went wrong"
-            className="text-white shadow-lg"
-            onRequestClose={() => setSubmitFailure(false)}
-            dismissable
-          />
+        <div className='relative'>
+          <div className={cx('absolute bottom-20 left-0 right-0 transition lg:w-7/12 mx-auto', { hidden: !submitSuccess })}>
+            <Alert
+              level="success"
+              message="User edited successfully"
+              className="text-white shadow-lg"
+              onRequestClose={() => setSubmitSuccess(false)}
+              dismissable
+            />
+          </div>
+          <div className={cx('absolute bottom-20 left-0 right-0 transition lg:w-7/12 mx-auto', { hidden: !submitFailure })}>
+            <Alert
+              level="error"
+              message="Something went wrong"
+              className="text-white shadow-lg"
+              onRequestClose={() => setSubmitFailure(false)}
+              dismissable
+            />
+          </div>
         </div>
       </div>
     </FormProvider>

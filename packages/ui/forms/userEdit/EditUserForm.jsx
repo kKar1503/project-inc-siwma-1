@@ -18,10 +18,10 @@ const EditUserForm = ({
   path,
   adminContent,
 }) => (
-  <form onSubmit={onSubmit}>
-    <div className="flex flex-wrap gap-8 p-8">
+  <form className='flex flex-col flex-1' onSubmit={onSubmit}>
+    <div className="flex flex-1 flex-wrap gap-8 p-8">
       <div className="flex flex-col flex-[3] flex-wrap">
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-1">
           <FormInputGroup
             className="flex-1"
             label="Profile Picture"
@@ -42,9 +42,9 @@ const EditUserForm = ({
         </div>
       </div>
 
-      <div className="flex-[9] flex-wrap">
-        <div className="flex flex-col w-full min-w-96 gap-12">
-          <div className="flex flex-col gap-4">
+      <div className="h-full flex-[9] flex-wrap">
+        <div className="flex flex-col h-full w-full min-w-96 gap-12">
+          <div className="flex flex-col gap-4 h-full">
             <div className="flex flex-col md:flex-row gap-4">
               <FormInputGroup
                 className="flex-1"
@@ -105,13 +105,13 @@ const EditUserForm = ({
                 />
               </FormInputGroup>
             </div>
-            <div className="flex flex-col gap-4">
-              <FormInputGroup label="Bio" name="bio" isLoading={isLoading} success={submitSuccess}>
-                <FormTextArea maxLength={999} />
-              </FormInputGroup>
-            </div>
+
+            <FormInputGroup className="flex-1" label="Bio" name="bio" isLoading={isLoading} success={submitSuccess}>
+              <FormTextArea maxLength={999} />
+            </FormInputGroup>
+
             <div className="flex flex-col">
-              <div className="label justify-start -mb-5">
+              <div className="label justify-start p-0">
                 <span className="label-text">Change Password</span>
                 <button
                   className="btn btn-active btn-link pointer-events-auto ml-1 px-2"
@@ -143,16 +143,15 @@ const EditUserForm = ({
             </div>
 
             {adminContent ? (
-              <div className="flex flex-col gap-4">
-                <FormInputGroup
-                  label="Comment"
-                  name="comment"
-                  isLoading={isLoading}
-                  success={submitSuccess}
-                >
-                  <FormTextArea />
-                </FormInputGroup>
-              </div>
+              <FormInputGroup
+                label="Comment"
+                name="comment"
+                isLoading={isLoading}
+                success={submitSuccess}
+                className="flex-1"
+              >
+                <FormTextArea />
+              </FormInputGroup>
             ) : (
               ''
             )}
