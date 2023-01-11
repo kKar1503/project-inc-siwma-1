@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
+// eslint-disable-next-line import/no-unresolved
+// import Autocomplete from 'react-autocomplete';
 import { useState, useEffect, useContext } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { useUser } from '@supabase/auth-helpers-react';
-// eslint-disable-next-line import/no-unresolved
 import toast, { Toaster } from 'react-hot-toast';
-// import Autocomplete from 'react-autocomplete';
 
 import '@inc/styles/globals.css';
 import { Header } from '@inc/ui';
@@ -16,6 +16,7 @@ import OfferModal from '../components/rtc/OfferModal';
 import ChatSidebar from '../components/rtc/ChatSidebar';
 import ItemDetails from '../components/rtc/ItemDetails';
 import ChatFilter from '../components/rtc/ChatFilter';
+import Container from '../components/Container';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -303,5 +304,9 @@ const RealTimeChat = () => {
     </div>
   );
 };
+
+RealTimeChat.allowNonAuthenticated = true;
+RealTimeChat.allowAuthenticated = true;
+RealTimeChat.getLayout = (page) => <Container>{page}</Container>;
 
 export default RealTimeChat;

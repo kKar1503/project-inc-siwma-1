@@ -1,33 +1,33 @@
 import { useState } from 'react';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 
-const ImageModal = () => {
+const FileModal = () => {
   const supabase = useSupabaseClient();
-  const [selectedImage, setSelectedImage] = useState();
-  const [isImagePicked, setIsImagePicked] = useState(false);
+  const [selectedFile, setSelectedFile] = useState();
+  const [isFileUploaded, setIsFileUploaded] = useState(false);
   const userdata = useUser();
 
   const changeHandler = (event) => {
-    setSelectedImage(event.target.files[0]);
-    setIsImagePicked(true);
+    setSelectedFile(event.target.files[0]);
+    setIsFileUploaded(true);
   };
 
   const handleUpload = async () => {
     try {
       const { data: uploadBucketData, error } = await supabase.storage
         .from('chat-bucket')
-        .upload(`images/${selectedImage.name}`, selectedImage, {
+        .upload(`files/${selectedFile.name}`, selectedFile, {
           upsert: true,
         });
 
       if (!error) {
         const { data, error: insertError } = await supabase
           .from('contents')
-          .insert([{ image: uploadBucketData.path }]);
+          .insert([{ file: uploadBucketData.path }]);
 
-        const imageModal = document.querySelector('#image-modal');
+        const fileModal = document.querySelector('#file-modal');
 
-        imageModal.style.display = 'none';
+        fileModal.style.display = 'none';
 
         if (insertError) {
           console.log(insertError);
@@ -64,22 +64,22 @@ const ImageModal = () => {
   };
 
   return (
-    <div className="modal" id="image-modal">
+    <div className="modal" id="file-modal">
       <div className="modal-box">
-        <h3 className="font-bold text-lg mb-4">Image Upload</h3>
+        <h3 className="font-bold text-lg mb-4">File Upload</h3>
         <div className="border-dashed border-2 rounded-md border-sky-500 relative flex justify-center">
           <div className="my-20">
             <input
               type="file"
-              name="imageFile"
-              accept="image/*"
+              name="fileInput"
+              accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
               className="absolute left-0 right-0 top-0 bottom-0 opacity-0"
               onChange={changeHandler}
             />
-            {isImagePicked ? (
-              <h2 className="font-bold">Image has been uploaded</h2>
+            {isFileUploaded ? (
+              <h2 className="font-bold">File has been uploaded</h2>
             ) : (
-              <h2 className="font-bold">Click here to upload an image</h2>
+              <h2 className="font-bold">Click here to upload an file</h2>
             )}
           </div>
         </div>
@@ -91,5 +91,6 @@ const ImageModal = () => {
       </div>
     </div>
   );
-};
-export default ImageModal;
+}
+
+export default FileModal;
