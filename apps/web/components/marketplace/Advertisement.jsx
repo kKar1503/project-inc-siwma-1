@@ -12,7 +12,7 @@ const propTypes = {
     image_public_url: PropTypes.string,
     link: PropTypes.string,
   }),
-}
+};
 
 /**
  * Advertisement is a component that renders an advertisement in a carousell
@@ -35,7 +35,7 @@ const Advertisement = ({ adData }) => {
             src={adData.image_public_url}
             fill
             htmlFor={`modal-${adData.id}`}
-            className="object-cover absolute"
+            className="object-contain absolute"
           />
         </label>
       </div>
@@ -46,9 +46,11 @@ const Advertisement = ({ adData }) => {
           <h3 className="text-lg font-bold text-center">{adData.company_name}</h3>
           <p className="py-4">{adData.description}</p>
           <div className="modal-action">
-            <Link href={adData.link} target="_blank" htmlFor="my-modal" className="btn">
-              Show me!
-            </Link>
+            {adData.link && (
+              <Link href={adData.link} target="_blank" htmlFor="my-modal" className="btn">
+                Show me!
+              </Link>
+            )}
             <label htmlFor={`modal-${adData.id}`} className="btn">
               Close
             </label>
