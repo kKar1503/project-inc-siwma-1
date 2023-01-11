@@ -1,61 +1,66 @@
 // ------------------ Imports ------------------
 
-import { bool, func } from 'prop-types';
-import { MdHome, MdBookmark, MdChat, MdPeople } from 'react-icons/md';
+import PropTypes, {bool, func} from 'prop-types';
+import {MdChat, MdDashboard, MdLogout, MdHome, MdLogin,MdAdd} from 'react-icons/md';
 import cx from 'classnames';
-import SidebarHeaderIcon from './MobileMenuSubComponents/SidebarHeader';
 import SidebarDivider from './MobileMenuSubComponents/SidebarDivider';
 import SidebarItem from './MobileMenuSubComponents/SidebarItem';
 import SidebarSubItem from './MobileMenuSubComponents/SidebarSubItem';
-import SidebarLogout from './MobileMenuSubComponents/SidebarLogout';
-import SidebarSearch from './MobileMenuSubComponents/SidebarSearch';
+import SidebarDropdown from './MobileMenuSubComponents/SidebarDropdown';
 
 // ------------------ Layout Configuration ------------------
 
 /**
  * This component is a central location to customize the HamburgerMenu
- * @type {React.FC<import('prop-types').InferProps<typeof LayoutEditor.propTypes>>}
  */
-const LayoutEditor = ({ closeHandle }) => (
+const LayoutEditor = ({categoryData, isLoggedIn}) => (
   <>
-    <SidebarHeaderIcon closeHandle={closeHandle} />
+    {/* eslint-disable-next-line no-alert */}
+    {/* <SidebarSearch/> */}
+    {/* <SidebarDivider/> */}
+    <SidebarItem name="Home" redirectLink="/"><MdHome/></SidebarItem>
+    <SidebarDropdown name="Categories" customIcon={<MdDashboard/>}>
+      {categoryData?.map(({name, id}) => (
+        <SidebarSubItem
+          name={name}
+          redirectLink={`/category/${name}?id=${id}`}
+          key={name}
+        />
+      ))}
+    </SidebarDropdown>
 
-    <SidebarDivider />
 
-    <SidebarSearch />
-    <SidebarItem name="Home" redirectLink="/test#home" customIcon={<MdHome />} />
-    <SidebarItem name="Bookmark" redirectLink="/test#bookmark" customIcon={<MdBookmark />} />
-    <SidebarItem name="Chat" redirectLink="/test#chat" customIcon={<MdChat />}>
-      <SidebarSubItem name="Social" redirectLink="/test#chat_socials" customIcon={<MdPeople />} />
-      <SidebarSubItem name="Personal" redirectLink="/test#chat_personal" />
-      <SidebarSubItem name="Friends" redirectLink="/test#chat_friends" />
-    </SidebarItem>
+    <SidebarItem name="Chat" redirectLink="/real-time-chat"><MdChat/></SidebarItem>
 
-    <SidebarDivider />
+    <SidebarDivider/>
 
-    <SidebarLogout />
+    <SidebarItem name="New Listing" redirectLink="/new-listing"><MdAdd/></SidebarItem>
+
+    <SidebarDivider/>
+
+    {isLoggedIn ? <SidebarItem name="Logout" redirectLink="/logout"><MdLogout/></SidebarItem>
+      : <SidebarItem name="Login" redirectLink="/login"><MdLogin/></SidebarItem>}
   </>
 );
 
 // ------------------ Main Component -----------------
 /**
  * The MobileMenu is a hamburger menu only visible on mobile devices
- * @type {React.FC<import('prop-types').InferProps<typeof HamburgerMenu.propTypes>>}
+ * @type {function({open: bool,className: string, setOpen: function, isLoggedIn: boolean, categoryData: {name : string,id : number}[]})}  })}
  */
-const MobileMenu = ({ open, setOpen }) => {
+const MobileMenu = ({open, className, setOpen, isLoggedIn, categoryData}) => {
   // ------------------ Handles -----------------
   const closeHandle = () => setOpen(false);
 
   // ------------------ Return -----------------
   return (
-    <div className={cx('drawer-side block', { hidden: !open })}>
+    <div
+      className={cx(className, `h1 z-40 absolute my-4 shadow-xl bg-base-100 rounded-box border-2 `, {hidden: !open})}>
       <main>
-        <span className="absolute text-white text-4xl top-5 left-4 cursor-pointer">
-          <i className="bi bi-filter-left px-2 bg-gray-900 rounded-md" />
-        </span>
-        {/* todo background color here */}
-        <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-auto overflow-y-auto text-center bg-base-content">
-          <LayoutEditor closeHandle={closeHandle} />
+        <div
+          className="p-2 text-center bg-base-100">
+          <LayoutEditor closeHandle={closeHandle} isLoggedIn={isLoggedIn}
+            categoryData={categoryData}/>
         </div>
       </main>
     </div>
@@ -67,10 +72,20 @@ export default MobileMenu;
 // ------------------ PropTypes ------------------
 
 LayoutEditor.propTypes = {
-  closeHandle: func,
+  categoryData: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    id: PropTypes.number,
+  })),
+  isLoggedIn: PropTypes.bool,
 };
 
 MobileMenu.propTypes = {
   open: bool.isRequired,
+  className: PropTypes.string,
   setOpen: func,
+  isLoggedIn: bool,
+  categoryData: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    id: PropTypes.number,
+  })),
 };
