@@ -65,4 +65,7 @@ const CategoryPage = () => {
  */
 CategoryPage.getLayout = (page) => <AdminPageLayout pageName="Category">{page}</AdminPageLayout>;
 
+CategoryPage.allowAuthenticated = true;
+CategoryPage.roles = ['admin'];
+
 export default CategoryPage;

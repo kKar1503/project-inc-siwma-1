@@ -54,4 +54,7 @@ const ParameterPage = () => {
  */
 ParameterPage.getLayout = (page) => <AdminPageLayout pageName="Parameter">{page}</AdminPageLayout>;
 
+ParameterPage.allowAuthenticated = true;
+ParameterPage.roles = ['admin'];
+
 export default ParameterPage;
