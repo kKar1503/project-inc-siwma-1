@@ -4,6 +4,7 @@ import { AiOutlineSend, AiOutlinePaperClip } from 'react-icons/ai';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import { useUser } from '@supabase/auth-helpers-react';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -11,52 +12,48 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const InputTextArea = () => {
   const [messages, setMessages] = useState('');
+  const userdata = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    if (messages !== '') {
+      // INSERT a row to content table from column 'text'
+      const { data, error: insertErr } = await supabase
+        .from('contents')
+        .insert([{ text: messages }]);
+      if (insertErr) {
+        console.log('error', insertErr);
+      } else {
+        console.log('no error');
+      }
 
-    if(messages !== ''){
-          // INSERT a row to content table from column 'text'
-    const { data, error: insertErr } = await supabase.from('contents').insert([{ text: messages }]);
-    if (insertErr) {
-      console.log('error', insertErr);
-    } else {
-      console.log('no error');
+      // GET all content_id
+      const { data: contentId, error: selectErr } = await supabase
+        .from('contents')
+        .select('content_id');
+      if (selectErr) {
+        console.log('error', selectErr);
+      } else {
+        console.log('no error');
+      }
+
+      // INSERT content_id into 'messages' table
+      // TODO: Change the profile_uuid value to user.id
+      const { msg, error: insertMsgErr } = await supabase.from('messages').insert([
+        {
+          content: contentId[contentId.length - 1].content_id,
+          profile_uuid: userdata.id,
+        },
+      ]);
+
+      if (insertMsgErr) {
+        console.log('error', insertMsgErr);
+      } else {
+        console.log('no error');
+        setMessages('');
+      }
     }
-
-    // GET all content_id
-    const { data: contentId, error: selectErr } = await supabase
-      .from('contents')
-      .select('content_id');
-    if (selectErr) {
-      console.log('error', selectErr);
-    } else {
-      console.log('no error');
-    }
-
-    // INSERT content_id into 'messages' table
-    // TODO: Change the profile_uuid value to user.id
-    const { msg, error: insertMsgErr } = await supabase.from('messages').insert([
-      {
-        content: contentId[contentId.length - 1].content_id,
-        profile_uuid: 'c078a5eb-e75e-4259-8fdf-2dc196f06cbd',
-      },
-    ]);
-
-    if (insertMsgErr) {
-      console.log('error', insertMsgErr);
-    } else {
-      console.log('no error');
-      setMessages('');
-    }
-
-    }
-
-
   };
 
   return (

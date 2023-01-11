@@ -1,11 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useState } from 'react';
 
 const OfferModal = () => {
   const supabase = useSupabaseClient();
   const [offerPrice, setOfferPrice] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [user, setUser] = useState('');
+  const userdata = useUser();
+
   const handleClick = () => {
     setIsVisible((current) => !current);
   };
@@ -17,6 +20,8 @@ const OfferModal = () => {
 
   const handleOffer = async (e) => {
     e.preventDefault();
+
+    setUser(userdata.id);
     try {
       const { data, error: insertError } = await supabase
         .from('contents')
@@ -44,7 +49,7 @@ const OfferModal = () => {
     const { msg, error: insertMsgErr } = await supabase.from('messages').insert([
       {
         content: contentId[contentId.length - 1].content_id,
-        profile_uuid: 'c078a5eb-e75e-4259-8fdf-2dc196f06cbd',
+        profile_uuid: userdata.id,
       },
     ]);
 

@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 
 const ImageModal = () => {
   const supabase = useSupabaseClient();
   const [selectedImage, setSelectedImage] = useState();
   const [isImagePicked, setIsImagePicked] = useState(false);
+  const userdata = useUser();
 
   const changeHandler = (event) => {
     setSelectedImage(event.target.files[0]);
@@ -51,7 +52,7 @@ const ImageModal = () => {
     const { msg, error: insertMsgErr } = await supabase.from('messages').insert([
       {
         content: contentId[contentId.length - 1].content_id,
-        profile_uuid: 'c078a5eb-e75e-4259-8fdf-2dc196f06cbd',
+        profile_uuid: userdata.id,
       },
     ]);
 

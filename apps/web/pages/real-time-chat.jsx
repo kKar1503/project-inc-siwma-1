@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import { useUser } from '@supabase/auth-helpers-react';
 // eslint-disable-next-line import/no-unresolved
 import toast, { Toaster } from 'react-hot-toast';
-import Autocomplete from 'react-autocomplete';
+// import Autocomplete from 'react-autocomplete';
 
 import '@inc/styles/globals.css';
 import { Header } from '@inc/ui';
@@ -73,18 +74,10 @@ const RealTimeChat = () => {
   const [selectedFilter, setSelectedFilter] = useState(options[0]);
   const [selectedRoom, setSelectedRoom] = useState('');
   const [notifs, setAllNotifs] = useState('');
-  const [user, setUser] = useState('');
   const [sidebarVisible, setSidebarVisible] = useState(false);
 
   const filterChatList = (filter) => filter.type === selectedFilter;
-  // Function to get logged in user
-  const getUser = async () => {
-    const {
-      data: { userData },
-    } = await supabase.auth.getUser();
-    console.log(userData);
-    setUser('c078a5eb-e75e-4259-8fdf-2dc196f06cbd');
-  };
+  const userdata = useUser();
 
   const retrieveFilteredData = () => {
     console.log(roomsData);
@@ -117,11 +110,11 @@ const RealTimeChat = () => {
 
     if (error) {
       console.log('error', error);
-    } else if (data.length != 0) {
+    } else if (data.length !== 0) {
       console.log(data);
       const userid = data[0].profile_uuid;
 
-      if (notifs !== '' && userid !== user) {
+      if (notifs !== '' && userid !== userdata.id) {
         if (notifs.text != null) {
           toast.custom((t) => (
             <div
@@ -178,11 +171,8 @@ const RealTimeChat = () => {
   }, []);
 
   useEffect(() => {
-    getUser();
     fetchLastMsg(notifs.content_id);
   }, [notifs]);
-
-
 
   return (
     <div className="drawer">
