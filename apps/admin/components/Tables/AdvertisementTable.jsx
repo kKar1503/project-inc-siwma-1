@@ -148,6 +148,7 @@ const AdvertisementTable = ({ className }) => {
     await supabase.from('advertisements').update({ active: true }).in('id', ids);
     setselectedCompanies(selectedCompanies.map((e) => ({ ...e, active: 'Active' })));
     queryClient.invalidateQueries({ queryKey: 'activeAd' });
+    queryClient.invalidateQueries({ queryKey: 'get_active_ads' });
   };
 
   return (
