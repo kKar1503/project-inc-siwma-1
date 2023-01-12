@@ -12,13 +12,13 @@ const UserProfileCard = () => (
       <p className="text-sm">28 July, 2018</p>
       <hr />
       <div className="card-actions justify-end mt-2">
-        <a href="localhost:1111">
+        <a href="https:t.me/+6587494704">
           <img
             src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/telegram-512.png"
             className="w-9"
           ></img>
         </a>
-        <a href="localhost:1111">
+        <a href="https://wa.me/+6587494704">
           <img
             src="https://cdn2.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-whatsapp-circle-512.png"
             className="w-9"

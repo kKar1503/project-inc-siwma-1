@@ -12,16 +12,18 @@ const IndividualChats = ({ room, setSelectedRoom, roomID }) => {
     <buttton
       role="button"
       onClick={() => setSelectedRoom(roomID)}
-      className="flex items-center py-2 px-3 my-2 rounded-xl hover:cursor-pointer hover:bg-blue-50"
+      className="flex items-center justify-between py-2 px-3 my-2 rounded-xl hover:cursor-pointer hover:bg-blue-50"
     >
-      <div className="avatar">
-        <div className="w-12 rounded-xl">
-          <img src="https://placeimg.com/192/192/people" />
+      <div className="flex items-center">
+        <div className="avatar">
+          <div className="w-12 rounded-xl">
+            <img src="https://placeimg.com/192/192/people" />
+          </div>
         </div>
-      </div>
-      <div className="ml-2">
-        <p className="text-2xs font-bold text-gray-400">{room.name}</p>
-        <p className="leading-4 text-sm">{room.lastMessage}</p>
+        <div className="ml-2">
+          <p className="text-2xs font-bold text-gray-400">{room.name}</p>
+          <p className="leading-4 text-sm">{room.lastMessage}</p>
+        </div>
       </div>
       <div>
         <BsChatLeftDots className="text-blue-500 text-md mr-2" />
