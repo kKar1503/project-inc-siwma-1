@@ -1,6 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
-import { createClient } from '@supabase/supabase-js';
-import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useEffect, useRef } from 'react';
+import { useUser } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
 
 // msg is a prop that has all the messages for the room id
@@ -19,30 +18,13 @@ image varchar,
 created_at timestamp with time zone,
 offer bigint
  */
-const ChatBubbles = ({msg: messages}) => {
-  const supabase = useSupabaseClient();
-  // const [allMsg, setAllMsg] = useState([]);
+const ChatBubbles = ({ msg: messages }) => {
   const bottomRef = useRef(null);
 
   const userdata = useUser();
 
-  // const fetchUserAndMsg = async () => {
-  //   const { data: content, error } = await supabase.from('messages').select(`
-  //     profile_uuid,
-  //     contents (*)
-  //   `);
+  console.log(messages);
 
-  //   if (error) {
-  //     console.log(error);
-  //   } else {
-  //     console.log(content);
-  //     setAllMsg(content);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchUserAndMsg();
-  // }, [messages]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -56,7 +38,9 @@ const ChatBubbles = ({msg: messages}) => {
             return (
               <div
                 className={
-                  msg.profile_uuid === userdata.id ? 'flex justify-end mx-5' : 'flex justify-start mx-5'
+                  msg.profile_uuid === userdata.id
+                    ? 'flex justify-end mx-5'
+                    : 'flex justify-start mx-5'
                 }
                 key={msg.content_id}
               >
@@ -81,7 +65,9 @@ const ChatBubbles = ({msg: messages}) => {
             return (
               <div
                 className={
-                  msg.profile_uuid === userdata.id ? 'flex justify-end mx-5' : 'flex justify-start mx-5'
+                  msg.profile_uuid === userdata.id
+                    ? 'flex justify-end mx-5'
+                    : 'flex justify-start mx-5'
                 }
                 key={msg.content_id}
               >

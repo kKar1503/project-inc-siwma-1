@@ -10,9 +10,10 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const InputTextArea = () => {
+const InputTextArea = (room) => {
   const [messages, setMessages] = useState('');
   const userdata = useUser();
+  const roomID = room.room;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,6 +45,7 @@ const InputTextArea = () => {
         {
           content: contentId[contentId.length - 1].content_id,
           profile_uuid: userdata.id,
+          room_id: roomID,
         },
       ]);
 

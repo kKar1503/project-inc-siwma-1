@@ -1,8 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 // eslint-disable-next-line import/no-unresolved
 // import Autocomplete from 'react-autocomplete';
-import { useState, useEffect, useContext } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { useState, useEffect } from 'react';
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -17,10 +16,6 @@ import ChatSidebar from '../components/rtc/ChatSidebar';
 import ItemDetails from '../components/rtc/ItemDetails';
 import ChatFilter from '../components/rtc/ChatFilter';
 import Container from '../components/Container';
-
-// const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-// const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-// const supabase = createClient(supabaseUrl, supabaseKey);
 
 const roomsData = [
   {
@@ -74,10 +69,11 @@ const RealTimeChat = () => {
   const [allMessages, setAllMessages] = useState([]);
   const [filteredData, setFilteredData] = useState(roomsData);
   const [selectedFilter, setSelectedFilter] = useState(options[0]);
-  // Select room id of 15 
+  // Select room id of 15
   const [selectedRoom, setSelectedRoom] = useState(15);
   const [notifs, setAllNotifs] = useState('');
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [newMsg, setNewMsg] = useState('');
 
   const filterChatList = (filter) => filter.type === selectedFilter;
   const userdata = useUser();
@@ -198,9 +194,9 @@ const RealTimeChat = () => {
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
 
-        console.log('Merged data!')
-        console.log(combinedData)
-        setFilteredData(combinedData)
+        console.log('Merged data!');
+        console.log(combinedData);
+        setFilteredData(combinedData);
       }
     );
   };
@@ -218,32 +214,20 @@ const RealTimeChat = () => {
 
   const fetchMessages = async (roomId) => {
     const fetchMessagesData = await supabase.rpc('get_all_messages_for_room_id', {
-      _room_id: roomId
-    })
+      _room_id: roomId,
+    });
 
-    if(fetchMessagesData.error){
-      console.error('There is an error fetching messages for this room')
+    if (fetchMessagesData.error) {
+      console.error('There is an error fetching messages for this room');
       return;
     }
 
-    console.log(`Fetched messages for room id ${roomId}`)
-    console.log(fetchMessagesData.data)
+    console.log(`Fetched messages for room id ${roomId}`);
+    console.log(fetchMessagesData.data);
     setAllMessages(fetchMessagesData.data);
-
-    // const { data: content, error } = await supabase.from('contents').select('*');
-
-    // if (error) {
-    //   console.log('error', error);
-    // } else {
-    //   console.log(content);
-    //   setAllMessages(content);
-    // }
   };
 
   // Function to fetch last message and to check if message was sent by current user
-  // if not, system triggers an alert (acts as notif for now)
-
-  // TO DO: Change the alert to react hot toast
   const fetchLastMsg = async (id) => {
     const { data, error } = await supabase.from('messages').select().eq('content', id);
 
@@ -299,23 +283,30 @@ const RealTimeChat = () => {
   // Call fetchMessages everytime selectedRoom changes
   useEffect(() => {
     fetchMessages(selectedRoom);
-  }, [selectedRoom])
+  }, [selectedRoom, newMsg]);
 
-  useEffect(() => {
-    // fetchMessages();
-    // supabase
-    //   .channel('public:messages')
-    //   .on(
-    //     'postgres_changes',
-    //     { event: 'INSERT', schema: 'public', table: 'contents' },
-    //     (payload) => {
-    //       console.log('Change received!', payload);
-    //       setAllMessages((current) => [...current, payload.new]);
-    //       setAllNotifs(payload.new);
-    //     }
-    //   )
-    //   .subscribe();
-  }, []);
+  supabase
+    .channel(`public:messages:room_id=eq.${selectedRoom}`)
+    .on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'contents',
+      },
+      (payload) => {
+        console.log('Change received!', payload);
+
+        setNewMsg((current) => {
+          console.log('HELLO');
+          console.log(current);
+        });
+
+        // console.log(allMessages);
+        setAllNotifs(payload.new);
+      }
+    )
+    .subscribe();
 
   useEffect(() => {
     fetchLastMsg(notifs.content_id);
@@ -419,7 +410,7 @@ const RealTimeChat = () => {
               </div>
               <div className="absolute bottom-[-80px] md:bottom-0 w-full px-4">
                 <hr style={{ border: '1px solid #A0A0A0' }} />
-                <InputText msg={allMessages} />
+                <InputText room={selectedRoom} />
               </div>
             </div>
           </div>
