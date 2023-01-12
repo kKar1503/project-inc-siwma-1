@@ -1,21 +1,24 @@
 /* eslint-disable react/jsx-props-no-spreading */
-// eslint-disable-next-line import/no-unresolved
-// import Autocomplete from 'react-autocomplete';
 import { useState, useEffect } from 'react';
-import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { createClient } from '@supabase/supabase-js';
+// eslint-disable-next-line import/no-unresolved
 import toast, { Toaster } from 'react-hot-toast';
+import Autocomplete from 'react-autocomplete';
 
 import '@inc/styles/globals.css';
 import { Header } from '@inc/ui';
-import InputText from '../components/rtc/InputText';
-import ChatBubbles from '../components/rtc/ChatBubbles';
-import ImageModal from '../components/rtc/ImageModal';
-import FileModal from '../components/rtc/FileModal';
-import OfferModal from '../components/rtc/OfferModal';
-import ChatSidebar from '../components/rtc/ChatSidebar';
-import ItemDetails from '../components/rtc/ItemDetails';
-import ChatFilter from '../components/rtc/ChatFilter';
-import Container from '../components/Container';
+import InputText from '../../components/rtc/InputText';
+import ChatBubbles from '../../components/rtc/ChatBubbles';
+import ImageModal from '../../components/rtc/ImageModal';
+import FileModal from '../../components/rtc/FileModal';
+import OfferModal from '../../components/rtc/OfferModal';
+import ChatSidebar from '../../components/rtc/ChatSidebar';
+import ItemDetails from '../../components/rtc/ItemDetails';
+import ChatFilter from '../../components/rtc/ChatFilter';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const roomsData = [
   {
@@ -65,163 +68,22 @@ const roomsData = [
 const options = ['All Chats', 'Selling', 'Buying', 'Archived'];
 
 const RealTimeChat = () => {
-  const supabase = useSupabaseClient();
   const [allMessages, setAllMessages] = useState([]);
   const [filteredData, setFilteredData] = useState(roomsData);
   const [selectedFilter, setSelectedFilter] = useState(options[0]);
-  // Select room id of 15
-  const [selectedRoom, setSelectedRoom] = useState(38);
+  const [selectedRoom, setSelectedRoom] = useState('');
   const [notifs, setAllNotifs] = useState('');
+  const [user, setUser] = useState('');
   const [sidebarVisible, setSidebarVisible] = useState(false);
-  const [newMsg, setNewMsg] = useState('');
 
   const filterChatList = (filter) => filter.type === selectedFilter;
-  const userdata = useUser();
-
-  const fetchRoomsByUserId = async () => {
-    // Set rooms to be
-    setFilteredData([]);
-
-    if (userdata == null) {
-      console.error('User data is null');
-      return;
-    }
-
-    console.log('FETCHING ROOMS BY USER ID');
-
-    // Get chats if i'm a seller
-    const chatsIfImSeller = supabase.rpc('get_sidebar_messages_for_user_seller', {
-      _user_uuid: userdata.id,
-    });
-
-    // Get chats if i'm a buyer
-    const chatsIfImBuyer = supabase.rpc('get_sidebar_messages_for_user_buyer', {
-      _user_uuid: userdata.id,
-    });
-
-    Promise.all([chatsIfImBuyer, chatsIfImSeller]).then(
-      ([chatsIfImBuyerData, chatsIfImSellerData]) => {
-        let finalBuyerData = [];
-        let finalSellerData = [];
-
-        // Stop execution if there is an error
-        if (chatsIfImBuyerData.error || chatsIfImSellerData.error) {
-          console.error('Something went wrong while fetching chats');
-          console.log(chatsIfImBuyerData);
-          console.log(chatsIfImSellerData);
-          return;
-        }
-
-        // Map the buyer data
-        if (chatsIfImBuyerData.data.length > 0) {
-          const d = chatsIfImBuyerData.data;
-          finalBuyerData = d.map(
-            ({
-              listing_id: id,
-              fullname,
-              text,
-              file,
-              image,
-              offer,
-              created_at: createdAt,
-              room_id: roomID,
-            }) => {
-              let messageType = '';
-              let lastMessage = '';
-
-              if (text !== null) {
-                messageType = 'text';
-                lastMessage = text;
-              }
-
-              if (file !== null) {
-                messageType = 'file';
-                lastMessage = file;
-              }
-
-              if (image !== null) {
-                messageType = 'image';
-                lastMessage = image;
-              }
-              if (offer !== null) {
-                messageType = 'offer';
-                lastMessage = offer;
-              }
-
-              return {
-                id,
-                name: fullname,
-                lastMessage,
-                messageType,
-                type: 'Buying',
-                createdAt,
-                roomID,
-              };
-            }
-          );
-        }
-
-        // Map the seller data
-        if (chatsIfImSellerData.data.length > 0) {
-          const d = chatsIfImSellerData.data;
-          finalSellerData = d.map(
-            ({
-              listing_id: id,
-              fullname,
-              text,
-              file,
-              image,
-              offer,
-              created_at: createdAt,
-              room_id: roomID,
-            }) => {
-              let messageType = '';
-              let lastMessage = '';
-
-              if (text !== null) {
-                messageType = 'text';
-                lastMessage = text;
-              }
-
-              if (file !== null) {
-                messageType = 'file';
-                lastMessage = file;
-              }
-
-              if (image !== null) {
-                messageType = 'image';
-                lastMessage = image;
-              }
-              if (offer !== null) {
-                messageType = 'offer';
-                lastMessage = offer;
-              }
-
-              return {
-                id,
-                name: fullname,
-                type: 'Selling',
-                lastMessage,
-                messageType,
-                createdAt,
-                roomID,
-              };
-            }
-          );
-        }
-
-        // Combine both data together
-        let combinedData = [];
-
-        combinedData = [...finalSellerData, ...finalBuyerData].sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-
-        console.log('Merged data!');
-        console.log(combinedData);
-        setFilteredData(combinedData);
-      }
-    );
+  // Function to get logged in user
+  const getUser = async () => {
+    const {
+      data: { userData },
+    } = await supabase.auth.getUser();
+    console.log(userData);
+    setUser('c078a5eb-e75e-4259-8fdf-2dc196f06cbd');
   };
 
   const retrieveFilteredData = () => {
@@ -235,32 +97,31 @@ const RealTimeChat = () => {
     console.log(filteredData);
   };
 
-  const fetchMessages = async (roomId) => {
-    const fetchMessagesData = await supabase.rpc('get_all_messages_for_room_id', {
-      _room_id: roomId,
-    });
+  const fetchMessages = async () => {
+    const { data: content, error } = await supabase.from('contents').select('*');
 
-    if (fetchMessagesData.error) {
-      console.error('There is an error fetching messages for this room');
-      return;
+    if (error) {
+      console.log('error', error);
+    } else {
+      console.log(content);
+      setAllMessages(content);
     }
-
-    console.log(`Fetched messages for room id ${roomId}`);
-    console.log(fetchMessagesData.data);
-    setAllMessages(fetchMessagesData.data);
   };
 
   // Function to fetch last message and to check if message was sent by current user
+  // if not, system triggers an alert (acts as notif for now)
+
+  // TO DO: Change the alert to react hot toast
   const fetchLastMsg = async (id) => {
     const { data, error } = await supabase.from('messages').select().eq('content', id);
 
     if (error) {
       console.log('error', error);
-    } else if (data.length !== 0) {
+    } else if (data.length != 0) {
       console.log(data);
       const userid = data[0].profile_uuid;
 
-      if (notifs !== '' && userid !== userdata.id) {
+      if (notifs !== '' && userid !== user) {
         if (notifs.text != null) {
           toast.custom((t) => (
             <div
@@ -300,37 +161,24 @@ const RealTimeChat = () => {
   };
 
   useEffect(() => {
-    fetchRoomsByUserId();
-  }, [userdata]);
+    fetchMessages();
 
-  // Call fetchMessages everytime selectedRoom changes
-  useEffect(() => {
-    fetchMessages(selectedRoom);
     supabase
-      .channel(`public:messages:room_id=eq.${selectedRoom}`)
+      .channel('public:messages')
       .on(
         'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'contents',
-        },
+        { event: 'INSERT', schema: 'public', table: 'contents' },
         (payload) => {
           console.log('Change received!', payload);
-
-          setNewMsg((current) => {
-            console.log('Nw');
-            console.log(current);
-          });
-
-          // console.log(allMessages);
+          setAllMessages((current) => [...current, payload.new]);
           setAllNotifs(payload.new);
         }
       )
       .subscribe();
-  }, [selectedRoom, newMsg]);
+  }, []);
 
   useEffect(() => {
+    getUser();
     fetchLastMsg(notifs.content_id);
   }, [notifs]);
 
@@ -424,19 +272,15 @@ const RealTimeChat = () => {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3">
             <div className="min-[320px]:hidden md-[820px]:block">
-              <ChatSidebar
-                setSelectedRoom={setSelectedRoom}
-                roomsData={filteredData}
-                roomID={selectedRoom}
-              />
+              <ChatSidebar roomsData={filteredData} />
             </div>
-            <div className="col-span-2 relative" style={{ maxHeight: '73vh' }}>
+            <div className="col-span-2 relative" style={{ maxHeight: '85vh' }}>
               <div>
                 <ChatBubbles msg={allMessages} />
               </div>
-              <div className="absolute bottom-[-80px] w-full px-4">
+              <div className="absolute bottom-[-80px] md:bottom-0 w-full px-4">
                 <hr style={{ border: '1px solid #A0A0A0' }} />
-                <InputText roomID={selectedRoom} />
+                <InputText msg={allMessages} />
               </div>
             </div>
           </div>
@@ -467,9 +311,5 @@ const RealTimeChat = () => {
     </div>
   );
 };
-
-RealTimeChat.allowNonAuthenticated = true;
-RealTimeChat.allowAuthenticated = true;
-RealTimeChat.getLayout = (page) => <Container>{page}</Container>;
 
 export default RealTimeChat;
