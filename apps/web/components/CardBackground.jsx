@@ -11,11 +11,9 @@ const propTypes = {
  * CardBackground is a component that renders a card with a background.
  * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
-const CardBackground = ({ className, children }) => (
+const CardBackground = ({className, children}) => (
   <div
-    className={cx('card bg-neutral-content shadow-xl', {
-      [className]: className,
-    })}
+    className={cx(className, 'card bg-neutral-content shadow-xl')}
   >
     <div className="card-body">{children}</div>
   </div>
