@@ -121,7 +121,7 @@ const EditParam = ({ id }) => {
   const editParameter = async (e) => {
     e.preventDefault();
 
-    if (tags.length === 0 && (paramT !== '3' || paramT !== '4')) {
+    if (tags.length === 0 && (paramT === '3' || paramT === '4')) {
       setDisplayAlert(true);
       setError('choices');
       setTimeout(() => {
