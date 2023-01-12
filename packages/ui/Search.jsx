@@ -121,7 +121,7 @@ const Search = ({
     const later = () => {
       clearTimeout(timeout.current);
       searchFocusHandler(isFocus);
-      setTextValue(inputRef.current.value);
+      if (inputRef !== null && inputRef.current !== null) setTextValue(inputRef.current.value);
     };
 
     clearTimeout(timeout.current);
@@ -183,7 +183,12 @@ const Search = ({
   return (
     <div
       className="form-control w-full"
-      style={{ transition: 'box-shadow 0.3s ease-in-out', ...focusStyle }}
+      style={{
+        transition: 'box-shadow 0.3s ease-in-out',
+        zIndex: 999,
+        position: 'relative',
+        ...focusStyle,
+      }}
       onFocus={() => debouncedInputs(true)}
       onBlur={() => debouncedInputs(false)}
       ref={searchRef}
