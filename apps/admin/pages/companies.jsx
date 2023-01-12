@@ -1,13 +1,10 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import { QueryClient } from 'react-query';
+import { useQueryClient } from 'react-query';
 import RegisteredCompaniesTable from '../components/Tables/RegisteredCompaniesTable';
 import AdminPageLayout from '../components/layouts/AdminPageLayout';
 import NavBar from '../components/NavBar';
 import CompanyRegister from '../components/Modals/CompanyRegister';
-
-// Initialise react-query
-const queryClient = new QueryClient();
 
 /**
  * The below is for rendering the Companies Management Page
@@ -35,6 +32,9 @@ const queryClient = new QueryClient();
 const Page = () => {
   // -- States -- //
   const [isOpen, setIsOpen] = useState(false);
+
+  // Get QueryClient from the context
+  const queryClient = useQueryClient();
 
   const openModal = () => {
     setIsOpen(true);
