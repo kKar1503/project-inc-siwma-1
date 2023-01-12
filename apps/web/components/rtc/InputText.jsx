@@ -4,18 +4,25 @@ import { AiOutlineSend, AiOutlinePaperClip } from 'react-icons/ai';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import { useUser } from '@supabase/auth-helpers-react';
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
+import PropTypes from 'prop-types';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+// const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+// const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+// const supabase = createClient(supabaseUrl, supabaseKey);
 
-const InputTextArea = (room) => {
+// roomID is number
+const InputTextArea = ({ roomID }) => {
+  const supabase = useSupabaseClient();
   const [messages, setMessages] = useState('');
   const userdata = useUser();
-  const roomID = room.room;
+  // const roomID = room.room;
 
+  // console.log('Sending messages to ' + roomID);
   const handleSubmit = async (e) => {
+    console.log(`Sending message to room`);
+    console.log(roomID);
+
     e.preventDefault();
 
     if (messages !== '') {
@@ -50,9 +57,9 @@ const InputTextArea = (room) => {
       ]);
 
       if (insertMsgErr) {
-        console.log('error', insertMsgErr);
+        console.log('error while inserting messages', insertMsgErr);
       } else {
-        console.log('no error');
+        console.log('no error while inserting messages');
         setMessages('');
       }
     }
@@ -96,6 +103,10 @@ const InputTextArea = (room) => {
       </div>
     </form>
   );
+};
+
+InputTextArea.propTypes = {
+  roomID: PropTypes.number.isRequired
 };
 
 export default InputTextArea;

@@ -70,7 +70,7 @@ const RealTimeChat = () => {
   const [filteredData, setFilteredData] = useState(roomsData);
   const [selectedFilter, setSelectedFilter] = useState(options[0]);
   // Select room id of 15
-  const [selectedRoom, setSelectedRoom] = useState(15);
+  const [selectedRoom, setSelectedRoom] = useState(38);
   const [notifs, setAllNotifs] = useState('');
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [newMsg, setNewMsg] = useState('');
@@ -79,6 +79,9 @@ const RealTimeChat = () => {
   const userdata = useUser();
 
   const fetchRoomsByUserId = async () => {
+    // Set rooms to be
+    setFilteredData([]);
+
     if (userdata == null) {
       console.error('User data is null');
       return;
@@ -113,7 +116,16 @@ const RealTimeChat = () => {
         if (chatsIfImBuyerData.data.length > 0) {
           const d = chatsIfImBuyerData.data;
           finalBuyerData = d.map(
-            ({ listing_id: id, fullname, text, file, image, offer, created_at: createdAt }) => {
+            ({
+              listing_id: id,
+              fullname,
+              text,
+              file,
+              image,
+              offer,
+              created_at: createdAt,
+              room_id: roomID,
+            }) => {
               let messageType = '';
               let lastMessage = '';
 
@@ -143,6 +155,7 @@ const RealTimeChat = () => {
                 messageType,
                 type: 'Buying',
                 createdAt,
+                roomID,
               };
             }
           );
@@ -152,7 +165,16 @@ const RealTimeChat = () => {
         if (chatsIfImSellerData.data.length > 0) {
           const d = chatsIfImSellerData.data;
           finalSellerData = d.map(
-            ({ listing_id: id, fullname, text, file, image, offer, created_at: createdAt }) => {
+            ({
+              listing_id: id,
+              fullname,
+              text,
+              file,
+              image,
+              offer,
+              created_at: createdAt,
+              room_id: roomID,
+            }) => {
               let messageType = '';
               let lastMessage = '';
 
@@ -182,6 +204,7 @@ const RealTimeChat = () => {
                 lastMessage,
                 messageType,
                 createdAt,
+                roomID,
               };
             }
           );
@@ -283,30 +306,29 @@ const RealTimeChat = () => {
   // Call fetchMessages everytime selectedRoom changes
   useEffect(() => {
     fetchMessages(selectedRoom);
+    supabase
+      .channel(`public:messages:room_id=eq.${selectedRoom}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'contents',
+        },
+        (payload) => {
+          console.log('Change received!', payload);
+
+          setNewMsg((current) => {
+            console.log('Nw');
+            console.log(current);
+          });
+
+          // console.log(allMessages);
+          setAllNotifs(payload.new);
+        }
+      )
+      .subscribe();
   }, [selectedRoom, newMsg]);
-
-  supabase
-    .channel(`public:messages:room_id=eq.${selectedRoom}`)
-    .on(
-      'postgres_changes',
-      {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'contents',
-      },
-      (payload) => {
-        console.log('Change received!', payload);
-
-        setNewMsg((current) => {
-          console.log('HELLO');
-          console.log(current);
-        });
-
-        // console.log(allMessages);
-        setAllNotifs(payload.new);
-      }
-    )
-    .subscribe();
 
   useEffect(() => {
     fetchLastMsg(notifs.content_id);
@@ -402,15 +424,19 @@ const RealTimeChat = () => {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3">
             <div className="min-[320px]:hidden md-[820px]:block">
-              <ChatSidebar roomsData={filteredData} />
+              <ChatSidebar
+                setSelectedRoom={setSelectedRoom}
+                roomsData={filteredData}
+                roomID={selectedRoom}
+              />
             </div>
-            <div className="col-span-2 relative" style={{ maxHeight: '85vh' }}>
+            <div className="col-span-2 relative" style={{ maxHeight: '73vh' }}>
               <div>
                 <ChatBubbles msg={allMessages} />
               </div>
-              <div className="absolute bottom-[-80px] md:bottom-0 w-full px-4">
+              <div className="absolute bottom-[-80px] w-full px-4">
                 <hr style={{ border: '1px solid #A0A0A0' }} />
-                <InputText room={selectedRoom} />
+                <InputText roomID={selectedRoom} />
               </div>
             </div>
           </div>
