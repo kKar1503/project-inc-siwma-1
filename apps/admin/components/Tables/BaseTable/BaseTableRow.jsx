@@ -63,8 +63,30 @@ const BaseTableRow = React.forwardRef(
       ) {
         // It is outside the bounding box
         // Calculate the required vertical offset for the actionMenu, such that it is within the bounds of the table
-        actionMenuRef.current.style.top = 'auto';
-        actionMenuRef.current.style.bottom = `30px`;
+        const topOffset = tableCoords.top - actionMenuCoords.top;
+        const bottomOffset = actionMenuCoords.bottom - tableCoords.bottom;
+        let finalOffset = 0;
+
+        // Determine the offsets to apply
+        // If the action menu exceeds the top of the table, apply the top offset
+        if (actionMenuCoords.top < tableCoords.top) {
+          finalOffset += topOffset;
+        }
+
+        // Check if the action menu is taller than the height of the table
+        // We do not want to apply a bottom offset if so, otherwise the top of the action menu gets cut off
+        if (actionMenuCoords.bottom - actionMenuCoords.top < tableCoords.bottom - tableCoords.top) {
+          // It is not taller than the table, it is safe to apply a bottom offset
+          // If the action menu exceeds the bottom of the table, deduct the bottom offset from the top offset
+          // We do not want to apply a bottom offset instead as you cannot use both top and bottom offsets together, or it would lead to weird behaviour
+          if (actionMenuCoords.bottom > tableCoords.bottom) {
+            finalOffset -= bottomOffset + 40;
+          }
+        }
+
+
+        // Apply the final offset
+        actionMenuRef.current.style.top = `${finalOffset}px`;
       }
     }, []);
 

@@ -64,8 +64,6 @@ const BaseTable = ({
   // Refs
   const tableBodyRef = useRef();
 
-  console.log({ selectedRows })
-
   return (
     <div
       className={cx(
