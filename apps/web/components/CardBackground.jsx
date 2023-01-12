@@ -1,7 +1,16 @@
 import cx from 'classnames';
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
 
+const propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.node.isRequired,
+}
+
+/**
+ * CardBackground is a component that renders a card with a background.
+ * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
+ */
 const CardBackground = ({ className, children }) => (
   <div
     className={cx('card bg-neutral-content shadow-xl', {
@@ -12,12 +21,6 @@ const CardBackground = ({ className, children }) => (
   </div>
 );
 
-CardBackground.propTypes = {
-  className: PropTypes.string,
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.element),
-    PropTypes.element.isRequired,
-  ]),
-};
+CardBackground.propTypes = propTypes;
 
 export default CardBackground;

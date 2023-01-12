@@ -1,18 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const propTypes = {
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onChangeValue: PropTypes.func.isRequired,
+}
+
 /**
  * RadioButton is a component that renders a radio button.
- * @params {Array} options - The options to be displayed in the radio button.
- * @returns {JSX.Element}
- * @constructor - RadioButton
+ * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
 const RadioButton = ({ options, onChangeValue }) => (
   <>
     <label htmlFor="condition" className="label">
       <span className="label-text mt-3 text-xl font-bold">Type of Listing</span>
     </label>
-    <div id="condition" className="btn-group mb-5 w-full">
+    <div id="condition" className="btn-group w-full">
       {options.map((option) => (
         <input
           type="radio"
@@ -28,9 +31,6 @@ const RadioButton = ({ options, onChangeValue }) => (
   </>
 );
 
-RadioButton.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onChangeValue: PropTypes.func.isRequired,
-};
+RadioButton.propTypes = propTypes;
 
 export default RadioButton;
