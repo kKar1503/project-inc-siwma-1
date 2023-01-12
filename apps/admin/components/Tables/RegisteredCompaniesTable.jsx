@@ -4,14 +4,13 @@ import { useQueries, useQueryClient } from 'react-query';
 import cx from 'classnames';
 import { getAllCompanies, getCompanyCount } from '@inc/database';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { MdOutlineRemoveRedEye } from 'react-icons/md';
-import { SlPencil } from 'react-icons/sl';
-import { BsTrash } from 'react-icons/bs';
-import Link from 'next/link';
+import { Alert } from '@inc/ui';
+import AlertManager from '@inc/ui/alerts/AlertManager';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
 import TablePagination from './TablePagination';
-import TableMenu from './TableMenu';
+import CompanyActionMenu from './actionMenus/CompanyActionMenu';
+import CompanyDelete from '../Modals/CompanyDelete';
 
 /**
  * Parses data retrieved from Supabase into a format accepted by the tables
@@ -21,9 +20,7 @@ import TableMenu from './TableMenu';
 function parseData(data) {
   return data.map((e) => ({
     id: e.id,
-    profilePicture: `https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/${
-      e.image || 'example.jpg'
-    }`,
+    profilePicture: `${process.env.NEXT_PUBLIC_COMPANY_BUCKET_URL}${e.image || 'example.jpg'}`,
     company: e.name,
     website: e.website,
     bio: e.bio && e.bio.length > 60 ? `${e.bio.substring(0, 59)}...` : e.bio,
@@ -31,39 +28,14 @@ function parseData(data) {
   }));
 }
 
-const CompanyActionMenu = ({ companyid }) => (
-  <TableMenu>
-    <li>
-      <button>
-        <MdOutlineRemoveRedEye className="h-5 w-5" />
-        View
-      </button>
-    </li>
-    <li>
-      <Link href={{ pathname: '/edit-company', query: { companyid } }}>
-        <SlPencil className="h-5 w-5" />
-        Edit
-      </Link>
-    </li>
-    <li>
-      <button>
-        <BsTrash className="h-5 w-5" />
-        Delete
-      </button>
-    </li>
-  </TableMenu>
-);
-
-CompanyActionMenu.propTypes = {
-  companyid: PropTypes.number.isRequired,
-};
-
 // This table shows Registered Companies and is built on the BaseTable component.
 const RegisteredCompaniesTable = ({ className }) => {
   // Set states
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedCompanies, setselectedCompanies] = useState([]);
   const [searchInput, setSearchInput] = useState('');
+  const [alerts, setAlerts] = useState([]);
+  const [deleteModalData, setDeleteModalData] = useState(null);
 
   // -- Queries Supabase --//
   // Initialise supabase client
@@ -189,6 +161,56 @@ const RegisteredCompaniesTable = ({ className }) => {
     }
   };
 
+  /**
+   * Handles for when a company is deleted
+   * @param {{id: number, profilePicture: Object, company: string, website: string, bio: string, isSelected: boolean}} data Data pertaining to the company that has been deleted
+   */
+  const onDeleteHandler = async (data) => {
+    // Close the modal
+    setDeleteModalData(null);
+
+    // Attempt to delete the company
+    const { error } = await supabase.from('companies').delete().eq('id', data.id);
+
+    // Check if the company was successfully deleted
+    if (error) {
+      // An error occured while trying to delete the company, show an error alert
+      const $alerts = [
+        ...alerts,
+        <Alert
+          level="error"
+          message="An error occurred while trying to delete the company. Please try again later."
+          dismissable
+        />,
+      ];
+
+      setAlerts($alerts);
+      return;
+    }
+
+    // The company was successfully deleted, invalidate old query to cause a refetch
+    queryClient.invalidateQueries({ queryKey: ['getAllCompanies'] });
+
+    // Show a success alert
+    const $alerts = [
+      ...alerts,
+      <Alert level="success" message="Company deleted successfully" dismissable />,
+    ];
+
+    setAlerts($alerts);
+  };
+
+  /**
+   * Closes an alert
+   * @param {number} index The index of the alert to close
+   */
+  const onCloseAlert = (index) => {
+    const $alerts = [...alerts];
+    $alerts.splice(index, 1);
+
+    setAlerts($alerts);
+  };
+
   // -- Logic functions -- //
   /**
    * Checks that all selected companies are suspended
@@ -203,76 +225,96 @@ const RegisteredCompaniesTable = ({ className }) => {
   const selectedAreNotSuspended = () => selectedCompanies.every((e) => e.visible === true);
 
   return (
-    <BaseTable
-      header={
-        <div className="flex flex-row justify-between items-center">
-          <div className="flex flex-col pb-3">
-            <h1 className="font-bold text-xl">Registered Companies</h1>
-            {isLoading ? (
-              <h1 className="pr-2">Showing 0 to 0 of 0 entries</h1>
-            ) : (
-              <h1 className="pr-2">
-                Showing {Math.min(selectedIndex * 10 + 1, companyCount)} to{' '}
-                {Math.min((selectedIndex + 1) * 10, companyCount)} of {companyCount} entries
-              </h1>
-            )}
-          </div>
-          <div className="flex flex-row gap-4">
-            <SearchBar placeholder="Search by name" value={searchInput} setValue={setSearchInput} />
-          </div>
-        </div>
-      }
-      headings={['Company', 'Website', 'Bio', 'Operational']}
-      headingColor="bg-primary"
-      showCheckbox
-      className={className}
-      columnKeys={['company', 'website', 'bio', 'visible']}
-      centerColumns={['Operational']}
-      // We only need to pass in an array of the ids of the companies that have been selected
-      selectedRows={selectedCompanies.map((e) => e.id)}
-      isLoading={isLoading}
-      data={companies}
-      onChange={onChangeHandler}
-      actionMenu={<CompanyActionMenu companyid={0} />}
-      footer={
-        <div className="flex justify-between bg-none">
-          {/* Company suspension/reinstation */}
-          <div className="flex gap-3">
-            <button
-              className="btn btn-primary text-white"
-              onClick={reinstateCompanies}
-              // Disable the button if one or more of the companies selected are not suspended
-              disabled={!isLoading && selectedCompanies.length > 0 ? !selectedAreSuspended() : true}
-            >
-              REINSTATE SELECTED
-            </button>
-            <button
-              className="btn btn-primary text-white"
-              onClick={suspendCompanies}
-              // Disable the button if one or more of the companies selected are suspended
-              disabled={
-                !isLoading && selectedCompanies.length > 0 ? !selectedAreNotSuspended() : true
-              }
-            >
-              SUSPEND SELECTED
-            </button>
-          </div>
+    <>
+      {/* Company deletion modal */}
+      <CompanyDelete
+        isOpen={Boolean(deleteModalData)}
+        company={deleteModalData}
+        onConfirm={onDeleteHandler}
+        onRequestClose={() => setDeleteModalData(null)}
+      />
 
-          <div className="flex justify-end bg-none">
-            {
-              // Table pagination buttons
-              <TablePagination
-                rows={companyCount}
-                rowsPerPage={10}
-                selectedIndex={selectedIndex}
-                onChange={setSelectedIndex}
-                isLoading={isLoading}
+      {/* Main Content */}
+      <BaseTable
+        header={
+          <div className="flex flex-row justify-between items-center">
+            <div className="flex flex-col pb-3">
+              <h1 className="font-bold text-xl">Registered Companies</h1>
+              {isLoading ? (
+                <h1 className="pr-2">Showing 0 to 0 of 0 entries</h1>
+              ) : (
+                <h1 className="pr-2">
+                  Showing {Math.min(selectedIndex * 10 + 1, companyCount)} to{' '}
+                  {Math.min((selectedIndex + 1) * 10, companyCount)} of {companyCount} entries
+                </h1>
+              )}
+            </div>
+            <div className="flex flex-row gap-4">
+              <SearchBar
+                placeholder="Search by name"
+                value={searchInput}
+                setValue={setSearchInput}
               />
-            }
+            </div>
           </div>
-        </div>
-      }
-    />
+        }
+        headings={['Company', 'Website', 'Bio', 'Operational']}
+        headingColor="bg-primary"
+        showCheckbox
+        className={className}
+        columnKeys={['company', 'website', 'bio', 'visible']}
+        centerColumns={['Operational']}
+        // We only need to pass in an array of the ids of the companies that have been selected
+        selectedRows={selectedCompanies.map((e) => e.id)}
+        isLoading={isLoading}
+        data={companies}
+        onChange={onChangeHandler}
+        actionMenu={<CompanyActionMenu data={{}} onDelete={setDeleteModalData} />}
+        footer={
+          <div className="flex justify-between bg-none">
+            {/* Company suspension/reinstation */}
+            <div className="flex gap-3">
+              <button
+                className="btn btn-primary text-white"
+                onClick={reinstateCompanies}
+                // Disable the button if one or more of the companies selected are not suspended
+                disabled={
+                  !isLoading && selectedCompanies.length > 0 ? !selectedAreSuspended() : true
+                }
+              >
+                REINSTATE SELECTED
+              </button>
+              <button
+                className="btn btn-primary text-white"
+                onClick={suspendCompanies}
+                // Disable the button if one or more of the companies selected are suspended
+                disabled={
+                  !isLoading && selectedCompanies.length > 0 ? !selectedAreNotSuspended() : true
+                }
+              >
+                SUSPEND SELECTED
+              </button>
+            </div>
+
+            <div className="flex justify-end bg-none">
+              {
+                // Table pagination buttons
+                <TablePagination
+                  rows={companyCount}
+                  rowsPerPage={10}
+                  selectedIndex={selectedIndex}
+                  onChange={setSelectedIndex}
+                  isLoading={isLoading}
+                />
+              }
+            </div>
+          </div>
+        }
+      />
+
+      {/* Table Alerts */}
+      <AlertManager maxAlerts={3} alerts={alerts} onRequestClose={onCloseAlert} />
+    </>
   );
 };
 
