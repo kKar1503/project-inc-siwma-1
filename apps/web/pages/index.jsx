@@ -110,6 +110,8 @@ const MarketplacePage = () => {
   );
 };
 
+MarketplacePage.allowNonAuthenticated = true;
+MarketplacePage.allowAuthenticated = true;
 MarketplacePage.getLayout = (page) => <Container>{page}</Container>;
 MarketplacePage.allowAuthenticated = true;
 MarketplacePage.title = 'Marketplace';
