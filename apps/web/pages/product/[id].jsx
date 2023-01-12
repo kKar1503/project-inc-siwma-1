@@ -123,6 +123,7 @@ const ListingPage = ({
 
   useEffect(() => {
     getUserProfilePictureURL('abc');
+    // FIXME: ANOTHER DEPENDENCY ISSUE
   }, []);
 
   // This function handles creating a chat room and then redirecting to the chat page
@@ -170,7 +171,7 @@ const ListingPage = ({
         paths={[
           {
             name: listing.category_name,
-            path: `/category/${listing.category_name}`,
+            path: `/category/${listing.category}`,
           },
           {
             name: listing.name,
@@ -182,7 +183,7 @@ const ListingPage = ({
       <>
         <Carousel
           className="my-10"
-          wrapperClassName="w-full h-[500px]  shadow-lg border border-black/20"
+          wrapperClassName="w-full h-[500px] shadow-lg border border-black/20"
         >
           {[...carouselImages].map((image) => (
             <div key={image} className="w-full h-full flex justify-center bg-black/50 relative">
@@ -194,9 +195,29 @@ const ListingPage = ({
                 />
               </picture>
 
-              <picture className="z-10">
-                <img src={image} alt={listing.name} className="w-auto h-full" />
-              </picture>
+              <label htmlFor={`modal-${listing.name}`} className="z-10" >
+                <picture>
+                  <img src={image} alt={listing.name} className="w-auto h-full" />
+                </picture>
+              </label>
+
+              {/* <input type="checkbox" id={`modal-${listing.name}`} className="modal-toggle" />
+              <div className="modal">
+                <div className="modal-box relative">
+                  <label
+                    htmlFor={`modal-${listing.name}`}
+                    className="btn btn-sm btn-circle absolute right-2 top-2"
+                  >
+                    ✕
+                  </label>
+                  <h3 className="text-lg font-bold">Congratulations random Internet user!</h3>
+                  <p className="py-4">
+                    You've been selected for a chance to get one year of subscription to use
+                    Wikipedia for free!
+                  </p>
+                </div>
+              </div> */}
+
               {/* <div className="relative w-fit h-full">
                   <Image
                     src={image}

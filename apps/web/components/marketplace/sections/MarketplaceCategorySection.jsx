@@ -46,7 +46,7 @@ const MarketplaceCategorySection = () => {
               key={id}
               name={name}
               img={imageUrl}
-              href={`/category/${name}?id=${id}`}
+              href={`/category/${id}`}
             />
           ))}
         </Carousel>

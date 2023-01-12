@@ -1,17 +1,13 @@
-import {useSupabaseClient} from '@supabase/auth-helpers-react';
-import {useState} from 'react';
-import {useQuery} from 'react-query';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useState } from 'react';
+import { useQuery } from 'react-query';
 import Container from '../components/Container';
 import Advertisement from '../components/marketplace/Advertisement';
 import AnimatedCarousel from '../components/marketplace/carousel/AnimatedCarousel';
-import MarketplaceCategorySection
-  from '../components/marketplace/sections/MarketplaceCategorySection';
-import MarketplaceExploreMoreItemsSection
-  from '../components/marketplace/sections/MarketplaceExploreMoreItemsSection';
-import MarketplacePopularSection
-  from '../components/marketplace/sections/MarketplacePopularSection';
-import MarketplaceRecommendedSection
-  from '../components/marketplace/sections/MarketplaceRecommendedSection';
+import MarketplaceCategorySection from '../components/marketplace/sections/MarketplaceCategorySection';
+import MarketplaceExploreMoreItemsSection from '../components/marketplace/sections/MarketplaceExploreMoreItemsSection';
+import MarketplacePopularSection from '../components/marketplace/sections/MarketplacePopularSection';
+import MarketplaceRecommendedSection from '../components/marketplace/sections/MarketplaceRecommendedSection';
 
 const MarketplacePage = () => {
   const supabase = useSupabaseClient();
@@ -92,7 +88,7 @@ const MarketplacePage = () => {
           <AnimatedCarousel wrapperClassName="w-full h-[400px]" animationDuration={5000}>
             {adsData.map((ad) => (
               <div key={ad.id} className="w-full relative">
-                <Advertisement adData={ad}/>
+                <Advertisement adData={ad} />
               </div>
             ))}
           </AnimatedCarousel>
@@ -101,10 +97,10 @@ const MarketplacePage = () => {
 
       {/* Container just adds margin from left and right */}
       <Container>
-        <MarketplaceCategorySection/>
-        <MarketplacePopularSection/>
-        <MarketplaceRecommendedSection/>
-        <MarketplaceExploreMoreItemsSection/>
+        <MarketplaceCategorySection />
+        <MarketplacePopularSection />
+        <MarketplaceRecommendedSection />
+        <MarketplaceExploreMoreItemsSection />
       </Container>
     </div>
   );

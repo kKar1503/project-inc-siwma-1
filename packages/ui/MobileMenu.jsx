@@ -23,7 +23,7 @@ const LayoutEditor = ({categoryData, isLoggedIn}) => (
       {categoryData?.map(({name, id}) => (
         <SidebarSubItem
           name={name}
-          redirectLink={`/category/${name}?id=${id}`}
+          redirectLink={`/category/${id}`}
           key={name}
         />
       ))}
