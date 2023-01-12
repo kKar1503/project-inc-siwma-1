@@ -175,6 +175,9 @@ const AdvertisementTable = ({ className }) => {
                 <option value={value}>{value} per page</option>
               ))}
             </select>
+            <Link href="/AdminUpload" className="btn btn-outline btn-primary w-32 ">
+              Add advertisement
+            </Link>
             {/* <SearchBar placeholder="Search by name" /> */}
           </div>
         </div>
