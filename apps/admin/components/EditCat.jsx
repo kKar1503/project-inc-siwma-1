@@ -1,7 +1,8 @@
-import { useQueries, useQueryClient, useQuery } from 'react-query';
+import { useQueryClient, useQuery } from 'react-query';
 import { useEffect, useState } from 'react';
 import { Alert } from '@inc/ui';
 import Link from 'next/link';
+import Image from 'next/image';
 import PropTypes from 'prop-types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { FiUpload } from 'react-icons/fi';
@@ -12,16 +13,18 @@ const EditCat = ({ id }) => {
   const [displayAlert, setDisplayAlert] = useState(null);
   const [error, setError] = useState(false);
   const [image, setImage] = useState(null);
+  const [imageURL, setImageURL] = useState('');
   const [colourMessage, setColourMessage] = useState('text-center text-green-500 pt-4');
   const [errorMessage, setErrorMessage] = useState('');
   const supabase = useSupabaseClient();
+  const queryClient = useQueryClient();
 
   const checkFile = async (e) => {
     if (e.target.files[0] === undefined) {
       e.target.files = null;
     } else if (e.target.files[0].type === 'image/png' || e.target.files[0].type === 'image/jpeg') {
       setImage(e.target.files[0]);
-      setErrorMessage('Please click "Create"');
+      setErrorMessage('Please click "SAVE"');
       setColourMessage('text-center text-green-500 pt-1');
     } else {
       e.target.files = null;
@@ -48,6 +51,7 @@ const EditCat = ({ id }) => {
   useEffect(() => {
     setName(data?.data[0].name);
     setDescription(data?.data[0].description);
+    setImageURL(data?.data[0].image);
     console.log(image);
   }, [data]);
 
@@ -88,6 +92,7 @@ const EditCat = ({ id }) => {
         setDisplayAlert(false);
       }, 4000);
     }
+    queryClient.invalidateQueries({ queryKey: ['categoryData'] });
   };
 
   return (
@@ -100,6 +105,20 @@ const EditCat = ({ id }) => {
           await editCategory(e);
         }}
       >
+        <div>
+          <div className="label">
+            <span className="label-text font-semibold">Current Category Image</span>
+          </div>
+          <div>
+            <Image
+              src={`https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/category-image-bucket/${imageURL}`}
+              alt="Category Imgae"
+              width={200}
+              height={180}
+              className="object-center"
+            />
+          </div>
+        </div>
         <div className="form-control">
           <div className="label">
             <span className="label-text font-semibold">Category Name</span>
@@ -165,7 +184,7 @@ const EditCat = ({ id }) => {
         <div className="modal-action">
           <div className="flex px-8 pb-8">
             <Link href="/category_management" className="btn btn-outline btn-warning">
-                Return To Category
+              Return To Category
             </Link>
           </div>
           <button className="btn btn-outline btn-primary" type="submit">
@@ -177,7 +196,11 @@ const EditCat = ({ id }) => {
         <Alert level="error" message="Duplicate category name found" className="mt-4" />
       )}
       {displayAlert && error === false && (
-        <Alert level="success" message="Category successfully edited, please click back to return to category page" className="mt-4" />
+        <Alert
+          level="success"
+          message="Category successfully edited, please click back to return to category page"
+          className="mt-4"
+        />
       )}
     </div>
   );
