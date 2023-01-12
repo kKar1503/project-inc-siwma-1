@@ -17,13 +17,21 @@ const InvitesPage = () => {
   async function inviteUsers(companyData, userData) {
     await Promise.all(
       companyData.map(async (company) => {
-        const res = await supabase
+        // Only write to the database if the company doesn't already exist
+        const existingData = await supabase
           .from('companies')
-          .insert([{ name: company.name }])
+          .select('id')
+          .eq('name', company.name)
           .single();
-        if (res.error) {
-          // TODO: Replace with custom alert component
-          alert(res.error);
+        if (existingData.data == null || existingData.data.length === 0) {
+          const res = await supabase
+            .from('companies')
+            .insert([{ name: company.name }])
+            .single();
+          if (res.error) {
+            // TODO: Replace with custom alert component
+            alert(res.error);
+          }
         }
       })
     );
