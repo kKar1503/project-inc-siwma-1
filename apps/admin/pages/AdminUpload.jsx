@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
+import { Alert } from '@inc/ui';
 import { useQuery } from 'react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import UploadCard from '../components/UploadCard';
@@ -8,8 +9,10 @@ import AdminPageLayout from '../components/layouts/AdminPageLayout';
 
 const AdminUpload = () => {
   const [userInput, setUserInput] = useState('');
+  const [handleSubmit, sethandleSubmit] = useState(false);
   const [selected, setSelected] = useState(0);
-  const [companyData, setCompanyData] = useState(null);
+  const [link, setLink] = useState('');
+  const [alert, setAlert] = useState(false);
   const [description, setDescription] = useState('');
   const supabase = useSupabaseClient();
 
@@ -46,6 +49,7 @@ const AdminUpload = () => {
           <h1 className="ml-4 leading-loose font-bold text-xl mt-6">Company to tag</h1>
           <div>
             <input
+              id="search"
               className="w-3/4 h-10 px-4 ml-4 mt-4 text-base placeholder-gray-500 border rounded-lg focus:shadow-outline"
               type="text"
               placeholder="Search"
@@ -71,28 +75,67 @@ const AdminUpload = () => {
             </ul>
           </div>
         </div>
-        <div className="card w-1/3  max-sm:w-full h-80 bg-base-100 shadow-xl mr-10 max-sm:mb-10">
-          <div className="max-w-xl">
-            <h1 className="ml-4 leading-loose font-bold text-xl mt-6">
-              Description of Advertisement
-            </h1>
-            <div className="flex justify-center">
-              <textarea
-                type="text"
-                name="description"
-                placeholder="Description"
-                value={description}
-                disabled={selected === 0}
-                className="w-11/12 h-40 px-4 mt-4 text-base placeholder-gray-500 break-normal border rounded-lg focus:shadow-outline"
-                onChange={(e) => setDescription(e.target.value)}
-              />
+        <div className="card w-1/3  max-sm:w-full h-80 bg-base-100 shadow-xl mr-10 items-center overflow-y-auto">
+          <div className="max-w-xl ">
+            <div className="justify-center m-4">
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  sethandleSubmit(true);
+                }}
+              >
+                <label htmlFor="Description" className="text-lg">
+                  Description
+                </label>
+                <textarea
+                  id="description"
+                  type="text"
+                  name="description"
+                  // placeholder="Description"
+                  value={description}
+                  disabled={selected === 0}
+                  required
+                  className="w-11/12 h-20 mx-4 mb-10 text-base placeholder-gray-500 break-normal border rounded-lg focus:shadow-outline"
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+                <label htmlFor="Link" className="text-lg">
+                  Company&#39;s Link
+                </label>
+                <input
+                  type="url"
+                  name="link"
+                  id="link"
+                  // placeholder="Description"
+                  value={link}
+                  disabled={selected === 0}
+                  className="w-11/12 h-10 mx-4 text-base placeholder-gray-500 break-normal border rounded-lg focus:shadow-outline"
+                  onChange={(e) => setLink(e.target.value)}
+                />
+                <div className="flex items-center justify-center">
+                  <button
+                    className="btn btn-ghost rounded-md w-full h-6 my-2 normal-case text-xl btn btn-outline btn-primary"
+                    type="submit"
+                    id="save"
+                    disabled={selected === 0}
+                  >
+                    Save
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
-        <div className="card w-1/3  max-sm:w-full h-80 bg-base-100 shadow-xl px-8 py-8 ">
-          <UploadCard id={selected} des={description} />
-        </div>
+        <UploadCard
+          id={selected}
+          des={description}
+          link={link}
+          state={handleSubmit}
+          setAlert={setAlert}
+        />
       </div>
+      {alert && (
+        <Alert level="success" message="Advertisement successfully added" className="mt-4" />
+      )}
     </div>
   );
 };
@@ -100,5 +143,10 @@ const AdminUpload = () => {
 AdminUpload.getLayout = (page) => (
   <AdminPageLayout pageName="Advertisement">{page}</AdminPageLayout>
 );
+
+// -- Configure AuthGuard -- //
+AdminUpload.allowAuthenticated = true;
+AdminUpload.roles = ['admin'];
+// Page.aclAbilities = [['View', 'Users']];
 
 export default AdminUpload;

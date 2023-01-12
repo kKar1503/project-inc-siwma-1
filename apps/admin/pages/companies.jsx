@@ -80,7 +80,7 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <div className="flex mb-4 gap-4 xl:overflow-hidden shadow-lg bg-base-100">
+      <div className="flex h-full mb-4 gap-4 xl:overflow-hidden shadow-lg bg-base-100">
         <div className="w-full h-full flex flex-row">
           <RegisteredCompaniesTable />
         </div>
@@ -88,6 +88,11 @@ const Page = () => {
     </div>
   );
 };
+
+// -- Configure AuthGuard -- //
+Page.allowAuthenticated = true;
+Page.roles = ['admin'];
+// Page.aclAbilities = [['View', 'Users']];
 
 Page.getLayout = (page) => <AdminPageLayout pageName="Companies">{page}</AdminPageLayout>;
 

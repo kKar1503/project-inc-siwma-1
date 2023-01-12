@@ -1,13 +1,17 @@
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import {useSupabaseClient} from '@supabase/auth-helpers-react';
+import {useState} from 'react';
+import {useQuery} from 'react-query';
 import Container from '../components/Container';
 import Advertisement from '../components/marketplace/Advertisement';
 import AnimatedCarousel from '../components/marketplace/carousel/AnimatedCarousel';
-import MarketplaceCategorySection from '../components/marketplace/sections/MarketplaceCategorySection';
-import MarketplaceExploreMoreItemsSection from '../components/marketplace/sections/MarketplaceExploreMoreItemsSection';
-import MarketplacePopularSection from '../components/marketplace/sections/MarketplacePopularSection';
-import MarketplaceRecommendedSection from '../components/marketplace/sections/MarketplaceRecommendedSection';
+import MarketplaceCategorySection
+  from '../components/marketplace/sections/MarketplaceCategorySection';
+import MarketplaceExploreMoreItemsSection
+  from '../components/marketplace/sections/MarketplaceExploreMoreItemsSection';
+import MarketplacePopularSection
+  from '../components/marketplace/sections/MarketplacePopularSection';
+import MarketplaceRecommendedSection
+  from '../components/marketplace/sections/MarketplaceRecommendedSection';
 
 const MarketplacePage = () => {
   const supabase = useSupabaseClient();
@@ -40,15 +44,27 @@ const MarketplacePage = () => {
   //         img: `https://images.unsplash.com/photo-1667925459217-e7b7a9797409?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80`,
   //       };
   //     });
-  const {
-    data: adsAPIData,
-    status: adsStatus,
-    isLoading: adsIsLoading,
-    error: adsError,
-  } = useQuery(['get_advertisements'], async () => supabase.rpc('get_advertisements'), {
-    refetchOnMount: false,
+  const getAdvertisementImages = async (ad) => {
+    if (ad.image === null) {
+      setAdsData((prevAds) => [...prevAds, { ...ad, image_public_url: '/' }]);
+      return;
+    }
+
+    const { data, error } = await supabase.storage
+      .from('advertisement-image-bucket')
+      .getPublicUrl(ad.image);
+
+    if (error) throw error;
+
+    setAdsData((prevAds) => [...prevAds, { ...ad, image_public_url: data.publicUrl }]);
+  };
+
+  useQuery(['get_advertisements'], async () => supabase.rpc('get_advertisements'), {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    onSuccess: (data) => {
+      data.data.forEach((path) => getAdvertisementImages(path));
+    },
   });
 
   //       return {
@@ -67,23 +83,16 @@ const MarketplacePage = () => {
   //       .from('listing-image-bucket')
   //       .getPublicUrl('5292cf25-72e7-4f1c-b0e1-5a1e0c2009b4');
 
-  useEffect(() => {
-    if (adsStatus === 'success') {
-      console.log('Success ads', adsAPIData.data);
-      setAdsData(adsAPIData.data);
-    }
-  }, [adsStatus, adsAPIData]);
-
   return (
     <div>
       {/* Image banner */}
       <div className="my-10">
         {adsData.length > 0 && (
           /* Image banner - Object cover covers the image (zoom crop) */
-          <AnimatedCarousel wrapperClassName="w-full h-[300px]" animationDuration={5000}>
+          <AnimatedCarousel wrapperClassName="w-full h-[400px]" animationDuration={5000}>
             {adsData.map((ad) => (
               <div key={ad.id} className="w-full relative">
-                <Advertisement adData={ad} />
+                <Advertisement adData={ad}/>
               </div>
             ))}
           </AnimatedCarousel>
@@ -92,15 +101,17 @@ const MarketplacePage = () => {
 
       {/* Container just adds margin from left and right */}
       <Container>
-        <MarketplaceCategorySection />
-        <MarketplacePopularSection />
-        <MarketplaceRecommendedSection />
-        <MarketplaceExploreMoreItemsSection />
+        <MarketplaceCategorySection/>
+        <MarketplacePopularSection/>
+        <MarketplaceRecommendedSection/>
+        <MarketplaceExploreMoreItemsSection/>
       </Container>
     </div>
   );
 };
 
 MarketplacePage.getLayout = (page) => <Container>{page}</Container>;
+MarketplacePage.allowAuthenticated = true;
+MarketplacePage.title = 'Marketplace';
 
 export default MarketplacePage;

@@ -71,8 +71,7 @@ const EditUser = () => {
   const commentData =
     isLoading || !getCommentQuery.data.data ? {} : parseCommentData(getCommentQuery.data.data[0]);
 
-  const profilePic =
-    'https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/company-image-bucket/example.jpg';
+  const profilePic = `${process.env.NEXT_PUBLIC_COMPANY_BUCKET_URL}example.jpg`;
 
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -225,5 +224,10 @@ const EditUser = () => {
 };
 
 EditUser.getLayout = (page) => <AdminPageLayout pageName="Users">{page}</AdminPageLayout>;
+
+// -- Configure AuthGuard -- //
+EditUser.allowAuthenticated = true;
+EditUser.roles = ['admin'];
+// Page.aclAbilities = [['View', 'Users']];
 
 export default EditUser;

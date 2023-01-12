@@ -3,9 +3,35 @@ import { useRouter } from 'next/router';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { getCompany } from '@inc/database';
+import { CompanyEditFormContext } from '@inc/ui';
 import AdminPageLayout from '../components/layouts/AdminPageLayout';
 import NavBar from '../components/NavBar';
-import { CompanyEditFormContext } from '../components/forms/companyEdit';
+
+/**
+ * Maps query data into a company object
+ * @param {{name: string, image: string, website: string, bio: string, comments: string}} data The data to parse
+ * @returns A object containing properties for a company
+ */
+const parseQueryData = (data) => {
+  // Parse the query data
+  const company = {
+    ...data,
+    image:
+      (data.image && {
+        src: `${process.env.NEXT_PUBLIC_COMPANY_BUCKET_URL}${data.image}`,
+      }) ||
+      null,
+    comments:
+      data.companies_comments && data.companies_comments.length > 0
+        ? data.companies_comments[0].comments
+        : '',
+  };
+
+  // Delete the companies_comments key from the object
+  delete company.companies_comments;
+
+  return company;
+};
 
 const EditCompany = () => {
   // Retrieve company id from query param
@@ -38,10 +64,14 @@ const EditCompany = () => {
 
   // -- Prepare fetched data for rendering & processing -- //
   // Redirect the user if no company was retrieved
-  if (!isLoading && queryData.data && queryData.data.length === 0) {
+  if (!isLoading && (!queryData.data || queryData.data.length === 0)) {
     // No company was retrieved
-    // router.push('/companies');
+    router.push('/companies');
   }
+
+  // Parse query data
+  const company =
+    isLoading || !queryData || !queryData.data ? false : parseQueryData(queryData.data[0]);
 
   // -- Functions -- //
   const refreshQuery = () => {
@@ -75,7 +105,7 @@ const EditCompany = () => {
           onSuccessChange={() => {
             refreshQuery();
           }}
-          queryData={queryData}
+          company={company}
           isLoading={isLoading}
         />
       </div>
@@ -84,5 +114,10 @@ const EditCompany = () => {
 };
 
 EditCompany.getLayout = (page) => <AdminPageLayout pageName="Companies">{page}</AdminPageLayout>;
+
+// -- Configure AuthGuard -- //
+EditCompany.allowAuthenticated = true;
+EditCompany.roles = ['admin'];
+// Page.aclAbilities = [['View', 'Users']];
 
 export default EditCompany;

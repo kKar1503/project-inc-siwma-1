@@ -8,15 +8,15 @@ import SIWMAIcon from '../public/siwma-logo-icon.png';
 /**
  * The ExpandedHamburgerMenu is the menu that is shown when the HamburgerButtonIcon is clicked
  * This is the icon that is displayed on the top left of the screen
- * @type {React.FC<import('prop-types').InferProps<typeof SidebarHeaderIcon.propTypes>>}
+ * @type {function({closeHandle: function})}
  */
 const SidebarHeaderIcon = ({ closeHandle }) => (
   <div className="text-gray-100 text-xl">
     <div className="p-2.5 mt-1 flex items-center">
       <Link className="btn btn-ghost" href="http://localhost:3000">
-        <Image src={SIWMAIcon} className="h-full w-full object-cover lg:hidden" />
+        <Image src={SIWMAIcon} className="h-full w-full object-cover lg:hidden"  alt="SIWMA"/>
         <i className="bi bi-app-indicator px-2 py-1 rounded-md bg-primary-focus" />
-        <h1 className="font-bold text-base-200 text-[15px] ml-3">S I W M A</h1>
+        {/* <h1 className="font-bold text-base-200 text-[15px] ml-3">S I W M A</h1> */}
       </Link>
       <div
         className="ml-32 cursor-pointer inset-y-0 right-0"
