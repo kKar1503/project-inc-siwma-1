@@ -61,11 +61,25 @@ const InvitesPage = () => {
             token,
             expiry: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
           })
+          .select()
           .single();
 
         if (res.err) {
           // TODO: Replace with custom alert component
           alert(res.err);
+        } else {
+          const searchParams = new URLSearchParams();
+
+          const inviteID = res.data.id;
+
+          fetch(`/api/invite/${inviteID}/notify${searchParams.toString()}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+            .then((inviteResult) => console.log(inviteResult))
+            .catch((inviteError) => alert('Error:', inviteError));
         }
       })
     );
