@@ -54,6 +54,16 @@ const BaseTableRow = React.forwardRef(
       const tableCoords = tableRef.current.getBoundingClientRect();
       const actionMenuCoords = actionMenuRef.current.getBoundingClientRect();
 
+      // Attempt to center the action menu
+      const actionMenuHeight = actionMenuCoords.bottom - actionMenuCoords.top;
+      const actionMenuTopOffset = -(actionMenuHeight / 2);
+
+      // Check if doing so will cause it to exceed the bounds of the table
+      if (actionMenuCoords.top + actionMenuTopOffset > tableCoords.top) {
+        // It will not exceed the bounds, apply the offset
+        actionMenuRef.current.style.top = `${actionMenuTopOffset}px`;
+      }
+
       // Check if the action menu is outside the bounding box of the table
       if (
         actionMenuCoords.top < tableCoords.top ||
@@ -86,7 +96,8 @@ const BaseTableRow = React.forwardRef(
 
 
         // Apply the final offset
-        actionMenuRef.current.style.top = `${finalOffset}px`;
+        if (finalOffset !== 0)
+          actionMenuRef.current.style.top = `${finalOffset}px`;
       }
     }, []);
 
