@@ -1,20 +1,19 @@
-import {useSupabaseClient} from '@supabase/auth-helpers-react';
-import {useState} from 'react';
-import {useQuery} from 'react-query';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import { Search } from '@inc/ui';
+import { useRouter } from 'next/router';
 import Container from '../components/Container';
 import Advertisement from '../components/marketplace/Advertisement';
 import AnimatedCarousel from '../components/marketplace/carousel/AnimatedCarousel';
-import MarketplaceCategorySection
-  from '../components/marketplace/sections/MarketplaceCategorySection';
-import MarketplaceExploreMoreItemsSection
-  from '../components/marketplace/sections/MarketplaceExploreMoreItemsSection';
-import MarketplacePopularSection
-  from '../components/marketplace/sections/MarketplacePopularSection';
-import MarketplaceRecommendedSection
-  from '../components/marketplace/sections/MarketplaceRecommendedSection';
+import MarketplaceCategorySection from '../components/marketplace/sections/MarketplaceCategorySection';
+import MarketplaceExploreMoreItemsSection from '../components/marketplace/sections/MarketplaceExploreMoreItemsSection';
+import MarketplacePopularSection from '../components/marketplace/sections/MarketplacePopularSection';
+import MarketplaceRecommendedSection from '../components/marketplace/sections/MarketplaceRecommendedSection';
 
 const MarketplacePage = () => {
   const supabase = useSupabaseClient();
+  const router = useRouter();
 
   // const [offset, setOffset] = useState(0);
   // const [limit, setLimit] = useState(60);
@@ -67,6 +66,10 @@ const MarketplacePage = () => {
     },
   });
 
+  const redirectSearch = (search) => {
+    router.push(`/search?search=${search}`);
+  };
+
   //       return {
   //         ...item,
   //         img: `https://images.unsplash.com/photo-1667925459217-e7b7a9797409?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80`,
@@ -85,26 +88,29 @@ const MarketplacePage = () => {
 
   return (
     <div>
-      {/* Image banner */}
-      <div className="my-10">
-        {adsData.length > 0 && (
-          /* Image banner - Object cover covers the image (zoom crop) */
-          <AnimatedCarousel wrapperClassName="w-full h-[400px]" animationDuration={5000}>
-            {adsData.map((ad) => (
-              <div key={ad.id} className="w-full relative">
-                <Advertisement adData={ad}/>
-              </div>
-            ))}
-          </AnimatedCarousel>
-        )}
-      </div>
-
       {/* Container just adds margin from left and right */}
       <Container>
-        <MarketplaceCategorySection/>
-        <MarketplacePopularSection/>
-        <MarketplaceRecommendedSection/>
-        <MarketplaceExploreMoreItemsSection/>
+        <div className="mt-5">
+          <Search searchCallback={redirectSearch} />
+        </div>
+
+        {/* Image banner */}
+        <div className="my-10">
+          {adsData.length > 0 && (
+            /* Image banner - Object cover covers the image (zoom crop) */
+            <AnimatedCarousel wrapperClassName="w-full h-[400px]" animationDuration={5000}>
+              {adsData.map((ad) => (
+                <div key={ad.id} className="w-full relative">
+                  <Advertisement adData={ad} />
+                </div>
+              ))}
+            </AnimatedCarousel>
+          )}
+        </div>
+        <MarketplaceCategorySection />
+        <MarketplacePopularSection />
+        <MarketplaceRecommendedSection />
+        <MarketplaceExploreMoreItemsSection />
       </Container>
     </div>
   );
