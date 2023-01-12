@@ -7,7 +7,7 @@ const CategoryBanner = ({ img, name }) => {
   const router = useRouter();
 
   const redirectSearch = (search) => {
-    router.push('/search?search=' + search);
+    router.push(`/search?search=${search}`);
   };
 
   return (

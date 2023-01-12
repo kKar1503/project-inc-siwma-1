@@ -2,10 +2,10 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
+import { Search } from '@inc/ui';
 import Container from '../components/Container';
 import useListingSearchData from '../hooks/useListingSearchData';
 import ProductListingItem from '../components/marketplace/listing/ProductListingItem';
-import { Search } from '@inc/ui';
 
 const MarketplaceSearchPage = () => {
   const supabase = useSupabaseClient();
@@ -18,8 +18,8 @@ const MarketplaceSearchPage = () => {
     'search_items'
   );
 
-  const redirectSearch = (search) => {
-    router.push('/search?search=' + search);
+  const redirectSearch = (searchText) => {
+    router.push(`/search?search=${searchText}`);
   };
 
   useEffect(() => {

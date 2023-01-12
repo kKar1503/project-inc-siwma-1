@@ -1,6 +1,8 @@
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
+import { Search } from '@inc/ui';
+import { useRouter } from 'next/router';
 import Container from '../components/Container';
 import Advertisement from '../components/marketplace/Advertisement';
 import AnimatedCarousel from '../components/marketplace/carousel/AnimatedCarousel';
@@ -8,8 +10,6 @@ import MarketplaceCategorySection from '../components/marketplace/sections/Marke
 import MarketplaceExploreMoreItemsSection from '../components/marketplace/sections/MarketplaceExploreMoreItemsSection';
 import MarketplacePopularSection from '../components/marketplace/sections/MarketplacePopularSection';
 import MarketplaceRecommendedSection from '../components/marketplace/sections/MarketplaceRecommendedSection';
-import { Search } from '@inc/ui';
-import { useRouter } from 'next/router';
 
 const MarketplacePage = () => {
   const supabase = useSupabaseClient();
@@ -67,7 +67,7 @@ const MarketplacePage = () => {
   });
 
   const redirectSearch = (search) => {
-    router.push('/search?search=' + search);
+    router.push(`/search?search=${search}`);
   };
 
   //       return {
