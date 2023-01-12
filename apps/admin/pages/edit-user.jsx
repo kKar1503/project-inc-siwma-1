@@ -33,6 +33,7 @@ const EditUser = () => {
     },
   ]);
 
+
   const refreshQuery = () => {
     queryClient.invalidateQueries({ queryKey: ['getUser', { id: userid }] });
     queryClient.invalidateQueries({ queryKey: ['getCompanies'] });
