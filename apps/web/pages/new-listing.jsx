@@ -90,6 +90,8 @@ const NewListing = () => {
     const category = validateCategory();
     const parameters = validateParameter();
 
+    console.log(images);
+
     if (!listing || !images || !category || !parameters) return;
 
     const { data: listingId, error: insertListingError } = await client
@@ -115,7 +117,7 @@ const NewListing = () => {
       })
     );
 
-    const imagePromises = images.selectedImages.map((image) => {
+    const imagePromises = images.map((image) => {
       const uuid = crypto.randomUUID();
       const promise1 = client.storage.from('listing-image-bucket').upload(uuid, image.blob);
       const promise2 = client.from('listings_images').insert({
@@ -131,7 +133,7 @@ const NewListing = () => {
 
     if (insertError) throw insertError;
 
-    router.push(`/product/${listingId[0].id}`)
+    router.push(`/product/${listingId[0].id}`);
   };
 
   return (
