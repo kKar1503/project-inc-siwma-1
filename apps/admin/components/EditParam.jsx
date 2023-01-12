@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { Alert } from '@inc/ui';
 import Link from 'next/link';
 import { AiFillCloseCircle } from 'react-icons/ai';
@@ -38,10 +38,6 @@ const EditParam = ({ id }) => {
     if (e.target.value !== '') {
       setTags([...tags, e.target.value]);
       e.target.value = '';
-    }
-
-    if (tags.length > 0) {
-      setParamType('4');
     }
   };
 
@@ -117,6 +113,14 @@ const EditParam = ({ id }) => {
       setTags(choices?.data[0].choice);
     }
   }, [data, choices]);
+
+  useEffect(() => {
+    if (tags.length !== undefined) {
+      if (tags.length > 2) {
+        setParamType('4');
+      }
+    }
+  }, [tags]);
 
   const editParameter = async (e) => {
     e.preventDefault();
@@ -314,7 +318,11 @@ const EditParam = ({ id }) => {
         />
       )}
       {displayAlert && error === 'choices' && (
-        <Alert level="error" message="Duplicate parameter name found or No choices entered" className="mt-4" />
+        <Alert
+          level="error"
+          message="Duplicate parameter name found or No choices entered"
+          className="mt-4"
+        />
       )}
     </div>
   );

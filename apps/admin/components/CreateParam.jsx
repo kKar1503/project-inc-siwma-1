@@ -1,5 +1,5 @@
 import { useQueries, useQueryClient, useQuery } from 'react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { Alert } from '@inc/ui';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
@@ -30,11 +30,13 @@ const CreateParam = () => {
       setTags([...tags, e.target.value]);
       e.target.value = '';
     }
-    if (tags.length > 0) {
-      setParamtype('4');
-    }
   };
 
+  useEffect(() => {
+    if (tags.length > 2) {
+      setParamtype('4');
+    }
+  }, [tags]);
   const removeTags = (indexToRemove) => {
     setTags(tags.filter((_, index) => index !== indexToRemove));
   };
@@ -74,7 +76,7 @@ const CreateParam = () => {
         }, 4000);
       } else {
         setDisplayAlert(true);
-  
+
         setTimeout(() => {
           setDisplayAlert(false);
         }, 4000);
@@ -238,7 +240,11 @@ const CreateParam = () => {
         </div>
       </form>
       {displayAlert && error === 'choices' && (
-        <Alert level="error" message="Duplicate parameter name found or No choices entered" className="mt-4" />
+        <Alert
+          level="error"
+          message="Duplicate parameter name found or No choices entered"
+          className="mt-4"
+        />
       )}
       {displayAlert && error === false && (
         <Alert level="success" message="Parameter successfully created" className="mt-4" />
