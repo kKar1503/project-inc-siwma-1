@@ -117,12 +117,12 @@ const RealTimeChat = () => {
 
     if (error) {
       console.log('error', error);
-    } else if (data.length != 0) {
+    } else if (data.length !== 0) {
       console.log(data);
       const userid = data[0].profile_uuid;
 
       if (notifs !== '' && userid !== user) {
-        if (notifs.text != null) {
+        if (notifs.text !== null) {
           toast.custom((t) => (
             <div
               className={`${
