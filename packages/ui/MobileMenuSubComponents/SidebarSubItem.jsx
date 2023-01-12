@@ -1,30 +1,25 @@
 // ------------------ Imports ------------------
 
 import { node, string } from 'prop-types';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 /**
  * SubMenuItem is a drawer item that is displayed by a MenuItem
- * @type {React.FC<import('prop-types').InferProps<typeof SidebarSubItem.propTypes>>}
+ * @type {function({name: string, customIcon: node, redirectLink: string})}
  */
-const SidebarSubItem = ({ name, customIcon, redirectLink }) => {
-  // ------------------ Misc -----------------
-  const router = useRouter();
-
-  // ------------------ Handles -----------------
-  const onClickHandle = () => {
-    router.push(redirectLink);
-  };
-
+const SidebarSubItem = ({ name, customIcon, redirectLink }) =>
   // ------------------ Return -----------------
-  return (
-    <div role="presentation" onClick={onClickHandle}>
-      <h1 className="cursor-pointer p-2 hover:bg-primary-focus rounded-md mt-1">
-        {name} {customIcon}
-      </h1>
-    </div>
-  );
-};
+  (
+    <li className="cursor-pointer p-2 hover:bg-primary-focus rounded-md mt-1 hover:text-base-200 text-black">
+      <Link href={redirectLink}>{name} {customIcon}</Link>
+    </li>
+    // <div role="presentation" onClick={onClickHandle}>
+    //   <h1 className="cursor-pointer p-2 hover:bg-primary-focus rounded-md mt-1">
+    //     {name} {customIcon}
+    //   </h1>
+    // </div>
+  )
+;
 
 SidebarSubItem.propTypes = {
   name: string.isRequired,
