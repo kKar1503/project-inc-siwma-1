@@ -2,6 +2,7 @@ import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { DateTime } from 'luxon';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -195,26 +196,27 @@ const ListingPage = ({
                 />
               </picture>
 
-              <label htmlFor={`modal-${listing.name}`} className="z-10" >
+              <label htmlFor={`modal-${listing.name}`} className="z-10">
                 <picture>
                   <img src={image} alt={listing.name} className="w-auto h-full" />
                 </picture>
               </label>
 
               {/* <input type="checkbox" id={`modal-${listing.name}`} className="modal-toggle" />
-              <div className="modal">
-                <div className="modal-box relative">
+              <div className="modal w-full h-full">
+                <div className="flex justify-center modal-box relative w-full h-full">
+                  <Image
+                    src={image}
+                    alt={listing.name}
+                    fill
+                    className="object-contain w-full h-full"
+                  />
                   <label
                     htmlFor={`modal-${listing.name}`}
                     className="btn btn-sm btn-circle absolute right-2 top-2"
                   >
                     ✕
                   </label>
-                  <h3 className="text-lg font-bold">Congratulations random Internet user!</h3>
-                  <p className="py-4">
-                    You've been selected for a chance to get one year of subscription to use
-                    Wikipedia for free!
-                  </p>
                 </div>
               </div> */}
 
