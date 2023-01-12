@@ -29,6 +29,13 @@ const Advertisement = ({ adData }) => {
 
   return (
     <>
+      <Image
+        src={adData.image_public_url}
+        fill
+        htmlFor={`modal-${adData.id}`}
+        // object-contain blur-3xl absolute top-0 left-0 (darker version)
+        className="object-contain blur-3xl absolute top-0 left-0"
+      />
       <div onClick={handleClick} onKeyDown={handleClick} role="button" tabIndex={0} className="">
         <label htmlFor={`modal-${adData.id}`} className="image">
           <Image
