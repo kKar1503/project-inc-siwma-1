@@ -115,7 +115,7 @@ const EditParam = ({ id }) => {
   }, [data, choices]);
 
   useEffect(() => {
-    if (tags.length !== undefined) {
+    if (tags !== undefined) {
       if (tags.length > 2) {
         setParamType('4');
       }

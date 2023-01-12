@@ -65,7 +65,8 @@ const CreateParam = () => {
       // console.log(tagsObj);
 
       await supabase.from('parameter_choices').insert({ parameter: data[0].id, choice: tags });
-      queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
+      queryClient.invalidateQueries({ queryKey: ['existingParams'] });
+      queryClient.invalidateQueries({ queryKey: ['getExistingParamCount'] });
 
       if (status === 409) {
         setDisplayAlert(true);
@@ -109,7 +110,8 @@ const CreateParam = () => {
       }, 4000);
     }
 
-    queryClient.invalidateQueries({ queryKey: ['availableParameters'] });
+    queryClient.invalidateQueries({ queryKey: ['existingParams'] });
+    queryClient.invalidateQueries({ queryKey: ['getExistingParamCount'] });
   };
 
   return (

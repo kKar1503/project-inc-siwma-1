@@ -77,6 +77,7 @@ const CreateCategory = () => {
     }
 
     queryClient.invalidateQueries({ queryKey: ['categories'] });
+    queryClient.invalidateQueries({ queryKey: ['getCategoryCount'] });
   };
 
   return (
