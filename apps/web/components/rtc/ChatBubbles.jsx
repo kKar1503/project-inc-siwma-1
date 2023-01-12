@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useUser } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
+import PropTypes from 'prop-types';
 
 // msg is a prop that has all the messages for the room id
 
@@ -157,5 +158,17 @@ const ChatBubbles = ({ msg: messages }) => {
     </div>
   );
 };
+
+ChatBubbles.propTypes = {
+  msg: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    type: PropTypes.string,
+    lastMessage: PropTypes.string,
+    messageType: PropTypes.string,
+    createdAt: PropTypes.string,
+    roomID: PropTypes.number,
+  }))
+}
 
 export default ChatBubbles;
