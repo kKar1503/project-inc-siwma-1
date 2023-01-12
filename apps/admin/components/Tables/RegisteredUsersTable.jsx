@@ -6,6 +6,7 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
+import UserActionMenu from './actionMenus/UserActionMenu';
 
 const parseData = (data) =>
   data.map((e) => ({
@@ -204,6 +205,7 @@ const RegisteredUsersTable = ({ className }) => {
       className={className}
       columnKeys={['name', 'email', 'company', 'mobileNumber', 'enabled']}
       onChange={onChangeHandler}
+      actionMenu={<UserActionMenu data={{}} />}
       selectedRows={selectedUsers.map((e) => e.id)}
       isLoading={isLoading}
       data={users}
