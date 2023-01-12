@@ -26,7 +26,7 @@ const parseData = (data) => {
 
 const ExistingParameters = ({ className, id }) => {
   const paginationValues = [5, 10, 20, 30];
-  const [selectedActiveParam, setSelectedActiveParam] = useState([])
+  const [selectedActiveParam, setSelectedActiveParam] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [option, setOption] = useState(paginationValues[0]);
   const queryClient = useQueryClient();
@@ -41,19 +41,14 @@ const ExistingParameters = ({ className, id }) => {
       queryFn: async () =>
         supabase
           .from('parameter')
-          .select(
-            `id, name, display_name, parameter_type(id, name), datatype(id, name), active`
-          )
+          .select(`id, name, display_name, parameter_type(id, name), datatype(id, name), active`)
           .range(selectedIndex * option, (selectedIndex + 1) * option - 1),
       keepPreviousData: true,
       refetchInterval: 300000,
     },
     {
       queryKey: ['getExistingParamCount'],
-      queryFn: async () =>
-        supabase
-          .from('parameter')
-          .select('*', { count: 'exact', head: true }),
+      queryFn: async () => supabase.from('parameter').select('*', { count: 'exact', head: true }),
       keepPreviousData: true,
       refetchInterval: 300000,
     },
@@ -203,7 +198,7 @@ const ExistingParameters = ({ className, id }) => {
                 <option value={value}>{value} per page</option>
               ))}
             </select>
-            <SearchBar placeholder="Search by name" />
+            {/* <SearchBar placeholder="Search by name" /> */}
           </div>
         </div>
       }

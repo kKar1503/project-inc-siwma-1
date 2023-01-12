@@ -229,7 +229,7 @@ const ExistingCategories = ({ className, id }) => {
                 <option value={value}>{value} per page</option>
               ))}
             </select>
-            <SearchBar placeholder="Search by name" />
+            {/* <SearchBar placeholder="Search by name" /> */}
           </div>
         </div>
       }
