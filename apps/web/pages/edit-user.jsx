@@ -40,10 +40,10 @@ const EditUser = () => {
   const [getUserQuery, getCompaniesQuery, getLoginDataQuery] = queries;
 
   return (
-    <div className="flex flex-col w-full h-full gap-8 p-6 overflow-auto xl:max-h-screen">
+    <div className="flex flex-col w-full gap-8 p-6 overflow-auto h-screen">
       <Header />
 
-      <div className="flex flex-col grow h-fit shadow-xl rounded-2xl bg-base-100">
+      <div className="flex flex-col flex-1 grow shadow-xl rounded-2xl bg-base-100">
         <div className="flex flex-col p-8 border-b">
           <h1 className="font-bold text-xl">Edit User</h1>
           {/* If you want, you can use the user's name to replace 'user' in the heading below as well */}
@@ -66,6 +66,7 @@ const EditUser = () => {
 };
 
 EditUser.getLayout = (page) => page;
+EditUser.ignoreHeader = true;
 
 EditUser.allowAuthenticated = true;
 
