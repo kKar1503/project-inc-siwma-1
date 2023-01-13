@@ -195,7 +195,7 @@ const EditUserFormWrap = ({
       <div className={cx('flex flex-col justify-between flex-1', className)} style={style}>
         <EditUserForm
           onSubmit={handleSubmit(onSubmit)}
-          submitSuccess={false}
+          submitSuccess={submitSuccess}
           isLoading={isLoading}
           onDeleteImage={handleDeleteImage}
           options={companies}
