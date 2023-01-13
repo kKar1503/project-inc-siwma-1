@@ -10,6 +10,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
  * @returns A input that works with react form hook
  */
 const FormInput = ({
+  type,
   name,
   label,
   placeholder,
@@ -40,7 +41,7 @@ const FormInput = ({
       <Skeleton className="h-12" />
     ) : (
       <input
-        type="text"
+        type={type || 'text'}
         className={cx(className, 'input-group input input-bordered', {
           'input-error': errors[name],
           'input-success': success,
@@ -54,6 +55,7 @@ const FormInput = ({
 };
 
 const propTypes = {
+  type: PropTypes.string,
   name: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,

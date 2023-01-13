@@ -27,10 +27,6 @@ const EditUser = () => {
       refetchInterval: 6000,
       keepPreviousData: true,
     },
-    {
-      queryKey: ['getLoginData'],
-      queryFn: async () => supabase.auth.getUser(),
-    },
   ]);
 
 
@@ -40,7 +36,7 @@ const EditUser = () => {
   };
 
   const isLoading = queries.some((e) => e.isLoading);
-  const [getUserQuery, getCompaniesQuery, getLoginDataQuery] = queries;
+  const [getUserQuery, getCompaniesQuery] = queries;
 
   return (
     <div className="flex flex-col w-full h-full gap-8 p-6 overflow-auto xl:max-h-screen">
@@ -61,7 +57,6 @@ const EditUser = () => {
           isLoading={isLoading}
           path="./users"
           adminContent
-          loginId={getLoginDataQuery?.data?.data.user.id}
         />
       </div>
     </div>

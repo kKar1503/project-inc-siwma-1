@@ -35,7 +35,6 @@ const EditUserFormWrap = ({
   style,
   path,
   adminContent,
-  loginId,
 }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitFailure, setSubmitFailure] = useState(false);
@@ -57,7 +56,9 @@ const EditUserFormWrap = ({
   const {
     handleSubmit,
     reset,
+    resetField,
     setValue,
+    setError,
     formState: { isDirty, touchedFields },
   } = formHook;
 
@@ -76,6 +77,65 @@ const EditUserFormWrap = ({
 
     console.log(data);
 
+    // -- Update user password -- //
+    // Check if the admin wants to update the user's password
+    // We return early on error so that other information does not get updated
+    if (newPassword.length > 0) {
+      // Check if the confirm password is set
+      if (confirmPassword.length > 0) {
+        // Check if the confirm password is equal to the new password
+        if (newPassword === confirmPassword) {
+          // Check if the user is authorised to make the change
+          const response = await fetch(`/api/auth/changePassword?userid=${user.id}`, {
+            method: 'POST',
+            body: JSON.stringify({
+              password: newPassword,
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          // Check if the request was successful
+          if (!response.ok) {
+            // It was not, parse the error message
+            const jsonResponse = await response.json();
+            const errorMessage = jsonResponse.error;
+
+            // Set errors
+            setError('newPassword', {
+              message: errorMessage,
+            });
+            setError('confirmPassword');
+            return;
+          }
+
+          // Password reset success
+          // Reset password inputs
+          resetField('newPassword');
+          resetField('confirmPassword');
+        } else {
+          // The confirm password does not match the new password
+          setError('confirmPassword', {
+            message: 'Confirm password must match the new password'
+          }, {
+            shouldFocus: true
+          });
+          return;
+        }
+      } else {
+        // The confirm password input is empty
+        setError('confirmPassword', {
+          message: 'Confirm password cannot be empty'
+        }, {
+          shouldFocus: true
+        });
+        return;
+      }
+    }
+
+    // -- Update user information -- //
+    // Fullname, email, phone, company, bio
     const { error: userError } = await supabase
       .from('users')
       .update({
@@ -89,26 +149,7 @@ const EditUserFormWrap = ({
 
     errors.push(userError);
 
-    if (newPassword !== null && newPassword !== '') {
-      if (newPassword === confirmPassword) {
-        if (adminContent || loginId === user.id) {
-          const response = await fetch(`/api/auth/changePassword?userid=${user.id}`, {
-            method: 'POST',
-            body: JSON.stringify({
-              password: newPassword,
-            }),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-
-          if (!response.ok) {
-            errors.push({ passwordError: 'password error' });
-          }
-        }
-      }
-    }
-
+    // -- Update user comments -- //
     if (adminContent) {
       if (user.comment) {
         const { error: commentError } = await supabase
@@ -129,6 +170,7 @@ const EditUserFormWrap = ({
       }
     }
 
+    // -- Update user image -- //
     if (profilePic !== user.image) {
       if (!profilePic) {
         const { error: updateError } = await supabase
@@ -157,13 +199,23 @@ const EditUserFormWrap = ({
       }
     }
 
-    if (errors.some((e) => e !== null)) {
+    // Check if there were any errors
+    if (errors.some((e) => e != null)) {
+      // There was an error
       setSubmitFailure(true);
-    } else {
-      reset(data, { keepValues: true });
-      setSubmitSuccess(true);
-      onSuccessChange();
+
+      // Error all the input fields
+      Object.keys(data).forEach((inputName) => {
+        setError(inputName);
+      });
+
+      return;
     }
+
+    // Success, reset the default value of the inputs (excluding password inputs) and show success message
+    reset({ ...data, newPassword: '', confirmPassword: '' }, { keepValues: true });
+    setSubmitSuccess(true);
+    onSuccessChange();
   };
 
   const sendEmail = async () =>
@@ -230,28 +282,34 @@ const EditUserFormWrap = ({
 
 const propTypes = {
   userQueryData: PropTypes.shape({
-    data: {
-      id: PropTypes.number.isRequired,
-      fullname: PropTypes.string.isRequired,
-      email: PropTypes.string.isRequired,
-      phone: PropTypes.string.isRequired,
-      enabled: PropTypes.number.isRequired,
-      companyid: PropTypes.number.isRequired,
-      companies: PropTypes.shape({
-        name: PropTypes.string.isRequired,
+    data: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        fullname: PropTypes.string.isRequired,
+        email: PropTypes.string.isRequired,
+        phone: PropTypes.string.isRequired,
+        enabled: PropTypes.number.isRequired,
+        companyid: PropTypes.number.isRequired,
+        companies: PropTypes.shape({
+          name: PropTypes.string.isRequired,
+        }),
+        bio: PropTypes.string.isRequired,
+        users_comments: PropTypes.arrayOf(
+          PropTypes.shape({
+            userid: PropTypes.string.isRequired,
+            comments: PropTypes.string.isRequired,
+          }),
+        ),
       }),
-      bio: PropTypes.string.isRequired,
-      users_comments: PropTypes.shape({
-        userid: PropTypes.number.isRequired,
-        comments: PropTypes.string.isRequired,
-      }),
-    },
+    ),
   }),
   companiesQueryData: PropTypes.shape({
-    data: {
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    },
+    data: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+      }),
+    ),
   }),
   onSuccessChange: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
@@ -259,7 +317,6 @@ const propTypes = {
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   path: PropTypes.string.isRequired,
   adminContent: PropTypes.bool.isRequired,
-  loginId: PropTypes.number.isRequired,
 };
 
 EditUserFormWrap.propTypes = propTypes;

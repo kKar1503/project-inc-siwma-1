@@ -53,7 +53,12 @@ FormSelect.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
   // eslint-disable-next-line react/forbid-prop-types
-  options: PropTypes.object,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ),
   // eslint-disable-next-line react/forbid-prop-types
   customValidation: PropTypes.object,
   required: PropTypes.bool,

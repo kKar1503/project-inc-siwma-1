@@ -111,9 +111,11 @@ const EditUserForm = ({
             </FormInputGroup>
 
             <div className="flex flex-col">
+              {/* Commented out for now because the password reset via email has yet to be implemented properly */}
               <div className="label justify-start p-0">
                 <span className="label-text">Change Password</span>
                 <button
+                  type='button'
                   className="btn btn-active btn-link pointer-events-auto ml-1 px-2"
                   onClick={sendEmail}
                 >
@@ -124,20 +126,28 @@ const EditUserForm = ({
                 <FormInputGroup
                   className="flex-1"
                   name="newPassword"
-                  noLabel
+                  label='New Password'
                   isLoading={isLoading}
                   success={submitSuccess}
                 >
-                  <FormTextInput placeholder="Password" />
+                  <FormTextInput
+                    type='password'
+                    placeholder="Password"
+                    customValidation={{
+                      minLength: {
+                        value: 6,
+                        message: 'Password must be at least 6 characters in length'
+                      },
+                    }} />
                 </FormInputGroup>
                 <FormInputGroup
                   className="flex-1"
                   name="confirmPassword"
-                  noLabel
+                  label="Confirm Password"
                   isLoading={isLoading}
                   success={submitSuccess}
                 >
-                  <FormTextInput placeholder="Confirm Password" />
+                  <FormTextInput type='password' placeholder="Confirm Password" />
                 </FormInputGroup>
               </div>
             </div>
@@ -192,7 +202,7 @@ EditUserForm.propTypes = {
   isLoading: PropTypes.bool,
   onDeleteImage: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  options: PropTypes.object,
+  options: PropTypes.array,
   sendEmail: PropTypes.func.isRequired,
   path: PropTypes.string,
   adminContent: PropTypes.bool,
