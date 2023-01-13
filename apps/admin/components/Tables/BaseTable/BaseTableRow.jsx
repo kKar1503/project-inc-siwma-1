@@ -41,8 +41,7 @@ const BaseTableRow = React.forwardRef(
     // References
     const actionMenuRef = useRef();
 
-    // -- Hooks -- //
-    useEffect(() => {
+    const setActionMenuOffset = () => {
       // -- Determine where the offset the action menu should have, such that it does not exit the bounds of the table -- //
       // Check if the action menu offset needs to be calculated
       if (!actionMenu) {
@@ -54,52 +53,69 @@ const BaseTableRow = React.forwardRef(
       const tableCoords = tableRef.current.getBoundingClientRect();
       const actionMenuCoords = actionMenuRef.current.getBoundingClientRect();
 
-      // Attempt to center the action menu
+      // Parse the top offset of the action menu
+      const topOffset = parseFloat(actionMenuRef.current.style.top);
+
+      // Calculate the original coordinates of the action menu (without offset)
+      const actionMenuTopRaw = actionMenuCoords.top - (!Number.isNaN(topOffset) ? topOffset : 0);
+      const actionMenuBottomRaw = actionMenuCoords.bottom - (!Number.isNaN(topOffset) ? topOffset : 0);
+
+      // Calculate the top offset required to center the action menu
       const actionMenuHeight = actionMenuCoords.bottom - actionMenuCoords.top;
       const actionMenuTopOffset = -(actionMenuHeight / 2);
 
       // Check if doing so will cause it to exceed the bounds of the table
-      if (actionMenuCoords.top + actionMenuTopOffset > tableCoords.top) {
+      if (actionMenuTopRaw + actionMenuTopOffset > tableCoords.top && actionMenuBottomRaw + actionMenuTopOffset < tableCoords.bottom) {
         // It will not exceed the bounds, apply the offset
         actionMenuRef.current.style.top = `${actionMenuTopOffset}px`;
       }
 
-      // Check if the action menu is outside the bounding box of the table
+      // Check if the action menu is currently outside the bounding box of the table
       if (
         actionMenuCoords.top < tableCoords.top ||
-        actionMenuCoords.right > tableCoords.right ||
         actionMenuCoords.bottom > tableCoords.bottom ||
-        actionMenuCoords.left < tableCoords.left
+        actionMenuTopRaw < tableCoords.top ||
+        actionMenuBottomRaw > tableCoords.bottom
       ) {
         // It is outside the bounding box
         // Calculate the required vertical offset for the actionMenu, such that it is within the bounds of the table
-        const topOffset = tableCoords.top - actionMenuCoords.top;
-        const bottomOffset = actionMenuCoords.bottom - tableCoords.bottom;
+        const requiredTopOffset = tableCoords.top - actionMenuTopRaw;
+        const requiredBottomOffset = actionMenuBottomRaw - tableCoords.bottom;
         let finalOffset = 0;
 
         // Determine the offsets to apply
         // If the action menu exceeds the top of the table, apply the top offset
-        if (actionMenuCoords.top < tableCoords.top) {
-          finalOffset += topOffset;
+        if (actionMenuTopRaw < tableCoords.top) {
+          finalOffset += requiredTopOffset;
         }
 
         // Check if the action menu is taller than the height of the table
         // We do not want to apply a bottom offset if so, otherwise the top of the action menu gets cut off
-        if (actionMenuCoords.bottom - actionMenuCoords.top < tableCoords.bottom - tableCoords.top) {
+        if (actionMenuBottomRaw - actionMenuTopRaw < tableCoords.bottom - tableCoords.top) {
           // It is not taller than the table, it is safe to apply a bottom offset
           // If the action menu exceeds the bottom of the table, deduct the bottom offset from the top offset
           // We do not want to apply a bottom offset instead as you cannot use both top and bottom offsets together, or it would lead to weird behaviour
-          if (actionMenuCoords.bottom > tableCoords.bottom) {
-            finalOffset -= bottomOffset + 40;
+          if (actionMenuBottomRaw > tableCoords.bottom) {
+            finalOffset -= requiredBottomOffset + 40;
           }
         }
 
-
         // Apply the final offset
-        if (finalOffset !== 0)
-          actionMenuRef.current.style.top = `${finalOffset}px`;
+        actionMenuRef.current.style.top = `${finalOffset}px`;
       }
+    }
+
+    // -- Hooks -- //
+    // Set the action menu offset on initial render
+    useEffect(() => {
+      setActionMenuOffset();
     }, []);
+
+    // Set the action menu offset again when the action menu is being opened
+    useEffect(() => {
+      if (showActionMenu === true)
+        setActionMenuOffset();
+    }, [showActionMenu]);
 
     return (
       <tr className='last:border-b'>
@@ -176,7 +192,7 @@ const BaseTableRow = React.forwardRef(
               {/* Action Menu */}
               <div className="relative">
                 <div
-                  className={cx('absolute right-[3vw] top-0 h-fit transition-all', {
+                  className={cx('absolute right-[3vw] top-0 h-fit transition-opacity', {
                     'invisible opacity-0': !showActionMenu,
                   })}
                   ref={actionMenuRef}
