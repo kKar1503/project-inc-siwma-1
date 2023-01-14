@@ -67,13 +67,14 @@ const options = ['All Chats', 'Selling', 'Buying', 'Archived'];
 const RealTimeChat = () => {
   const supabase = useSupabaseClient();
   const [allMessages, setAllMessages] = useState([]);
-  const [filteredData, setFilteredData] = useState(roomsData);
+  const [filteredData, setFilteredData] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(options[0]);
   // Select room id of 15
   const [selectedRoom, setSelectedRoom] = useState(38);
   const [notifs, setAllNotifs] = useState('');
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [newMsg, setNewMsg] = useState('');
+  const [newContent, setNewContent] = useState('');
 
   const filterChatList = (filter) => filter.type === selectedFilter;
   const userdata = useUser();
@@ -306,6 +307,7 @@ const RealTimeChat = () => {
   // Call fetchMessages everytime selectedRoom changes
   useEffect(() => {
     fetchMessages(selectedRoom);
+
     supabase
       .channel(`public:messages:room_id=eq.${selectedRoom}`)
       .on(
@@ -313,21 +315,19 @@ const RealTimeChat = () => {
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'contents',
+          table: 'messages',
         },
         (payload) => {
           console.log('Change received!', payload);
-
-          setNewMsg((current) => {
-            console.log('Nw');
-            console.log(current);
-          });
-
-          // console.log(allMessages);
+          setNewMsg(payload.new);
           setAllNotifs(payload.new);
         }
       )
       .subscribe();
+
+    console.log(newMsg);
+    console.log(allMessages);
+
   }, [selectedRoom, newMsg]);
 
   useEffect(() => {
@@ -468,7 +468,7 @@ const RealTimeChat = () => {
   );
 };
 
-RealTimeChat.allowNonAuthenticated = true;
+RealTimeChat.allowNonAuthenticated = false;
 RealTimeChat.allowAuthenticated = true;
 RealTimeChat.getLayout = (page) => <Container>{page}</Container>;
 

@@ -24,9 +24,6 @@ const ChatBubbles = ({ msg: messages }) => {
 
   const userdata = useUser();
 
-  console.log('Messages', messages);
-
-
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
