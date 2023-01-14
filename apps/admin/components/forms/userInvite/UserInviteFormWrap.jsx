@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useQueryClient } from 'react-query';
 import UserInviteForm from './UserInviteForm';
 
 const UserInviteFormWrap = ({ isLoading, companiesQuery, submitSuccess, onSuccessChange }) => {
@@ -15,6 +16,8 @@ const UserInviteFormWrap = ({ isLoading, companiesQuery, submitSuccess, onSucces
   } = formHook;
 
   const watchAllFields = watch();
+
+  const queryClient = useQueryClient();
 
   const companies = isLoading || !companiesQuery || !companiesQuery.data ? [] : companiesQuery.data;
 
@@ -59,6 +62,7 @@ const UserInviteFormWrap = ({ isLoading, companiesQuery, submitSuccess, onSucces
     });
 
     reset();
+    queryClient.invalidateQueries();
     onSuccessChange(true, null);
   };
 
