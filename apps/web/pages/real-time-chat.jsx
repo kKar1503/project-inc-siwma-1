@@ -314,7 +314,6 @@ const RealTimeChat = () => {
 
     console.log(newMsg);
     console.log(allMessages);
-
   }, [selectedRoom, newMsg]);
 
   useEffect(() => {
@@ -408,14 +407,20 @@ const RealTimeChat = () => {
                 roomID={selectedRoom}
               />
             </div>
-            <div className="col-span-2 relative" style={{ maxHeight: '73vh' }}>
-              <div>
-                <ChatBubbles msg={allMessages} />
-              </div>
-              <div className="absolute bottom-[-80px] w-full px-4">
-                <hr style={{ border: '1px solid #A0A0A0' }} />
-                <InputText roomID={selectedRoom} />
-              </div>
+            <div className="col-span-2">
+              <table className="w-full">
+                <tr>
+                  <td>
+                    <ChatBubbles msg={allMessages} />
+                  </td>
+                </tr>
+                <tr>
+                  <td valign="bottom">
+                    <hr style={{ border: '1px solid #A0A0A0' }} />
+                    <InputText roomID={selectedRoom} />
+                  </td>
+                </tr>
+              </table>
             </div>
           </div>
         </div>

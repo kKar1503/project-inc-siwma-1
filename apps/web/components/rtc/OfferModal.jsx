@@ -6,14 +6,8 @@ import PropTypes from 'prop-types';
 const OfferModal = ({ roomID }) => {
   const supabase = useSupabaseClient();
   const [offerPrice, setOfferPrice] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
   const [user, setUser] = useState('');
   const userdata = useUser();
-
-  const handleClick = () => {
-    setIsVisible((current) => !current);
-  };
-  const [submitted, setSubmitted] = useState('');
 
   function handleChange(e) {
     setOfferPrice(e.target.value);
@@ -65,39 +59,44 @@ const OfferModal = ({ roomID }) => {
   return (
     <div className="modal" id="offer-modal">
       <div className="modal-box">
-        {isVisible ? (
-          <div className="form-control ml-4">
-            <div>
-              <div className="label">
-                <span className="label-text">Enter Amount</span>
-              </div>
-              <form>
-                <span>SGD</span>
-                <input
-                  type="number"
-                  min="0"
-                  placeholder="100"
-                  className="input input-bordered input-sm w-full max-w-xs m-1"
-                  value={offerPrice}
-                  onChange={handleChange}
-                />
-
-                <div className="modal-action">
-                  <button className="btn p-4" onClick={handleOffer}>
-                    Make Offer
-                  </button>
-                  <a href="#" className="btn">
-                    Close
-                  </a>
-                </div>
-              </form>
-            </div>
+        <h6 className="font-bold text-xl mb-4 text-center">Make an offer!</h6>
+        <div className="flex justify-center">
+          <div className="form-control">
+            <label className="input-group w-100">
+              <input
+                type="number"
+                placeholder="10"
+                min="0"
+                className="input input-bordered"
+                value={offerPrice}
+                onChange={handleChange}
+                style={{
+                  borderTopLeftRadius: 'var(--rounded-btn, 0.5rem) !important',
+                  borderBottomLeftRadius: 'var(--rounded-btn, 0.5rem) !important',
+                }}
+              />
+              <span
+                className='bg-green-500 font-bold text-white'
+                style={{
+                  borderTopRightRadius: 'var(--rounded-btn, 0.5rem) !important',
+                  borderBottomRightRadius: 'var(--rounded-btn, 0.5rem) !important',
+                }}
+              >
+                SGD
+              </span>
+            </label>
           </div>
-        ) : (
-          <button onClick={handleClick} className="btn btn-sm m-3">
-            Make Offer
-          </button>
-        )}
+        </div>
+        <div className="modal-action">
+          <div className="grid grid-cols-2 gap-4 w-full">
+            <button className="btn bg-blue-700 hover:bg-blue-400 text-white border-none p-4" onClick={handleOffer}>
+              Make Offer
+            </button>
+            <a href="#" className="btn bg-red-700 hover:bg-red-400 border-none text-white">
+              Close
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );
