@@ -2,11 +2,11 @@ import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { DateTime } from 'luxon';
 import Head from 'next/head';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { IoHelpCircleOutline } from 'react-icons/io5';
 import CardBackground from '../../components/CardBackground';
 import Container from '../../components/Container';
 import Breadcrumbs from '../../components/listing/Breadcrumbs';
@@ -17,6 +17,8 @@ import User from '../../components/listing/User';
 import Carousel from '../../components/marketplace/carousel/Carousel';
 import BuyBadge from '../../components/marketplace/listing/BuyBadge';
 import SellBadge from '../../components/marketplace/listing/SellBadge';
+import Tooltip from '../../components/marketplace/Tooltip';
+import sampleParameterImage from '../../public/sample-parameter-image.jpg';
 
 const getAllListingImages = async (listingId, supabaseClient) => {
   const { data, error } = await supabaseClient.rpc('get_all_images_for_listing_by_id', {
@@ -121,6 +123,14 @@ const ListingPage = ({
 
     setProfilePictureUrl(res.data.publicUrl);
   };
+
+  /**
+   * getCategoryImage fetches the category image for the given category id
+   *
+   * @param {number} categoryId
+   * @returns {string | null} The category image url
+   */
+  const getCategoryImage = (categoryId) => sampleParameterImage;
 
   useEffect(() => {
     getUserProfilePictureURL('abc');
@@ -250,7 +260,27 @@ const ListingPage = ({
 
             {listingParameterValues.length > 0 && (
               <>
-                <h1 className="text-xl font-semibold">Details</h1>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h1 className="text-xl font-semibold">Dimensions</h1>
+
+                  <Tooltip
+                    content={
+                      <picture>
+                        <img
+                          src="/sample-parameter-image.jpg"
+                          alt={`Reference for ${listing.category}`}
+                          className="w-24 my-3"
+                        />
+                      </picture>
+                    }
+                    contentClassName="bg-neutral-content p-2 rounded-lg shadow-lg"
+                    position="right"
+                  >
+                    <IoHelpCircleOutline className="text-xl text-gray-500" />
+                  </Tooltip>
+                </div>
+
+                {/* Each details */}
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 my-4">
                   {listingParameterValues.map((p) => (
                     <Detail
