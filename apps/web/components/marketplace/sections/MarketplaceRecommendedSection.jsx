@@ -39,17 +39,25 @@ const MarketplaceRecommendedSection = () => {
               listing_type: type,
               price,
               negotiable,
+              created_at: createdAt,
+              owner: ownerId,
+              fullname: ownerFullName,
               unit_price: unitPrice,
+              company_name: companyName,
             }) => (
               <ProductListingItem
                 className="w-[200px] hover:shadow-lg"
                 type={type}
                 negotiable={negotiable}
                 key={id}
+                companyName={companyName}
                 price={price}
                 img={imageUrl}
                 name={name}
                 rating={4.5}
+                ownerId={ownerId}
+                ownerFullName={ownerFullName}
+                createdAt={createdAt}
                 unit_price={unitPrice}
                 href={`/product/${id}`}
               />

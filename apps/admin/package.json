@@ -42,6 +42,7 @@
   "devDependencies": {
     "autoprefixer": "10.4.13",
     "cypress": "10.11.0",
+    "cypress-file-upload": "^5.0.8",
     "eslint": "8.26.0",
     "eslint-config-custom": "workspace:*",
     "postcss": "8.4.18",
