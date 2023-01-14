@@ -1,7 +1,8 @@
-import {useRouter} from 'next/router';
-import {useEffect} from 'react';
-import {useQuery} from 'react-query';
-import {useSupabaseClient, useUser} from '@supabase/auth-helpers-react';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useQuery } from 'react-query';
+import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
+import Container from '../components/Container';
 import CategoricalForm from '../components/layouts/CategoricalForm';
 import ParameterForm from '../components/layouts/ParameterForm';
 import ListingForm from '../components/layouts/ListingForm';
@@ -12,10 +13,10 @@ const NewListing = () => {
   const user = useUser();
   const client = useSupabaseClient();
 
-  const {categoryID, categoryHook, validateCategory} = CategoricalForm.useHook();
-  const {imageHook, validateImage} = ImageForm.useHook();
-  const {listingHook, validateListing} = ListingForm.useHook();
-  const {parameterHook, validateParameter, identifyParameterType} = ParameterForm.useHook();
+  const { categoryID, categoryHook, validateCategory } = CategoricalForm.useHook();
+  const { imageHook, validateImage } = ImageForm.useHook();
+  const { listingHook, validateListing } = ListingForm.useHook();
+  const { parameterHook, validateParameter, identifyParameterType } = ParameterForm.useHook();
 
   const {
     data: categoriesData,
@@ -28,7 +29,7 @@ const NewListing = () => {
     refetchOnReconnect: false,
   });
 
-  const {data: parameterTypesData} = useQuery(
+  const { data: parameterTypesData } = useQuery(
     'get_parameter_types',
     async () => client.rpc('get_parameter_types'),
     {
@@ -38,7 +39,7 @@ const NewListing = () => {
     }
   );
 
-  const {data: parameterChoicesData} = useQuery(
+  const { data: parameterChoicesData } = useQuery(
     'get_parameter_choices',
     async () => client.rpc('get_parameter_choices'),
     {
@@ -55,7 +56,7 @@ const NewListing = () => {
     status: parametersStatus,
   } = useQuery(
     ['get_category_parameters', categoryID],
-    async () => client.rpc('get_category_parameters', {_category_id: categoryID}),
+    async () => client.rpc('get_category_parameters', { _category_id: categoryID }),
     {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
@@ -88,10 +89,9 @@ const NewListing = () => {
     const category = validateCategory();
     const parameters = validateParameter();
 
-
     if (!listing || !images || !category || !parameters) return;
 
-    const {data: listingId, error: insertListingError} = await client
+    const { data: listingId, error: insertListingError } = await client
       .from('listing')
       .insert({
         name: listing.name,
@@ -126,7 +126,7 @@ const NewListing = () => {
 
     const promises = Promise.all([...parameterPromises, ...imagePromises]);
 
-    const {error: insertError} = await promises;
+    const { error: insertError } = await promises;
 
     if (insertError) throw insertError;
 
@@ -135,26 +135,28 @@ const NewListing = () => {
 
   return (
     <main>
-      <div className="flex justify-around mt-8 mx-32">
-        <div className="flex space-y-6 flex-col w-2/6">
-          {!categoriesLoading &&
-            !categoriesError &&
-            categoriesStatus === 'success' &&
-            categoriesData && (
-            <CategoricalForm items={categoriesData.data} categoryHook={categoryHook}/>
-          )}
+      <Container>
+        <div className="flex justify-around mt-8">
+          <div className="flex space-y-6 flex-col w-2/6">
+            {!categoriesLoading &&
+              !categoriesError &&
+              categoriesStatus === 'success' &&
+              categoriesData && (
+              <CategoricalForm items={categoriesData.data} categoryHook={categoryHook} />
+            )}
 
-          {!parametersLoading &&
-            !parametersError &&
-            parametersStatus === 'success' &&
-            parametersData.data.length !== 0 && <ParameterForm parameterHook={parameterHook}/>}
+            {!parametersLoading &&
+              !parametersError &&
+              parametersStatus === 'success' &&
+              parametersData.data.length !== 0 && <ParameterForm parameterHook={parameterHook} />}
 
-          <ImageForm useImageHook={imageHook}/>
+            <ImageForm useImageHook={imageHook} />
+          </div>
+          <div className="flex flex-col w-3/5">
+            <ListingForm listingHook={listingHook} onSubmit={onSubmit} />
+          </div>
         </div>
-        <div className="flex flex-col w-3/5">
-          <ListingForm listingHook={listingHook} onSubmit={onSubmit}/>
-        </div>
-      </div>
+      </Container>
     </main>
   );
 };
