@@ -103,7 +103,7 @@ const BaseTable = ({
                   data.map((row) => (
                     <BaseTableRow
                       key={row.id}
-                      selected={selectedRows ? selectedRows.find((e) => e === data.id) : false}
+                      selected={selectedRows ? (selectedRows.find((e) => e === row.id) != null) : false}
                       columnKeys={columnKeys}
                       headings={headings}
                       centerColumns={centerColumns}
