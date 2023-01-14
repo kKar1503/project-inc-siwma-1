@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import { boolean, number, object, string } from 'yup';
 import React from 'react';
-import RadioButton from '../RadioButton';
-import Input from '../Input';
-import ErrorMessage from './ErrorMessage';
+import { boolean, number, object, string } from 'yup';
 import CardBackground from '../CardBackground';
+import Input from '../Input';
+import RadioButton from '../RadioButton';
+import ErrorMessage from './ErrorMessage';
 
 const propTypes = {
   listingHook: PropTypes.shape({
@@ -23,7 +23,7 @@ const propTypes = {
     errorMsg: PropTypes.string,
   }).isRequired,
   onSubmit: PropTypes.func.isRequired,
-}
+};
 
 const listingValidationSchema = object({
   name: string().required('Title is required'),
@@ -112,10 +112,10 @@ const CreateListingInformation = ({ onSubmit, listingHook }) => {
     setType,
     errorMsg,
   } = listingHook;
-  
+
   return (
     <CardBackground>
-      <form className="px-5 space-y-2" onSubmit={onSubmit}>
+      <form className="space-y-2" onSubmit={onSubmit}>
         <ErrorMessage errorMsg={errorMsg} />
         {/* Selling/Buying Options */}
         <RadioButton
@@ -129,6 +129,14 @@ const CreateListingInformation = ({ onSubmit, listingHook }) => {
           <>
             {/* Title Label */}
             <Input text="Title" value={name} onChange={(e) => setName(e.target.value)} />
+
+            {/* Description Label */}
+            <Input
+              text="Description"
+              type="textarea"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
 
             {/* Price Label */}
             <Input text="Price (SGD)" value={price} onChange={(e) => setPrice(e.target.value)} />
@@ -154,14 +162,6 @@ const CreateListingInformation = ({ onSubmit, listingHook }) => {
                 />
               </label>
             </div>
-
-            {/* Description Label */}
-            <Input
-              text="Description"
-              type="textarea"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
           </>
         )}
 
