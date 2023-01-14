@@ -1,4 +1,4 @@
-import { QueryClientProvider, QueryClient } from 'react-query';
+import { useQueryClient } from 'react-query';
 import { useState } from 'react';
 import Link from 'next/link';
 import { Alert } from '@inc/ui';
@@ -12,12 +12,12 @@ import AdminPageLayout from '../components/layouts/AdminPageLayout';
 /**
  * Comment to be written
  */
-
-const queryClient = new QueryClient();
-
 const Page = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [inviteSuccess, setInviteSuccess] = useState(false);
+
+  const queryClient = useQueryClient();
+
   const openModal = () => {
     setIsOpen(true);
   };
@@ -34,55 +34,55 @@ const Page = () => {
   };
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
-        <NavBar />
-        <div className="grid grid-cols-2 gap-8">
-          <div className="rounded-lg card bg-base-100 shadow-lg">
-            <div className="card-body">
-              <h1 className="font-bold text-xl">Create an individual invite</h1>
-              <h1 className="pr-2 pb-4">Invite an individual user to the system</h1>
-              <div className="card-actions justify-center">
-                <button onClick={openModal} className="btn btn-primary btn-outline grow">
-                  Send Invite
-                </button>
-              </div>
+    <div className="flex flex-col flex-1 w-full p-8 gap-8 overflow-auto">
+      <NavBar />
+
+      <div className="flex flex-row gap-6">
+        <div className="mb-4 gap-4 flex-1">
+          <div className="rounded-xl shadow-lg p-4 bg-base-100">
+            <div className="pb-3">
+              <h3 className="font-bold text-lg">Create an individual invite</h3>
+              <p className="text-sm">Invite an individual user to the system</p>
             </div>
-          </div>
-          <div className="rounded-lg card bg-base-100 shadow-lg">
-            <div className="card-body">
-              <h1 className="font-bold text-xl">Bulk invite users</h1>
-              <h1 className="pr-2 pb-4">Invite multiple users at once through a file import</h1>
-              <div className="card-actions justify-center">
-                <Link href="invite/" className="w-full btn btn-outline btn-primary">
-                  Bulk Invite Users
-                </Link>
-              </div>
-            </div>
+            <button onClick={openModal} className="btn w-full btn-outline btn-primary">
+              Send Invite
+            </button>
           </div>
         </div>
-        <div className="flex flex-col h-full gap-8">
-          <PendingInvitesTable />
-          <RegisteredUsersTable />
+        <div className="mb-4 gap-4 flex-1">
+          <div className="rounded-xl shadow-lg p-4 bg-base-100">
+            <div className="pb-3">
+              <h3 className="font-bold text-lg">Bulk invite users</h3>
+              <p className="text-sm">Invite multiple users at once through a file import</p>
+            </div>
+            <Link href="invite/" className="btn w-full btn-outline btn-primary">
+              Bulk Invite Users
+            </Link>
+          </div>
         </div>
-        <UserInvite
-          isOpen={isOpen}
-          onRequestClose={closeModal}
-          onSuccess={refreshQuery}
-          submitSuccess={inviteSuccess}
-          setSubmitSuccess={setInviteSuccess}
-        />
       </div>
-      <div className={cx('w-full transition', { hidden: !inviteSuccess })}>
+
+      <div className="flex flex-col h-full gap-8">
+        <PendingInvitesTable />
+        <RegisteredUsersTable />
+      </div>
+      <UserInvite
+        isOpen={isOpen}
+        onRequestClose={closeModal}
+        onSuccess={refreshQuery}
+        submitSuccess={inviteSuccess}
+        setSubmitSuccess={setInviteSuccess}
+      />
+      <div className={cx('sticky bottom-10 w-full transition', { hidden: !inviteSuccess })}>
         <Alert
           level="info"
           message="User invite sent."
-          className="text-white absolute bottom-10 left-0 transition lg:w-7/12 mx-auto"
+          className="text-white lg:w-7/12 mx-auto"
           onRequestClose={() => setInviteSuccess(false)}
           dismissable
         />
       </div>
-    </QueryClientProvider>
+    </div>
   );
 };
 
