@@ -15,7 +15,6 @@ const ChatFilter = ({
   retrieveFilteredData,
   selectedFilter,
   roomsData,
-  setSelectedRoom,
 }) => {
   const [inputValue, setValue] = useState('');
   // const [selectedRoom, setSelectedRoom] = useState(''); // define selectedRoom in state
@@ -42,11 +41,11 @@ const ChatFilter = ({
             inputProps={{
               type: 'text',
               placeholder: 'Chat History',
-              autocomplete: 'on', // add this line to enable autocomplete
+              autoComplete: 'on', // add this line to enable autocomplete
               className: 'input input-bordered',
               style: {
-                borderTopLeftRadius: 'var(--rounded-btn, 0.5rem) !important;',
-                borderBottomLeftRadius: 'var(--rounded-btn, 0.5rem) !important;',
+                borderTopLeftRadius: 'var(--rounded-btn, 0.5rem) !important',
+                borderBottomLeftRadius: 'var(--rounded-btn, 0.5rem) !important',
               },
             }}
             menuStyle={{ display: 'block' }}
@@ -71,8 +70,8 @@ const ChatFilter = ({
           <button
             className="btn btn-square"
             style={{
-              borderTopRightRadius: 'var(--rounded-btn, 0.5rem) !important;',
-              borderBottomRightRadius: 'var(--rounded-btn, 0.5rem) !important;',
+              borderTopRightRadius: 'var(--rounded-btn, 0.5rem) !important',
+              borderBottomRightRadius: 'var(--rounded-btn, 0.5rem) !important',
             }}
           >
             <BiSearch className="text-2xl" />
@@ -91,13 +90,12 @@ ChatFilter.propTypes = {
   roomsData: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
-      name: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
       lastMessage: PropTypes.string.isRequired,
       type: PropTypes.string.isRequired,
       ischeck: PropTypes.bool.isRequired,
     })
   ),
-  setSelectedRoom: PropTypes.func.isRequired,
 };
 
 export default ChatFilter;

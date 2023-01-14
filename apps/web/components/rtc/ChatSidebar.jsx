@@ -10,7 +10,7 @@ const ChatSidebar = ({ roomsData, setSelectedRoom, roomID }) => (
       style={{ height: '85vh' }}
     >
       {roomsData.map((room) => (
-        <IndividualChats setSelectedRoom={setSelectedRoom} room={room} roomID={room.roomID} />
+        <IndividualChats setSelectedRoom={setSelectedRoom} room={room} roomID={room.roomID} key={room.roomID} />
       ))}
     </div>
   </div>
@@ -18,8 +18,8 @@ const ChatSidebar = ({ roomsData, setSelectedRoom, roomID }) => (
 
 ChatSidebar.propTypes = {
   roomsData: PropTypes.arrayOf(PropTypes.object),
-  setSelectedRoom: PropTypes.func.isRequired,
-  roomID: PropTypes.number.isRequired,
+  setSelectedRoom: PropTypes.func,
+  roomID: PropTypes.number,
 };
 
 export default ChatSidebar;

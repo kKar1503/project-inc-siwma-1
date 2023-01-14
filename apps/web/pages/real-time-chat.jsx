@@ -6,7 +6,6 @@ import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import toast, { Toaster } from 'react-hot-toast';
 
 import '@inc/styles/globals.css';
-import { Header } from '@inc/ui';
 import InputText from '../components/rtc/InputText';
 import ChatBubbles from '../components/rtc/ChatBubbles';
 import ImageModal from '../components/rtc/ImageModal';
@@ -88,8 +87,6 @@ const RealTimeChat = () => {
       return;
     }
 
-    console.log('FETCHING ROOMS BY USER ID');
-
     // Get chats if i'm a seller
     const chatsIfImSeller = supabase.rpc('get_sidebar_messages_for_user_seller', {
       _user_uuid: userdata.id,
@@ -108,8 +105,6 @@ const RealTimeChat = () => {
         // Stop execution if there is an error
         if (chatsIfImBuyerData.error || chatsIfImSellerData.error) {
           console.error('Something went wrong while fetching chats');
-          console.log(chatsIfImBuyerData);
-          console.log(chatsIfImSellerData);
           return;
         }
 
@@ -218,22 +213,17 @@ const RealTimeChat = () => {
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
 
-        console.log('Merged data!');
-        console.log(combinedData);
         setFilteredData(combinedData);
       }
     );
   };
 
   const retrieveFilteredData = () => {
-    console.log(roomsData);
-    console.log(selectedFilter);
     if (selectedFilter === 'All Chats') {
       setFilteredData(roomsData);
     } else {
       setFilteredData(roomsData.filter(filterChatList));
     }
-    console.log(filteredData);
   };
 
   const fetchMessages = async (roomId) => {
@@ -246,8 +236,6 @@ const RealTimeChat = () => {
       return;
     }
 
-    console.log(`Fetched messages for room id ${roomId}`);
-    console.log(fetchMessagesData.data);
     setAllMessages(fetchMessagesData.data);
   };
 
@@ -258,7 +246,6 @@ const RealTimeChat = () => {
     if (error) {
       console.log('error', error);
     } else if (data.length !== 0) {
-      console.log(data);
       const userid = data[0].profile_uuid;
 
       if (notifs !== '' && userid !== userdata.id) {
@@ -340,7 +327,6 @@ const RealTimeChat = () => {
       <div className="grid grid-cols-10 gap-4 h-screen drawer-content">
         <Toaster />
         <div className="col-span-10 md:col-span-7 bg-blue-50 rounded-3xl h-screen drawer-content">
-          <Header />
           <div className="md:flex border-b-4 items-center md:px-6 md:py-4">
             <div className="hidden lg:block">
               <h2 className="font-bold text-xl">Conversations</h2>
@@ -413,14 +399,6 @@ const RealTimeChat = () => {
                 </div>
               </div>
             </div>
-            {/* <div className="hidden md:flex">
-              <ChatFilter
-                options={options}
-                setSelectedFilter={setSelectedFilter}
-                retrieveFilteredData={retrieveFilteredData}
-                selectedFilter={selectedFilter}
-              />
-            </div> */}
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3">
             <div className="min-[320px]:hidden md-[820px]:block">
@@ -459,7 +437,6 @@ const RealTimeChat = () => {
             retrieveFilteredData={retrieveFilteredData}
             selectedFilter={selectedFilter}
             roomsData={roomsData}
-            selectedRoom={setSelectedRoom} // Add this line
           />
           <ChatSidebar roomsData={filteredData} />
         </ul>
