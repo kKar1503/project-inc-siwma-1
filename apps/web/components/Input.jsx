@@ -23,7 +23,8 @@ const Input = ({ className, text, type, value, onChange, isOptional }) => (
     {type === 'textarea' ? (
       <textarea
         id="description"
-        className="textarea h-24 leading-normal"
+        className="textarea h-[100px] md:h-[150px] lg:h-[200px] leading-normal"
+        maxLength={1500}
         placeholder={`${text} of listing... ${isOptional ? '(Optional)' : ''}`}
         value={value}
         onChange={onChange}
