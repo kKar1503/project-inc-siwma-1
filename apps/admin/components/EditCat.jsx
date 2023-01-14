@@ -178,7 +178,7 @@ const EditCat = ({ id }) => {
           <div>
             <Image
               src={`https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/category-image-bucket/${imageURL}`}
-              alt="Category Imgae"
+              alt="Category Image"
               width={200}
               height={180}
               className="object-center"
@@ -219,7 +219,7 @@ const EditCat = ({ id }) => {
           <div>
             <Image
               src={`https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/category-cross-section-image-bucket/${imageURL2}`}
-              alt="Cross Section Imgae"
+              alt="Cross Section Image"
               width={200}
               height={180}
               className="object-center"
