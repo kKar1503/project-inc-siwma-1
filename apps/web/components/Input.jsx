@@ -32,7 +32,7 @@ const Input = ({ text, type, value, onChange,isOptional }) => (
         type="text"
         value={value}
         onChange={onChange}
-        placeholder={`${text} of listing...`}
+        placeholder={`${text} of listing... ${isOptional ? '(Optional)' : ''}`}
         className="input w-full"
       />
     )}

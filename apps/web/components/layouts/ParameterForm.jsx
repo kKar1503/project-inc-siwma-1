@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {IoHelpCircleOutline} from 'react-icons/io5';
 import {boolean, number, object, string} from 'yup';
 import CardBackground from '../CardBackground';
@@ -61,25 +61,14 @@ const ParameterHook = () => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [values, setValues] = React.useState({});
 
-  useEffect(() => {
-    setValues(
-      formTypeData.reduce((acc, item) => {
-        acc[item.name] = '';
-        return acc;
-      }, {})
-    );
-  }, [formTypeData]);
-
   const getValue = (name) => values[name]?.value;
 
-  const updateValues = (name, typeData, value) => {
-    setValues((v) => ({
-      ...v,
-      [name]: {
-        typeData,
-        value,
-      },
-    }));
+  const updateValues = (name, value) => {
+    setValues((prevValues) => {
+      const newValues = {...prevValues};
+      newValues[name].value = value;
+      return newValues;
+    });
   };
 
   const validateParameter = () => {
@@ -141,6 +130,7 @@ const ParameterHook = () => {
           const formData = {
             id: parameterData[i].parameter,
             name: parameterData[i].display_name,
+            required: parameterData[i].required,
             dataTypeId: parameterData[i].datatype,
             type: parameterType[j].name,
             typeId: parameterType[j].id,
@@ -153,12 +143,22 @@ const ParameterHook = () => {
           }
 
           formTypes.push(formData);
+
         }
       }
     }
+    console.log('formTypes', formTypes);
 
+    setValues(
+      formTypes.reduce((acc, item) => {
+        acc[item.name] = {
+          typeData: item,
+        }
+        return acc;
+      }, {})
+    );
     setFormTypeData(formTypes);
-  },[]);
+  }, []);
 
   return {
     parameterHook: {
@@ -200,45 +200,50 @@ const ParameterForm = ({parameterHook}) => {
       </div>
       {/* {formSorter(formTypes)} */}
       {formTypes.map((item) => {
+        console.log(item);
         switch (item.type) {
           case 'MEASUREMENT (WEIGHT)':
             return (
               <Input
+                isOptional={!item.required}
                 key={item.name}
                 text={`${item.name} (g)`}
                 value={getValue(item.name) || ''}
                 onChange={(e) => {
-                  updateValues(item.name, item, e.target.value);
+                  updateValues(item.name, e.target.value);
                 }}
               />
             );
           case 'MEASUREMENT (DIMENSION)':
             return (
               <Input
+                isOptional={!item.required}
                 key={item.name}
                 text={`${item.name} (mm)`}
                 value={getValue(item.name) || ''}
                 onChange={(e) => {
-                  updateValues(item.name, item, e.target.value);
+                  updateValues(item.name, e.target.value);
                 }}
               />
             );
           case 'TWO CHOICES':
             return (
               <RadioButton
+                isOptional={!item.required}
                 text={item.name}
                 options={item.choice}
                 onChangeValue={(e) => {
-                  updateValues(item.name, item, e.target.value);
+                  updateValues(item.name, e.target.value);
                 }}
               />
             );
           case 'MANY CHOICES':
             return (
               <Dropdown
+                isOptional={!item.required}
                 items={item.choice}
                 onChangeValue={(e) => {
-                  updateValues(item.name, item, e.target.value);
+                  updateValues(item.name, e.target.value);
                 }}
                 defaultValue={`${item.name}`}
               />
@@ -246,12 +251,13 @@ const ParameterForm = ({parameterHook}) => {
           case 'OPEN ENDED':
             return (
               <Input
+                isOptional={!item.required}
                 key={item.name}
                 type="textarea"
                 text={`${item.name}`}
                 value={getValue(item.name) || ''}
                 onChange={(e) => {
-                  updateValues(item.name, item, e.target.value);
+                  updateValues(item.name, e.target.value);
                 }}
               />
             );
