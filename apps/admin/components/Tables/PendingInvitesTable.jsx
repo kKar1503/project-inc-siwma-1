@@ -75,6 +75,9 @@ const PendingInvitesTable = ({ className }) => {
         selectedInvites.map((e) => e.id)
       );
     queryClient.invalidateQueries();
+
+    // Clear all selected invites
+    setSelectedInvites([]);
   };
 
   const resendInvite = async (id) => {
@@ -90,6 +93,9 @@ const PendingInvitesTable = ({ className }) => {
   const singleRevoke = async (id) => {
     await supabase.from('invite').delete().eq('id', id);
     queryClient.invalidateQueries();
+
+    // Unselect the revoked invite (if it was selected)
+    setSelectedInvites(selectedInvites.filter((e) => e.id !== id));
   };
 
   const onChangeHandler = (targetInvite, selected) => {

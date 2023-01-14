@@ -191,6 +191,9 @@ const RegisteredCompaniesTable = ({ className }) => {
     // The company was successfully deleted, invalidate old query to cause a refetch
     queryClient.invalidateQueries({ queryKey: ['getAllCompanies'] });
 
+    // Unselect the deleted company if it was selected
+    setselectedCompanies(selectedCompanies.filter((e) => e.id !== data.id));
+
     // Show a success alert
     const $alerts = [
       ...alerts,
