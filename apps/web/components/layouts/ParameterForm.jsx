@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { IoHelpCircleOutline } from 'react-icons/io5';
 import { boolean, number, object, string } from 'yup';
 import CardBackground from '../CardBackground';
 import Dropdown from '../Dropdown';
-import RadioButton from '../RadioButton';
 import Input from '../Input';
+import Tooltip from '../marketplace/Tooltip';
+import RadioButton from '../RadioButton';
 import ErrorMessage from './ErrorMessage';
 
 // const typeDataSchema = object('Please fill in the values').shape({
@@ -27,7 +29,7 @@ const propTypes = {
     updateValues: PropTypes.func.isRequired,
     errorMsg: PropTypes.string,
   }).isRequired,
-}
+};
 
 // Validation
 const ParameterValidationSchemaString = object(
@@ -181,7 +183,21 @@ const ParameterForm = ({ parameterHook }) => {
   return (
     <CardBackground>
       <ErrorMessage errorMsg={errorMsg} />
-      <h1 className="font-bold text-3xl">Parameters</h1>
+
+      <div className="flex flex-wrap items-center gap-2">
+        <h1 className="font-bold text-3xl">Parameters</h1>
+        <Tooltip
+          content={
+            <picture>
+              <img src="/sample-parameter-image.jpg" alt="Reference for" className="w-24 my-3" />
+            </picture>
+          }
+          contentClassName="bg-white p-2 rounded-lg shadow-lg"
+          position="right"
+        >
+          <IoHelpCircleOutline className="text-xl text-gray-500" />
+        </Tooltip>
+      </div>
       {/* {formSorter(formTypes)} */}
       {formTypes.map((item) => {
         switch (item.type) {
