@@ -29,7 +29,7 @@ const propTypes = {
     updateValues: PropTypes.func.isRequired,
     errorMsg: PropTypes.string,
   }).isRequired,
-};
+}
 
 // Validation
 const ParameterValidationSchemaString = object(
@@ -226,6 +226,7 @@ const ParameterForm = ({ parameterHook }) => {
           case 'TWO CHOICES':
             return (
               <RadioButton
+                text={item.name}
                 options={item.choice}
                 onChangeValue={(e) => {
                   updateValues(item.name, item, e.target.value);

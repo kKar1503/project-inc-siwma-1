@@ -90,7 +90,6 @@ const NewListing = () => {
     const category = validateCategory();
     const parameters = validateParameter();
 
-    console.log(images);
 
     if (!listing || !images || !category || !parameters) return;
 

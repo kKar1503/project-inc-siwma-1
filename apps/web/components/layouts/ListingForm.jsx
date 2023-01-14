@@ -109,6 +109,7 @@ const CreateListingInformation = ({ onSubmit, listingHook }) => {
         <ErrorMessage errorMsg={errorMsg} />
         {/* Selling/Buying Options */}
         <RadioButton
+          text="Type of Listing"
           options={['Buying', 'Selling']}
           onChangeValue={(event) => setType(event.target.value)}
         />
