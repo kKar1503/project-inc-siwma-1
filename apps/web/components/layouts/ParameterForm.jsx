@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import React, {useMemo, useState} from 'react';
-import {IoHelpCircleOutline} from 'react-icons/io5';
-import {boolean, number, object, string} from 'yup';
+import React, { useMemo, useState } from 'react';
+import { IoHelpCircleOutline } from 'react-icons/io5';
+import { boolean, number, object, string } from 'yup';
 import CardBackground from '../CardBackground';
 import Dropdown from '../Dropdown';
 import Input from '../Input';
@@ -16,6 +16,7 @@ import ErrorMessage from './ErrorMessage';
 // }).required('Please fill in the values');
 
 const propTypes = {
+  crossSectionImage: PropTypes.string.isRequired,
   parameterHook: PropTypes.shape({
     formTypes: PropTypes.arrayOf(
       PropTypes.shape({
@@ -29,7 +30,7 @@ const propTypes = {
     updateValues: PropTypes.func.isRequired,
     errorMsg: PropTypes.string,
   }).isRequired,
-}
+};
 
 // Validation
 const ParameterValidationSchemaString = object(
@@ -65,7 +66,7 @@ const ParameterHook = () => {
 
   const updateValues = (name, value) => {
     setValues((prevValues) => {
-      const newValues = {...prevValues};
+      const newValues = { ...prevValues };
       newValues[name].value = value;
       return newValues;
     });
@@ -74,46 +75,32 @@ const ParameterHook = () => {
   const validateParam = (dataTypeId, id, value) => {
     switch (dataTypeId) {
       case 2:
-        return (
-          ParameterValidationSchemaNumber.validateSync(
-            {id, value},
-            {stripUnknown: true}
-          )
-        );
+        return ParameterValidationSchemaNumber.validateSync({ id, value }, { stripUnknown: true });
       case 3:
-        return (
-          ParameterValidationSchemaBoolean.validateSync(
-            {id, value},
-            {stripUnknown: true}
-          )
-        );
+        return ParameterValidationSchemaBoolean.validateSync({ id, value }, { stripUnknown: true });
       default:
-        return (
-          ParameterValidationSchemaString.validateSync(
-            {id, value},
-            {stripUnknown: true}
-          )
-        );
+        return ParameterValidationSchemaString.validateSync({ id, value }, { stripUnknown: true });
     }
-  }
+  };
+
   const validateParameter = () => {
     const validated = [];
     const objectValues = Object.values(values);
     for (let i = 0; i < objectValues.length; i++) {
-      const {value, typeData} = objectValues[i];
-      const {id,  dataTypeId, required} = typeData
+      const { value, typeData } = objectValues[i];
+      const { id, dataTypeId, required } = typeData;
 
       try {
-        if (required || !(value === undefined || value === null || value === '' || value === 'None')) {
+        if (
+          required ||
+          !(value === undefined || value === null || value === '' || value === 'None')
+        ) {
           validated.push(validateParam(dataTypeId, id, value));
         }
       } catch (error) {
-        if(error.message.includes('value must be a `number` type'))
-        {
-          if(value === '')
-            setErrorMsg(`Please fill in the values for all parameters`);
-          else
-            setErrorMsg(`${value} is not a valid number`);
+        if (error.message.includes('value must be a `number` type')) {
+          if (value === '') setErrorMsg(`Please fill in the values for all parameters`);
+          else setErrorMsg(`${value} is not a valid number`);
           return false;
         }
         setErrorMsg(
@@ -133,42 +120,44 @@ const ParameterHook = () => {
   // Every Parameter has a type
   // Choice type Parameters have parameter choices
   // This function identifies the parameter type and choices of every parameter of the category
-  const identifyParameterType = useMemo(() => async (parameterData, parameterType, parameterChoice) => {
-    const formTypes = [];
+  const identifyParameterType = useMemo(
+    () => async (parameterData, parameterType, parameterChoice) => {
+      const formTypes = [];
 
-    for (let i = 0; i < parameterData.length; i++) {
-      for (let j = 0; j < parameterType.length; j++) {
-        if (parameterData[i].type === parameterType[j].id) {
-          const formData = {
-            id: parameterData[i].parameter,
-            name: parameterData[i].display_name,
-            required: parameterData[i].required,
-            dataTypeId: parameterData[i].datatype,
-            type: parameterType[j].name,
-            typeId: parameterType[j].id,
-          };
+      for (let i = 0; i < parameterData.length; i++) {
+        for (let j = 0; j < parameterType.length; j++) {
+          if (parameterData[i].type === parameterType[j].id) {
+            const formData = {
+              id: parameterData[i].parameter,
+              name: parameterData[i].display_name,
+              required: parameterData[i].required,
+              dataTypeId: parameterData[i].datatype,
+              type: parameterType[j].name,
+              typeId: parameterType[j].id,
+            };
 
-          for (let k = 0; k < parameterChoice.length; k++) {
-            if (parameterData[i].parameter === parameterChoice[k].parameter) {
-              formData.choice = parameterChoice[k].choice;
+            for (let k = 0; k < parameterChoice.length; k++) {
+              if (parameterData[i].parameter === parameterChoice[k].parameter) {
+                formData.choice = parameterChoice[k].choice;
+              }
             }
+
+            formTypes.push(formData);
           }
-
-          formTypes.push(formData);
-
         }
       }
-    }
-    setValues(
-      formTypes.reduce((acc, item) => {
-        acc[item.name] = {
-          typeData: item,
-        }
-        return acc;
-      }, {})
-    );
-    setFormTypeData(formTypes);
-  }, []);
+      setValues(
+        formTypes.reduce((acc, item) => {
+          acc[item.name] = {
+            typeData: item,
+          };
+          return acc;
+        }, {})
+      );
+      setFormTypeData(formTypes);
+    },
+    []
+  );
 
   return {
     parameterHook: {
@@ -185,27 +174,28 @@ const ParameterHook = () => {
 /**
  * Parameter Form is a component that renders the form for the parameters.
  * They are rendered depending on the category selected
+ *
  * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
-const ParameterForm = ({parameterHook}) => {
-  const {formTypes, errorMsg, getValue, updateValues} = parameterHook;
+const ParameterForm = ({ crossSectionImage, parameterHook }) => {
+  const { formTypes, errorMsg, getValue, updateValues } = parameterHook;
 
   return (
     <CardBackground>
-      <ErrorMessage errorMsg={errorMsg}/>
+      <ErrorMessage errorMsg={errorMsg} />
 
       <div className="flex flex-wrap items-center gap-2">
         <h1 className="font-bold text-3xl">Parameters</h1>
         <Tooltip
           content={
             <picture>
-              <img src="/sample-parameter-image.jpg" alt="Reference for" className="w-24 my-3"/>
+              <img src={crossSectionImage} alt="Reference for" className="w-24 my-3" />
             </picture>
           }
           contentClassName="bg-white p-2 rounded-lg shadow-lg"
           position="right"
         >
-          <IoHelpCircleOutline className="text-xl text-gray-500"/>
+          <IoHelpCircleOutline className="text-xl text-gray-500" />
         </Tooltip>
       </div>
       {/* {formSorter(formTypes)} */}

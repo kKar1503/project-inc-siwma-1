@@ -81,6 +81,17 @@ const NewListing = () => {
     }
   }, [parametersData, parameterTypesData, parameterChoicesData, identifyParameterType]);
 
+  const getTooltipImage = () => {
+    if (!categoriesData || !categoryID || categoryID === null) return '';
+
+    const category = categoriesData.data.find((item) => item.id === parseInt(categoryID, 10));
+    const { data, error } = client.storage.from('category-cross-section-image-bucket').getPublicUrl(category.cross_section_image);
+
+    if (error) throw error;
+
+    return data.publicUrl;
+  };
+
   const onSubmit = async (event) => {
     event.preventDefault();
 
@@ -151,7 +162,12 @@ const NewListing = () => {
         <CategoricalForm items={categoriesData.data} categoryHook={categoryHook} />
       )}
 
-      {canShowParametersForm && <ParameterForm parameterHook={parameterHook} />}
+      {canShowParametersForm && (
+        <ParameterForm
+          crossSectionImage={getTooltipImage()}
+          parameterHook={parameterHook}
+        />
+      )}
 
       <ListingForm listingHook={listingHook} onSubmit={onSubmit} />
     </Container>

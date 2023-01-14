@@ -18,7 +18,6 @@ import Carousel from '../../components/marketplace/carousel/Carousel';
 import BuyBadge from '../../components/marketplace/listing/BuyBadge';
 import SellBadge from '../../components/marketplace/listing/SellBadge';
 import Tooltip from '../../components/marketplace/Tooltip';
-import sampleParameterImage from '../../public/sample-parameter-image.jpg';
 
 const getAllListingImages = async (listingId, supabaseClient) => {
   const { data, error } = await supabaseClient.rpc('get_all_images_for_listing_by_id', {
@@ -70,6 +69,38 @@ export async function getServerSideProps(context) {
     images = listingImagesData.map((image) => image.data.publicUrl);
   }
 
+  // Get cross section image uuid from category table
+  const { data: getCrossSectionImage, error: getCrossSectionImageError } = await supabase
+    .from('category')
+    .select('cross_section_image')
+    .eq('id', getListingData[0].category_id);
+
+  if (getCrossSectionImageError) {
+    // Redirect to the 404 page
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    };
+  }
+
+  // Get public cross section image link from storage
+  const { data: getCrossSectionImageLink, error: getCrossSectionImageLinkError } =
+    await supabase.storage
+      .from('category-cross-section-image-bucket')
+      .getPublicUrl(getCrossSectionImage[0].cross_section_image);
+
+  if (getCrossSectionImageLinkError) {
+    // Redirect to the 404 page
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    };
+  }
+
   // Get parameters for the listing
   const { data: getListingParametersData, error: getListingParametersError } = await supabase.rpc(
     'get_parameter_values_for_listing_by_id',
@@ -98,6 +129,7 @@ export async function getServerSideProps(context) {
       images,
       listing: getListingData[0],
       parameter_values: getListingParametersData,
+      cross_section_image: getCrossSectionImageLink.publicUrl,
     },
   };
 }
@@ -111,6 +143,7 @@ const ListingPage = ({
   listing,
   images: carouselImages,
   parameter_values: listingParameterValues,
+  cross_section_image: crossSectionImage,
 }) => {
   const user = useUser();
   const router = useRouter();
@@ -124,14 +157,6 @@ const ListingPage = ({
 
     setProfilePictureUrl(res.data.publicUrl);
   };
-
-  /**
-   * getCategoryImage fetches the category image for the given category id
-   *
-   * @param {number} categoryId
-   * @returns {string | null} The category image url
-   */
-  const getCategoryImage = (categoryId) => sampleParameterImage;
 
   useEffect(() => {
     getUserProfilePictureURL('abc');
@@ -183,7 +208,7 @@ const ListingPage = ({
         paths={[
           {
             name: listing.category_name,
-            path: `/category/${listing.category}`,
+            path: `/category/${listing.category_id}`,
           },
           {
             name: listing.name,
@@ -269,8 +294,8 @@ const ListingPage = ({
                     content={
                       <picture>
                         <img
-                          src="/sample-parameter-image.jpg"
-                          alt={`Reference for ${listing.category}`}
+                          src={crossSectionImage}
+                          alt={`Reference for ${listing.category_id}`}
                           className="w-24 my-3"
                         />
                       </picture>
@@ -374,6 +399,7 @@ ListingPage.propTypes = {
       display_name: PropTypes.string,
     })
   ),
+  cross_section_image: PropTypes.string,
 };
 
 ListingPage.getLayout = (page) => <Container>{page}</Container>;
