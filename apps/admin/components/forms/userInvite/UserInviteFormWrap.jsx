@@ -30,18 +30,34 @@ const UserInviteFormWrap = ({ isLoading, companiesQuery, submitSuccess, onSucces
       .map((b) => b.toString(16).padStart(2, '0'))
       .join('');
 
-    const { error } = await supabase.from('invite').insert({
-      name,
-      email,
-      company: companyid,
-      token,
-      expiry: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
-    });
+    const { data: inviteData, error } = await supabase.from('invite')
+      .insert({
+        name,
+        email,
+        company: companyid,
+        token,
+        expiry: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
+      })
+      .select()
+      .single();;
 
     if (error) {
       onSuccessChange(false, error);
       return;
     }
+
+    // Invite successfully sent
+    fetch(`/api/invite/${inviteData.id}/notify`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((inviteResult) => {
+      if (!inviteResult.ok) {
+        onSuccessChange(false, `Error sending invite for user: ${inviteData.email}`);
+      }
+    });
+
     reset();
     onSuccessChange(true, null);
   };

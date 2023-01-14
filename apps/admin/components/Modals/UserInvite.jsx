@@ -26,9 +26,11 @@ const UserInvite = ({ isOpen, onRequestClose, onSuccess, submitSuccess, setSubmi
       onSuccess();
       onRequestClose();
     }
+
     if (error) {
-      setSubmitError(true);
+      setSubmitError(error.length > 0 ? error : 'An unexpected error occurred');
     }
+
     setSubmitSuccess(value);
   };
 
@@ -46,7 +48,7 @@ const UserInvite = ({ isOpen, onRequestClose, onSuccess, submitSuccess, setSubmi
         <div className={cx('w-full transition', { hidden: !submitError })}>
           <Alert
             level="error"
-            message="Something went wrong"
+            message={submitError}
             className="text-white lg:w-1/3 !absolute shadow-lg translate-x-1/2 right-[50%] mt-5"
             onRequestClose={() => setSubmitError(false)}
             dismissable
