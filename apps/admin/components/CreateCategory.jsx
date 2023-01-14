@@ -83,26 +83,24 @@ const CreateCategory = () => {
         setError(false);
       }, 4000);
     } else {
-      const newUUID = crypto.randomUUID();
-      await supabase.storage.from('category-image-bucket').upload(newUUID, image);
+      let newUUID = null;
+      let newUUID2 = null;
+      if (image !== null) {
+        newUUID = crypto.randomUUID();
+        await supabase.storage.from('category-image-bucket').upload(newUUID, image);
+      }
+      if (image2 !== null) {
+        newUUID2 = crypto.randomUUID();
+        await supabase.storage.from('category-cross-section-image-bucket').upload(newUUID2, image);
+      }
+
       const { error: message } = await supabase
         .from('category')
-        .update({ image: newUUID })
+        .update({ image: newUUID, cross_section_image: newUUID2 })
         .eq('id', data[0].id);
       setDisplayAlert(true);
       setErrorMessage('');
       setImage(null);
-      setTimeout(() => {
-        setDisplayAlert(false);
-      }, 4000);
-
-      const newUUID2 = crypto.randomUUID();
-      await supabase.storage.from('category-cross-section-image-bucket').upload(newUUID2, image2);
-      const { error: message2 } = await supabase
-        .from('category')
-        .update({ cross_section_image: newUUID2 })
-        .eq('id', data[0].id);
-      setDisplayAlert(true);
       setErrorMessage2('');
       setImage2(null);
       setTimeout(() => {
