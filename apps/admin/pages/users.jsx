@@ -1,6 +1,8 @@
 import { QueryClientProvider, QueryClient } from 'react-query';
 import { useState } from 'react';
 import Link from 'next/link';
+import { Alert } from '@inc/ui';
+import cx from 'classnames';
 import NavBar from '../components/NavBar';
 import UserInvite from '../components/Modals/UserInvite';
 import RegisteredUsersTable from '../components/Tables/RegisteredUsersTable';
@@ -15,7 +17,7 @@ const queryClient = new QueryClient();
 
 const Page = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [inviteSuccess, setInviteSuccess] = useState(false);
   const openModal = () => {
     setIsOpen(true);
   };
@@ -59,12 +61,26 @@ const Page = () => {
             </div>
           </div>
         </div>
-
         <div className="flex flex-col h-full gap-8">
           <PendingInvitesTable />
           <RegisteredUsersTable />
         </div>
-        <UserInvite isOpen={isOpen} onRequestClose={closeModal} onSuccess={refreshQuery} />
+        <UserInvite
+          isOpen={isOpen}
+          onRequestClose={closeModal}
+          onSuccess={refreshQuery}
+          submitSuccess={inviteSuccess}
+          setSubmitSuccess={setInviteSuccess}
+        />
+      </div>
+      <div className={cx('w-full transition', { hidden: !inviteSuccess })}>
+        <Alert
+          level="info"
+          message="User invite sent."
+          className="text-white absolute bottom-10 left-0 transition lg:w-7/12 mx-auto"
+          onRequestClose={() => setInviteSuccess(false)}
+          dismissable
+        />
       </div>
     </QueryClientProvider>
   );

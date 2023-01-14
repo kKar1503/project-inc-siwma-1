@@ -1,18 +1,18 @@
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 import { getAllCompanies } from '@inc/database';
 import { useQuery } from 'react-query';
 import cx from 'classnames';
 import { Alert } from '@inc/ui';
+import { useState } from 'react';
 import { UserInviteFormWrap } from '../forms/userInvite';
 import BaseModal from './BaseModal';
 
-const UserInvite = ({ isOpen, onRequestClose, onSuccess }) => {
+const UserInvite = ({ isOpen, onRequestClose, onSuccess, submitSuccess, setSubmitSuccess }) => {
   const supabase = useSupabaseClient();
-  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
-  const { data, error, isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['getCompanies'],
     refetchInterval: 60000,
     queryFn: async () =>
@@ -21,9 +21,13 @@ const UserInvite = ({ isOpen, onRequestClose, onSuccess }) => {
       }),
   });
 
-  const onSuccessChange = (value) => {
+  const onSuccessChange = (value, error) => {
     if (value && onSuccess) {
       onSuccess();
+      onRequestClose();
+    }
+    if (error) {
+      setSubmitError(true);
     }
     setSubmitSuccess(value);
   };
@@ -39,12 +43,12 @@ const UserInvite = ({ isOpen, onRequestClose, onSuccess }) => {
         </div>
       }
       siblings={
-        <div className={cx('w-full transition', { hidden: !submitSuccess })}>
+        <div className={cx('w-full transition', { hidden: !submitError })}>
           <Alert
-            level="success"
-            message="User invite sent."
+            level="error"
+            message="Something went wrong"
             className="text-white lg:w-1/3 !absolute shadow-lg translate-x-1/2 right-[50%] mt-5"
-            onRequestClose={() => setSubmitSuccess(false)}
+            onRequestClose={() => setSubmitError(false)}
             dismissable
           />
         </div>
@@ -61,9 +65,11 @@ const UserInvite = ({ isOpen, onRequestClose, onSuccess }) => {
 };
 
 UserInvite.propTypes = {
-  isOpen: PropTypes.bool,
-  onRequestClose: PropTypes.func,
-  onSuccess: PropTypes.func,
+  isOpen: PropTypes.bool.isRequired,
+  onRequestClose: PropTypes.func.isRequired,
+  onSuccess: PropTypes.func.isRequired,
+  submitSuccess: PropTypes.bool.isRequired,
+  setSubmitSuccess: PropTypes.func.isRequired,
 };
 
 export default UserInvite;

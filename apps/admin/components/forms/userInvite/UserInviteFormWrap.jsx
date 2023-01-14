@@ -39,15 +39,16 @@ const UserInviteFormWrap = ({ isLoading, companiesQuery, submitSuccess, onSucces
     });
 
     if (error) {
-      // TODO: Replace with custom alert component
+      onSuccessChange(false, error);
+      return;
     }
     reset();
-    onSuccessChange(true);
+    onSuccessChange(true, null);
   };
 
   useEffect(() => {
     if (submitSuccess && isDirty) {
-      onSuccessChange(false);
+      onSuccessChange(false, null);
     }
   }, [watchAllFields]);
 
