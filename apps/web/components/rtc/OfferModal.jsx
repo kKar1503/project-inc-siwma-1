@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
-const OfferModal = () => {
+const OfferModal = ({ roomID }) => {
   const supabase = useSupabaseClient();
   const [offerPrice, setOfferPrice] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
@@ -50,6 +51,7 @@ const OfferModal = () => {
       {
         content: contentId[contentId.length - 1].content_id,
         profile_uuid: userdata.id,
+        room_id: roomID,
       },
     ]);
 
@@ -99,6 +101,10 @@ const OfferModal = () => {
       </div>
     </div>
   );
+};
+
+OfferModal.propTypes = {
+  roomID: PropTypes.number.isRequired,
 };
 
 export default OfferModal;

@@ -7,9 +7,6 @@ import { createClient } from '@supabase/supabase-js';
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import PropTypes from 'prop-types';
 
-// const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-// const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-// const supabase = createClient(supabaseUrl, supabaseKey);
 
 // roomID is number
 const InputTextArea = ({ roomID }) => {

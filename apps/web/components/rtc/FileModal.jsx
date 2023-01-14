@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
+import PropTypes from 'prop-types';
 
-const FileModal = () => {
+
+const FileModal = ({ roomID }) => {
   const supabase = useSupabaseClient();
   const [selectedFile, setSelectedFile] = useState();
   const [isFileUploaded, setIsFileUploaded] = useState(false);
@@ -53,6 +55,7 @@ const FileModal = () => {
       {
         content: contentId[contentId.length - 1].content_id,
         profile_uuid: userdata.id,
+        room_id: roomID,
       },
     ]);
 
@@ -91,6 +94,10 @@ const FileModal = () => {
       </div>
     </div>
   );
-}
+};
+
+FileModal.propTypes = {
+  roomID: PropTypes.number.isRequired,
+};
 
 export default FileModal;

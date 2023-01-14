@@ -24,7 +24,7 @@ const ChatBubbles = ({ msg: messages }) => {
 
   const userdata = useUser();
 
-  console.log(messages);
+  console.log('Messages', messages);
 
 
   useEffect(() => {

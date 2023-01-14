@@ -444,9 +444,9 @@ const RealTimeChat = () => {
         <div className="p-2 md:p-4 relative h-screen col-span-4 md:col-span-3 min-[320px]:hidden md:block">
           <ItemDetails />
         </div>
-        <ImageModal />
-        <FileModal />
-        <OfferModal />
+        <ImageModal roomID={selectedRoom} />
+        <FileModal roomID={selectedRoom} />
+        <OfferModal roomID={selectedRoom} />
       </div>
       <div className="drawer-side">
         <label htmlFor="my-drawer-3" className="drawer-overlay">

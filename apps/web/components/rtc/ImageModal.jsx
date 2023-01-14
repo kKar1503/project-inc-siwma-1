@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
+import PropTypes from 'prop-types';
 
-const ImageModal = () => {
+const ImageModal = ({ roomID }) => {
   const supabase = useSupabaseClient();
   const [selectedImage, setSelectedImage] = useState();
   const [isImagePicked, setIsImagePicked] = useState(false);
@@ -13,7 +14,6 @@ const ImageModal = () => {
   };
 
   const handleUpload = async () => {
-
     try {
       const { data: uploadBucketData, error } = await supabase.storage
         .from('chat-bucket')
@@ -54,6 +54,7 @@ const ImageModal = () => {
       {
         content: contentId[contentId.length - 1].content_id,
         profile_uuid: userdata.id,
+        room_id: roomID,
       },
     ]);
 
@@ -93,4 +94,9 @@ const ImageModal = () => {
     </div>
   );
 };
+
+ImageModal.propTypes = {
+  roomID: PropTypes.number.isRequired,
+};
+
 export default ImageModal;
