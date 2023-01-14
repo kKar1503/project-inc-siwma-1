@@ -17,13 +17,21 @@ const InvitesPage = () => {
   async function inviteUsers(companyData, userData) {
     await Promise.all(
       companyData.map(async (company) => {
-        const res = await supabase
+        // Only write to the database if the company doesn't already exist
+        const existingData = await supabase
           .from('companies')
-          .insert([{ name: company.name }])
+          .select('id')
+          .eq('name', company.name)
           .single();
-        if (res.error) {
-          // TODO: Replace with custom alert component
-          alert(res.error);
+        if (existingData.data == null || existingData.data.length === 0) {
+          const res = await supabase
+            .from('companies')
+            .insert([{ name: company.name }])
+            .single();
+          if (res.error) {
+            // TODO: Replace with custom alert component
+            alert(res.error);
+          }
         }
       })
     );
@@ -52,20 +60,45 @@ const InvitesPage = () => {
 
         const { id } = res.data[0];
 
-        res = await supabase
+        // Only write to the database if the invite doesn't already exist
+        const existingData = await supabase
           .from('invite')
-          .insert({
-            name: user.name,
-            email: user.email,
-            company: id,
-            token,
-            expiry: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
-          })
+          .select('id')
+          .eq('company', id)
+          .eq('name', user.name)
           .single();
+        if (existingData.data == null || existingData.data.length === 0) {
+          res = await supabase
+            .from('invite')
+            .insert({
+              name: user.name,
+              email: user.email,
+              company: id,
+              token,
+              expiry: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
+            })
+            .select()
+            .single();
 
-        if (res.err) {
-          // TODO: Replace with custom alert component
-          alert(res.err);
+          if (res.err) {
+            // TODO: Replace with custom alert component
+            alert(res.err);
+          } else {
+            const searchParams = new URLSearchParams();
+
+            const inviteID = res.data.id;
+
+            fetch(`/api/invite/${inviteID}/notify${searchParams.toString()}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }).then((inviteResult) => {
+              if (!inviteResult.ok) {
+                alert(`Error sending invite for user: ${res.data.email}`);
+              }
+            });
+          }
         }
       })
     );
