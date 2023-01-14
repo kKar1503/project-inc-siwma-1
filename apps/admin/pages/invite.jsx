@@ -51,7 +51,7 @@ const InvitesPage = () => {
           .join('');
 
         // Find company id from supabase
-        let res = await supabase.from('companies').select('id').eq('name', user.company).limit(1);
+        const res = await supabase.from('companies').select('id').eq('name', user.company).limit(1);
         if (res.error) {
           // TODO: Replace with custom alert component
           alert(res.error);
@@ -68,7 +68,7 @@ const InvitesPage = () => {
           .eq('name', user.name)
           .single();
         if (existingData.data == null || existingData.data.length === 0) {
-          res = await supabase
+          const { data: notificationRes, error: notificatonErr } = await supabase
             .from('invite')
             .insert({
               name: user.name,
@@ -80,13 +80,13 @@ const InvitesPage = () => {
             .select()
             .single();
 
-          if (res.err) {
+          if (notificatonErr) {
             // TODO: Replace with custom alert component
-            alert(res.err);
+            alert(notificatonErr.message);
           } else {
             const searchParams = new URLSearchParams();
 
-            const inviteID = res.data.id;
+            const inviteID = notificationRes.id;
 
             fetch(`/api/invite/${inviteID}/notify${searchParams.toString()}`, {
               method: 'POST',
@@ -95,7 +95,7 @@ const InvitesPage = () => {
               },
             }).then((inviteResult) => {
               if (!inviteResult.ok) {
-                alert(`Error sending invite for user: ${res.data.email}`);
+                alert(`Error sending invite for user: ${notificationRes.email}`);
               }
             });
           }
