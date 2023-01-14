@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { IoHelpCircleOutline } from 'react-icons/io5';
+import { IoClose, IoHelpCircleOutline } from 'react-icons/io5';
 import CardBackground from '../../components/CardBackground';
 import Container from '../../components/Container';
 import Breadcrumbs from '../../components/listing/Breadcrumbs';
@@ -117,6 +117,7 @@ const ListingPage = ({
   const supabase = useSupabaseClient();
 
   const [profilePictureUrl, setProfilePictureUrl] = useState(null);
+  const [showFullScreenGallery, setShowFullScreenGallery] = useState(false);
 
   const getUserProfilePictureURL = async (userId) => {
     const res = await supabase.storage.from('user-image-bucket').getPublicUrl('default-user.png');
@@ -197,7 +198,13 @@ const ListingPage = ({
           wrapperClassName="w-full h-[500px] shadow-lg border border-black/20"
         >
           {[...carouselImages].map((image) => (
-            <div key={image} className="w-full h-full flex justify-center bg-black/50 relative">
+            <div
+              tabIndex={0}
+              role="button"
+              onKeyDown={() => setShowFullScreenGallery(true)}
+              onClick={() => setShowFullScreenGallery(true)}
+              className="cursor-pointer w-full h-full flex justify-center bg-black/50 relative"
+            >
               <picture>
                 <img
                   src={image}
@@ -206,41 +213,36 @@ const ListingPage = ({
                 />
               </picture>
 
-              <label htmlFor={`modal-${listing.name}`} className="z-10">
-                <picture>
-                  <img src={image} alt={listing.name} className="w-auto h-full" />
-                </picture>
-              </label>
-
-              {/* <input type="checkbox" id={`modal-${listing.name}`} className="modal-toggle" />
-              <div className="modal w-full h-full">
-                <div className="flex justify-center modal-box relative w-full h-full">
-                  <Image
-                    src={image}
-                    alt={listing.name}
-                    fill
-                    className="object-contain w-full h-full"
-                  />
-                  <label
-                    htmlFor={`modal-${listing.name}`}
-                    className="btn btn-sm btn-circle absolute right-2 top-2"
-                  >
-                    ✕
-                  </label>
-                </div>
-              </div> */}
-
-              {/* <div className="relative w-fit h-full">
-                  <Image
-                    src={image}
-                    alt={listing.name}
-                    className="aspect-auto w-auto h-full"
-                    fill
-                  />
-                </div> */}
+              <picture className="z-10">
+                <img src={image} alt={listing.name} className="w-auto h-full z-10" />
+              </picture>
             </div>
           ))}
         </Carousel>
+
+        {showFullScreenGallery && (
+          <div
+            tabIndex={0}
+            role="button"
+            className="bg-black/50 backdrop-blur-xl w-full h-full fixed top-0 left-0 z-[999] px-24"
+          >
+            <button
+              onClick={() => setShowFullScreenGallery(false)}
+              className="btn btn-error absolute left-2 top-2"
+            >
+              <IoClose className="mr-2" size={18} />
+              Close
+            </button>
+
+            <Carousel className="" showButtons wrapperClassName="mx-auto w-full h-screen ">
+              {[...carouselImages].map((image) => (
+                <picture className="mx-auto h-full py-20">
+                  <img src={image} alt={listing.name} className="h-full z-10" />
+                </picture>
+              ))}
+            </Carousel>
+          </div>
+        )}
 
         <div className="lg:grid lg:grid-cols-10 my-5 gap-5 space-y-4">
           {/* Listing details */}
