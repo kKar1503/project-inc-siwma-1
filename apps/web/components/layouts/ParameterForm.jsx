@@ -71,39 +71,51 @@ const ParameterHook = () => {
     });
   };
 
+  const validateParam = (dataTypeId, id, value) => {
+    switch (dataTypeId) {
+      case 2:
+        return (
+          ParameterValidationSchemaNumber.validateSync(
+            {id, value},
+            {stripUnknown: true}
+          )
+        );
+      case 3:
+        return (
+          ParameterValidationSchemaBoolean.validateSync(
+            {id, value},
+            {stripUnknown: true}
+          )
+        );
+      default:
+        return (
+          ParameterValidationSchemaString.validateSync(
+            {id, value},
+            {stripUnknown: true}
+          )
+        );
+    }
+  }
   const validateParameter = () => {
     const validated = [];
     const objectValues = Object.values(values);
     for (let i = 0; i < objectValues.length; i++) {
-      const item = objectValues[i];
+      const {value, typeData} = objectValues[i];
+      const {id,  dataTypeId, required} = typeData
 
       try {
-        switch (item.typeData.dataTypeId) {
-          case 2:
-            validated.push(
-              ParameterValidationSchemaNumber.validateSync(
-                {id: item.typeData.id, value: item.value},
-                {stripUnknown: true}
-              )
-            );
-            break;
-          case 3:
-            validated.push(
-              ParameterValidationSchemaBoolean.validateSync(
-                {id: item.typeData.id, value: item.value},
-                {stripUnknown: true}
-              )
-            );
-            break;
-          default:
-            validated.push(
-              ParameterValidationSchemaString.validateSync(
-                {id: item.typeData.id, value: item.value},
-                {stripUnknown: true}
-              )
-            );
+        if (required || !(value === undefined || value === null || value === '' || value === 'None')) {
+          validated.push(validateParam(dataTypeId, id, value));
         }
       } catch (error) {
+        if(error.message.includes('value must be a `number` type'))
+        {
+          if(value === '')
+            setErrorMsg(`Please fill in the values for all parameters`);
+          else
+            setErrorMsg(`${value} is not a valid number`);
+          return false;
+        }
         setErrorMsg(
           error.message.includes('Cannot read properties of undefined')
             ? `Please fill in the values for all parameters`
@@ -147,8 +159,6 @@ const ParameterHook = () => {
         }
       }
     }
-    console.log('formTypes', formTypes);
-
     setValues(
       formTypes.reduce((acc, item) => {
         acc[item.name] = {
@@ -200,7 +210,6 @@ const ParameterForm = ({parameterHook}) => {
       </div>
       {/* {formSorter(formTypes)} */}
       {formTypes.map((item) => {
-        console.log(item);
         switch (item.type) {
           case 'MEASUREMENT (WEIGHT)':
             return (
