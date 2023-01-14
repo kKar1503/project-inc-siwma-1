@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
-import { IoHelpCircleOutline } from 'react-icons/io5';
-import { boolean, number, object, string } from 'yup';
+import React, {useEffect, useMemo, useState} from 'react';
+import {IoHelpCircleOutline} from 'react-icons/io5';
+import {boolean, number, object, string} from 'yup';
 import CardBackground from '../CardBackground';
 import Dropdown from '../Dropdown';
 import Input from '../Input';
@@ -93,24 +93,24 @@ const ParameterHook = () => {
           case 2:
             validated.push(
               ParameterValidationSchemaNumber.validateSync(
-                { id: item.typeData.id, value: item.value },
-                { stripUnknown: true }
+                {id: item.typeData.id, value: item.value},
+                {stripUnknown: true}
               )
             );
             break;
           case 3:
             validated.push(
               ParameterValidationSchemaBoolean.validateSync(
-                { id: item.typeData.id, value: item.value },
-                { stripUnknown: true }
+                {id: item.typeData.id, value: item.value},
+                {stripUnknown: true}
               )
             );
             break;
           default:
             validated.push(
               ParameterValidationSchemaString.validateSync(
-                { id: item.typeData.id, value: item.value },
-                { stripUnknown: true }
+                {id: item.typeData.id, value: item.value},
+                {stripUnknown: true}
               )
             );
         }
@@ -132,7 +132,7 @@ const ParameterHook = () => {
   // Every Parameter has a type
   // Choice type Parameters have parameter choices
   // This function identifys the parameter type and choices of every parameter of the category
-  const identifyParameterType = async (parameterData, parameterType, parameterChoice) => {
+  const identifyParameterType = useMemo(() => async (parameterData, parameterType, parameterChoice) => {
     const formTypes = [];
 
     for (let i = 0; i < parameterData.length; i++) {
@@ -158,7 +158,7 @@ const ParameterHook = () => {
     }
 
     setFormTypeData(formTypes);
-  };
+  },[]);
 
   return {
     parameterHook: {
@@ -177,25 +177,25 @@ const ParameterHook = () => {
  * The parameters rendered are dependent on the category selected
  * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
-const ParameterForm = ({ parameterHook }) => {
-  const { formTypes, errorMsg, getValue, updateValues } = parameterHook;
+const ParameterForm = ({parameterHook}) => {
+  const {formTypes, errorMsg, getValue, updateValues} = parameterHook;
 
   return (
     <CardBackground>
-      <ErrorMessage errorMsg={errorMsg} />
+      <ErrorMessage errorMsg={errorMsg}/>
 
       <div className="flex flex-wrap items-center gap-2">
         <h1 className="font-bold text-3xl">Parameters</h1>
         <Tooltip
           content={
             <picture>
-              <img src="/sample-parameter-image.jpg" alt="Reference for" className="w-24 my-3" />
+              <img src="/sample-parameter-image.jpg" alt="Reference for" className="w-24 my-3"/>
             </picture>
           }
           contentClassName="bg-white p-2 rounded-lg shadow-lg"
           position="right"
         >
-          <IoHelpCircleOutline className="text-xl text-gray-500" />
+          <IoHelpCircleOutline className="text-xl text-gray-500"/>
         </Tooltip>
       </div>
       {/* {formSorter(formTypes)} */}
