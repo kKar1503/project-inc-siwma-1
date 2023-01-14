@@ -6,12 +6,14 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
-import pic from '../../public/avatar.png';
+import UserActionMenu from './actionMenus/UserActionMenu';
 
 const parseData = (data) =>
   data.map((e) => ({
     id: e.id,
-    profilePicture: pic,
+    profilePicture: e.image
+      ? `https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/user-image-bucket/${e.image}`
+      : `https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/user-image-bucket/default-user.png`,
     name: e.fullname,
     email: e.email,
     company: e.companies.name,
@@ -35,14 +37,18 @@ const RegisteredUsersTable = ({ className }) => {
       queryKey: [
         'getUsers',
         selectedIndex * 10,
-        { from: (selectedIndex * option), to: (selectedIndex + 1) * option - 1, matching: searchInput },
+        {
+          from: selectedIndex * option,
+          to: (selectedIndex + 1) * option - 1,
+          matching: searchInput,
+        },
       ],
       queryFn: async () =>
         supabase
           .from('users')
-          .select(`id, email, fullname, phone, companies:companyid(name), enabled`)
+          .select(`*, companies:companyid(name)`)
           .ilike('fullname', `%${searchInput}%`)
-          .range((selectedIndex * option), (selectedIndex + 1) * option - 1)
+          .range(selectedIndex * option, (selectedIndex + 1) * option - 1)
           .order('fullname', { ascending: true }),
       keepPreviousData: true,
       refetchInterval: 60000,
@@ -62,6 +68,8 @@ const RegisteredUsersTable = ({ className }) => {
   const queries = [usersQuery, userCountQuery];
 
   const isLoading = queries.some((e) => e.isLoading);
+
+  const users = isLoading || !usersQuery.data.data ? [] : parseData(usersQuery.data.data);
 
   const userCount = isLoading ? 0 : userCountQuery.data.count;
 
@@ -159,7 +167,6 @@ const RegisteredUsersTable = ({ className }) => {
   };
 
   if (selectedIndex > 0 && (selectedIndex + 1) * 10 > Math.ceil(userCount / 10) * 10)
-    // It is out of bounds, set the selected index to be that of the last button
     setSelectedIndex(Math.floor(userCount / 10));
 
   return (
@@ -198,7 +205,10 @@ const RegisteredUsersTable = ({ className }) => {
       className={className}
       columnKeys={['name', 'email', 'company', 'mobileNumber', 'enabled']}
       onChange={onChangeHandler}
-      data={isLoading ? [] : parseData(usersQuery.data?.data)}
+      actionMenu={<UserActionMenu data={{}} />}
+      selectedRows={selectedUsers.map((e) => e.id)}
+      isLoading={isLoading}
+      data={users}
       footer={
         <div className="flex justify-between bg-none">
           <div className="flex gap-4">

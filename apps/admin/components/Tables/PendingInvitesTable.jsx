@@ -6,6 +6,7 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { BaseTable } from './BaseTable';
 import SearchBar from '../SearchBar';
 import TableButton from './TableButton';
+import InviteActionMenu from './actionMenus/InviteActionMenu';
 
 const parseData = (data) =>
   data.map((e) => ({
@@ -74,6 +75,27 @@ const PendingInvitesTable = ({ className }) => {
         selectedInvites.map((e) => e.id)
       );
     queryClient.invalidateQueries();
+
+    // Clear all selected invites
+    setSelectedInvites([]);
+  };
+
+  const resendInvite = async (id) => {
+    await supabase
+      .from('invite')
+      .update(
+        { expiry: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000) } // 7 days from now
+      )
+      .eq('id', id);
+    queryClient.invalidateQueries();
+  };
+
+  const singleRevoke = async (id) => {
+    await supabase.from('invite').delete().eq('id', id);
+    queryClient.invalidateQueries();
+
+    // Unselect the revoked invite (if it was selected)
+    setSelectedInvites(selectedInvites.filter((e) => e.id !== id));
   };
 
   const onChangeHandler = (targetInvite, selected) => {
@@ -160,6 +182,7 @@ const PendingInvitesTable = ({ className }) => {
       className={className}
       columnKeys={['name', 'company', 'email']}
       onChange={onChangeHandler}
+      actionMenu={<InviteActionMenu data={{}} onRevoke={singleRevoke} onResend={resendInvite} />}
       data={isLoading ? undefined : parseData(inviteQuery?.data.data)}
       footer={
         <div className="flex justify-between bg-none">
