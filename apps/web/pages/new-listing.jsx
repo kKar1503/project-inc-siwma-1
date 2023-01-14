@@ -1,12 +1,12 @@
+import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import Container from '../components/Container';
 import CategoricalForm from '../components/layouts/CategoricalForm';
-import ParameterForm from '../components/layouts/ParameterForm';
-import ListingForm from '../components/layouts/ListingForm';
 import ImageForm from '../components/layouts/ImageForm';
+import ListingForm from '../components/layouts/ListingForm';
+import ParameterForm from '../components/layouts/ParameterForm';
 
 const NewListing = () => {
   const router = useRouter();
@@ -134,31 +134,27 @@ const NewListing = () => {
     router.push(`/product/${listingId[0].id}`);
   };
 
+  const canShowCategoriesForm =
+    !categoriesLoading && !categoriesError && categoriesStatus === 'success' && categoriesData;
+
+  const canShowParametersForm =
+    !parametersLoading &&
+    !parametersError &&
+    parametersStatus === 'success' &&
+    parametersData.data.length !== 0;
+
   return (
-    <main>
-      <Container>
-        <div className="flex justify-around mt-8">
-          <div className="flex space-y-6 flex-col w-2/6">
-            {!categoriesLoading &&
-              !categoriesError &&
-              categoriesStatus === 'success' &&
-              categoriesData && (
-              <CategoricalForm items={categoriesData.data} categoryHook={categoryHook} />
-            )}
+    <Container>
+      <ImageForm useImageHook={imageHook} />
 
-            {!parametersLoading &&
-              !parametersError &&
-              parametersStatus === 'success' &&
-              parametersData.data.length !== 0 && <ParameterForm parameterHook={parameterHook} />}
+      {canShowCategoriesForm && (
+        <CategoricalForm items={categoriesData.data} categoryHook={categoryHook} />
+      )}
 
-            <ImageForm useImageHook={imageHook} />
-          </div>
-          <div className="flex flex-col w-3/5">
-            <ListingForm listingHook={listingHook} onSubmit={onSubmit} />
-          </div>
-        </div>
-      </Container>
-    </main>
+      {canShowParametersForm && <ParameterForm parameterHook={parameterHook} />}
+
+      <ListingForm listingHook={listingHook} onSubmit={onSubmit} />
+    </Container>
   );
 };
 
