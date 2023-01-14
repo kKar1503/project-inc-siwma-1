@@ -98,6 +98,7 @@ const NewListing = () => {
         description: listing.description,
         price: listing.price,
         negotiable: listing.negotiable,
+        unit_price: listing.unitPrice,
         category: category.categoryId,
         type: listing.type === 'Buying' ? 1 : 2,
         owner: user.id,

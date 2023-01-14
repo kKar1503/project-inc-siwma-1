@@ -16,6 +16,8 @@ const propTypes = {
     setDescription: PropTypes.func.isRequired,
     negotiable: PropTypes.bool.isRequired,
     setNegotiable: PropTypes.func.isRequired,
+    unitPrice: PropTypes.bool.isRequired,
+    setUnitPrice: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
     setType: PropTypes.func.isRequired,
     errorMsg: PropTypes.string,
@@ -30,6 +32,7 @@ const listingValidationSchema = object({
     .min(0, 'Price must 0 or more'),
   description: string(),
   negotiable: boolean().required('Negotiable is required'),
+  unitPrice: boolean().required('Unit price is required'),
   // can only be 'Buying' or 'Selling'
   type: string('Please select either buying or selling')
     .required('Type is required')
@@ -41,6 +44,7 @@ const ListingHook = () => {
   const [price, setPrice] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [negotiable, setNegotiable] = React.useState(false);
+  const [unitPrice, setUnitPrice] = React.useState(false);
   const [type, setType] = React.useState('');
   const [errorMsg, setErrorMsg] = React.useState(null);
 
@@ -51,6 +55,7 @@ const ListingHook = () => {
         price,
         description,
         negotiable,
+        unitPrice,
         type,
       });
       setErrorMsg(null);
@@ -76,6 +81,8 @@ const ListingHook = () => {
       setDescription,
       negotiable,
       setNegotiable,
+      unitPrice,
+      setUnitPrice,
       type,
       setType,
       errorMsg,
@@ -99,13 +106,16 @@ const CreateListingInformation = ({ onSubmit, listingHook }) => {
     setDescription,
     negotiable,
     setNegotiable,
+    unitPrice,
+    setUnitPrice,
     type,
     setType,
     errorMsg,
   } = listingHook;
+  
   return (
     <CardBackground>
-      <form className="p-5" onSubmit={onSubmit}>
+      <form className="px-5 space-y-2" onSubmit={onSubmit}>
         <ErrorMessage errorMsg={errorMsg} />
         {/* Selling/Buying Options */}
         <RadioButton
@@ -122,14 +132,25 @@ const CreateListingInformation = ({ onSubmit, listingHook }) => {
 
             {/* Price Label */}
             <Input text="Price (SGD)" value={price} onChange={(e) => setPrice(e.target.value)} />
-            <div className="form-control w-1/6 flex flex-row justify-start">
-              <label className="label cursor-pointer space-x-4">
-                <span className="label-text">Negotiable</span>
+
+            <div className="form-control w-1/6 grid-rows-3">
+              <label className="label cursor-pointer space-x-2 mt-1">
+                <span className="label-text">Negotiable?</span>
                 <input
                   type="checkbox"
                   className="checkbox checkbox-primary"
                   checked={negotiable}
                   onChange={(e) => setNegotiable(e.target.checked)}
+                />
+              </label>
+
+              <label className="label cursor-pointer space-x-2">
+                <span className="label-text">Unit price?</span>
+                <input
+                  type="checkbox"
+                  className="checkbox checkbox-primary"
+                  checked={unitPrice}
+                  onChange={(e) => setUnitPrice(e.target.checked)}
                 />
               </label>
             </div>

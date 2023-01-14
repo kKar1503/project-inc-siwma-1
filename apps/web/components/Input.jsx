@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
 const propTypes = {
+  className: PropTypes.string,
   text: PropTypes.string.isRequired,
   type: PropTypes.string,
   value: PropTypes.string,
@@ -13,10 +15,10 @@ const propTypes = {
  * Input is a component that renders an input field.
  * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
-const Input = ({ text, type, value, onChange,isOptional }) => (
-  <div className="form-control">
+const Input = ({ className, text, type, value, onChange, isOptional }) => (
+  <div className={cn(className, 'form-control')}>
     <label className="label">
-      <span className="label-text mt-31 text-xl font-bold">{text}</span>
+      <span className="label-text text-xl font-bold">{text}</span>
     </label>
     {type === 'textarea' ? (
       <textarea
