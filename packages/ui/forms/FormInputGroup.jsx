@@ -21,6 +21,7 @@ const FormInputGroup = ({
   label,
   name,
   required,
+  noLabel,
   children,
   hideError,
   success,
@@ -31,7 +32,7 @@ const FormInputGroup = ({
   <div className={cx(className, 'form-control')} style={style}>
     <div className="label pt-0">
       <span className="label-text">
-        {label} {!required ? '(optional)' : ''}
+        {label} {!required && !noLabel ? '(optional)' : ''}
       </span>
     </div>
     {
@@ -49,6 +50,7 @@ const propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   required: PropTypes.bool,
+  noLabel: PropTypes.bool,
   children: PropTypes.node.isRequired,
   hideError: PropTypes.bool,
   success: PropTypes.bool,

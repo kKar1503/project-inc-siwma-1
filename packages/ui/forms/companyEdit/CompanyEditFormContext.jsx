@@ -201,22 +201,19 @@ const CompanyEditFormContext = ({ company, onSuccessChange, isLoading, backButto
 };
 
 const propTypes = {
-  company: PropTypes.oneOfType([
-    null,
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      image: PropTypes.exact({
-        src: PropTypes.string.isRequired,
-      }),
-      website: PropTypes.string.isRequired,
-      bio: PropTypes.string.isRequired,
-      comments: PropTypes.shape({
-        companyid: PropTypes.number.isRequired,
-        comments: PropTypes.string.isRequired,
-      }),
+  company: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    image: PropTypes.exact({
+      src: PropTypes.string.isRequired,
     }),
-  ]),
+    website: PropTypes.string.isRequired,
+    bio: PropTypes.string.isRequired,
+    comments: PropTypes.shape({
+      companyid: PropTypes.number.isRequired,
+      comments: PropTypes.string.isRequired,
+    }),
+  }),
   onSuccessChange: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   backButton: PropTypes.element,
