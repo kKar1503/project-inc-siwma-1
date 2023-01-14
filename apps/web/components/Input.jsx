@@ -6,7 +6,7 @@ const propTypes = {
   type: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-}
+};
 
 /**
  * Input is a component that renders an input field.
@@ -19,6 +19,7 @@ const Input = ({ text, type, value, onChange }) => (
     </label>
     {type === 'textarea' ? (
       <textarea
+        style={{ 'line-height': '1.25rem' }}
         id="description"
         className="textarea h-24"
         placeholder={`${text} of listing...`}
