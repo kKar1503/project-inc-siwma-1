@@ -120,7 +120,7 @@ const ParameterHook = () => {
   // Parameters have two sets of values (parameter values/parameter choices)
   // Every Parameter has a type
   // Choice type Parameters have parameter choices
-  // This function identifys the parameter type and choices of every parameter of the category
+  // This function identifies the parameter type and choices of every parameter of the category
   const identifyParameterType = useMemo(() => async (parameterData, parameterType, parameterChoice) => {
     const formTypes = [];
 
@@ -173,8 +173,8 @@ const ParameterHook = () => {
 };
 
 /**
- * Parameter Form is a component that renders the form for the parameters
- * The parameters rendered are dependent on the category selected
+ * Parameter Form is a component that renders the form for the parameters.
+ * They are rendered depending on the category selected
  * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
 const ParameterForm = ({parameterHook}) => {
