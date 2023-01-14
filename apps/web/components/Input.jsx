@@ -1,5 +1,5 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 const propTypes = {
   text: PropTypes.string.isRequired,
@@ -19,9 +19,8 @@ const Input = ({ text, type, value, onChange }) => (
     </label>
     {type === 'textarea' ? (
       <textarea
-        style={{ 'line-height': '1.25rem' }}
         id="description"
-        className="textarea h-24"
+        className="textarea h-24 leading-normal"
         placeholder={`${text} of listing...`}
         value={value}
         onChange={onChange}
