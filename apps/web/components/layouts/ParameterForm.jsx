@@ -190,7 +190,7 @@ const ParameterForm = ({ crossSectionImage, parameterHook }) => {
         <Tooltip
           content={
             <picture>
-              <img src={crossSectionImage} alt="Reference for" className="w-24 my-3" />
+              <img src={crossSectionImage} alt="Reference for" className="w-34 my-3" />
             </picture>
           }
           contentClassName="bg-white p-2 rounded-lg shadow-lg"

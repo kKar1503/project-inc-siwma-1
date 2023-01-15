@@ -296,7 +296,7 @@ const ListingPage = ({
                         <img
                           src={crossSectionImage}
                           alt={`Reference for ${listing.category_id}`}
-                          className="w-24 my-3"
+                          className="w-36 my-3"
                         />
                       </picture>
                     }
