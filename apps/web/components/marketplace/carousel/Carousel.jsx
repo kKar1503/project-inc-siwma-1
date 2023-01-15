@@ -137,8 +137,8 @@ const Carousel = ({
 
       {numberOfItems > 1 && (
         <div
-          className={cx('hidden md:block', {
-            'md:hidden': !showButtons,
+          className={cx('md:block', {
+            'md:hidden hidden': !showButtons,
           })}
         >
           {!firstItemVisible && (

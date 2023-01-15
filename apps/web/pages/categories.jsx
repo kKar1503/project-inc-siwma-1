@@ -38,7 +38,7 @@ const Category = () => {
   } = useQuery(['get_category'], async () => supabase.from('category').select('*'), {
     onSuccess: async (data) => {
       if (data.error) {
-        throw new Error('Problem fetching categories data from the database.');
+        setCategoriesData([]);
       }
 
       const categoriesWithImages = await getCategoriesImage(data.data, supabase);
@@ -64,7 +64,7 @@ const Category = () => {
             <CategoryCard
               name={item.name}
               img={item.imageUrl}
-              href={`/category/${item.name}?id=${item.id}`}
+              href={`/category/${item.id}`}
               key={item.name}
             />
           ))}
@@ -100,5 +100,7 @@ const Category = () => {
 //     },
 //   };
 // }
+
 Category.allowAuthenticated = true;
+
 export default Category;

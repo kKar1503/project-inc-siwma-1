@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import React, { useMemo, useState } from 'react';
+import { IoHelpCircleOutline } from 'react-icons/io5';
 import { boolean, number, object, string } from 'yup';
 import CardBackground from '../CardBackground';
 import Dropdown from '../Dropdown';
-import RadioButton from '../RadioButton';
 import Input from '../Input';
+import Tooltip from '../marketplace/Tooltip';
+import RadioButton from '../RadioButton';
 import ErrorMessage from './ErrorMessage';
 
 // const typeDataSchema = object('Please fill in the values').shape({
@@ -14,6 +16,7 @@ import ErrorMessage from './ErrorMessage';
 // }).required('Please fill in the values');
 
 const propTypes = {
+  crossSectionImage: PropTypes.string.isRequired,
   parameterHook: PropTypes.shape({
     formTypes: PropTypes.arrayOf(
       PropTypes.shape({
@@ -27,7 +30,7 @@ const propTypes = {
     updateValues: PropTypes.func.isRequired,
     errorMsg: PropTypes.string,
   }).isRequired,
-}
+};
 
 // Validation
 const ParameterValidationSchemaString = object(
@@ -59,60 +62,48 @@ const ParameterHook = () => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [values, setValues] = React.useState({});
 
-  useEffect(() => {
-    setValues(
-      formTypeData.reduce((acc, item) => {
-        acc[item.name] = '';
-        return acc;
-      }, {})
-    );
-  }, [formTypeData]);
-
   const getValue = (name) => values[name]?.value;
 
-  const updateValues = (name, typeData, value) => {
-    setValues((v) => ({
-      ...v,
-      [name]: {
-        typeData,
-        value,
-      },
-    }));
+  const updateValues = (name, value) => {
+    setValues((prevValues) => {
+      const newValues = { ...prevValues };
+      console.log(newValues);
+      newValues[name].value = value;
+      return newValues;
+    });
+  };
+
+  const validateParam = (dataTypeId, id, value) => {
+    switch (dataTypeId) {
+      case 2:
+        return ParameterValidationSchemaNumber.validateSync({ id, value }, { stripUnknown: true });
+      case 3:
+        return ParameterValidationSchemaBoolean.validateSync({ id, value }, { stripUnknown: true });
+      default:
+        return ParameterValidationSchemaString.validateSync({ id, value }, { stripUnknown: true });
+    }
   };
 
   const validateParameter = () => {
     const validated = [];
     const objectValues = Object.values(values);
     for (let i = 0; i < objectValues.length; i++) {
-      const item = objectValues[i];
+      const { value, typeData } = objectValues[i];
+      const { id, dataTypeId, required } = typeData;
 
       try {
-        switch (item.typeData.dataTypeId) {
-          case 2:
-            validated.push(
-              ParameterValidationSchemaNumber.validateSync(
-                { id: item.typeData.id, value: item.value },
-                { stripUnknown: true }
-              )
-            );
-            break;
-          case 3:
-            validated.push(
-              ParameterValidationSchemaBoolean.validateSync(
-                { id: item.typeData.id, value: item.value },
-                { stripUnknown: true }
-              )
-            );
-            break;
-          default:
-            validated.push(
-              ParameterValidationSchemaString.validateSync(
-                { id: item.typeData.id, value: item.value },
-                { stripUnknown: true }
-              )
-            );
+        if (
+          required ||
+          !(value === undefined || value === null || value === '' || value === 'None')
+        ) {
+          validated.push(validateParam(dataTypeId, id, value));
         }
       } catch (error) {
+        if (error.message.includes('value must be a `number` type')) {
+          if (value === '') setErrorMsg(`Please fill in the values for all parameters`);
+          else setErrorMsg(`${value} is not a valid number`);
+          return false;
+        }
         setErrorMsg(
           error.message.includes('Cannot read properties of undefined')
             ? `Please fill in the values for all parameters`
@@ -129,34 +120,45 @@ const ParameterHook = () => {
   // Parameters have two sets of values (parameter values/parameter choices)
   // Every Parameter has a type
   // Choice type Parameters have parameter choices
-  // This function identifys the parameter type and choices of every parameter of the category
-  const identifyParameterType = async (parameterData, parameterType, parameterChoice) => {
-    const formTypes = [];
+  // This function identifies the parameter type and choices of every parameter of the category
+  const identifyParameterType = useMemo(
+    () => async (parameterData, parameterType, parameterChoice) => {
+      const formTypes = [];
 
-    for (let i = 0; i < parameterData.length; i++) {
-      for (let j = 0; j < parameterType.length; j++) {
-        if (parameterData[i].type === parameterType[j].id) {
-          const formData = {
-            id: parameterData[i].parameter,
-            name: parameterData[i].display_name,
-            dataTypeId: parameterData[i].datatype,
-            type: parameterType[j].name,
-            typeId: parameterType[j].id,
-          };
+      for (let i = 0; i < parameterData.length; i++) {
+        for (let j = 0; j < parameterType.length; j++) {
+          if (parameterData[i].type === parameterType[j].id) {
+            const formData = {
+              id: parameterData[i].parameter,
+              name: parameterData[i].display_name,
+              required: parameterData[i].required,
+              dataTypeId: parameterData[i].datatype,
+              type: parameterType[j].name,
+              typeId: parameterType[j].id,
+            };
 
-          for (let k = 0; k < parameterChoice.length; k++) {
-            if (parameterData[i].parameter === parameterChoice[k].parameter) {
-              formData.choice = parameterChoice[k].choice;
+            for (let k = 0; k < parameterChoice.length; k++) {
+              if (parameterData[i].parameter === parameterChoice[k].parameter) {
+                formData.choice = parameterChoice[k].choice;
+              }
             }
-          }
 
-          formTypes.push(formData);
+            formTypes.push(formData);
+          }
         }
       }
-    }
-
-    setFormTypeData(formTypes);
-  };
+      setValues(
+        formTypes.reduce((acc, item) => {
+          acc[item.id] = {
+            typeData: item,
+          };
+          return acc;
+        }, {})
+      );
+      setFormTypeData(formTypes);
+    },
+    []
+  );
 
   return {
     parameterHook: {
@@ -171,57 +173,77 @@ const ParameterHook = () => {
 };
 
 /**
- * Parameter Form is a component that renders the form for the parameters
- * The parameters rendered are dependent on the category selected
+ * Parameter Form is a component that renders the form for the parameters.
+ * They are rendered depending on the category selected
+ *
  * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
-const ParameterForm = ({ parameterHook }) => {
+const ParameterForm = ({ crossSectionImage, parameterHook }) => {
   const { formTypes, errorMsg, getValue, updateValues } = parameterHook;
 
   return (
     <CardBackground>
       <ErrorMessage errorMsg={errorMsg} />
-      <h1 className="font-bold text-3xl">Parameters</h1>
+
+      <div className="flex flex-wrap items-center gap-2">
+        <h1 className="font-bold text-3xl">Parameters</h1>
+        <Tooltip
+          content={
+            <picture>
+              <img src={crossSectionImage} alt="Reference for" className="w-34 my-3" />
+            </picture>
+          }
+          contentClassName="bg-white p-2 rounded-lg shadow-lg"
+          position="right"
+        >
+          <IoHelpCircleOutline className="text-xl text-gray-500" />
+        </Tooltip>
+      </div>
       {/* {formSorter(formTypes)} */}
       {formTypes.map((item) => {
         switch (item.type) {
           case 'MEASUREMENT (WEIGHT)':
             return (
               <Input
+                isOptional={!item.required}
                 key={item.name}
                 text={`${item.name} (g)`}
-                value={getValue(item.name) || ''}
+                value={getValue(item.id) || ''}
                 onChange={(e) => {
-                  updateValues(item.name, item, e.target.value);
+                  updateValues(item.id, e.target.value);
                 }}
               />
             );
           case 'MEASUREMENT (DIMENSION)':
             return (
               <Input
+                isOptional={!item.required}
                 key={item.name}
                 text={`${item.name} (mm)`}
-                value={getValue(item.name) || ''}
+                value={getValue(item.id) || ''}
                 onChange={(e) => {
-                  updateValues(item.name, item, e.target.value);
+                  updateValues(item.id, e.target.value);
                 }}
               />
             );
           case 'TWO CHOICES':
             return (
               <RadioButton
+                isOptional={!item.required}
+                text={item.name}
                 options={item.choice}
                 onChangeValue={(e) => {
-                  updateValues(item.name, item, e.target.value);
+                  updateValues(item.id, e.target.value);
                 }}
               />
             );
           case 'MANY CHOICES':
             return (
               <Dropdown
+                isOptional={!item.required}
                 items={item.choice}
                 onChangeValue={(e) => {
-                  updateValues(item.name, item, e.target.value);
+                  updateValues(item.id, e.target.value);
                 }}
                 defaultValue={`${item.name}`}
               />
@@ -229,12 +251,13 @@ const ParameterForm = ({ parameterHook }) => {
           case 'OPEN ENDED':
             return (
               <Input
+                isOptional={!item.required}
                 key={item.name}
                 type="textarea"
                 text={`${item.name}`}
-                value={getValue(item.name) || ''}
+                value={getValue(item.id) || ''}
                 onChange={(e) => {
-                  updateValues(item.name, item, e.target.value);
+                  updateValues(item.id, e.target.value);
                 }}
               />
             );

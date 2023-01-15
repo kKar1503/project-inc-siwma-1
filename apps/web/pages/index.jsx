@@ -1,8 +1,8 @@
+import { Search } from '@inc/ui';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
-import { Search } from '@inc/ui';
-import { useRouter } from 'next/router';
 import Container from '../components/Container';
 import Advertisement from '../components/marketplace/Advertisement';
 import AnimatedCarousel from '../components/marketplace/carousel/AnimatedCarousel';
@@ -119,6 +119,7 @@ const MarketplacePage = () => {
 MarketplacePage.allowNonAuthenticated = true;
 MarketplacePage.allowAuthenticated = true;
 MarketplacePage.getLayout = (page) => <Container>{page}</Container>;
+MarketplacePage.allowNonAuthenticated = false;
 MarketplacePage.allowAuthenticated = true;
 MarketplacePage.title = 'Marketplace';
 

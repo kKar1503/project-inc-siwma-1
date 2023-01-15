@@ -26,7 +26,7 @@ const Page = () => {
     },
     {
       onSuccess: () => {
-        router.push(router.query.redirect ?? '/');
+        router.push('/login');
       },
     }
   );
@@ -57,7 +57,7 @@ const SignInAndUpLayoutNoSSR = dynamic(() => Promise.resolve(SignInAndUpLayout),
 Page.getLayout = (page) => <SignInAndUpLayoutNoSSR>{page}</SignInAndUpLayoutNoSSR>;
 Page.ignoreHeader = true;
 
-Page.allowNonAuthenticated = false;
+Page.allowNonAuthenticated = true;
 Page.allowAuthenticated = true;
 
 

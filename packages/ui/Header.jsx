@@ -65,7 +65,7 @@ const Header = ({categoryData, isLoggedIn}) => {
               {categoryData?.map(({name, id}) => (
                 <CategoryItem
                   name={name}
-                  redirectLink={`/category/${name}?id=${id}`}
+                  redirectLink={`/category/${id}`}
                   key={name}
                 />
               ))}

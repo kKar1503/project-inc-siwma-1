@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { IoClose, IoHelpCircleOutline } from 'react-icons/io5';
 import CardBackground from '../../components/CardBackground';
 import Container from '../../components/Container';
 import Breadcrumbs from '../../components/listing/Breadcrumbs';
@@ -16,6 +17,7 @@ import User from '../../components/listing/User';
 import Carousel from '../../components/marketplace/carousel/Carousel';
 import BuyBadge from '../../components/marketplace/listing/BuyBadge';
 import SellBadge from '../../components/marketplace/listing/SellBadge';
+import Tooltip from '../../components/marketplace/Tooltip';
 
 const getAllListingImages = async (listingId, supabaseClient) => {
   const { data, error } = await supabaseClient.rpc('get_all_images_for_listing_by_id', {
@@ -67,6 +69,38 @@ export async function getServerSideProps(context) {
     images = listingImagesData.map((image) => image.data.publicUrl);
   }
 
+  // Get cross section image uuid from category table
+  const { data: getCrossSectionImage, error: getCrossSectionImageError } = await supabase
+    .from('category')
+    .select('cross_section_image')
+    .eq('id', getListingData[0].category_id);
+
+  if (getCrossSectionImageError) {
+    // Redirect to the 404 page
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    };
+  }
+
+  // Get public cross section image link from storage
+  const { data: getCrossSectionImageLink, error: getCrossSectionImageLinkError } =
+    await supabase.storage
+      .from('category-cross-section-image-bucket')
+      .getPublicUrl(getCrossSectionImage[0].cross_section_image);
+
+  if (getCrossSectionImageLinkError) {
+    // Redirect to the 404 page
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    };
+  }
+
   // Get parameters for the listing
   const { data: getListingParametersData, error: getListingParametersError } = await supabase.rpc(
     'get_parameter_values_for_listing_by_id',
@@ -95,6 +129,7 @@ export async function getServerSideProps(context) {
       images,
       listing: getListingData[0],
       parameter_values: getListingParametersData,
+      cross_section_image: getCrossSectionImageLink.publicUrl,
     },
   };
 }
@@ -108,12 +143,14 @@ const ListingPage = ({
   listing,
   images: carouselImages,
   parameter_values: listingParameterValues,
+  cross_section_image: crossSectionImage,
 }) => {
   const user = useUser();
   const router = useRouter();
   const supabase = useSupabaseClient();
 
   const [profilePictureUrl, setProfilePictureUrl] = useState(null);
+  const [showFullScreenGallery, setShowFullScreenGallery] = useState(false);
 
   const getUserProfilePictureURL = async (userId) => {
     const res = await supabase.storage.from('user-image-bucket').getPublicUrl('default-user.png');
@@ -123,6 +160,7 @@ const ListingPage = ({
 
   useEffect(() => {
     getUserProfilePictureURL('abc');
+    // FIXME: ANOTHER DEPENDENCY ISSUE
   }, []);
 
   // This function handles creating a chat room and then redirecting to the chat page
@@ -170,7 +208,7 @@ const ListingPage = ({
         paths={[
           {
             name: listing.category_name,
-            path: `/category/${listing.category_name}`,
+            path: `/category/${listing.category_id}`,
           },
           {
             name: listing.name,
@@ -182,10 +220,16 @@ const ListingPage = ({
       <>
         <Carousel
           className="my-10"
-          wrapperClassName="w-full h-[500px]  shadow-lg border border-black/20"
+          wrapperClassName="w-full h-[500px] shadow-lg border border-black/20"
         >
           {[...carouselImages].map((image) => (
-            <div key={image} className="w-full h-full flex justify-center bg-black/50 relative">
+            <div
+              tabIndex={0}
+              role="button"
+              onKeyDown={() => setShowFullScreenGallery(true)}
+              onClick={() => setShowFullScreenGallery(true)}
+              className="cursor-pointer w-full h-full flex justify-center bg-black/50 relative"
+            >
               <picture>
                 <img
                   src={image}
@@ -195,19 +239,35 @@ const ListingPage = ({
               </picture>
 
               <picture className="z-10">
-                <img src={image} alt={listing.name} className="w-auto h-full" />
+                <img src={image} alt={listing.name} className="w-auto h-full z-10" />
               </picture>
-              {/* <div className="relative w-fit h-full">
-                  <Image
-                    src={image}
-                    alt={listing.name}
-                    className="aspect-auto w-auto h-full"
-                    fill
-                  />
-                </div> */}
             </div>
           ))}
         </Carousel>
+
+        {showFullScreenGallery && (
+          <div
+            tabIndex={0}
+            role="button"
+            className="bg-black/50 backdrop-blur-xl w-full h-full fixed top-0 left-0 z-[999] px-24"
+          >
+            <button
+              onClick={() => setShowFullScreenGallery(false)}
+              className="btn btn-error absolute left-2 top-2"
+            >
+              <IoClose className="mr-2" size={18} />
+              Close
+            </button>
+
+            <Carousel className="" showButtons wrapperClassName="mx-auto w-full h-screen ">
+              {[...carouselImages].map((image) => (
+                <picture className="mx-auto h-full py-20">
+                  <img src={image} alt={listing.name} className="h-full z-10" />
+                </picture>
+              ))}
+            </Carousel>
+          </div>
+        )}
 
         <div className="lg:grid lg:grid-cols-10 my-5 gap-5 space-y-4">
           {/* Listing details */}
@@ -227,7 +287,27 @@ const ListingPage = ({
 
             {listingParameterValues.length > 0 && (
               <>
-                <h1 className="text-xl font-semibold">Details</h1>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h1 className="text-xl font-semibold">Dimensions</h1>
+
+                  <Tooltip
+                    content={
+                      <picture>
+                        <img
+                          src={crossSectionImage}
+                          alt={`Reference for ${listing.category_id}`}
+                          className="w-36 my-3"
+                        />
+                      </picture>
+                    }
+                    contentClassName="bg-neutral-content p-2 rounded-lg shadow-lg"
+                    position="right"
+                  >
+                    <IoHelpCircleOutline className="text-xl text-gray-500" />
+                  </Tooltip>
+                </div>
+
+                {/* Each details */}
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 my-4">
                   {listingParameterValues.map((p) => (
                     <Detail
@@ -319,6 +399,7 @@ ListingPage.propTypes = {
       display_name: PropTypes.string,
     })
   ),
+  cross_section_image: PropTypes.string,
 };
 
 ListingPage.getLayout = (page) => <Container>{page}</Container>;
