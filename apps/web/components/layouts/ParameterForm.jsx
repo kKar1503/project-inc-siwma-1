@@ -67,6 +67,7 @@ const ParameterHook = () => {
   const updateValues = (name, value) => {
     setValues((prevValues) => {
       const newValues = { ...prevValues };
+      console.log(newValues);
       newValues[name].value = value;
       return newValues;
     });
@@ -148,7 +149,7 @@ const ParameterHook = () => {
       }
       setValues(
         formTypes.reduce((acc, item) => {
-          acc[item.name] = {
+          acc[item.id] = {
             typeData: item,
           };
           return acc;
@@ -207,9 +208,9 @@ const ParameterForm = ({ crossSectionImage, parameterHook }) => {
                 isOptional={!item.required}
                 key={item.name}
                 text={`${item.name} (g)`}
-                value={getValue(item.name) || ''}
+                value={getValue(item.id) || ''}
                 onChange={(e) => {
-                  updateValues(item.name, e.target.value);
+                  updateValues(item.id, e.target.value);
                 }}
               />
             );
@@ -219,9 +220,9 @@ const ParameterForm = ({ crossSectionImage, parameterHook }) => {
                 isOptional={!item.required}
                 key={item.name}
                 text={`${item.name} (mm)`}
-                value={getValue(item.name) || ''}
+                value={getValue(item.id) || ''}
                 onChange={(e) => {
-                  updateValues(item.name, e.target.value);
+                  updateValues(item.id, e.target.value);
                 }}
               />
             );
@@ -232,7 +233,7 @@ const ParameterForm = ({ crossSectionImage, parameterHook }) => {
                 text={item.name}
                 options={item.choice}
                 onChangeValue={(e) => {
-                  updateValues(item.name, e.target.value);
+                  updateValues(item.id, e.target.value);
                 }}
               />
             );
@@ -242,7 +243,7 @@ const ParameterForm = ({ crossSectionImage, parameterHook }) => {
                 isOptional={!item.required}
                 items={item.choice}
                 onChangeValue={(e) => {
-                  updateValues(item.name, e.target.value);
+                  updateValues(item.id, e.target.value);
                 }}
                 defaultValue={`${item.name}`}
               />
@@ -254,9 +255,9 @@ const ParameterForm = ({ crossSectionImage, parameterHook }) => {
                 key={item.name}
                 type="textarea"
                 text={`${item.name}`}
-                value={getValue(item.name) || ''}
+                value={getValue(item.id) || ''}
                 onChange={(e) => {
-                  updateValues(item.name, e.target.value);
+                  updateValues(item.id, e.target.value);
                 }}
               />
             );
