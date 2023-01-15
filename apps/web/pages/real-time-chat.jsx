@@ -214,6 +214,7 @@ const RealTimeChat = () => {
         );
 
         setFilteredData(combinedData);
+        console.log(combinedData);
       }
     );
   };
@@ -243,10 +244,23 @@ const RealTimeChat = () => {
   const fetchLastMsg = async (id) => {
     const { data, error } = await supabase.from('messages').select().eq('content', id);
 
+    console.log('Last msg', data);
+
     if (error) {
       console.log('error', error);
     } else if (data.length !== 0) {
       const userid = data[0].profile_uuid;
+
+      const { data: users, userError } = await supabase
+        .from('users')
+        .select('fullname')
+        .eq('id', userid);
+
+      if (userError) {
+        console.log(userError);
+        return;
+      }
+      console.log('Users', users);
 
       if (notifs !== '' && userid !== userdata.id) {
         if (notifs.text != null) {
@@ -266,7 +280,7 @@ const RealTimeChat = () => {
                     />
                   </div>
                   <div className="ml-3 flex-1">
-                    <p className="text-sm font-medium text-gray-900">Emilia Gates</p>
+                    <p className="text-sm font-medium text-gray-900">{users[0].fullname}</p>
                     <p className="mt-1 text-sm text-gray-500">{notifs.text}</p>
                   </div>
                 </div>
@@ -307,6 +321,18 @@ const RealTimeChat = () => {
         (payload) => {
           console.log('Change received!', payload);
           setNewMsg(payload.new);
+          // setAllNotifs(payload.new);
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'contents',
+        },
+        (payload) => {
+          console.log('Change received!', payload);
           setAllNotifs(payload.new);
         }
       )
@@ -317,6 +343,7 @@ const RealTimeChat = () => {
   }, [selectedRoom, newMsg]);
 
   useEffect(() => {
+    console.log(notifs);
     fetchLastMsg(notifs.content_id);
   }, [notifs]);
 
