@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { VictoryAxis, VictoryStack, VictoryBar, VictoryChart } from 'victory';
+import { VictoryAxis, VictoryStack, VictoryBar, VictoryChart, VictoryLegend } from 'victory';
 import { BarLine, BarToolTip, focus, reset, unfocus } from '../BarHover';
 import Title from '../Title';
 import { limit } from '../../utils/format';
@@ -12,6 +12,7 @@ import { limit } from '../../utils/format';
 // ];
 
 const bars = ['buy', 'sell'];
+const colors = ['#2563EB', '#6D96F2'];
 
 const MostBuyAndSellChart = ({ data }) => (
   <VictoryChart domainPadding={50}>
@@ -94,6 +95,13 @@ const MostBuyAndSellChart = ({ data }) => (
       style={{ tickLabels: { fontSize: 10 } }}
       label="Company"
       tickFormat={(name) => limit(name, 15)}
+    />
+    <VictoryLegend
+      x={275}
+      y={40}
+      orientation="horizontal"
+      data={['Total', 'Buy'].map((name) => ({ name, symbol: { type: 'square' } }))}
+      colorScale={colors}
     />
   </VictoryChart>
 );
