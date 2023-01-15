@@ -153,7 +153,7 @@ const CreateParam = () => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Display Name"
-            pattern="^[^\s].+[^\s]$"
+            pattern="^[^\s]+(\s+[^\s]+)*$"
             title="Display name should not have spaces at the start or end"
             required
           />

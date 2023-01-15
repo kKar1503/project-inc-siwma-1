@@ -214,7 +214,7 @@ const EditParam = ({ id }) => {
             type="text"
             className="input-group input input-bordered"
             placeholder="Display Name"
-            pattern="^[^\s].+[^\s]$"
+            pattern="^[^\s]+(\s+[^\s]+)*$"
             required
             value={displayName}
             onChange={(e) => {
