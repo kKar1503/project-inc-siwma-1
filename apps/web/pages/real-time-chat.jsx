@@ -6,7 +6,6 @@ import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import toast, { Toaster } from 'react-hot-toast';
 
 import '@inc/styles/globals.css';
-import { Header } from '@inc/ui';
 import InputText from '../components/rtc/InputText';
 import ChatBubbles from '../components/rtc/ChatBubbles';
 import ImageModal from '../components/rtc/ImageModal';
@@ -340,7 +339,6 @@ const RealTimeChat = () => {
       <div className="grid grid-cols-10 gap-4 h-screen drawer-content">
         <Toaster />
         <div className="col-span-10 md:col-span-7 bg-blue-50 rounded-3xl h-screen drawer-content">
-          <Header />
           <div className="md:flex border-b-4 items-center md:px-6 md:py-4">
             <div className="hidden lg:block">
               <h2 className="font-bold text-xl">Conversations</h2>
