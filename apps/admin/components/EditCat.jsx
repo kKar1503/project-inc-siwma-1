@@ -105,7 +105,7 @@ const EditCat = ({ id }) => {
       }
       if (image2 !== null) {
         newUUID2 = crypto.randomUUID();
-        await supabase.storage.from('category-cross-section-image-bucket').upload(newUUID2, image);
+        await supabase.storage.from('category-cross-section-image-bucket').upload(newUUID2, image2);
       }
       await supabase
         .from('category')
