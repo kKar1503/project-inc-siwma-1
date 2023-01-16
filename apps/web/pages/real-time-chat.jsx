@@ -398,6 +398,16 @@ const RealTimeChat = () => {
                 </div>
               </div>
             </div>
+            <div className="hidden md:flex">
+              <ChatFilter
+                options={options}
+                setSelectedFilter={setSelectedFilter}
+                retrieveFilteredData={retrieveFilteredData}
+                selectedFilter={selectedFilter}
+                roomsData={roomsData}
+                selectedRoom={setSelectedRoom} // Add this line
+              />
+            </div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3">
             <div className="min-[320px]:hidden md-[820px]:block">
