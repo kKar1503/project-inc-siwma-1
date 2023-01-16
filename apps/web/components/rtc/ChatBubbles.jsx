@@ -139,7 +139,7 @@ const ChatBubbles = ({ msg: messages }) => {
                       className="min-w-fit max-w-sm min-[320px]:text-[0.8em] sm:text-[0.8em] md:text-[0.9em] lg:text-[1em] text-blue-700"
                       href={`https://rvndpcxlgtqfvrxhahnm.supabase.co/storage/v1/object/public/chat-bucket/${msg.file}`}
                     >
-                      {msg.file.split('/')[1]}
+                      <u>{msg.file.split('/')[1]}</u>
                     </Link>
                   </div>
                 </div>
@@ -157,15 +157,17 @@ const ChatBubbles = ({ msg: messages }) => {
 };
 
 ChatBubbles.propTypes = {
-  msg: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    type: PropTypes.string,
-    lastMessage: PropTypes.string,
-    messageType: PropTypes.string,
-    createdAt: PropTypes.string,
-    roomID: PropTypes.number,
-  }))
-}
+  msg: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      type: PropTypes.string,
+      lastMessage: PropTypes.string,
+      messageType: PropTypes.string,
+      createdAt: PropTypes.string,
+      roomID: PropTypes.number,
+    })
+  ),
+};
 
 export default ChatBubbles;
