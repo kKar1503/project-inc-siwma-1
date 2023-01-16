@@ -1,11 +1,11 @@
-import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
-import { useState } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import Container from '../../components/Container';
-import CategoryCard from '../../components/category/CategoryCard';
-import ProductListingItem from '../../components/marketplace/listing/ProductListingItem';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useQuery } from 'react-query';
 import CategoryBanner from '../../components/category/CategoryBanner';
+import Container from '../../components/Container';
+import ProductListingItem from '../../components/marketplace/listing/ProductListingItem';
 
 // supabase.rpc('get_category_listing', { catid: router.query.id })
 // supabase.from('listing').select('*').eq('category', catId);
@@ -48,8 +48,8 @@ const Category = () => {
     // status: categoryStatus,
     // isLoading: categoryIsLoading,
   } = useQuery(
-    ['fetchListings', router.query.id],
-    async () => supabase.rpc('get_category_listings', { item_offset: 0, catid: router.query.id }),
+    ['fetchListings', category],
+    async () => supabase.rpc('get_category_listings', { item_offset: 0, catid: category }),
     {
       onSuccess: async (apiData) => {
         const { data } = apiData;
@@ -63,6 +63,9 @@ const Category = () => {
 
   return (
     <Container>
+      <Head>
+        <title>Category</title>
+      </Head>
       <div className="m-auto my-10 flex flex-col justify-center w-10/12">
         <div className="h-1/3 mb-10">
           <CategoryBanner img="https://images.unsplash.com/photo-1563642900777-eb44ab05eaf8" />

@@ -1,27 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
 const propTypes = {
+  className: PropTypes.string,
   text: PropTypes.string.isRequired,
   type: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-}
+  isOptional: PropTypes.bool,
+};
 
 /**
  * Input is a component that renders an input field.
  * @type {React.FC<import('prop-types').InferProps<typeof propTypes>>}
  */
-const Input = ({ text, type, value, onChange }) => (
-  <div className="form-control">
+const Input = ({ className, text, type, value, onChange, isOptional }) => (
+  <div className={cn(className, 'form-control')}>
     <label className="label">
-      <span className="label-text mt-31 text-xl font-bold">{text}</span>
+      <span className="label-text text-xl font-bold">{text}</span>
     </label>
     {type === 'textarea' ? (
       <textarea
         id="description"
-        className="textarea h-24"
-        placeholder={`${text} of listing...`}
+        className="textarea h-[100px] md:h-[150px] lg:h-[200px] leading-normal"
+        placeholder={`${text} of listing... ${isOptional ? '(Optional)' : ''}`}
         value={value}
         onChange={onChange}
       />
@@ -31,7 +34,7 @@ const Input = ({ text, type, value, onChange }) => (
         type="text"
         value={value}
         onChange={onChange}
-        placeholder={`${text} of listing...`}
+        placeholder={`${text} of listing... ${isOptional ? '(Optional)' : ''}`}
         className="input w-full"
       />
     )}

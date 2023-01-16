@@ -195,7 +195,7 @@ const FileUpload = ({ className, setUserTableData, setCompanyTableData, setError
             <p className="text-center">{selectedFile.name}</p>
           ) : (
             <p className="text-lg text-center w-3/4">
-              Click to upload or drag and drop .xslx (MAX. 64MB)
+              Click to upload .xslx (MAX. 64MB)
             </p>
           )}
         </div>

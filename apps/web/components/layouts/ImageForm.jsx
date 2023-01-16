@@ -26,6 +26,7 @@ const ImageHook = () => {
 
   const onSelectFile = (event) => {
     const images = Array.from(event.target.files).map((file) => ({
+      name: file.name,
       link: URL.createObjectURL(file),
       blob: file,
     }));
@@ -36,7 +37,7 @@ const ImageHook = () => {
       return (
         newImages
           //  filter out duplication
-          .filter((image, index) => newImages.findIndex((img) => img.link === image.link) === index)
+          .filter((image, index) => newImages.findIndex((img) => img.name === image.name) === index)
           //  filter out unaccepted fileTypes
           .filter((image) => acceptedFileTypes.includes(image.blob.type))
       );

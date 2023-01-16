@@ -1,11 +1,12 @@
+import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
+import Container from '../components/Container';
 import CategoricalForm from '../components/layouts/CategoricalForm';
-import ParameterForm from '../components/layouts/ParameterForm';
-import ListingForm from '../components/layouts/ListingForm';
 import ImageForm from '../components/layouts/ImageForm';
+import ListingForm from '../components/layouts/ListingForm';
+import ParameterForm from '../components/layouts/ParameterForm';
 
 const NewListing = () => {
   const router = useRouter();
@@ -78,9 +79,18 @@ const NewListing = () => {
         parameterChoicesData.data
       );
     }
-    // FIXME: i have no clue what is causing this error
-    // because adding the dep inside causes a loopy error
-  }, [parametersData, parameterTypesData, parameterChoicesData]);
+  }, [parametersData, parameterTypesData, parameterChoicesData, identifyParameterType]);
+
+  const getTooltipImage = () => {
+    if (!categoriesData || !categoryID || categoryID === null) return '';
+
+    const category = categoriesData.data.find((item) => item.id === parseInt(categoryID, 10));
+    const { data, error } = client.storage.from('category-cross-section-image-bucket').getPublicUrl(category.cross_section_image);
+
+    if (error) throw error;
+
+    return data.publicUrl;
+  };
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -89,8 +99,6 @@ const NewListing = () => {
     const images = validateImage();
     const category = validateCategory();
     const parameters = validateParameter();
-
-    console.log(images);
 
     if (!listing || !images || !category || !parameters) return;
 
@@ -101,6 +109,7 @@ const NewListing = () => {
         description: listing.description,
         price: listing.price,
         negotiable: listing.negotiable,
+        unit_price: listing.unitPrice,
         category: category.categoryId,
         type: listing.type === 'Buying' ? 1 : 2,
         owner: user.id,
@@ -136,29 +145,32 @@ const NewListing = () => {
     router.push(`/product/${listingId[0].id}`);
   };
 
+  const canShowCategoriesForm =
+    !categoriesLoading && !categoriesError && categoriesStatus === 'success' && categoriesData;
+
+  const canShowParametersForm =
+    !parametersLoading &&
+    !parametersError &&
+    parametersStatus === 'success' &&
+    parametersData.data.length !== 0;
+
   return (
-    <main>
-      <div className="flex justify-around mt-8 mx-32">
-        <div className="flex space-y-6 flex-col w-2/6">
-          {!categoriesLoading &&
-            !categoriesError &&
-            categoriesStatus === 'success' &&
-            categoriesData && (
-            <CategoricalForm items={categoriesData.data} categoryHook={categoryHook} />
-          )}
+    <Container>
+      <ImageForm useImageHook={imageHook} />
 
-          {!parametersLoading &&
-            !parametersError &&
-            parametersStatus === 'success' &&
-            parametersData.data.length !== 0 && <ParameterForm parameterHook={parameterHook} />}
+      {canShowCategoriesForm && (
+        <CategoricalForm items={categoriesData.data} categoryHook={categoryHook} />
+      )}
 
-          <ImageForm useImageHook={imageHook} />
-        </div>
-        <div className="flex flex-col w-3/5">
-          <ListingForm listingHook={listingHook} onSubmit={onSubmit} />
-        </div>
-      </div>
-    </main>
+      {canShowParametersForm && (
+        <ParameterForm
+          crossSectionImage={getTooltipImage()}
+          parameterHook={parameterHook}
+        />
+      )}
+
+      <ListingForm listingHook={listingHook} onSubmit={onSubmit} />
+    </Container>
   );
 };
 

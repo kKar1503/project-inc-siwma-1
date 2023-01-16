@@ -208,12 +208,12 @@ const AnimatedCarousel = ({
       </div>
 
       {/* Carousel Slides */}
-      <div className="flex w-full gap-2 my-3 justify-center absolute bottom-0 items-center">
+      <div className="flex w-full gap-2 my-3 justify-center absolute bottom-0 items-center pb-3">
         {[...Array(numberOfItems)].map((_, index) => (
           <button
             aria-label="Carousel button"
             key={index}
-            className={`w-9 h-[3px] drop-shadow-lg bg-white/50 rounded-full ${
+            className={`w-9 h-[5px] drop-shadow-lg bg-white/50 rounded-full ${
               index === activeIndex ? 'bg-white/90' : ''
             }`}
             onClick={() => setActiveIndex(index)}
