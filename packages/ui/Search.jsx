@@ -185,7 +185,7 @@ const Search = ({
       className="form-control w-full"
       style={{
         transition: 'box-shadow 0.3s ease-in-out',
-        zIndex: 30,
+        zIndex: 35,
         position: 'relative',
         ...focusStyle,
       }}
