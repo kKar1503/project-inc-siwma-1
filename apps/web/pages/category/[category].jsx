@@ -39,15 +39,23 @@ async function getListingFirstImage(listings, supabaseClient) {
 
 const Category = () => {
   const [listingData, setListingData] = useState([]);
+  const [categoryName, setCategoryName] = useState('');
   const router = useRouter();
   const { category } = router.query;
   const supabase = useSupabaseClient();
 
-  const {
-    data: categoryData,
-    // status: categoryStatus,
-    // isLoading: categoryIsLoading,
-  } = useQuery(
+  // this useQuery is a temp fix to get the category name
+  useQuery(
+    ['get_category_name', parseInt(category, 10)],
+    () => supabase.from('category').select('*').eq('id', parseInt(category, 10)),
+    {
+      onSuccess: (data) => {
+        setCategoryName(data.data[0].name);
+      },
+    }
+  );
+
+  useQuery(
     ['fetchListings', category],
     async () => supabase.rpc('get_category_listings', { item_offset: 0, catid: category }),
     {
@@ -59,8 +67,6 @@ const Category = () => {
     }
   );
 
-  console.log(listingData);
-
   return (
     <Container>
       <Head>
@@ -70,8 +76,11 @@ const Category = () => {
         <div className="h-1/3 mb-10">
           <CategoryBanner img="https://images.unsplash.com/photo-1563642900777-eb44ab05eaf8" />
         </div>
-        <div className="h-2/3">
-          <p className="font-bold text-2xl">{category} listings</p>
+        <div className="h-2/3 space-y-4">
+          <h2 className="font-bold text-4xl">{categoryName}</h2>
+          <h6 className="font-bold text-xl">
+            {listingData.length} {listingData.length > 1 ? 'listings' : 'listing'}
+          </h6>
           {/* dynamically generate each category when queried */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:grid-cols-2 mb-10">
             {/* image temporarily grabbed from metalsupermarkets.com */}
