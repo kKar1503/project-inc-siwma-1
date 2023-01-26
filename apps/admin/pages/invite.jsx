@@ -30,7 +30,7 @@ const InvitesPage = () => {
             .single();
           if (res.error) {
             // TODO: Replace with custom alert component
-            alert(res.error);
+            alert(res.error.message);
           }
         }
       })
@@ -54,51 +54,54 @@ const InvitesPage = () => {
         const res = await supabase.from('companies').select('id').eq('name', user.company).limit(1);
         if (res.error) {
           // TODO: Replace with custom alert component
-          alert(res.error);
+          alert(res.error.message);
           return;
         }
 
-        const { id } = res.data[0];
+        if (res.data[0] != null) {
+          const { id } = res.data[0];
 
-        // Only write to the database if the invite doesn't already exist
-        const existingData = await supabase
-          .from('invite')
-          .select('id')
-          .eq('company', id)
-          .eq('name', user.name)
-          .single();
-        if (existingData.data == null || existingData.data.length === 0) {
-          const { data: notificationRes, error: notificatonErr } = await supabase
+          // Only write to the database if the invite doesn't already exist
+          const existingData = await supabase
             .from('invite')
-            .insert({
-              name: user.name,
-              email: user.email,
-              company: id,
-              token,
-              expiry: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
-            })
-            .select()
+            .select('id')
+            .eq('company', id)
+            .eq('name', user.name)
             .single();
+          if (existingData.data == null || existingData.data.length === 0) {
+            const { data: notificationRes, error: notificatonErr } = await supabase
+              .from('invite')
+              .insert({
+                name: user.name,
+                email: user.email,
+                company: id,
+                token,
+                expiry: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
+              })
+              .select()
+              .single();
 
-          if (notificatonErr) {
-            // TODO: Replace with custom alert component
-            alert(notificatonErr.message);
-          } else {
-            const searchParams = new URLSearchParams();
+            if (notificatonErr) {
+              // TODO: Replace with custom alert component
+              alert(notificatonErr.message);
+            } else {
+              const searchParams = new URLSearchParams();
 
-            const inviteID = notificationRes.id;
+              const inviteID = notificationRes.id;
 
-            fetch(`/api/invite/${inviteID}/notify${searchParams.toString()}`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }).then((inviteResult) => {
-              if (!inviteResult.ok) {
-                alert(`Error sending invite for user: ${notificationRes.email}`);
-              }
-            });
+              fetch(`/api/invite/${inviteID}/notify${searchParams.toString()}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              }).then((inviteResult) => {
+                if (!inviteResult.ok) {
+                  alert(`Error sending invite for user: ${notificationRes.email}`);
+                }
+              });
+            }
           }
+
         }
       })
     );

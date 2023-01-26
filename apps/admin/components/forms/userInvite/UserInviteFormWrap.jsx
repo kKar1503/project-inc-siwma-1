@@ -42,7 +42,7 @@ const UserInviteFormWrap = ({ isLoading, companiesQuery, submitSuccess, onSucces
         expiry: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
       })
       .select()
-      .single();;
+      .single();
 
     if (error) {
       onSuccessChange(false, error);
